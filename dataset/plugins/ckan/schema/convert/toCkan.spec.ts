@@ -4,10 +4,10 @@ import type { CkanSchema } from "../Schema.ts"
 import ckanSchemaFixture from "./fixtures/ckan-schema.json" with {
   type: "json",
 }
-import { convertSchemaFromCkan } from "./fromCkan.ts"
-import { convertSchemaToCkan } from "./toCkan.ts"
+import { convertTableSchemaFromCkan } from "./fromCkan.ts"
+import { convertTableSchemaToCkan } from "./toCkan.ts"
 
-describe("convertSchemaToCkan", () => {
+describe("convertTableSchemaToCkan", () => {
   it("converts a Frictionless schema to a CKAN schema", () => {
     const schema: Schema = {
       fields: [
@@ -74,7 +74,7 @@ describe("convertSchemaToCkan", () => {
       ],
     }
 
-    const result = convertSchemaToCkan(schema)
+    const result = convertTableSchemaToCkan(schema)
 
     expect(result.fields).toHaveLength(schema.fields.length)
 
@@ -192,7 +192,7 @@ describe("convertSchemaToCkan", () => {
       ],
     }
 
-    const result = convertSchemaToCkan(schema)
+    const result = convertTableSchemaToCkan(schema)
 
     expect(result.fields).toHaveLength(1)
     const field = result.fields[0]
@@ -218,7 +218,7 @@ describe("convertSchemaToCkan", () => {
       ],
     }
 
-    const result = convertSchemaToCkan(schema)
+    const result = convertTableSchemaToCkan(schema)
 
     expect(result.fields).toHaveLength(1)
     const field = result.fields[0]
@@ -243,7 +243,7 @@ describe("convertSchemaToCkan", () => {
       ],
     }
 
-    const result = convertSchemaToCkan(schema)
+    const result = convertTableSchemaToCkan(schema)
 
     expect(result.fields).toHaveLength(1)
     const field = result.fields[0]
@@ -260,7 +260,7 @@ describe("convertSchemaToCkan", () => {
       fields: [],
     }
 
-    const result = convertSchemaToCkan(schema)
+    const result = convertTableSchemaToCkan(schema)
 
     expect(result.fields).toEqual([])
   })
@@ -275,7 +275,7 @@ describe("convertSchemaToCkan", () => {
       ],
     }
 
-    const result = convertSchemaToCkan(schema)
+    const result = convertTableSchemaToCkan(schema)
 
     expect(result.fields).toHaveLength(1)
     const field = result.fields[0]
@@ -288,9 +288,9 @@ describe("convertSchemaToCkan", () => {
   it("performs a round-trip conversion (CKAN → Frictionless → CKAN)", () => {
     const originalCkanSchema = ckanSchemaFixture as CkanSchema
 
-    const frictionlessSchema = convertSchemaFromCkan(originalCkanSchema)
+    const frictionlessSchema = convertTableSchemaFromCkan(originalCkanSchema)
 
-    const resultCkanSchema = convertSchemaToCkan(frictionlessSchema)
+    const resultCkanSchema = convertTableSchemaToCkan(frictionlessSchema)
 
     expect(resultCkanSchema.fields).toHaveLength(
       originalCkanSchema.fields.length,

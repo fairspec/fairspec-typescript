@@ -1,6 +1,6 @@
 import type { Dialect, Resource } from "@fairspec/metadata"
 import { resolveDialect } from "@fairspec/metadata"
-import { resolveSchema } from "@fairspec/metadata"
+import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../plugin.ts"
 import { inferSchemaFromTable } from "../../../schema/index.ts"
@@ -43,7 +43,7 @@ export async function loadJsonTable(
   let table = pl.concat(tables)
 
   if (!options?.denormalized) {
-    let schema = await resolveSchema(resource.schema)
+    let schema = await resolveTableSchema(resource.schema)
     if (!schema) schema = await inferSchemaFromTable(table, options)
     table = await normalizeTable(table, schema)
   }

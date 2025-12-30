@@ -2,7 +2,7 @@ import invariant from "tiny-invariant"
 import type { Descriptor } from "../../descriptor/index.ts"
 import { convertFieldFromDescriptor } from "../../field/index.ts"
 
-export function convertSchemaFromDescriptor(descriptor: Descriptor) {
+export function convertTableSchemaFromDescriptor(descriptor: Descriptor) {
   descriptor = globalThis.structuredClone(descriptor)
 
   convertProfile(descriptor)

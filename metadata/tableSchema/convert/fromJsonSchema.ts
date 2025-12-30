@@ -2,7 +2,7 @@ import type { JSONSchema7 } from "json-schema"
 import type { Field } from "../../field/index.ts"
 import type { Schema } from "../Schema.ts"
 
-export function convertSchemaFromJsonSchema(jsonSchema: JSONSchema7): Schema {
+export function convertTableSchemaFromJsonSchema(jsonSchema: JSONSchema7): Schema {
   const fields: Field[] = []
   const requiredFields = new Set(
     Array.isArray(jsonSchema.required) ? jsonSchema.required : [],

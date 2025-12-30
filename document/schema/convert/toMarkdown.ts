@@ -1,6 +1,6 @@
 import type { Schema } from "@fairspec/metadata"
 
-export function convertSchemaToMarkdown(
+export function convertTableSchemaToMarkdown(
   schema: Schema,
   options?: { frontmatter?: boolean },
 ): string {

@@ -1,7 +1,7 @@
 import type { Descriptor } from "../descriptor/index.ts"
 import { loadDescriptor } from "../descriptor/index.ts"
 import { validateDescriptor } from "../profile/index.ts"
-import { convertSchemaFromDescriptor } from "./convert/fromDescriptor.ts"
+import { convertTableSchemaFromDescriptor } from "./convert/fromDescriptor.ts"
 import type { Schema } from "./Schema.ts"
 
 const DEFAULT_PROFILE = "https://datapackage.org/profiles/1.0/tableschema.json"
@@ -9,7 +9,7 @@ const DEFAULT_PROFILE = "https://datapackage.org/profiles/1.0/tableschema.json"
 /**
  * Validate a Schema descriptor (JSON Object) against its profile
  */
-export async function validateSchema(source: Schema | Descriptor | string) {
+export async function validateTableSchema(source: Schema | Descriptor | string) {
   const descriptor =
     typeof source === "string"
       ? await loadDescriptor(source)
@@ -27,7 +27,7 @@ export async function validateSchema(source: Schema | Descriptor | string) {
   let schema: Schema | undefined
   if (report.valid) {
     // Validation + normalization = we can cast it
-    schema = convertSchemaFromDescriptor(descriptor) as unknown as Schema
+    schema = convertTableSchemaFromDescriptor(descriptor) as unknown as Schema
   }
 
   return { ...report, schema }

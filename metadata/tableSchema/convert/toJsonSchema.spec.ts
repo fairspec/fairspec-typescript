@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import type { Schema } from "../Schema.ts"
-import { convertSchemaToJsonSchema } from "./toJsonSchema.ts"
+import { convertTableSchemaToJsonSchema } from "./toJsonSchema.ts"
 
-describe("convertSchemaToJsonSchema", () => {
+describe("convertTableSchemaToJsonSchema", () => {
   it("converts Table Schema to JSONSchema object", () => {
     const tableSchema: Schema & { title?: string; description?: string } = {
       title: "User Schema",
@@ -69,7 +69,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect(jsonSchema.title).toBe("User Schema")
     expect(jsonSchema.description).toBe("Schema for user data")
@@ -139,7 +139,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect((jsonSchema.properties as any)?.basicString).toEqual({
       type: "string",
@@ -184,7 +184,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect((jsonSchema.properties as any)?.simpleNumber).toEqual({
       type: "number",
@@ -245,7 +245,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect((jsonSchema.properties as any)?.simpleArray).toEqual({
       type: "array",
@@ -305,7 +305,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect((jsonSchema.properties as any)?.dateField).toEqual({
       type: "string",
@@ -354,7 +354,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect((jsonSchema.properties as any)?.geopointField).toEqual({
       type: "string",
@@ -381,7 +381,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect((jsonSchema.properties as any)?.listField).toEqual({
       type: "array",
@@ -403,7 +403,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect(jsonSchema.title).toBeUndefined()
     expect(jsonSchema.description).toBeUndefined()
@@ -427,7 +427,7 @@ describe("convertSchemaToJsonSchema", () => {
       ],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect(jsonSchema.required).toBeUndefined()
     expect((jsonSchema.properties as any)?.optionalField1).toEqual({
@@ -443,7 +443,7 @@ describe("convertSchemaToJsonSchema", () => {
       fields: [],
     }
 
-    const jsonSchema = convertSchemaToJsonSchema(tableSchema)
+    const jsonSchema = convertTableSchemaToJsonSchema(tableSchema)
 
     expect(jsonSchema.type).toBe("object")
     expect(jsonSchema.properties).toEqual({})

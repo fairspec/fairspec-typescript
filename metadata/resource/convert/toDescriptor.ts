@@ -1,7 +1,7 @@
 import type { Descriptor } from "../../descriptor/index.ts"
 import { convertDialectToDescriptor } from "../../dialect/index.ts"
 import { denormalizePath } from "../../path/index.ts"
-import { convertSchemaToDescriptor } from "../../schema/index.ts"
+import { convertTableSchemaToDescriptor } from "../../tableSchema/index.ts"
 import type { Resource } from "../Resource.ts"
 
 export function convertResourceToDescriptor(
@@ -15,7 +15,7 @@ export function convertResourceToDescriptor(
   convertPaths(resource, options)
 
   const dialect = convertDialect(resource)
-  const schema = convertSchema(resource)
+  const schema = convertTableSchema(resource)
 
   return { ...resource, dialect, schema } as Descriptor
 }
@@ -49,10 +49,10 @@ function convertDialect(resource: Resource) {
   return convertDialectToDescriptor(resource.dialect)
 }
 
-function convertSchema(resource: Resource) {
+function convertTableSchema(resource: Resource) {
   if (!resource.schema || typeof resource.schema === "string") {
     return resource.schema
   }
 
-  return convertSchemaToDescriptor(resource.schema)
+  return convertTableSchemaToDescriptor(resource.schema)
 }

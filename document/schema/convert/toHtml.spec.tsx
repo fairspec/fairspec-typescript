@@ -1,8 +1,8 @@
 import type { Schema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { convertSchemaToHtml } from "./toHtml.tsx"
+import { convertTableSchemaToHtml } from "./toHtml.tsx"
 
-describe("convertSchemaToHtml", () => {
+describe("convertTableSchemaToHtml", () => {
   it("converts a simple schema to html table", () => {
     const schema: Schema = {
       fields: [
@@ -21,7 +21,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<h2>Fields</h2>")
     expect(result).toContain("<table>")
@@ -48,7 +48,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain('<h1 id="test-schema">Test Schema</h1>')
     expect(result).toContain("<p>A test schema for validation</p>")
@@ -77,7 +77,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<strong>Constraints</strong>")
     expect(result).toContain("required:")
@@ -106,7 +106,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<strong>requiredField</strong>")
     expect(result).not.toContain("requiredField?")
@@ -118,7 +118,7 @@ describe("convertSchemaToHtml", () => {
       fields: [],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<h2>Fields</h2>")
     expect(result).toContain("<table>")
@@ -138,7 +138,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("Test &amp; &lt;Schema&gt;")
     expect(result).toContain(
@@ -162,7 +162,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("enum:")
     expect(result).toContain("<code>active, inactive, pending</code>")
@@ -185,7 +185,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("required:")
     expect(result).toContain("unique:")
@@ -212,7 +212,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<strong>Examples</strong>")
     expect(result).toContain("<code>user@example.com</code>")
@@ -233,7 +233,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<code>string</code>")
     expect(result).toContain("<code>integer</code>")
@@ -258,7 +258,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain('id="test-schema-more"')
     expect(result).toContain('id="field-with-dashes"')
@@ -271,7 +271,7 @@ describe("convertSchemaToHtml", () => {
       fields: [{ name: "field1", type: "string" }],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).not.toContain("<!DOCTYPE")
     expect(result).not.toContain("<html>")
@@ -286,7 +286,7 @@ describe("convertSchemaToHtml", () => {
       fields: [{ name: "field1", type: "string" }],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<p>Description only</p>")
     expect(result).not.toContain("<h2 id=")
@@ -303,7 +303,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<strong>field1?</strong>")
     expect(result).toContain("<code>string</code>")
@@ -321,7 +321,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema, { frontmatter: true })
+    const result = convertTableSchemaToHtml(schema, { frontmatter: true })
 
     expect(result).toContain("---")
     expect(result).toContain("Test Schema")
@@ -340,7 +340,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema, { frontmatter: false })
+    const result = convertTableSchemaToHtml(schema, { frontmatter: false })
 
     expect(result).toContain('<h1 id="test-schema">Test Schema</h1>')
     expect(result).not.toContain("title: Test Schema")
@@ -362,7 +362,7 @@ describe("convertSchemaToHtml", () => {
       primaryKey: ["id"],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<h2>Primary Key</h2>")
     expect(result).toContain("<code>id</code>")
@@ -383,7 +383,7 @@ describe("convertSchemaToHtml", () => {
       primaryKey: ["user_id", "project_id"],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<h2>Primary Key</h2>")
     expect(result).toContain("<code>user_id, project_id</code>")
@@ -408,7 +408,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<h2>Foreign Keys</h2>")
     expect(result).toContain("<th>Fields</th>")
@@ -449,7 +449,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<h2>Foreign Keys</h2>")
     expect(result).toContain("<code>user_id</code>")
@@ -476,7 +476,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<h2>Foreign Keys</h2>")
     expect(result).toContain("<code>parent_id</code>")
@@ -494,7 +494,7 @@ describe("convertSchemaToHtml", () => {
       ],
     }
 
-    const result = convertSchemaToHtml(schema)
+    const result = convertTableSchemaToHtml(schema)
 
     expect(result).not.toContain("<h2>Primary Key</h2>")
     expect(result).not.toContain("<h2>Foreign Keys</h2>")

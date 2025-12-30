@@ -3,13 +3,13 @@ import type { CkanSchema } from "../Schema.ts"
 import ckanSchemaFixture from "./fixtures/ckan-schema.json" with {
   type: "json",
 }
-import { convertSchemaFromCkan } from "./fromCkan.ts"
+import { convertTableSchemaFromCkan } from "./fromCkan.ts"
 
-describe("convertSchemaFromCkan", () => {
+describe("convertTableSchemaFromCkan", () => {
   it("converts a CKAN schema to a Frictionless schema", () => {
     const ckanSchema = ckanSchemaFixture as CkanSchema
 
-    const result = convertSchemaFromCkan(ckanSchema)
+    const result = convertTableSchemaFromCkan(ckanSchema)
 
     expect(result.fields).toHaveLength(ckanSchema.fields.length)
 
@@ -93,7 +93,7 @@ describe("convertSchemaFromCkan", () => {
   it("converts CKAN type aliases to Frictionless types", () => {
     const ckanSchema = ckanSchemaFixture as CkanSchema
 
-    const result = convertSchemaFromCkan(ckanSchema)
+    const result = convertTableSchemaFromCkan(ckanSchema)
 
     const stringField = result.fields.find(f => f.name === "string_field")
     expect(stringField?.type).toEqual("string")
@@ -120,7 +120,7 @@ describe("convertSchemaFromCkan", () => {
   it("handles unknown field types by converting to 'any'", () => {
     const ckanSchema = ckanSchemaFixture as CkanSchema
 
-    const result = convertSchemaFromCkan(ckanSchema)
+    const result = convertTableSchemaFromCkan(ckanSchema)
 
     const unknownField = result.fields.find(f => f.name === "unknown_field")
     expect(unknownField).toBeDefined()
@@ -132,7 +132,7 @@ describe("convertSchemaFromCkan", () => {
   it("respects type_override in field info", () => {
     const ckanSchema = ckanSchemaFixture as CkanSchema
 
-    const result = convertSchemaFromCkan(ckanSchema)
+    const result = convertTableSchemaFromCkan(ckanSchema)
 
     const overrideField = result.fields.find(f => f.name === "override_field")
     expect(overrideField).toBeDefined()
@@ -148,7 +148,7 @@ describe("convertSchemaFromCkan", () => {
       fields: [],
     }
 
-    const result = convertSchemaFromCkan(ckanSchema)
+    const result = convertTableSchemaFromCkan(ckanSchema)
 
     expect(result.fields).toEqual([])
   })
@@ -163,7 +163,7 @@ describe("convertSchemaFromCkan", () => {
       ],
     }
 
-    const result = convertSchemaFromCkan(ckanSchema)
+    const result = convertTableSchemaFromCkan(ckanSchema)
 
     expect(result.fields).toHaveLength(1)
     const field = result.fields[0]
@@ -186,7 +186,7 @@ describe("convertSchemaFromCkan", () => {
       ],
     }
 
-    const result = convertSchemaFromCkan(ckanSchema)
+    const result = convertTableSchemaFromCkan(ckanSchema)
 
     expect(result.fields[0]?.type).toEqual("string")
     expect(result.fields[1]?.type).toEqual("integer")

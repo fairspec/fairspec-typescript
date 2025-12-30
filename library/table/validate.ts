@@ -1,5 +1,5 @@
 import type { Resource, UnboundError } from "@fairspec/metadata"
-import { createReport, resolveSchema } from "@fairspec/metadata"
+import { createReport, resolveTableSchema } from "@fairspec/metadata"
 import type { LoadTableOptions } from "@fairspec/table"
 import { inspectTable } from "@fairspec/table"
 import { inferSchema } from "../schema/index.ts"
@@ -15,7 +15,7 @@ export async function validateTable(
   const table = await loadTable(resource, { denormalized: true })
 
   if (table) {
-    let schema = await resolveSchema(resource.schema)
+    let schema = await resolveTableSchema(resource.schema)
     if (!schema) schema = await inferSchema(resource, options)
     const tableErrors = await inspectTable(table, { schema, maxErrors })
     errors.push(...tableErrors)

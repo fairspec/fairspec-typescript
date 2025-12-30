@@ -1,2 +1,2 @@
-export { convertSchemaToHtml } from "./convert/toHtml.tsx"
-export { convertSchemaToMarkdown } from "./convert/toMarkdown.ts"
+export { convertTableSchemaToHtml } from "./convert/toHtml.tsx"
+export { convertTableSchemaToMarkdown } from "./convert/toMarkdown.ts"

@@ -1,6 +1,6 @@
 import { resolveDialect } from "@fairspec/metadata"
 import type { Resource } from "@fairspec/metadata"
-import { resolveSchema } from "@fairspec/metadata"
+import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
 import type { DataRow } from "../../../data/index.ts"
 import { getRecordsFromRows } from "../../../data/index.ts"
@@ -47,7 +47,7 @@ export async function loadOdsTable(
   let table = pl.concat(tables)
 
   if (!options?.denormalized) {
-    let schema = await resolveSchema(resource.schema)
+    let schema = await resolveTableSchema(resource.schema)
     if (!schema) schema = await inferSchemaFromTable(table, options)
     table = await normalizeTable(table, schema)
   }

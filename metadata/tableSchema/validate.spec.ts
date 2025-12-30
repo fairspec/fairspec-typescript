@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { validateSchema } from "./validate.ts"
+import { validateTableSchema } from "./validate.ts"
 
-describe("validateSchema", () => {
+describe("validateTableSchema", () => {
   it("returns empty array for valid schema", async () => {
     const descriptor = {
       fields: [
@@ -16,7 +16,7 @@ describe("validateSchema", () => {
       ],
     }
 
-    const report = await validateSchema(descriptor)
+    const report = await validateTableSchema(descriptor)
 
     expect(report.valid).toBe(true)
     expect(report.errors).toEqual([])
@@ -32,7 +32,7 @@ describe("validateSchema", () => {
       ],
     }
 
-    const report = await validateSchema(descriptor)
+    const report = await validateTableSchema(descriptor)
 
     expect(report.valid).toBe(false)
     expect(report.errors.length).toBeGreaterThan(0)

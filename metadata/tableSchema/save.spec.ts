@@ -3,9 +3,9 @@ import * as path from "node:path"
 import { temporaryDirectory } from "tempy"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import type { Schema } from "./Schema.ts"
-import { saveSchema } from "./save.ts"
+import { saveTableSchema } from "./save.ts"
 
-describe("saveSchema", () => {
+describe("saveTableSchema", () => {
   const testSchema: Schema = {
     fields: [
       {
@@ -39,7 +39,7 @@ describe("saveSchema", () => {
   })
 
   it("should save a schema to a file and maintain its structure", async () => {
-    await saveSchema(testSchema, { path: testPath })
+    await saveTableSchema(testSchema, { path: testPath })
 
     const fileExists = await fs
       .stat(testPath)

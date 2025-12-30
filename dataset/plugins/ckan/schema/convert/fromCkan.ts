@@ -14,7 +14,7 @@ import type {
 import type { CkanField } from "../Field.ts"
 import type { CkanSchema } from "../Schema.ts"
 
-export function convertSchemaFromCkan(ckanSchema: CkanSchema): Schema {
+export function convertTableSchemaFromCkan(ckanSchema: CkanSchema): Schema {
   const fields = ckanSchema.fields.map(convertField)
 
   return { fields }

@@ -1,12 +1,12 @@
 import type { Descriptor } from "../descriptor/index.ts"
 import type { Schema } from "./Schema.ts"
-import { validateSchema } from "./validate.ts"
+import { validateTableSchema } from "./validate.ts"
 
 /**
- * Assert a Schema descriptor (JSON Object) against its profile
+ * Assert a Table Schema descriptor (JSON Object) against its profile
  */
-export async function assertSchema(source: Descriptor | Schema) {
-  const report = await validateSchema(source)
+export async function assertTableSchema(source: Descriptor | Schema) {
+  const report = await validateTableSchema(source)
 
   if (!report.schema) {
     throw new Error(

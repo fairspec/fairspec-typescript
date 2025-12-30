@@ -1,7 +1,7 @@
 import type { Dialect } from "../dialect/index.ts"
 import type { Metadata } from "../metadata/index.ts"
 import type { Profile } from "../profile/index.ts"
-import type { Schema } from "../schema/index.ts"
+import type { Schema } from "../tableSchema/index.ts"
 import type { License } from "./License.ts"
 import type { Source } from "./Source.ts"
 

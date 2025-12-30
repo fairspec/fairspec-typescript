@@ -1,12 +1,12 @@
 import { loadDescriptor } from "../descriptor/index.ts"
-import { assertSchema } from "./assert.ts"
+import { assertTableSchema } from "./assert.ts"
 
 /**
  * Load a Schema descriptor (JSON Object) from a file or URL
  * Ensures the descriptor is valid against its profile
  */
-export async function loadSchema(path: string) {
+export async function loadTableSchema(path: string) {
   const descriptor = await loadDescriptor(path)
-  const schema = await assertSchema(descriptor)
+  const schema = await assertTableSchema(descriptor)
   return schema
 }

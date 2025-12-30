@@ -2,7 +2,7 @@ import type { Descriptor } from "../../descriptor/index.ts"
 import { isDescriptor } from "../../descriptor/index.ts"
 import { convertDialectFromDescriptor } from "../../dialect/index.ts"
 import { isRemotePath, normalizePath } from "../../path/index.ts"
-import { convertSchemaFromDescriptor } from "../../schema/index.ts"
+import { convertTableSchemaFromDescriptor } from "../../tableSchema/index.ts"
 
 export function convertResourceFromDescriptor(
   descriptor: Descriptor,
@@ -18,7 +18,7 @@ export function convertResourceFromDescriptor(
   convertPaths(descriptor, options)
 
   convertDialect(descriptor)
-  convertSchema(descriptor)
+  convertTableSchema(descriptor)
 
   return descriptor
 }
@@ -84,8 +84,8 @@ function convertDialect(descriptor: Descriptor) {
   }
 }
 
-function convertSchema(descriptor: Descriptor) {
+function convertTableSchema(descriptor: Descriptor) {
   if (isDescriptor(descriptor.schema)) {
-    descriptor.schema = convertSchemaFromDescriptor(descriptor.schema)
+    descriptor.schema = convertTableSchemaFromDescriptor(descriptor.schema)
   }
 }

@@ -1,8 +1,8 @@
 import type { JSONSchema7 } from "json-schema"
 import { describe, expect, it } from "vitest"
-import { convertSchemaFromJsonSchema } from "./fromJsonSchema.ts"
+import { convertTableSchemaFromJsonSchema } from "./fromJsonSchema.ts"
 
-describe("convertSchemaFromJsonSchema", () => {
+describe("convertTableSchemaFromJsonSchema", () => {
   it("converts JSONSchema object to Table Schema", () => {
     const jsonSchema: JSONSchema7 = {
       type: "object",
@@ -44,7 +44,7 @@ describe("convertSchemaFromJsonSchema", () => {
       },
     }
 
-    const tableSchema = convertSchemaFromJsonSchema(jsonSchema)
+    const tableSchema = convertTableSchemaFromJsonSchema(jsonSchema)
 
     expect(tableSchema.title).toBe("User Schema")
     expect(tableSchema.description).toBe("Schema for user data")
@@ -133,7 +133,7 @@ describe("convertSchemaFromJsonSchema", () => {
       },
     }
 
-    const tableSchema = convertSchemaFromJsonSchema(jsonSchema)
+    const tableSchema = convertTableSchemaFromJsonSchema(jsonSchema)
 
     const nullableField = tableSchema.fields.find(
       f => f.name === "nullableString",
@@ -152,7 +152,7 @@ describe("convertSchemaFromJsonSchema", () => {
       },
     }
 
-    const tableSchema = convertSchemaFromJsonSchema(jsonSchema)
+    const tableSchema = convertTableSchemaFromJsonSchema(jsonSchema)
 
     const unknownField = tableSchema.fields.find(f => f.name === "unknownField")
     expect(unknownField?.type).toBe("string")
@@ -170,7 +170,7 @@ describe("convertSchemaFromJsonSchema", () => {
       },
     }
 
-    const tableSchema = convertSchemaFromJsonSchema(jsonSchema)
+    const tableSchema = convertTableSchemaFromJsonSchema(jsonSchema)
 
     expect(tableSchema.fields).toHaveLength(1)
     expect(tableSchema.fields[0]?.name).toBe("validField")

@@ -114,11 +114,11 @@ export {
   loadResourceDescriptor,
   validateResourceMetadata,
 } from "./resource/index.ts"
+export type { Schema } from "./tableSchema/index.ts"
 export {
-  convertSchemaFromJsonSchema,
-  convertSchemaToJsonSchema,
-  loadSchema,
-  resolveSchema,
-  validateSchema,
-} from "./schema/index.ts"
-export type { Schema } from "./schema/Schema.ts"
+  convertTableSchemaFromJsonSchema,
+  convertTableSchemaToJsonSchema,
+  loadTableSchema,
+  resolveTableSchema,
+  validateTableSchema,
+} from "./tableSchema/index.ts"

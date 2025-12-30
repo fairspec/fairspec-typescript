@@ -2,7 +2,7 @@ import type { Field, Schema } from "@fairspec/metadata"
 import { prettify } from "htmlfy"
 import { renderToStaticMarkup } from "react-dom/server"
 
-export function convertSchemaToHtml(
+export function convertTableSchemaToHtml(
   schema: Schema,
   options?: { frontmatter?: boolean },
 ): string {

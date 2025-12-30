@@ -1,6 +1,6 @@
 import type { SavePackageOptions } from "@fairspec/dataset"
 import type { Package } from "@fairspec/metadata"
-import { isRemoteResource, resolveSchema } from "@fairspec/metadata"
+import { isRemoteResource, resolveTableSchema } from "@fairspec/metadata"
 import type { TablePlugin } from "@fairspec/table"
 import type { DatabaseFormat } from "../resource/index.ts"
 import { saveDatabaseTable } from "../table/index.ts"
@@ -23,7 +23,7 @@ export async function savePackageToDatabase(
 
       if (table) {
         const dialect = { table: resource.name }
-        const schema = await resolveSchema(resource.schema)
+        const schema = await resolveTableSchema(resource.schema)
 
         // TODO: support parallel saving?
         await saveDatabaseTable(table, {

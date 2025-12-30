@@ -1,4 +1,4 @@
-import { resolveDialect, resolveSchema } from "@fairspec/metadata"
+import { resolveDialect, resolveTableSchema } from "@fairspec/metadata"
 import type { Resource } from "@fairspec/metadata"
 import { normalizeTable } from "@fairspec/table"
 import type { LoadTableOptions } from "@fairspec/table"
@@ -30,7 +30,7 @@ export async function loadDatabaseTable(
   let table = pl.DataFrame(records).lazy()
 
   if (!options?.denormalized) {
-    let schema = await resolveSchema(resource.schema)
+    let schema = await resolveTableSchema(resource.schema)
     if (!schema) schema = await inferDatabaseSchema(resource)
     table = await normalizeTable(table, schema)
   }

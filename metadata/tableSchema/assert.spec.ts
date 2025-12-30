@@ -1,8 +1,8 @@
 import { describe, expect, expectTypeOf, it } from "vitest"
-import { assertSchema } from "./assert.ts"
+import { assertTableSchema } from "./assert.ts"
 import type { Schema } from "./Schema.ts"
 
-describe("assertSchema", () => {
+describe("assertTableSchema", () => {
   it("returns typed schema when valid", async () => {
     const descriptor = {
       fields: [
@@ -18,7 +18,7 @@ describe("assertSchema", () => {
       primaryKey: ["id"],
     }
 
-    const schema = await assertSchema(descriptor)
+    const schema = await assertTableSchema(descriptor)
 
     expectTypeOf(schema).toEqualTypeOf<Schema>()
     expect(schema).toEqual(descriptor)
@@ -34,6 +34,6 @@ describe("assertSchema", () => {
       ],
     }
 
-    await expect(assertSchema(descriptor)).rejects.toThrow(Error)
+    await expect(assertTableSchema(descriptor)).rejects.toThrow(Error)
   })
 })

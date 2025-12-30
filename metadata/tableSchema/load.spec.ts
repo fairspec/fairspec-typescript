@@ -1,9 +1,9 @@
 import { join } from "node:path"
 import { describe, expect, expectTypeOf, it } from "vitest"
-import { loadSchema } from "./load.ts"
+import { loadTableSchema } from "./load.ts"
 import type { Schema } from "./Schema.ts"
 
-describe("loadSchema", () => {
+describe("loadTableSchema", () => {
   const getFixturePath = (name: string) =>
     join(import.meta.dirname, "fixtures", name)
   const expectedSchema = {
@@ -20,7 +20,7 @@ describe("loadSchema", () => {
   }
 
   it("loads a schema from a local file path", async () => {
-    const schema = await loadSchema(getFixturePath("schema.json"))
+    const schema = await loadTableSchema(getFixturePath("schema.json"))
 
     expectTypeOf(schema).toEqualTypeOf<Schema>()
     expect(schema).toEqual(expectedSchema)
@@ -28,12 +28,12 @@ describe("loadSchema", () => {
 
   it("throws an error when schema is invalid", async () => {
     await expect(
-      loadSchema(getFixturePath("schema-invalid.json")),
+      loadTableSchema(getFixturePath("schema-invalid.json")),
     ).rejects.toThrow()
   })
 
   it("loads a full schema with all features", async () => {
-    const schema = await loadSchema(getFixturePath("schema-full.json"))
+    const schema = await loadTableSchema(getFixturePath("schema-full.json"))
 
     expectTypeOf(schema).toEqualTypeOf<Schema>()
     expect(schema).toBeDefined()

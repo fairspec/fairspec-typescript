@@ -1,8 +1,8 @@
 import type { Schema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { convertSchemaToMarkdown } from "./toMarkdown.ts"
+import { convertTableSchemaToMarkdown } from "./toMarkdown.ts"
 
-describe("convertSchemaToMarkdown", () => {
+describe("convertTableSchemaToMarkdown", () => {
   it("converts a simple schema to markdown table", () => {
     const schema: Schema = {
       fields: [
@@ -21,7 +21,7 @@ describe("convertSchemaToMarkdown", () => {
       ],
     }
 
-    const result = convertSchemaToMarkdown(schema)
+    const result = convertTableSchemaToMarkdown(schema)
 
     expect(result).toContain(
       "| Name | Type | Title | Description | Constraints |",
@@ -44,7 +44,7 @@ describe("convertSchemaToMarkdown", () => {
       ],
     }
 
-    const result = convertSchemaToMarkdown(schema)
+    const result = convertTableSchemaToMarkdown(schema)
 
     expect(result).toContain("# Test Schema")
     expect(result).toContain("A test schema for validation")
@@ -73,7 +73,7 @@ describe("convertSchemaToMarkdown", () => {
       ],
     }
 
-    const result = convertSchemaToMarkdown(schema)
+    const result = convertTableSchemaToMarkdown(schema)
 
     expect(result).toContain("required")
     expect(result).toContain("min: 0")
@@ -86,7 +86,7 @@ describe("convertSchemaToMarkdown", () => {
       fields: [],
     }
 
-    const result = convertSchemaToMarkdown(schema)
+    const result = convertTableSchemaToMarkdown(schema)
 
     expect(result).toContain(
       "| Name | Type | Title | Description | Constraints |",
@@ -104,7 +104,7 @@ describe("convertSchemaToMarkdown", () => {
       ],
     }
 
-    const result = convertSchemaToMarkdown(schema)
+    const result = convertTableSchemaToMarkdown(schema)
 
     expect(result).toContain("Description with pipe character")
   })
@@ -122,7 +122,7 @@ describe("convertSchemaToMarkdown", () => {
       ],
     }
 
-    const result = convertSchemaToMarkdown(schema)
+    const result = convertTableSchemaToMarkdown(schema)
 
     expect(result).toContain("enum: active, inactive, pending")
   })
@@ -139,7 +139,7 @@ describe("convertSchemaToMarkdown", () => {
       ],
     }
 
-    const result = convertSchemaToMarkdown(schema, { frontmatter: true })
+    const result = convertTableSchemaToMarkdown(schema, { frontmatter: true })
 
     expect(result).toContain("---")
     expect(result).toContain("title: Test Schema")
@@ -158,7 +158,7 @@ describe("convertSchemaToMarkdown", () => {
       ],
     }
 
-    const result = convertSchemaToMarkdown(schema, { frontmatter: false })
+    const result = convertTableSchemaToMarkdown(schema, { frontmatter: false })
 
     expect(result).toContain("# Test Schema")
     expect(result).not.toContain("title: Test Schema")

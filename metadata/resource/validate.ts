@@ -3,7 +3,7 @@ import { loadDescriptor } from "../descriptor/index.ts"
 import { validateDialect } from "../dialect/index.ts"
 import type { MetadataError } from "../error/index.ts"
 import { validateDescriptor } from "../profile/index.ts"
-import { validateSchema } from "../schema/index.ts"
+import { validateTableSchema } from "../tableSchema/index.ts"
 import { convertResourceFromDescriptor } from "./convert/fromDescriptor.ts"
 import type { Resource } from "./Resource.ts"
 
@@ -73,7 +73,7 @@ async function inspectSchemaIfExternal(resource: Resource) {
   const errors: MetadataError[] = []
 
   if (typeof resource.schema === "string") {
-    const report = await validateSchema(resource.schema)
+    const report = await validateTableSchema(resource.schema)
     errors.push(...report.errors)
   }
 

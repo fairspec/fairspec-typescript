@@ -25,7 +25,8 @@
     "metadata"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "type": "tsc --noEmit"
   },
   "dependencies": {
     "@sindresorhus/slugify": "^0.9.0",

@@ -1,6 +1,6 @@
 import type { Descriptor } from "../descriptor/index.ts"
 import type { MetadataError } from "../error/index.ts"
-import { inspectJsonValue } from "../json/index.ts"
+import { inspectJsonValue } from "../jsonSchema/index.ts"
 import { createReport } from "../report/index.ts"
 import type { Profile } from "./Profile.ts"
 import { resolveProfile } from "./resolve.ts"

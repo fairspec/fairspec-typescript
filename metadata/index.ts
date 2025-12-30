@@ -86,7 +86,7 @@ export type {
   YearmonthConstraints,
   YearmonthField,
 } from "./field/index.ts"
-export { inspectJsonValue, resolveJsonSchema } from "./json/index.ts"
+export { inspectJsonValue, resolveJsonSchema } from "./jsonSchema/index.ts"
 export type { Contributor, Package } from "./package/index.ts"
 export {
   convertPackageToDescriptor,

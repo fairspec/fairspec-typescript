@@ -1,4 +1,4 @@
-import type { JsonSchema } from "../json/index.ts"
+import type { JsonSchema } from "../jsonSchema/index.ts"
 
 export type Profile = JsonSchema
 export type ProfileType = "dialect" | "package" | "resource" | "schema"

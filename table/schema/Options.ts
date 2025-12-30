@@ -1,0 +1,27 @@
+import type {
+  FieldType,
+  GeojsonField,
+  GeopointField,
+  ListField,
+  StringField,
+} from "@fairspec/metadata"
+
+export interface SchemaOptions {
+  fieldNames?: string[]
+  fieldTypes?: Record<string, FieldType>
+  missingValues?: string[]
+  stringFormat?: StringField["format"]
+  decimalChar?: string
+  groupChar?: string
+  bareNumber?: boolean
+  trueValues?: string[]
+  falseValues?: string[]
+  datetimeFormat?: string
+  dateFormat?: string
+  timeFormat?: string
+  arrayType?: "array" | "list"
+  listDelimiter?: string
+  listItemType?: ListField["itemType"]
+  geopointFormat?: GeopointField["format"]
+  geojsonFormat?: GeojsonField["format"]
+}

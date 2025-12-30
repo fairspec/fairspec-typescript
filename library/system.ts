@@ -1,0 +1,54 @@
+import { DatabasePlugin } from "@fairspec/database"
+import {
+  CkanPlugin,
+  DatahubPlugin,
+  DescriptorPlugin,
+  FolderPlugin,
+  GithubPlugin,
+  ZenodoPlugin,
+  ZipPlugin,
+} from "@fairspec/dataset"
+import {
+  ArrowPlugin,
+  CsvPlugin,
+  InlinePlugin,
+  JsonPlugin,
+  OdsPlugin,
+  ParquetPlugin,
+  XlsxPlugin,
+} from "@fairspec/table"
+import type { Plugin } from "./plugin.ts"
+
+export class System {
+  plugins: Plugin[] = []
+
+  register(PluginClass: new () => Plugin) {
+    this.plugins.unshift(new PluginClass())
+  }
+}
+
+export const system = new System()
+
+// Dataset
+
+system.register(CkanPlugin)
+system.register(DatahubPlugin)
+system.register(DescriptorPlugin)
+system.register(GithubPlugin)
+system.register(ZenodoPlugin)
+system.register(FolderPlugin)
+system.register(ZipPlugin)
+
+// Table
+
+system.register(ArrowPlugin)
+system.register(CsvPlugin)
+system.register(InlinePlugin)
+system.register(JsonPlugin)
+system.register(OdsPlugin)
+system.register(ParquetPlugin)
+system.register(XlsxPlugin)
+
+// Mixed
+
+system.register(DatabasePlugin)

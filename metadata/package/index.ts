@@ -1,0 +1,8 @@
+export { assertPackage } from "./assert.ts"
+export type { Contributor } from "./Contributor.ts"
+export { convertPackageFromDescriptor } from "./convert/fromDescriptor.ts"
+export { convertPackageToDescriptor } from "./convert/toDescriptor.ts"
+export { loadPackageDescriptor } from "./load.ts"
+export type { Package } from "./Package.ts"
+export { savePackageDescriptor } from "./save.ts"
+export { validatePackageMetadata } from "./validate.ts"

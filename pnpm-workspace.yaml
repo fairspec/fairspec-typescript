@@ -1,0 +1,11 @@
+dangerouslyAllowAllBuilds: true
+packages:
+  - database
+  - dataset
+  - document
+  - fairspec
+  - library
+  - metadata
+  - table
+  - terminal
+  - website

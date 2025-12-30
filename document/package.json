@@ -1,0 +1,45 @@
+{
+  "name": "@fairspec/document",
+  "type": "module",
+  "version": "0.0.0-dev",
+  "exports": "./build/index.js",
+  "sideEffects": false,
+  "files": [
+    "build"
+  ],
+  "license": "MIT",
+  "author": "Evgeny Karev",
+  "repository": "https://github.com/fairspec/fairspec-typescript",
+  "description": "Fairspec TypeScript is a fast data management framework built on top of the Fairspec standard and Polars DataFrames",
+  "keywords": [
+    "fairspec",
+    "data",
+    "polars",
+    "dataframe",
+    "jsonschema",
+    "tableschema",
+    "typescript",
+    "validation",
+    "quality",
+    "fair",
+    "document",
+    "html"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@fairspec/metadata": "workspace:*",
+    "@fairspec/dataset": "workspace:*",
+    "htmlfy": "^1.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/mdast": "^4.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
+  }
+}

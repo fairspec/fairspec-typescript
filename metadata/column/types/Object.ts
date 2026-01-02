@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { BaseColumn } from "../Base.ts"
+import { BaseColumn } from "./Base.ts"
 
-export const BaseObjectColumn = BaseColumn.extend({
+export const ObjectColumn = BaseColumn.extend({
   type: z.literal("object"),
 
   missingValues: z
@@ -21,4 +21,4 @@ export const BaseObjectColumn = BaseColumn.extend({
     ),
 })
 
-export type BaseObjectColumn = z.infer<typeof BaseObjectColumn>
+export type ObjectColumn = z.infer<typeof ObjectColumn>

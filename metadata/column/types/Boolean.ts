@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { BaseColumn } from "../Base.ts"
+import { BaseColumn } from "./Base.ts"
 
-export const BaseBooleanColumn = BaseColumn.extend({
+export const BooleanColumn = BaseColumn.extend({
   type: z.literal("boolean"),
 
   enum: z
@@ -40,4 +40,4 @@ export const BaseBooleanColumn = BaseColumn.extend({
     ),
 })
 
-export type BaseBooleanColumn = z.infer<typeof BaseBooleanColumn>
+export type BooleanColumn = z.infer<typeof BooleanColumn>

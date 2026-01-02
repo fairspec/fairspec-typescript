@@ -1,65 +1,49 @@
 import { z } from "zod"
-import { BaseColumn } from "../Base.ts"
+import { BaseColumn } from "./Base.ts"
 
-export const BaseIntegerColumn = BaseColumn.extend({
-  type: z.literal("integer"),
+export const NumberColumn = BaseColumn.extend({
+  type: z.literal("number"),
 
   enum: z
-    .array(z.number().int())
+    .array(z.number())
     .optional()
     .describe("An optional array of allowed values for the column"),
 
   minimum: z
     .number()
-    .int()
     .optional()
     .describe("An optional minimum value constraint (inclusive)"),
 
   maximum: z
     .number()
-    .int()
     .optional()
     .describe("An optional maximum value constraint (inclusive)"),
 
   exclusiveMinimum: z
     .number()
-    .int()
     .optional()
     .describe("An optional minimum value constraint (exclusive)"),
 
   exclusiveMaximum: z
     .number()
-    .int()
     .optional()
     .describe("An optional maximum value constraint (exclusive)"),
 
   multipleOf: z
     .number()
-    .int()
-    .min(1)
+    .positive()
     .optional()
-    .describe("An optional constraint that values must be a multiple of this number"),
-
-  categories: z
-    .array(
-      z.union([
-        z.number().int(),
-        z.object({
-          value: z.number().int(),
-          label: z.string(),
-        }),
-      ]),
-    )
-    .optional()
-    .describe("An optional array of categorical values with optional labels"),
+    .describe(
+      "An optional constraint that values must be a multiple of this number",
+    ),
 
   missingValues: z
     .array(
       z.union([
         z.string(),
-        z.number().int(),
+        z.number(),
         z.object({
-          value: z.union([z.string(), z.number().int()]),
+          value: z.union([z.string(), z.number()]),
           label: z.string(),
         }),
       ]),
@@ -70,4 +54,4 @@ export const BaseIntegerColumn = BaseColumn.extend({
     ),
 })
 
-export type BaseIntegerColumn = z.infer<typeof BaseIntegerColumn>
+export type NumberColumn = z.infer<typeof NumberColumn>

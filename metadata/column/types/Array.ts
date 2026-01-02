@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { BaseColumn } from "../Base.ts"
+import { BaseColumn } from "./Base.ts"
 
-export const BaseArrayColumn = BaseColumn.extend({
+export const ArrayColumn = BaseColumn.extend({
   type: z.literal("array"),
 
   missingValues: z
@@ -21,4 +21,4 @@ export const BaseArrayColumn = BaseColumn.extend({
     ),
 })
 
-export type BaseArrayColumn = z.infer<typeof BaseArrayColumn>
+export type ArrayColumn = z.infer<typeof ArrayColumn>

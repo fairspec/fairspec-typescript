@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { BaseColumn } from "../Base.ts"
+import { BaseColumn } from "./Base.ts"
 
-export const BaseStringColumn = BaseColumn.extend({
+export const StringColumn = BaseColumn.extend({
   type: z.literal("string"),
 
   enum: z
@@ -13,6 +13,20 @@ export const BaseStringColumn = BaseColumn.extend({
     .string()
     .optional()
     .describe("An optional regular expression pattern that values must match"),
+
+  minLength: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("An optional minimum length constraint for string values"),
+
+  maxLength: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("An optional maximum length constraint for string values"),
 
   categories: z
     .array(
@@ -43,4 +57,4 @@ export const BaseStringColumn = BaseColumn.extend({
     ),
 })
 
-export type BaseStringColumn = z.infer<typeof BaseStringColumn>
+export type StringColumn = z.infer<typeof StringColumn>

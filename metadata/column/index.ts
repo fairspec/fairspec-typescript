@@ -1,1 +1,7 @@
 export { BaseColumn } from "./Base.ts"
+export { BaseStringColumn } from "./string/Base.ts"
+export { BaseIntegerColumn } from "./integer/Base.ts"
+export { BaseNumberColumn } from "./number/Base.ts"
+export { BaseBooleanColumn } from "./boolean/Base.ts"
+export { BaseArrayColumn } from "./array/Base.ts"
+export { BaseObjectColumn } from "./object/Base.ts"

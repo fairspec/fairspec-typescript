@@ -1,1 +1,6 @@
-// TODO: implement (should be 2020-12 compatible)?
+import type { Descriptor } from "../descriptor/index.ts"
+
+export function normalizeJsonSchema(descriptor: Descriptor) {
+  descriptor = globalThis.structuredClone(descriptor)
+  return descriptor
+}

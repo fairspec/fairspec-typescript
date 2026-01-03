@@ -1,70 +1,56 @@
 {
-  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
-  "name": "users",
-  "title": "User Data Schema",
-  "description": "A comprehensive schema for user data",
-  "fields": [
-    {
-      "name": "id",
+  "$schema": "https://fairspec.org/profiles/latest/table.json",
+  "required": ["id", "email"],
+  "properties": {
+    "id": {
       "type": "integer",
-      "constraints": {
-        "required": true,
-        "unique": true
-      }
+      "title": "User ID",
+      "description": "Unique identifier for the user"
     },
-    {
-      "name": "email",
+    "email": {
       "type": "string",
       "format": "email",
-      "constraints": {
-        "required": true
-      }
+      "title": "Email Address"
     },
-    {
-      "name": "name",
+    "name": {
       "type": "string",
-      "constraints": {
-        "minLength": 1,
-        "maxLength": 100
-      }
+      "minLength": 1,
+      "maxLength": 100
     },
-    {
-      "name": "age",
+    "age": {
       "type": "integer",
-      "constraints": {
-        "minimum": 0,
-        "maximum": 150
-      }
+      "minimum": 0,
+      "maximum": 150
     },
-    {
-      "name": "score",
+    "score": {
       "type": "number"
     },
-    {
-      "name": "active",
+    "active": {
       "type": "boolean"
     },
-    {
-      "name": "created_at",
-      "type": "datetime"
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
     },
-    {
-      "name": "birth_date",
-      "type": "date"
+    "birth_date": {
+      "type": "string",
+      "format": "date"
     },
-    {
-      "name": "department_id",
+    "department_id": {
       "type": "integer"
     }
+  },
+  "primaryKey": ["id"],
+  "uniqueKeys": [
+    ["email"],
+    ["name", "department_id"]
   ],
-  "primaryKey": "id",
-  "uniqueKeys": [["email"], ["name", "department_id"]],
   "foreignKeys": [
     {
-      "fields": "department_id",
+      "columns": ["department_id"],
       "reference": {
         "resource": "departments",
-        "fields": "id"
+        "columns": ["id"]
       }
     }
   ],

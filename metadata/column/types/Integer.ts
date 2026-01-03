@@ -3,6 +3,7 @@ import { BaseColumn } from "./Base.ts"
 
 export const IntegerColumn = BaseColumn.extend({
   type: z.literal("integer"),
+  format: z.undefined().optional(),
 
   enum: z
     .array(z.number().int())

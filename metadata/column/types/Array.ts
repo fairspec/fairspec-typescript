@@ -5,6 +5,7 @@ import { BaseColumn } from "./Base.ts"
 
 export const ArrayColumn = BaseColumn.extend({
   type: z.literal("array"),
+  format: z.undefined().optional(),
 
   missingValues: z
     .array(

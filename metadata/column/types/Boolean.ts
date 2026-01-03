@@ -3,6 +3,7 @@ import { BaseColumn } from "./Base.ts"
 
 export const BooleanColumn = BaseColumn.extend({
   type: z.literal("boolean"),
+  format: z.undefined().optional(),
 
   enum: z
     .array(z.boolean())

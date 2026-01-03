@@ -1,8 +1,8 @@
 {
-  "fields": [
-    {
-      "name": "id",
+  "$schema": "https://fairspec.org/profiles/latest/table.json",
+  "properties": {
+    "id": {
       "type": 123
     }
-  ]
+  }
 }

@@ -2,21 +2,20 @@ import * as fs from "node:fs/promises"
 import * as path from "node:path"
 import { temporaryDirectory } from "tempy"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
-import type { Schema } from "./Schema.ts"
+import type { TableSchema } from "./Schema.ts"
 import { saveTableSchema } from "./save.ts"
 
 describe("saveTableSchema", () => {
-  const testSchema: Schema = {
-    fields: [
-      {
-        name: "id",
+  const testSchema: TableSchema = {
+    $schema: "https://fairspec.org/profiles/latest/table.json",
+    properties: {
+      id: {
         type: "integer",
       },
-      {
-        name: "name",
+      name: {
         type: "string",
       },
-    ],
+    },
     primaryKey: ["id"],
   }
 
@@ -50,19 +49,12 @@ describe("saveTableSchema", () => {
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
 
-    // Remove $schema property for test comparison
-    const { $schema, ...schemaWithoutSchema } = parsedContent
-    expect(schemaWithoutSchema).toEqual(testSchema)
-    expect($schema).toBe(
-      "https://datapackage.org/profiles/2.0/tableschema.json",
+    expect(parsedContent).toEqual(testSchema)
+    expect(parsedContent.$schema).toBe(
+      "https://fairspec.org/profiles/latest/table.json",
     )
 
-    // Create expected format with $schema for comparison
-    const expectedWithSchema = {
-      ...testSchema,
-      $schema: "https://datapackage.org/profiles/2.0/tableschema.json",
-    }
-    const expectedFormat = JSON.stringify(expectedWithSchema, null, 2)
+    const expectedFormat = JSON.stringify(testSchema, null, 2)
     expect(content).toEqual(expectedFormat)
   })
 })

@@ -1,12 +1,11 @@
 {
-  "fields": [
-    {
-      "name": "id",
+  "$schema": "https://fairspec.org/profiles/latest/table.json",
+  "properties": {
+    "id": {
       "type": "integer"
     },
-    {
-      "name": "name",
+    "name": {
       "type": "string"
     }
-  ]
+  }
 }

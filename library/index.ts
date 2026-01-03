@@ -1,6 +1,6 @@
 export * from "@fairspec/database"
 export * from "@fairspec/dataset"
-export * from "@fairspec/document"
+export * from "@fairspec/extension"
 export * from "@fairspec/metadata"
 export * from "@fairspec/table"
 export { inferDialect } from "./dialect/index.ts"

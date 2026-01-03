@@ -134,7 +134,7 @@ importers:
         specifier: 4.1.3
         version: 4.1.3
 
-  document:
+  extension:
     dependencies:
       '@fairspec/dataset':
         specifier: workspace:*
@@ -185,9 +185,9 @@ importers:
       '@fairspec/dataset':
         specifier: workspace:*
         version: link:../dataset
-      '@fairspec/document':
+      '@fairspec/extension':
         specifier: workspace:*
-        version: link:../document
+        version: link:../extension
       '@fairspec/metadata':
         specifier: workspace:*
         version: link:../metadata
@@ -6794,7 +6794,7 @@ snapshots:
       '@types/mdast': 4.0.4
       escape-string-regexp: 5.0.0
       unist-util-is: 6.0.0
-      unist-util-visit-parents: 6.0.1
+      unist-util-visit-parents: 6.0.2
 
   mdast-util-from-markdown@2.0.2:
     dependencies:

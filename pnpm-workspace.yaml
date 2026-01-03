@@ -2,7 +2,7 @@ dangerouslyAllowAllBuilds: true
 packages:
   - database
   - dataset
-  - document
+  - extension
   - fairspec
   - library
   - metadata

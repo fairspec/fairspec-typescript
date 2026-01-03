@@ -1,6 +1,6 @@
 export { assertTableSchema } from "./assert.ts"
-export { convertTableSchemaFromJsonSchema } from "./convert/fromJsonSchema.ts"
-export { convertTableSchemaToJsonSchema } from "./convert/toJsonSchema.ts"
+export { convertTableSchemaFromDescriptor } from "./convert/fromDescriptor.ts"
+export { convertTableSchemaToDescriptor } from "./convert/toDescriptor.ts"
 export { ForeignKey } from "./ForeignKey.ts"
 export { loadTableSchema } from "./load.ts"
 export { resolveTableSchema } from "./resolve.ts"

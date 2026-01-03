@@ -1,5 +1,5 @@
 import { saveDescriptor } from "../descriptor/index.ts"
-import { convertTableSchemaToDescriptor } from "./convert/toDescriptor.ts"
+import { denormalizeTableSchema } from "./denormalize.ts"
 import type { TableSchema } from "./Schema.ts"
 
 /**
@@ -13,7 +13,7 @@ export async function saveTableSchema(
     overwrite?: boolean
   },
 ) {
-  const descriptor = convertTableSchemaToDescriptor(tableSchema)
+  const descriptor = denormalizeTableSchema(tableSchema)
 
   await saveDescriptor(descriptor, {
     path: options.path,

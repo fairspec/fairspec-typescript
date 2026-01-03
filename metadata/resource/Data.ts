@@ -4,8 +4,8 @@ import { Path } from "../path/Path.ts"
 export const PathData = z.union([Path, z.array(Path)])
 
 export const JsonData = z.union([
-  z.object({}).passthrough(),
-  z.array(z.object({}).passthrough()),
+  z.record(z.string(), z.unknown()),
+  z.array(z.record(z.string(), z.unknown())),
 ])
 
 export const Data = z.union([PathData, JsonData])

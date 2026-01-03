@@ -7,7 +7,7 @@ import { profileRegistry } from "./registry.ts"
 export async function assertProfile(
   jsonSchema: JsonSchema,
   options?: {
-    path?: string
+    path: string
     type?: ProfileType
   },
 ) {
@@ -30,7 +30,7 @@ export async function assertProfile(
 function checkProfileType(
   jsonSchema: JsonSchema,
   options?: {
-    path?: string
+    path: string
     type?: ProfileType
   },
 ) {

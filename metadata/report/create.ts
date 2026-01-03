@@ -1,6 +1,6 @@
-import type { FrictionlessError } from "../error/index.ts"
+import type { FairspecError } from "../error/index.ts"
 
-export function createReport<T = FrictionlessError>(
+export function createReport<T = FairspecError>(
   errors?: T[],
   options?: { maxErrors?: number },
 ) {

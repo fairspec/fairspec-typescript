@@ -1,14 +1,14 @@
 import { loadTableSchema } from "./load.ts"
-import type { Schema } from "./Schema.ts"
+import type { TableSchema } from "./Schema.ts"
 
-export async function resolveTableSchema(schema?: Schema | string) {
-  if (!schema) {
+export async function resolveTableSchema(tableSchema?: TableSchema | string) {
+  if (!tableSchema) {
     return undefined
   }
 
-  if (typeof schema !== "string") {
-    return schema
+  if (typeof tableSchema !== "string") {
+    return tableSchema
   }
 
-  return await loadTableSchema(schema)
+  return await loadTableSchema(tableSchema)
 }

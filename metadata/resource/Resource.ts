@@ -1,7 +1,7 @@
 import type { Dialect } from "../dialect/index.ts"
+import type { JsonSchema } from "../jsonSchema/index.ts"
 import type { Metadata } from "../metadata/index.ts"
-import type { Profile } from "../profile/index.ts"
-import type { Schema } from "../tableSchema/index.ts"
+import type { TableSchema } from "../tableSchema/index.ts"
 import type { License } from "./License.ts"
 import type { Source } from "./Source.ts"
 
@@ -99,12 +99,12 @@ export interface Resource extends Metadata {
    * Describes fields in the table, constraints, etc.
    * @see https://datapackage.org/standard/table-schema/
    */
-  schema?: string | Schema
+  schema?: string | TableSchema
 
   /**
    * Schema for the json data
    * Describes fields in the json, constraints, etc.
    * @see https://json-schema.org/
    */
-  jsonSchema?: string | Profile
+  jsonSchema?: string | JsonSchema
 }

@@ -5,6 +5,6 @@ import type { BaseError } from "./Base.ts"
  */
 export interface MetadataError extends BaseError {
   type: "metadata"
-  pointer: string
   message: string
+  jsonPointer: string
 }

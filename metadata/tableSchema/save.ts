@@ -1,24 +1,18 @@
 import { saveDescriptor } from "../descriptor/index.ts"
-import { convertTableSchemaToDescriptor } from "./convert/toDescriptor.ts"
-import type { Schema } from "./Schema.ts"
-
-const CURRENT_PROFILE = "https://datapackage.org/profiles/2.0/tableschema.json"
+import type { TableSchema } from "./Schema.ts"
 
 /**
  * Save a Schema to a file path
  * Works in Node.js environments
  */
 export async function saveTableSchema(
-  schema: Schema,
+  tableSchema: TableSchema,
   options: {
     path: string
     overwrite?: boolean
   },
 ) {
-  const descriptor = convertTableSchemaToDescriptor(schema)
-  descriptor.$schema = descriptor.$schema ?? CURRENT_PROFILE
-
-  await saveDescriptor(descriptor, {
+  await saveDescriptor(tableSchema, {
     path: options.path,
     overwrite: options.overwrite,
   })

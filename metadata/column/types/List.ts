@@ -5,7 +5,15 @@ export const ListColumn = StringColumn.extend({
   format: z.literal("list"),
 
   itemType: z
-    .enum(["string", "integer", "number", "boolean", "datetime", "date", "time"])
+    .enum([
+      "string",
+      "integer",
+      "number",
+      "boolean",
+      "datetime",
+      "date",
+      "time",
+    ])
     .optional()
     .describe("An optional type for items in a list column"),
 

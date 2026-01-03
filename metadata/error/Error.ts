@@ -1,4 +1,4 @@
-import type { BoundError } from "./Bound.ts"
-import type { UnboundError } from "./Unbound.ts"
+import type { GeneralError } from "./General.ts"
+import type { ResourceError } from "./Resource.ts"
 
-export type FrictionlessError = BoundError | UnboundError
+export type FairspecError = GeneralError | ResourceError

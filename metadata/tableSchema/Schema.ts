@@ -1,63 +1,61 @@
-import type { Field } from "../field/index.ts"
-import type { Metadata } from "../metadata/index.ts"
-import type { ForeignKey } from "./ForeignKey.ts"
+import { z } from "zod"
+import { Column } from "../column/Column.ts"
+import { ForeignKey } from "./ForeignKey.ts"
+import { UniqueKey } from "./UniqueKey.ts"
 
-/**
- * Table Schema definition
- * Based on the specification at https://datapackage.org/standard/table-schema/
- */
-export interface Schema extends Metadata {
-  /**
-   * URL of profile (optional)
-   */
-  $schema?: string
+export const TableSchema = z.object({
+  $schema: z
+    .string()
+    .regex(/fairspec\.table\.json$/)
+    .describe("URI to one of the officially published Fairspec Table profiles"),
 
-  /**
-   * Name of schema (optional)
-   */
-  name?: string
+  required: z
+    .array(z.string())
+    .optional()
+    .describe("An optional list of column names that must be present"),
 
-  /**
-   * Title of schema (optional)
-   */
-  title?: string
+  properties: z
+    .record(z.string(), Column)
+    .describe(
+      "An object defining the schema for table columns, where each key is a column name",
+    ),
 
-  /**
-   * Description of schema (optional)
-   */
-  description?: string
+  missingValues: z
+    .array(
+      z.union([
+        z.string(),
+        z.number(),
+        z.boolean(),
+        z.object({
+          value: z.union([z.string(), z.number(), z.boolean()]),
+          label: z.string(),
+        }),
+      ]),
+    )
+    .optional()
+    .describe(
+      "An optional list of values that represent missing or null data across all columns",
+    ),
 
-  /**
-   * Fields in this schema (required)
-   */
-  fields: Field[]
+  primaryKey: z
+    .array(z.string())
+    .min(1)
+    .optional()
+    .describe(
+      "An optional array of column names that form the table's primary key",
+    ),
 
-  /**
-   * Field matching rule (optional)
-   * Default: "exact"
-   */
-  fieldsMatch?: "exact" | "equal" | "subset" | "superset" | "partial"
+  uniqueKeys: z
+    .array(UniqueKey)
+    .min(1)
+    .optional()
+    .describe("An optional array of unique key constraints"),
 
-  /**
-   * Values representing missing data (optional)
-   * Default: [""]
-   * Can be a simple array of strings or an array of {value, label} objects
-   * where label provides context for why the data is missing
-   */
-  missingValues?: (string | { value: string; label: string })[]
+  foreignKeys: z
+    .array(ForeignKey)
+    .min(1)
+    .optional()
+    .describe("An optional array of foreign key constraints"),
+})
 
-  /**
-   * Fields uniquely identifying each row (optional)
-   */
-  primaryKey?: string[]
-
-  /**
-   * Field combinations that must be unique (optional)
-   */
-  uniqueKeys?: string[][]
-
-  /**
-   * Foreign key relationships (optional)
-   */
-  foreignKeys?: ForeignKey[]
-}
+export type TableSchema = z.infer<typeof TableSchema>

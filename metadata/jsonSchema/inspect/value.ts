@@ -22,8 +22,8 @@ export async function inspectJsonValue(
 
   const errors = validate.errors
     ? validate.errors?.map(error => ({
-        pointer: error.instancePath ?? "/",
         message: error.message ?? "error",
+        jsonPointer: error.instancePath ?? "/",
       }))
     : []
 

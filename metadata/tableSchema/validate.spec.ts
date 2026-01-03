@@ -2,18 +2,17 @@ import { describe, expect, it } from "vitest"
 import { validateTableSchema } from "./validate.ts"
 
 describe("validateTableSchema", () => {
-  it("returns empty array for valid schema", async () => {
+  it("returns no errors for valid schema", async () => {
     const descriptor = {
-      fields: [
-        {
-          name: "id",
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        id: {
           type: "integer",
         },
-        {
-          name: "name",
+        name: {
           type: "string",
         },
-      ],
+      },
     }
 
     const report = await validateTableSchema(descriptor)

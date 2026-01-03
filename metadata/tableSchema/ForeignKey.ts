@@ -1,25 +1,20 @@
-/**
- * Foreign key definition for Table Schema
- * Based on the specification at https://datapackage.org/standard/table-schema/#foreign-keys
- */
-export interface ForeignKey {
-  /**
-   * Source field(s) in this schema
-   */
-  fields: string[]
+import { z } from "zod"
 
-  /**
-   * Reference to fields in another resource
-   */
-  reference: {
-    /**
-     * Target resource name (optional)
-     */
-    resource?: string
+export const ForeignKey = z.object({
+  columns: z.array(z.string()).describe("Source column(s) in this table"),
 
-    /**
-     * Target field(s) in the referenced resource
-     */
-    fields: string[]
-  }
-}
+  reference: z
+    .object({
+      resource: z
+        .string()
+        .optional()
+        .describe("Target resource name (optional, omit for self-reference)"),
+
+      columns: z
+        .array(z.string())
+        .describe("Target column(s) in the referenced resource"),
+    })
+    .describe("Reference to columns in another resource"),
+})
+
+export type ForeignKey = z.infer<typeof ForeignKey>

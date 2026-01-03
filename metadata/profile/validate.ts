@@ -7,8 +7,8 @@ import type { ProfileType } from "./Profile.ts"
 
 export async function validateDescriptor(
   descriptor: Descriptor,
-  options?: {
-    type?: ProfileType
+  options: {
+    type: ProfileType
   },
 ) {
   const $schema =

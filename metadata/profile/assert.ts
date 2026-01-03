@@ -1,59 +1,33 @@
 import type { JsonSchema } from "../jsonSchema/index.ts"
 import type { Profile, ProfileType } from "./Profile.ts"
-import { profileRegistry } from "./registry.ts"
-
-// TODO: It should narrow to JSON Schema
 
 export async function assertProfile(
   jsonSchema: JsonSchema,
-  options?: {
+  options: {
     path: string
-    type?: ProfileType
+    type: ProfileType
   },
 ) {
-  const errors: { message: string }[] = []
-
-  if (!checkProfileType(jsonSchema, options)) {
-    errors.push({
-      message: `Profile at ${options?.path} is not a valid ${options?.type} profile`,
-    })
-  }
-
-  // TODO: Improve consolidated error message
-  if (errors.length) {
-    throw new Error(`Profile at path ${options?.path} is invalid`)
-  }
-
-  return jsonSchema as Profile
-}
-
-function checkProfileType(
-  jsonSchema: JsonSchema,
-  options?: {
-    path: string
-    type?: ProfileType
-  },
-) {
-  if (!options?.path || !options?.type) {
-    return true
-  }
-
-  // This type official profiles
-  const typeProfiles = Object.values(profileRegistry).filter(
-    profile => profile.type === options.type,
+  const regex = new RegExp(
+    `^https:\\/\\/fairspec\\.org\\/profiles\\/\\d+\\.\\d+\\.\\d+\\/${options.type}\\.json$`,
   )
 
-  for (const typeProfile of typeProfiles) {
-    // The profile itself is from the official registry
-    if (options.path === typeProfile.path) return true
-
-    // The profile extends one of the official profiles
-    if (Array.isArray(jsonSchema.allOf)) {
-      for (const ref of Object.values(jsonSchema.allOf)) {
-        if (ref === typeProfile.path) return true
-      }
+  // Main profile path + extension's base profiles
+  const paths = [options.path]
+  if (Array.isArray(jsonSchema.allOf)) {
+    for (const ref of Object.values(jsonSchema.allOf)) {
+      paths.push(ref)
     }
   }
 
-  return false
+  // If one of the paths matches the profile type, we're good
+  for (const path of paths) {
+    if (regex.test(path)) {
+      return jsonSchema as Profile
+    }
+  }
+
+  throw new Error(
+    `Profile at path ${options.path} is not a valid ${options.type} profile`,
+  )
 }

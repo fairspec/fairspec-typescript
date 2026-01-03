@@ -2,154 +2,138 @@ import { describe, expect, it } from "vitest"
 import { assertProfile } from "./assert.ts"
 
 describe("assertProfile", () => {
-  it("returns profile for valid descriptor without options", async () => {
-    const descriptor = {
-      name: "test",
+  it("returns profile for valid json schema", async () => {
+    const jsonSchema = {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+      },
     }
 
-    const profile = await assertProfile(descriptor)
+    const profile = await assertProfile(jsonSchema, {
+      path: "https://fairspec.org/profiles/1.0.0/catalog.json",
+      type: "catalog",
+    })
 
-    expect(profile).toEqual(descriptor)
+    expect(profile).toEqual(jsonSchema)
   })
 
-  it("throws error for custom profile path with mismatched type", async () => {
-    const descriptor = {
-      name: "test",
+  it("returns profile for dataset type", async () => {
+    const jsonSchema = {
+      type: "object",
+      properties: {
+        title: { type: "string" },
+      },
+    }
+
+    const profile = await assertProfile(jsonSchema, {
+      path: "https://fairspec.org/profiles/1.0.0/dataset.json",
+      type: "dataset",
+    })
+
+    expect(profile).toEqual(jsonSchema)
+  })
+
+  it("returns profile for table type", async () => {
+    const jsonSchema = {
+      type: "object",
+      properties: {
+        fields: { type: "array" },
+      },
+    }
+
+    const profile = await assertProfile(jsonSchema, {
+      path: "https://fairspec.org/profiles/2.1.3/table.json",
+      type: "table",
+    })
+
+    expect(profile).toEqual(jsonSchema)
+  })
+
+  it("accepts different semantic versions", async () => {
+    const jsonSchema = {
+      type: "object",
+    }
+
+    const profile1 = await assertProfile(jsonSchema, {
+      path: "https://fairspec.org/profiles/1.0.0/catalog.json",
+      type: "catalog",
+    })
+    expect(profile1).toEqual(jsonSchema)
+
+    const profile2 = await assertProfile(jsonSchema, {
+      path: "https://fairspec.org/profiles/10.20.30/dataset.json",
+      type: "dataset",
+    })
+    expect(profile2).toEqual(jsonSchema)
+  })
+
+  it("throws error for path with mismatched type", async () => {
+    const jsonSchema = {
+      type: "object",
     }
 
     await expect(
-      assertProfile(descriptor, {
-        path: "custom-profile.json",
-        type: "package",
+      assertProfile(jsonSchema, {
+        path: "https://fairspec.org/profiles/1.0.0/catalog.json",
+        type: "dataset",
       }),
-    ).rejects.toThrow("Profile at path custom-profile.json is invalid")
+    ).rejects.toThrow("Profile at path https://fairspec.org/profiles/1.0.0/catalog.json is not a valid dataset profile")
   })
 
-  it("returns profile for official profile path", async () => {
-    const descriptor = {
-      name: "test",
-    }
-
-    const profile = await assertProfile(descriptor, {
-      path: "https://datapackage.org/profiles/1.0/datapackage.json",
-      type: "package",
-    })
-
-    expect(profile).toEqual(descriptor)
-  })
-
-  it("returns profile when path matches alternate official profile", async () => {
-    const descriptor = {
-      name: "test",
-    }
-
-    const profile = await assertProfile(descriptor, {
-      path: "https://specs.frictionlessdata.io/schemas/data-package.json",
-      type: "package",
-    })
-
-    expect(profile).toEqual(descriptor)
-  })
-
-  it("throws error when profile path does not match the specified type", async () => {
-    const descriptor = {
-      name: "test",
+  it("throws error for invalid URL format", async () => {
+    const jsonSchema = {
+      type: "object",
     }
 
     await expect(
-      assertProfile(descriptor, {
-        path: "https://datapackage.org/profiles/1.0/tableschema.json",
-        type: "package",
+      assertProfile(jsonSchema, {
+        path: "https://example.com/catalog.json",
+        type: "catalog",
       }),
-    ).rejects.toThrow(
-      "Profile at path https://datapackage.org/profiles/1.0/tableschema.json is invalid",
-    )
+    ).rejects.toThrow("Profile at path https://example.com/catalog.json is not a valid catalog profile")
   })
 
-  it("returns profile when only path is provided", async () => {
-    const descriptor = {
-      name: "test",
-    }
-
-    const profile = await assertProfile(descriptor, {
-      path: "custom-profile.json",
-    })
-
-    expect(profile).toEqual(descriptor)
-  })
-
-  it("returns profile when only type is provided", async () => {
-    const descriptor = {
-      name: "test",
-    }
-
-    const profile = await assertProfile(descriptor, {
-      type: "package",
-    })
-
-    expect(profile).toEqual(descriptor)
-  })
-
-  it("returns profile when descriptor extends official profile via allOf", async () => {
-    const descriptor = {
-      name: "test",
-      allOf: ["https://datapackage.org/profiles/1.0/datapackage.json"],
-    }
-
-    const profile = await assertProfile(descriptor, {
-      path: "custom-profile.json",
-      type: "package",
-    })
-
-    expect(profile).toEqual(descriptor)
-  })
-
-  it("throws error when custom profile does not extend matching official profile", async () => {
-    const descriptor = {
-      name: "test",
-      allOf: ["https://datapackage.org/profiles/1.0/tableschema.json"],
+  it("throws error for non-semantic version", async () => {
+    const jsonSchema = {
+      type: "object",
     }
 
     await expect(
-      assertProfile(descriptor, {
-        path: "custom-profile.json",
-        type: "package",
+      assertProfile(jsonSchema, {
+        path: "https://fairspec.org/profiles/latest/catalog.json",
+        type: "catalog",
       }),
-    ).rejects.toThrow("Profile at path custom-profile.json is invalid")
+    ).rejects.toThrow("Profile at path https://fairspec.org/profiles/latest/catalog.json is not a valid catalog profile")
   })
 
-  it("validates different profile types correctly", async () => {
-    const descriptorDialect = {
-      delimiter: ",",
+  it("throws error for custom profile path without extending official profile", async () => {
+    const jsonSchema = {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+      },
     }
 
-    const profileDialect = await assertProfile(descriptorDialect, {
-      path: "https://datapackage.org/profiles/1.0/tabledialect.json",
-      type: "dialect",
-    })
+    await expect(
+      assertProfile(jsonSchema, {
+        path: "https://example.com/custom-catalog.json",
+        type: "catalog",
+      }),
+    ).rejects.toThrow("Profile at path https://example.com/custom-catalog.json is not a valid catalog profile")
+  })
 
-    expect(profileDialect).toEqual(descriptorDialect)
-
-    const descriptorResource = {
-      name: "test-resource",
+  it("returns profile when custom profile extends official profile via allOf", async () => {
+    const jsonSchema = {
+      type: "object",
+      allOf: ["https://fairspec.org/profiles/1.0.0/catalog.json"],
     }
 
-    const profileResource = await assertProfile(descriptorResource, {
-      path: "https://datapackage.org/profiles/1.0/dataresource.json",
-      type: "resource",
+    const profile = await assertProfile(jsonSchema, {
+      path: "https://example.com/custom-catalog.json",
+      type: "catalog",
     })
 
-    expect(profileResource).toEqual(descriptorResource)
-
-    const descriptorSchema = {
-      fields: [],
-    }
-
-    const profileSchema = await assertProfile(descriptorSchema, {
-      path: "https://datapackage.org/profiles/1.0/tableschema.json",
-      type: "schema",
-    })
-
-    expect(profileSchema).toEqual(descriptorSchema)
+    expect(profile).toEqual(jsonSchema)
   })
 })

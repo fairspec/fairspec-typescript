@@ -1,6 +1,6 @@
-import type { FrictionlessError } from "../error/index.ts"
+import type { FairspecError } from "../error/index.ts"
 
-export interface Report<T extends FrictionlessError = FrictionlessError> {
+export interface Report<T extends FairspecError = FairspecError> {
   valid: boolean
   errors: T[]
 }

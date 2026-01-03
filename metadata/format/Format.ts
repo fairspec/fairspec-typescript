@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { ArrowFormat } from "./ArrowFormat.ts"
+import { ArrowFormat } from "./types/Arrow.ts"
 import { CsvFormat } from "./types/Csv.ts"
 import { JsonFormat } from "./types/Json.ts"
 import { JsonlFormat } from "./types/Jsonl.ts"

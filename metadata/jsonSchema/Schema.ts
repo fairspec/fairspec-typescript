@@ -1,4 +1,5 @@
-import type { Descriptor } from "../descriptor/index.ts"
+import { z } from "zod"
 
-// TODO: Narrow to valid JSON Schema
-export type JsonSchema = Descriptor
+export const JsonSchema = z.record(z.string(), z.unknown())
+
+export type JsonSchema = z.infer<typeof JsonSchema>

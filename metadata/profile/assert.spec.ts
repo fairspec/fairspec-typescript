@@ -94,17 +94,15 @@ describe("assertProfile", () => {
     ).rejects.toThrow("Profile at path https://example.com/catalog.json is not a valid catalog profile")
   })
 
-  it("throws error for non-semantic version", async () => {
+  it("accepts 'latest' version", async () => {
     const jsonSchema = {
       type: "object",
     }
 
-    await expect(
-      assertProfile(jsonSchema, {
-        path: "https://fairspec.org/profiles/latest/catalog.json",
-        type: "catalog",
-      }),
-    ).rejects.toThrow("Profile at path https://fairspec.org/profiles/latest/catalog.json is not a valid catalog profile")
+    await assertProfile(jsonSchema, {
+      path: "https://fairspec.org/profiles/latest/catalog.json",
+      type: "catalog",
+    })
   })
 
   it("throws error for custom profile path without extending official profile", async () => {

@@ -6,7 +6,7 @@ import { UniqueKey } from "./UniqueKey.ts"
 export const TableSchema = z.object({
   $schema: z
     .string()
-    .regex(/fairspec\.table\.json$/)
+    .regex(/table\.json$/)
     .describe("URI to one of the officially published Fairspec Table profiles"),
 
   required: z

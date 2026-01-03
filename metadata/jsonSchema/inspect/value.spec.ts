@@ -41,8 +41,8 @@ describe("inspectJsonValue", () => {
     const errors = await inspectJsonValue(value, { jsonSchema })
 
     expect(errors.length).toBeGreaterThan(0)
-    expect(errors[0]?.pointer).toBe("/version")
     expect(errors[0]?.message).toContain("string")
+    expect(errors[0]?.jsonPointer).toBe("/version")
   })
 
   it("returns errors when required fields are missing", async () => {
@@ -64,8 +64,8 @@ describe("inspectJsonValue", () => {
     const errors = await inspectJsonValue(value, { jsonSchema })
 
     expect(errors.length).toBeGreaterThan(0)
-    expect(errors[0]?.pointer).toBe("")
     expect(errors[0]?.message).toContain("required_field")
+    expect(errors[0]?.jsonPointer).toBe("")
   })
 
   it("validates nested objects in the value", async () => {
@@ -102,7 +102,7 @@ describe("inspectJsonValue", () => {
     expect(
       errors.some(
         error =>
-          error.pointer === "/author/email" &&
+          error.jsonPointer === "/author/email" &&
           error.message.includes("pattern"),
       ),
     ).toBe(true)
@@ -137,7 +137,7 @@ describe("inspectJsonValue", () => {
 
     expect(errors.length).toBeGreaterThan(3)
 
-    const errorPointers = errors.map(err => err.pointer)
+    const errorPointers = errors.map(err => err.jsonPointer)
     expect(errorPointers).toContain("")
     expect(errorPointers).toContain("/name")
     expect(errorPointers).toContain("/version")

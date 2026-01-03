@@ -1,6 +1,8 @@
 import { z } from "zod"
 import { BaseColumn } from "./Base.ts"
 
+// TODO: Should allow all the JSON Schema properties
+
 export const ArrayColumn = BaseColumn.extend({
   type: z.literal("array"),
 

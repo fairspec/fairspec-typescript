@@ -21,7 +21,7 @@ import { WkbColumn } from "./types/Wkb.ts"
 import { WktColumn } from "./types/Wkt.ts"
 import { YearColumn } from "./types/Year.ts"
 
-const ColumnTypeString = z.discriminatedUnion("format", [
+const StringColumnGroup = z.discriminatedUnion("format", [
   ListColumn,
   Base64Column,
   HexColumn,
@@ -37,7 +37,7 @@ const ColumnTypeString = z.discriminatedUnion("format", [
   StringColumn,
 ])
 
-const ColumnTypeInteger = z.discriminatedUnion("format", [
+const IntegerColumnGroup = z.discriminatedUnion("format", [
   YearColumn,
   IntegerColumn,
 ])
@@ -48,18 +48,18 @@ const ColumnTypeObject = z.discriminatedUnion("format", [
   ObjectColumn,
 ])
 
-const ColumnTypeNumber = z.discriminatedUnion("format", [NumberColumn])
+const NumberColumnGroup = z.discriminatedUnion("format", [NumberColumn])
 
-const ColumnTypeBoolean = z.discriminatedUnion("format", [BooleanColumn])
+const BooleanColumnGroup = z.discriminatedUnion("format", [BooleanColumn])
 
-const ColumnTypeArray = z.discriminatedUnion("format", [ArrayColumn])
+const ArrayColumnGroup = z.discriminatedUnion("format", [ArrayColumn])
 
 export const Column = z.discriminatedUnion("type", [
-  ColumnTypeString,
-  ColumnTypeInteger,
-  ColumnTypeNumber,
-  ColumnTypeBoolean,
-  ColumnTypeArray,
+  StringColumnGroup,
+  IntegerColumnGroup,
+  NumberColumnGroup,
+  BooleanColumnGroup,
+  ArrayColumnGroup,
   ColumnTypeObject,
 ])
 

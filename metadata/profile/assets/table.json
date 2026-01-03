@@ -31,33 +31,68 @@
     "Column": {
       "allOf": [
         {
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "enum": [
+                "string",
+                "integer",
+                "number",
+                "boolean",
+                "array",
+                "object"
+              ]
+            }
+          }
+        },
+        {
           "if": { "properties": { "type": { "const": "integer" } } },
-          "then": { "$ref": "#/$defs/ColumnTypeInteger" }
+          "then": { "$ref": "#/$defs/IntegerColumnGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "number" } } },
-          "then": { "$ref": "#/$defs/ColumnTypeNumber" }
+          "then": { "$ref": "#/$defs/NumberColumnGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "boolean" } } },
-          "then": { "$ref": "#/$defs/ColumnTypeBoolean" }
+          "then": { "$ref": "#/$defs/BooleanColumnGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "string" } } },
-          "then": { "$ref": "#/$defs/ColumnTypeString" }
+          "then": { "$ref": "#/$defs/StringColumnGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "array" } } },
-          "then": { "$ref": "#/$defs/ColumnTypeArray" }
+          "then": { "$ref": "#/$defs/ArrayColumnGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "object" } } },
-          "then": { "$ref": "#/$defs/ColumnTypeObject" }
+          "then": { "$ref": "#/$defs/ObjectColumnGroup" }
         }
       ]
     },
-    "ColumnTypeString": {
+    "StringColumnGroup": {
       "allOf": [
+        {
+          "properties": {
+            "format": {
+              "enum": [
+                "list",
+                "hex",
+                "base64",
+                "email",
+                "uuid",
+                "url",
+                "date-time",
+                "date",
+                "time",
+                "duration",
+                "wkt",
+                "wkb"
+              ]
+            }
+          }
+        },
         {
           "if": { "not": { "required": ["format"] } },
           "then": { "$ref": "#/$defs/StringColumn" }
@@ -112,8 +147,15 @@
         }
       ]
     },
-    "ColumnTypeInteger": {
+    "IntegerColumnGroup": {
       "allOf": [
+        {
+          "properties": {
+            "format": {
+              "enum": ["year"]
+            }
+          }
+        },
         {
           "if": { "not": { "required": ["format"] } },
           "then": { "$ref": "#/$defs/IntegerColumn" }
@@ -124,7 +166,7 @@
         }
       ]
     },
-    "ColumnTypeNumber": {
+    "NumberColumnGroup": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
@@ -132,7 +174,7 @@
         }
       ]
     },
-    "ColumnTypeBoolean": {
+    "BooleanColumnGroup": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
@@ -140,7 +182,7 @@
         }
       ]
     },
-    "ColumnTypeArray": {
+    "ArrayColumnGroup": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
@@ -148,8 +190,15 @@
         }
       ]
     },
-    "ColumnTypeObject": {
+    "ObjectColumnGroup": {
       "allOf": [
+        {
+          "properties": {
+            "format": {
+              "enum": ["geojson", "topojson"]
+            }
+          }
+        },
         {
           "if": { "not": { "required": ["format"] } },
           "then": { "$ref": "#/$defs/ObjectColumn" }

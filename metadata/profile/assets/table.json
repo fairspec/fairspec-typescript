@@ -29,7 +29,6 @@
       }
     },
     "Column": {
-      "additionalProperties": false,
       "allOf": [
         {
           "if": { "properties": { "type": { "const": "integer" } } },
@@ -89,7 +88,7 @@
         },
         {
           "if": { "properties": { "format": { "const": "date-time" } } },
-          "then": { "$ref": "#/$defs/DateTimeColumn" }
+          "then": { "$ref": "#/$defs/DatetimeColumn" }
         },
         {
           "if": { "properties": { "format": { "const": "date" } } },
@@ -126,7 +125,6 @@
       ]
     },
     "ColumnTypeNumber": {
-      "additionalProperties": false,
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
@@ -396,7 +394,6 @@
       ]
     },
     "YearColumn": {
-      "additionalProperties": false,
       "allOf": [
         { "$ref": "#/$defs/IntegerColumn" },
         {

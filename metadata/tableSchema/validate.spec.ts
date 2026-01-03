@@ -23,24 +23,48 @@ describe("validateTableSchema", () => {
 
   it("returns validation errors for invalid schema", async () => {
     const descriptor = {
-      fields: [
-        {
-          name: "id",
-          type: 123, // Should be a string
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        id: {
+          type: 123,
         },
-      ],
+      },
     }
 
     const report = await validateTableSchema(descriptor)
 
     expect(report.valid).toBe(false)
     expect(report.errors.length).toBeGreaterThan(0)
+  })
 
-    const error = report.errors[0]
-    expect(error).toBeDefined()
-    if (error) {
-      // The error could be either type or enum depending on schema validation
-      expect(error.pointer).toContain("/fields/0/type")
+  it("returns error for missing $schema", async () => {
+    const descriptor = {
+      properties: {
+        id: {
+          type: "integer",
+        },
+      },
     }
+
+    const report = await validateTableSchema(descriptor)
+
+    expect(report.valid).toBe(false)
+    expect(report.errors.length).toBeGreaterThan(0)
+  })
+
+  it("returns error for invalid $schema URL", async () => {
+    const descriptor = {
+      $schema: "https://fairspec.org/profiles/latest/dataste.json",
+      properties: {
+        id: {
+          type: "integer",
+        },
+      },
+    }
+
+    const report = await validateTableSchema(descriptor)
+
+    expect(report.valid).toBe(false)
+    expect(report.errors.length).toBeGreaterThan(0)
   })
 })

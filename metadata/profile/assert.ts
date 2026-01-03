@@ -9,7 +9,7 @@ export async function assertProfile(
   },
 ) {
   const regex = new RegExp(
-    `^https:\\/\\/fairspec\\.org\\/profiles\\/\\d+\\.\\d+\\.\\d+\\/${options.type}\\.json$`,
+    `^https:\\/\\/fairspec\\.org\\/profiles\\/(\\d+\\.\\d+\\.\\d+|latest)\\/${options.type}\\.json$`,
   )
 
   // Main profile path + extension's base profiles

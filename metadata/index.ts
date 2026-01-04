@@ -79,8 +79,7 @@ export {
   isRemotePath,
   resolveBasepath,
 } from "./path/index.ts"
-export type { Report } from "./report/index.ts"
-export { createReport } from "./report/index.ts"
+export { createReport, Report } from "./report/index.ts"
 export {
   convertResourceToDescriptor,
   inferFormat,

@@ -1,4 +1,7 @@
-import type { GeneralError } from "./General.ts"
-import type { ResourceError } from "./Resource.ts"
+import { z } from "zod"
+import { GeneralError } from "./General.ts"
+import { ResourceError } from "./Resource.ts"
 
-export type FairspecError = GeneralError | ResourceError
+export const FairspecError = z.union([GeneralError, ResourceError])
+
+export type FairspecError = z.infer<typeof FairspecError>

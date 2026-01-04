@@ -1,7 +1,9 @@
-import type { BaseError } from "./Base.ts"
+import { z } from "zod"
 
-export interface JsonError extends BaseError {
-  type: "json"
-  message: string
-  jsonPointer: string
-}
+export const JsonError = z.object({
+  type: z.literal("json").describe("Error type identifier"),
+  message: z.string().describe("The JSON parsing error message"),
+  jsonPointer: z.string().describe("JSON Pointer to the location of the error"),
+})
+
+export type JsonError = z.infer<typeof JsonError>

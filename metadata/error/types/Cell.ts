@@ -1,82 +1,97 @@
-import type { FieldType } from "../../field/index.ts"
-import type { BaseError } from "./Base.ts"
+import { z } from "zod"
+import { ColumnType } from "../../column/index.ts"
 
-export type CellError =
-  | CellTypeError
-  | CellRequiredError
-  | CellMinimumError
-  | CellMaximumError
-  | CellExclusiveMinimumError
-  | CellExclusiveMaximumError
-  | CellMinLengthError
-  | CellMaxLengthError
-  | CellPatternError
-  | CellUniqueError
-  | CellEnumError
-  | CellJsonSchemaError
+const BaseCellError = z.object({
+  fieldName: z.string().describe("The name of the field/column"),
+  rowNumber: z.number().describe("The row number where the error occurred"),
+  cell: z.string().describe("The cell value that caused the error"),
+})
 
-export interface BaseCellError extends BaseError {
-  fieldName: string
-  rowNumber: number
-  cell: string
-}
+export const CellTypeError = BaseCellError.extend({
+  type: z.literal("cell/type").describe("Error type identifier"),
+  fieldType: ColumnType.describe("The expected column type"),
+  fieldFormat: z.string().optional().describe("The expected field format"),
+})
 
-export interface CellTypeError extends BaseCellError {
-  type: "cell/type"
-  fieldType: FieldType
-  fieldFormat?: string
-}
+export const CellRequiredError = BaseCellError.extend({
+  type: z.literal("cell/required").describe("Error type identifier"),
+})
 
-export interface CellRequiredError extends BaseCellError {
-  type: "cell/required"
-}
+export const CellMinimumError = BaseCellError.extend({
+  type: z.literal("cell/minimum").describe("Error type identifier"),
+  minimum: z.string().describe("The minimum value allowed"),
+})
 
-export interface CellMinimumError extends BaseCellError {
-  type: "cell/minimum"
-  minimum: string
-}
+export const CellMaximumError = BaseCellError.extend({
+  type: z.literal("cell/maximum").describe("Error type identifier"),
+  maximum: z.string().describe("The maximum value allowed"),
+})
 
-export interface CellMaximumError extends BaseCellError {
-  type: "cell/maximum"
-  maximum: string
-}
+export const CellExclusiveMinimumError = BaseCellError.extend({
+  type: z.literal("cell/exclusiveMinimum").describe("Error type identifier"),
+  minimum: z.string().describe("The exclusive minimum value"),
+})
 
-export interface CellExclusiveMinimumError extends BaseCellError {
-  type: "cell/exclusiveMinimum"
-  minimum: string
-}
+export const CellExclusiveMaximumError = BaseCellError.extend({
+  type: z.literal("cell/exclusiveMaximum").describe("Error type identifier"),
+  maximum: z.string().describe("The exclusive maximum value"),
+})
 
-export interface CellExclusiveMaximumError extends BaseCellError {
-  type: "cell/exclusiveMaximum"
-  maximum: string
-}
+export const CellMinLengthError = BaseCellError.extend({
+  type: z.literal("cell/minLength").describe("Error type identifier"),
+  minLength: z.number().describe("The minimum length required"),
+})
 
-export interface CellMinLengthError extends BaseCellError {
-  type: "cell/minLength"
-  minLength: number
-}
+export const CellMaxLengthError = BaseCellError.extend({
+  type: z.literal("cell/maxLength").describe("Error type identifier"),
+  maxLength: z.number().describe("The maximum length allowed"),
+})
 
-export interface CellMaxLengthError extends BaseCellError {
-  type: "cell/maxLength"
-  maxLength: number
-}
+export const CellPatternError = BaseCellError.extend({
+  type: z.literal("cell/pattern").describe("Error type identifier"),
+  pattern: z.string().describe("The pattern that must be matched"),
+})
 
-export interface CellPatternError extends BaseCellError {
-  type: "cell/pattern"
-  pattern: string
-}
+export const CellUniqueError = BaseCellError.extend({
+  type: z.literal("cell/unique").describe("Error type identifier"),
+})
 
-export interface CellUniqueError extends BaseCellError {
-  type: "cell/unique"
-}
+export const CellEnumError = BaseCellError.extend({
+  type: z.literal("cell/enum").describe("Error type identifier"),
+  enum: z.array(z.string()).describe("The allowed enumeration values"),
+})
 
-export interface CellEnumError extends BaseCellError {
-  type: "cell/enum"
-  enum: string[]
-}
+export const CellJsonSchemaError = BaseCellError.extend({
+  type: z.literal("cell/jsonSchema").describe("Error type identifier"),
+  pointer: z.string().describe("JSON Pointer to the validation error location"),
+  message: z.string().describe("The JSON schema validation error message"),
+})
 
-export interface CellJsonSchemaError extends BaseCellError {
-  type: "cell/jsonSchema"
-  pointer: string
-  message: string
-}
+export const CellError = z.discriminatedUnion("type", [
+  CellTypeError,
+  CellRequiredError,
+  CellMinimumError,
+  CellMaximumError,
+  CellExclusiveMinimumError,
+  CellExclusiveMaximumError,
+  CellMinLengthError,
+  CellMaxLengthError,
+  CellPatternError,
+  CellUniqueError,
+  CellEnumError,
+  CellJsonSchemaError,
+])
+
+export type CellTypeError = z.infer<typeof CellTypeError>
+export type CellRequiredError = z.infer<typeof CellRequiredError>
+export type CellMinimumError = z.infer<typeof CellMinimumError>
+export type CellMaximumError = z.infer<typeof CellMaximumError>
+export type CellExclusiveMinimumError = z.infer<typeof CellExclusiveMinimumError>
+export type CellExclusiveMaximumError = z.infer<typeof CellExclusiveMaximumError>
+export type CellMinLengthError = z.infer<typeof CellMinLengthError>
+export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>
+export type CellPatternError = z.infer<typeof CellPatternError>
+export type CellUniqueError = z.infer<typeof CellUniqueError>
+export type CellEnumError = z.infer<typeof CellEnumError>
+export type CellJsonSchemaError = z.infer<typeof CellJsonSchemaError>
+export type CellError = z.infer<typeof CellError>

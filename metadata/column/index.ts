@@ -1,5 +1,5 @@
 export { Column } from "./Column.ts"
-export type { ColumnType } from "./Type.ts"
+export { ColumnType } from "./Type.ts"
 export { ArrayColumn } from "./types/Array.ts"
 export { Base64Column } from "./types/Base64.ts"
 export { BooleanColumn } from "./types/Boolean.ts"

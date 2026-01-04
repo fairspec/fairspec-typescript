@@ -1,13 +1,15 @@
-import type { BaseError } from "./Base.ts"
+import { z } from "zod"
 
-export type RowError = RowUniqueError
+export const RowUniqueError = z.object({
+  type: z.literal("row/unique").describe("Error type identifier"),
+  rowNumber: z.number().describe("The row number where the error occurred"),
 
-export interface BaseRowError extends BaseError {
-  rowNumber: number
-}
+  columnNames: z
+    .array(z.string())
+    .describe("Column names involved in the unique constraint violation"),
+})
 
-export interface RowUniqueError extends BaseRowError {
-  type: "row/unique"
-  fieldNames: string[]
-  // TODO: add cells?
-}
+export const RowError = z.discriminatedUnion("type", [RowUniqueError])
+
+export type RowUniqueError = z.infer<typeof RowUniqueError>
+export type RowError = z.infer<typeof RowError>

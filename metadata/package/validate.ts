@@ -39,3 +39,15 @@ export async function validatePackageMetadata(
 
   return { ...report, dataPackage }
 }
+// TODO: Implement
+//
+// async function inspectSchemaIfExternal(resource: Resource) {
+//   const errors: MetadataError[] = []
+//
+//   if (typeof resource.schema === "string") {
+//     const report = await validateTableSchema(resource.schema)
+//     errors.push(...report.errors)
+//   }
+//
+//   return errors
+// }

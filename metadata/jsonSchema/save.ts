@@ -1,4 +1,5 @@
 import { saveDescriptor } from "../descriptor/index.ts"
+import { denormalizeJsonSchema } from "./denormalize.ts"
 import type { JsonSchema } from "./Schema.ts"
 
 export async function saveJsonSchema(
@@ -8,7 +9,9 @@ export async function saveJsonSchema(
     overwrite?: boolean
   },
 ) {
-  await saveDescriptor(jsonSchema, {
+  const descriptor = denormalizeJsonSchema(jsonSchema)
+
+  await saveDescriptor(descriptor, {
     path: options.path,
     overwrite: options.overwrite,
   })

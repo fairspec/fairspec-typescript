@@ -1,5 +1,6 @@
 import type { Descriptor } from "../descriptor/index.ts"
 import { inspectJsonSchema } from "./inspect/schema.ts"
+import { normalizeJsonSchema } from "./normalize.ts"
 import type { JsonSchema } from "./Schema.ts"
 
 export async function assertJsonSchema(descriptor: Descriptor) {
@@ -12,5 +13,6 @@ export async function assertJsonSchema(descriptor: Descriptor) {
     )
   }
 
-  return descriptor as JsonSchema
+  // Validation + normalization = we can cast it
+  return normalizeJsonSchema(descriptor) as JsonSchema
 }

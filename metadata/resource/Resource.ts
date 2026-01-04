@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { Datacite } from "../datacite/index.ts"
 import { Format } from "../format/index.ts"
 import { JsonSchema } from "../jsonSchema/index.ts"
 import { Path } from "../path/Path.ts"
@@ -6,7 +7,7 @@ import { TableSchema } from "../tableSchema/index.ts"
 import { Data } from "./Data.ts"
 import { Integrity } from "./Integrity.ts"
 
-export const Resource = z.object({
+export const Resource = Datacite.extend({
   data: Data.describe(
     "Data or content of the resource. It must be a path to a file, array of paths to files, inline JSON object, or inline JSON array of objects.",
   ),

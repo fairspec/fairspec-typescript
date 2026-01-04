@@ -21,8 +21,9 @@ export {
   WktColumn,
   YearColumn,
 } from "./column/index.ts"
-export type { Descriptor } from "./descriptor/index.ts"
+export { Datacite } from "./datacite/index.ts"
 export {
+  Descriptor,
   loadDescriptor,
   saveDescriptor,
   stringifyDescriptor,
@@ -66,8 +67,12 @@ export type {
   RowUniqueError,
   TableError,
 } from "./error/index.ts"
-export { inspectJsonValue, resolveJsonSchema } from "./jsonSchema/index.ts"
-export type { Contributor, Package } from "./package/index.ts"
+export {
+  inspectJsonValue,
+  JsonSchema,
+  resolveJsonSchema,
+} from "./jsonSchema/index.ts"
+export type { Package } from "./package/index.ts"
 export {
   convertPackageToDescriptor,
   loadPackageDescriptor,

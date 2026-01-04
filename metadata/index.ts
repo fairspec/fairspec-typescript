@@ -81,13 +81,10 @@ export {
 } from "./path/index.ts"
 export { createReport, Report } from "./report/index.ts"
 export {
-  convertResourceToDescriptor,
   inferFormat,
   inferName,
   isRemoteResource,
-  loadResourceDescriptor,
   Resource,
-  validateResourceMetadata,
 } from "./resource/index.ts"
 export {
   loadTableSchema,

@@ -1,5 +1,3 @@
-export { convertResourceFromDescriptor } from "./convert/fromDescriptor.ts"
-export { convertResourceToDescriptor } from "./convert/toDescriptor.ts"
 export { isRemoteResource } from "./helpers.ts"
 export { inferFormat, inferName } from "./infer.ts"
 export { Resource } from "./Resource.ts"

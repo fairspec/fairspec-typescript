@@ -1,7 +1,5 @@
-export { denormalizeJsonSchema } from "./denormalize.ts"
 export { inspectJsonValue } from "./inspect/value.ts"
 export { loadJsonSchema } from "./load.ts"
-export { normalizeJsonSchema } from "./normalize.ts"
 export { resolveJsonSchema } from "./resolve.ts"
 export { JsonSchema } from "./Schema.ts"
 export { JsonValue } from "./Value.ts"

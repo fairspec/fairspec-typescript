@@ -1,43 +1,47 @@
-import { getFilename, getFormat, getName, getProtocol } from "../path/index.ts"
+import {
+  getFileName,
+  getFormatName,
+  getName,
+  getProtocol,
+} from "../path/index.ts"
+import { getFirstPath } from "./general.ts"
 import type { Resource } from "./Resource.ts"
 
 export function inferName(resource: Partial<Resource>) {
   let name = resource.name
 
   if (!name) {
-    const path = Array.isArray(resource.path) ? resource.path[0] : resource.path
+    const path = getFirstPath(resource)
     if (path) {
-      const filename = getFilename(path)
-      name = getName(filename)
+      const fileName = getFileName(path)
+      name = getName(fileName)
     }
   }
 
   return name ?? "resource"
 }
 
-export function inferFormat(resource: Partial<Resource>) {
-  let format = resource.format
+export function inferFormatName(resource: Partial<Resource>) {
+  const format = resource.format
+  if (format) {
+    return format.name
+  }
 
-  if (!format) {
-    if (resource.path) {
-      const path = Array.isArray(resource.path)
-        ? resource.path[0]
-        : resource.path
+  const path = getFirstPath(resource)
+  if (path) {
+    const protocol = getProtocol(path)
 
-      if (path) {
-        const protocol = getProtocol(path)
-
-        if (DATABASE_PROTOCOLS.includes(protocol)) {
-          format = protocol
-        } else {
-          const filename = getFilename(path)
-          format = getFormat(filename)
-        }
-      }
+    // TODO: review
+    if (DATABASE_PROTOCOLS.includes(protocol)) {
+      return protocol
+    } else {
+      const fileName = getFileName(path)
+      const formatName = getFormatName(fileName)
+      return formatName
     }
   }
 
-  return format
+  return undefined
 }
 
 const DATABASE_PROTOCOLS = ["postgresql", "mysql", "sqlite"]

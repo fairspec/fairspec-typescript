@@ -73,8 +73,8 @@ export {
 export {
   denormalizePath,
   getBasepath,
-  getFilename,
-  getFormat,
+  getFileName,
+  getFormatName,
   getName,
   isRemotePath,
   resolveBasepath,

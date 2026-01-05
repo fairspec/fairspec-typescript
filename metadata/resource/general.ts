@@ -1,7 +1,7 @@
 import { isRemotePath } from "../path/index.ts"
 import type { Resource } from "./Resource.ts"
 
-export function isRemoteResource(resource: Resource) {
+export function isRemoteResource(resource: Partial<Resource>) {
   const pathData = getPathData(resource)
   if (!pathData) return false
 
@@ -9,7 +9,7 @@ export function isRemoteResource(resource: Resource) {
   return paths?.some(path => isRemotePath(path))
 }
 
-export function getPathData(resource: Resource) {
+export function getPathData(resource: Partial<Resource>) {
   if (typeof resource.data === "string") {
     return resource.data
   }
@@ -23,7 +23,7 @@ export function getPathData(resource: Resource) {
   return undefined
 }
 
-export function getJsonData(resource: Resource) {
+export function getJsonData(resource: Partial<Resource>) {
   const pathData = getPathData(resource)
 
   if (!pathData) {
@@ -31,4 +31,16 @@ export function getJsonData(resource: Resource) {
   }
 
   return undefined
+}
+
+export function getPaths(resource: Partial<Resource>) {
+  const pathData = getPathData(resource)
+  if (!pathData) return []
+  return Array.isArray(pathData) ? pathData : [pathData]
+}
+
+export function getFirstPath(resource: Partial<Resource>) {
+  const pathData = getPathData(resource)
+  if (!pathData) return undefined
+  return Array.isArray(pathData) ? pathData[0] : pathData
 }

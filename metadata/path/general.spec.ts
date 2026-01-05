@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { getFilename, isRemotePath } from "./path.ts"
+import { getFileName, isRemotePath } from "./general.ts"
 
 describe("isRemotePath", () => {
   it.each([
@@ -59,7 +59,7 @@ describe("isRemotePath", () => {
   })
 })
 
-describe("getFilename", () => {
+describe("getFileName", () => {
   it.each([
     {
       description: "simple filename",
@@ -107,6 +107,6 @@ describe("getFilename", () => {
       filename: undefined,
     },
   ])("$description", ({ path, filename }) => {
-    expect(getFilename(path)).toEqual(filename)
+    expect(getFileName(path)).toEqual(filename)
   })
 })

@@ -35,11 +35,11 @@ export function getProtocol(path: string) {
   }
 }
 
-export function getFormat(filename?: string) {
+export function getFormatName(filename?: string) {
   return filename?.split(".").slice(-1)[0]?.toLowerCase()
 }
 
-export function getFilename(path: string) {
+export function getFileName(path: string) {
   const isRemote = isRemotePath(path)
 
   if (isRemote) {

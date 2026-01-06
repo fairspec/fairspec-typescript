@@ -136,9 +136,6 @@ importers:
 
   extension:
     dependencies:
-      '@fairspec/dataset':
-        specifier: workspace:*
-        version: link:../dataset
       '@fairspec/metadata':
         specifier: workspace:*
         version: link:../metadata

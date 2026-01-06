@@ -149,7 +149,7 @@ describe("saveDatasetDescriptor", () => {
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
     expect(parsedContent.resources[0]?.tableSchema).toEqual(
-      datasetWithSchema.resources[0]?.tableSchema,
+      datasetWithSchema.resources?.[0]?.tableSchema,
     )
   })
 
@@ -174,7 +174,7 @@ describe("saveDatasetDescriptor", () => {
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
     expect(parsedContent.resources[0]?.format).toEqual(
-      datasetWithFormat.resources[0]?.format,
+      datasetWithFormat.resources?.[0]?.format,
     )
   })
 

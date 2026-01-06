@@ -45,7 +45,7 @@ describe("inferName", () => {
 
 describe("inferFormatName", () => {
   it("returns existing format name when provided", () => {
-    const resource = { format: { name: "json" } }
+    const resource = { format: { name: "json" as const } }
     expect(inferFormatName(resource)).toBe("json")
   })
 

@@ -1,7 +1,7 @@
 import { join } from "node:path"
 import { describe, expect, expectTypeOf, it } from "vitest"
 import { loadTableSchema } from "./load.ts"
-import type { TableSchema } from "./Schema.ts"
+import type { TableSchema } from "./TableSchema.ts"
 
 describe("loadTableSchema", () => {
   const getFixturePath = (name: string) =>

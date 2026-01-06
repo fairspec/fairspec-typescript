@@ -81,7 +81,7 @@ export {
 } from "./path/index.ts"
 export { createReport, Report } from "./report/index.ts"
 export {
-  inferFormat,
+  inferFormatName,
   inferName,
   isRemoteResource,
   Resource,

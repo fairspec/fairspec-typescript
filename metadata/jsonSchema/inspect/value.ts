@@ -1,6 +1,6 @@
 import { ajv } from "../ajv.ts"
+import type { JsonSchema } from "../JsonSchema.ts"
 import { loadJsonSchema } from "../load.ts"
-import type { JsonSchema } from "../Schema.ts"
 
 /**
  * Validate a value against a JSON Schema

@@ -75,4 +75,4 @@ export const Datacite = z.object({
   ),
 })
 
-export type DataCite = z.infer<typeof DataCite>
+export type Datacite = z.infer<typeof Datacite>

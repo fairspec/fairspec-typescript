@@ -1,39 +1,36 @@
 import { join, relative } from "node:path"
 import { describe, expect, expectTypeOf, it } from "vitest"
-import { loadPackageDescriptor } from "./load.ts"
-import type { Package } from "./Package.ts"
+import type { Dataset } from "./Dataset.ts"
+import { loadDatasetDescriptor } from "./load.ts"
 
-describe("loadPackageDescriptor", async () => {
+describe("loadDatasetDescriptor", async () => {
   const getFixturePath = (name: string) =>
     relative(process.cwd(), join(import.meta.dirname, "fixtures", name))
 
-  it("loads a package from a local file path", async () => {
-    const datapackage = await loadPackageDescriptor(
-      getFixturePath("package.json"),
-    )
+  it("loads a dataset from a local file path", async () => {
+    const dataset = await loadDatasetDescriptor(getFixturePath("dataset.json"))
 
-    expectTypeOf(datapackage).toEqualTypeOf<Package>()
-    expect(datapackage.name).toBe("name")
-    expect(datapackage.resources.length).toBeGreaterThan(0)
+    expectTypeOf(dataset).toEqualTypeOf<Dataset>()
+    expect(dataset.$schema).toMatch(/dataset\.json$/)
+    expect(dataset.creators).toBeDefined()
+    expect(dataset.creators?.length).toBeGreaterThan(0)
+    expect(dataset.resources).toBeDefined()
+    expect(dataset.resources?.length).toBeGreaterThan(0)
 
-    const resource = datapackage.resources[0]
+    const resource = dataset.resources?.[0]
     expect(resource).toBeDefined()
 
     if (resource) {
-      expect(resource).toEqual({
-        type: "table",
-        name: "name",
-        format: "csv",
-        path: getFixturePath("table.csv"),
-        dialect: getFixturePath("dialect.json"),
-        schema: getFixturePath("schema.json"),
-      })
+      expect(resource.name).toBe("name")
+      expect(resource.data).toBe(getFixturePath("table.csv"))
+      expect(resource.format).toEqual({ name: "csv" })
+      expect(resource.tableSchema).toBe(getFixturePath("schema.json"))
     }
   })
 
-  it("throws an error when package is invalid", async () => {
+  it("throws an error when dataset is invalid", async () => {
     await expect(
-      loadPackageDescriptor(getFixturePath("package-invalid.json")),
+      loadDatasetDescriptor(getFixturePath("dataset-invalid.json")),
     ).rejects.toThrow()
   })
 })

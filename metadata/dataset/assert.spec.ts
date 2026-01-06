@@ -1,31 +1,33 @@
 import { describe, expect, expectTypeOf, it } from "vitest"
-import { assertPackage } from "./assert.ts"
-import type { Package } from "./Package.ts"
+import { assertDataset } from "./assert.ts"
+import type { Dataset } from "./Dataset.ts"
 
-describe("assertPackage", () => {
+describe("assertDataset", () => {
   it("returns typed package when valid", async () => {
     const descriptor = {
-      name: "example-package",
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
+      language: "en",
       resources: [
         {
-          name: "resource-1",
-          path: "data.csv",
+          name: "name",
+          data: "table.csv",
         },
       ],
     }
 
-    const datapackage = await assertPackage(descriptor)
+    const dataset = await assertDataset(descriptor)
 
-    expectTypeOf(datapackage).toEqualTypeOf<Package>()
-    expect(datapackage).toEqual(descriptor)
+    expectTypeOf(dataset).toEqualTypeOf<Dataset>()
+    expect(dataset).toEqual(descriptor)
   })
 
   it("throws Error when package is invalid", async () => {
     const descriptor = {
-      name: 123,
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
+      language: 123,
       resources: "not-an-array",
     }
 
-    await expect(assertPackage(descriptor)).rejects.toThrow(Error)
+    await expect(assertDataset(descriptor)).rejects.toThrow(Error)
   })
 })

@@ -3,7 +3,7 @@
   "resources": [
     {
       "name": "name",
-      "path": "table.csv"
+      "data": "table.csv"
     }
   ]
 }

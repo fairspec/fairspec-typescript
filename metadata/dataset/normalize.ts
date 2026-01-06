@@ -29,13 +29,13 @@ function normalizeResourceData(
 ) {
   const basepath = options?.basepath
 
-  if (typeof descriptor.path === "string") {
-    descriptor.path = normalizePath(descriptor.path, { basepath })
+  if (typeof descriptor.data === "string") {
+    descriptor.data = normalizePath(descriptor.data, { basepath })
   }
 
-  if (Array.isArray(descriptor.path)) {
-    for (const [index, path] of descriptor.path.entries()) {
-      descriptor.path[index] = normalizePath(path, { basepath })
+  if (Array.isArray(descriptor.data)) {
+    for (const [index, path] of descriptor.data.entries()) {
+      descriptor.data[index] = normalizePath(path, { basepath })
     }
   }
 }

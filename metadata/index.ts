@@ -1,3 +1,4 @@
+export { Catalog } from "./catalog/index.ts"
 export {
   ArrayColumn,
   Base64Column,
@@ -22,6 +23,12 @@ export {
   YearColumn,
 } from "./column/index.ts"
 export { Datacite } from "./datacite/index.ts"
+export {
+  Dataset,
+  loadDatasetDescriptor,
+  saveDatasetDescriptor,
+  validateDatasetMetadata,
+} from "./dataset/index.ts"
 export {
   Descriptor,
   loadDescriptor,
@@ -63,13 +70,6 @@ export {
   JsonSchema,
   resolveJsonSchema,
 } from "./jsonSchema/index.ts"
-export type { Package } from "./package/index.ts"
-export {
-  convertPackageToDescriptor,
-  loadPackageDescriptor,
-  savePackageDescriptor,
-  validatePackageMetadata,
-} from "./package/index.ts"
 export {
   denormalizePath,
   getBasepath,

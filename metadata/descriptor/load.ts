@@ -1,6 +1,6 @@
 import { node } from "../platform/index.ts"
 import { getProtocol, isRemotePath } from "../path/index.ts"
-import { parseDescriptor } from "./process/parse.ts"
+import { parseDescriptor } from "./parse.ts"
 
 /**
  * Load a descriptor (JSON Object) from a file or URL

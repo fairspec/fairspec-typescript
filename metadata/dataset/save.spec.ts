@@ -2,23 +2,33 @@ import * as fs from "node:fs/promises"
 import * as path from "node:path"
 import { temporaryDirectory } from "tempy"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
-import type { Package } from "./Package.ts"
-import { savePackageDescriptor } from "./save.ts"
+import type { Dataset } from "./Dataset.ts"
+import { saveDatasetDescriptor } from "./save.ts"
 
-describe("savePackageDescriptor", () => {
+describe("saveDatasetDescriptor", () => {
   let testDir: string
   let testPath: string
-  let testPackage: Package
+  let testDataset: Dataset
 
   beforeEach(() => {
     testDir = temporaryDirectory()
-    testPath = path.join(testDir, "datapackage.json")
-    testPackage = {
-      name: "test-package",
+    testPath = path.join(testDir, "dataset.json")
+    testDataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
+      creators: [
+        {
+          name: "Test Creator",
+        },
+      ],
+      titles: [
+        {
+          title: "Test Dataset",
+        },
+      ],
       resources: [
         {
           name: "test-resource",
-          path: path.join(testDir, "data.csv"),
+          data: path.join(testDir, "data.csv"),
         },
       ],
     }
@@ -34,8 +44,8 @@ describe("savePackageDescriptor", () => {
     }
   })
 
-  it("should save a package descriptor to a file and maintain its structure", async () => {
-    await savePackageDescriptor(testPackage, { path: testPath })
+  it("should save a dataset descriptor to a file and maintain its structure", async () => {
+    await saveDatasetDescriptor(testDataset, { path: testPath })
 
     const fileExists = await fs
       .stat(testPath)
@@ -46,47 +56,39 @@ describe("savePackageDescriptor", () => {
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
 
-    const { $schema, ...packageWithoutSchema } = parsedContent
-    expect(packageWithoutSchema.name).toEqual(testPackage.name)
-    expect(packageWithoutSchema.resources).toHaveLength(1)
-    expect(packageWithoutSchema.resources[0].name).toBe("test-resource")
-    expect(packageWithoutSchema.resources[0].path).toBe("data.csv")
-    expect($schema).toBe(
-      "https://datapackage.org/profiles/2.0/datapackage.json",
-    )
+    expect(parsedContent.$schema).toMatch(/dataset\.json$/)
+    expect(parsedContent.creators).toHaveLength(1)
+    expect(parsedContent.creators[0].name).toBe("Test Creator")
+    expect(parsedContent.resources).toHaveLength(1)
+    expect(parsedContent.resources[0].name).toBe("test-resource")
+    expect(parsedContent.resources[0].data).toBe("data.csv")
   })
 
-  it("should add $schema property if not present", async () => {
-    await savePackageDescriptor(testPackage, { path: testPath })
+  it("should preserve $schema property", async () => {
+    await saveDatasetDescriptor(testDataset, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
     expect(parsedContent.$schema).toBe(
-      "https://datapackage.org/profiles/2.0/datapackage.json",
+      "https://fairspec.org/profiles/latest/dataset.json",
     )
   })
 
-  it("should preserve existing $schema property", async () => {
-    const packageWithSchema: Package = {
-      name: "test-package",
-      resources: [
-        {
-          name: "test-resource",
-          path: path.join(testDir, "data.csv"),
-        },
-      ],
-      $schema: "https://custom.schema.url",
+  it("should preserve custom $schema property", async () => {
+    const datasetWithCustomSchema: Dataset = {
+      ...testDataset,
+      $schema: "https://custom.schema.url/dataset.json",
     }
 
-    await savePackageDescriptor(packageWithSchema, { path: testPath })
+    await saveDatasetDescriptor(datasetWithCustomSchema, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
-    expect(parsedContent.$schema).toBe("https://custom.schema.url")
+    expect(parsedContent.$schema).toBe("https://custom.schema.url/dataset.json")
   })
 
   it("should use pretty formatting with 2-space indentation", async () => {
-    await savePackageDescriptor(testPackage, { path: testPath })
+    await saveDatasetDescriptor(testDataset, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const lines = content.split("\n")
@@ -97,23 +99,23 @@ describe("savePackageDescriptor", () => {
     }
   })
 
-  it("should save package with multiple resources", async () => {
-    const packageWithMultipleResources: Package = {
-      name: "test-package",
+  it("should save dataset with multiple resources", async () => {
+    const datasetWithMultipleResources: Dataset = {
+      ...testDataset,
       resources: [
         {
           name: "resource1",
-          path: path.join(testDir, "data1.csv"),
+          data: path.join(testDir, "data1.csv"),
         },
         {
           name: "resource2",
-          path: path.join(testDir, "data2.json"),
-          format: "json",
+          data: path.join(testDir, "data2.json"),
+          format: { name: "json" },
         },
       ],
     }
 
-    await savePackageDescriptor(packageWithMultipleResources, {
+    await saveDatasetDescriptor(datasetWithMultipleResources, {
       path: testPath,
     })
 
@@ -124,40 +126,42 @@ describe("savePackageDescriptor", () => {
     expect(parsedContent.resources[1]?.name).toBe("resource2")
   })
 
-  it("should save package with resource containing schema", async () => {
-    const packageWithSchema: Package = {
-      name: "test-package",
+  it("should save dataset with resource containing tableSchema", async () => {
+    const datasetWithSchema: Dataset = {
+      ...testDataset,
       resources: [
         {
           name: "test-resource",
-          path: path.join(testDir, "data.csv"),
-          schema: {
-            fields: [
-              { name: "id", type: "integer" },
-              { name: "name", type: "string" },
-            ],
+          data: path.join(testDir, "data.csv"),
+          tableSchema: {
+            $schema: "https://fairspec.org/profiles/latest/table.json",
+            properties: {
+              id: { type: "integer" },
+              name: { type: "string" },
+            },
           },
         },
       ],
     }
 
-    await savePackageDescriptor(packageWithSchema, { path: testPath })
+    await saveDatasetDescriptor(datasetWithSchema, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
-    expect(parsedContent.resources[0]?.schema).toEqual(
-      packageWithSchema.resources[0]?.schema,
+    expect(parsedContent.resources[0]?.tableSchema).toEqual(
+      datasetWithSchema.resources[0]?.tableSchema,
     )
   })
 
-  it("should save package with resource containing dialect", async () => {
-    const packageWithDialect: Package = {
-      name: "test-package",
+  it("should save dataset with resource containing format options", async () => {
+    const datasetWithFormat: Dataset = {
+      ...testDataset,
       resources: [
         {
           name: "test-resource",
-          path: path.join(testDir, "data.csv"),
-          dialect: {
+          data: path.join(testDir, "data.csv"),
+          format: {
+            name: "csv",
             delimiter: ";",
             lineTerminator: "\n",
           },
@@ -165,28 +169,28 @@ describe("savePackageDescriptor", () => {
       ],
     }
 
-    await savePackageDescriptor(packageWithDialect, { path: testPath })
+    await saveDatasetDescriptor(datasetWithFormat, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
-    expect(parsedContent.resources[0]?.dialect).toEqual(
-      packageWithDialect.resources[0]?.dialect,
+    expect(parsedContent.resources[0]?.format).toEqual(
+      datasetWithFormat.resources[0]?.format,
     )
   })
 
-  it("should save package to a nested directory path", async () => {
-    const nestedPath = path.join(testDir, "nested", "dir", "datapackage.json")
-    const nestedPackage: Package = {
-      name: "test-package",
+  it("should save dataset to a nested directory path", async () => {
+    const nestedPath = path.join(testDir, "nested", "dir", "dataset.json")
+    const nestedDataset: Dataset = {
+      ...testDataset,
       resources: [
         {
           name: "test-resource",
-          path: path.join(testDir, "nested", "dir", "data.csv"),
+          data: path.join(testDir, "nested", "dir", "data.csv"),
         },
       ],
     }
 
-    await savePackageDescriptor(nestedPackage, { path: nestedPath })
+    await saveDatasetDescriptor(nestedDataset, { path: nestedPath })
 
     const fileExists = await fs
       .stat(nestedPath)
@@ -196,14 +200,14 @@ describe("savePackageDescriptor", () => {
 
     const content = await fs.readFile(nestedPath, "utf-8")
     const parsedContent = JSON.parse(content)
-    expect(parsedContent.name).toBe(nestedPackage.name)
+    expect(parsedContent.creators[0].name).toBe("Test Creator")
   })
 
   it("should throw an error when file exists and overwrite is false", async () => {
-    await savePackageDescriptor(testPackage, { path: testPath })
+    await saveDatasetDescriptor(testDataset, { path: testPath })
 
     await expect(
-      savePackageDescriptor(testPackage, {
+      saveDatasetDescriptor(testDataset, {
         path: testPath,
         overwrite: false,
       }),
@@ -211,162 +215,179 @@ describe("savePackageDescriptor", () => {
   })
 
   it("should throw an error when file exists and overwrite is not specified", async () => {
-    await savePackageDescriptor(testPackage, { path: testPath })
+    await saveDatasetDescriptor(testDataset, { path: testPath })
 
     await expect(
-      savePackageDescriptor(testPackage, { path: testPath }),
+      saveDatasetDescriptor(testDataset, { path: testPath }),
     ).rejects.toThrow()
   })
 
   it("should overwrite existing file when overwrite is true", async () => {
-    const initialPackage: Package = {
-      name: "initial",
+    const initialDataset: Dataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
+      creators: [{ name: "Initial Creator" }],
+      titles: [{ title: "Initial Dataset" }],
       resources: [
         {
           name: "resource1",
-          path: path.join(testDir, "data1.csv"),
+          data: path.join(testDir, "data1.csv"),
         },
       ],
     }
 
-    const updatedPackage: Package = {
-      name: "updated",
+    const updatedDataset: Dataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
+      creators: [{ name: "Updated Creator" }],
+      titles: [{ title: "Updated Dataset" }],
       resources: [
         {
           name: "resource2",
-          path: path.join(testDir, "data2.csv"),
+          data: path.join(testDir, "data2.csv"),
         },
       ],
-      description: "Updated package",
+      descriptions: [
+        {
+          description: "Updated dataset",
+          descriptionType: "Abstract",
+        },
+      ],
     }
 
-    await savePackageDescriptor(initialPackage, { path: testPath })
+    await saveDatasetDescriptor(initialDataset, { path: testPath })
 
     const initialContent = await fs.readFile(testPath, "utf-8")
     const initialParsed = JSON.parse(initialContent)
-    expect(initialParsed.name).toBe("initial")
+    expect(initialParsed.creators[0].name).toBe("Initial Creator")
 
-    await savePackageDescriptor(updatedPackage, {
+    await saveDatasetDescriptor(updatedDataset, {
       path: testPath,
       overwrite: true,
     })
 
     const updatedContent = await fs.readFile(testPath, "utf-8")
     const updatedParsed = JSON.parse(updatedContent)
-    expect(updatedParsed.name).toBe("updated")
-    expect(updatedParsed.description).toBe("Updated package")
+    expect(updatedParsed.creators[0].name).toBe("Updated Creator")
+    expect(updatedParsed.descriptions[0].description).toBe("Updated dataset")
   })
 
-  it("should save package with all metadata fields", async () => {
-    const fullPackage: Package = {
-      name: "full-package",
-      title: "Full Package",
-      description: "A package with all fields",
+  it("should save dataset with all DataCite metadata fields", async () => {
+    const fullDataset: Dataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
+      creators: [{ name: "Full Creator" }],
+      titles: [{ title: "Full Dataset" }],
+      publisher: { name: "Example Publisher" },
+      publicationYear: "2024",
+      subjects: [
+        { subject: "test" },
+        { subject: "data" },
+        { subject: "dataset" },
+      ],
+      descriptions: [
+        {
+          description: "A dataset with all fields",
+          descriptionType: "Abstract",
+        },
+      ],
       version: "1.0.0",
-      homepage: "https://example.com",
-      keywords: ["test", "data", "package"],
-      created: "2024-01-01T00:00:00Z",
-      image: "https://example.com/image.png",
+      dates: [
+        {
+          date: "2024-01-01",
+          dateType: "Created",
+        },
+      ],
+      relatedIdentifiers: [
+        {
+          relatedIdentifier: "https://example.com",
+          relatedIdentifierType: "URL",
+          relationType: "IsDescribedBy",
+        },
+      ],
       resources: [
         {
           name: "test-resource",
-          path: path.join(testDir, "data.csv"),
+          data: path.join(testDir, "data.csv"),
         },
       ],
     }
 
-    await savePackageDescriptor(fullPackage, { path: testPath })
+    await saveDatasetDescriptor(fullDataset, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
-    expect(parsedContent.name).toBe(fullPackage.name)
-    expect(parsedContent.title).toBe(fullPackage.title)
-    expect(parsedContent.description).toBe(fullPackage.description)
-    expect(parsedContent.version).toBe(fullPackage.version)
-    expect(parsedContent.homepage).toBe(fullPackage.homepage)
-    expect(parsedContent.keywords).toEqual(fullPackage.keywords)
-    expect(parsedContent.created).toBe(fullPackage.created)
-    expect(parsedContent.image).toBe(fullPackage.image)
+    expect(parsedContent.creators[0].name).toBe("Full Creator")
+    expect(parsedContent.titles[0].title).toBe("Full Dataset")
+    expect(parsedContent.descriptions[0].description).toBe(
+      "A dataset with all fields",
+    )
+    expect(parsedContent.version).toBe("1.0.0")
+    expect(parsedContent.publicationYear).toBe("2024")
+    expect(parsedContent.subjects).toHaveLength(3)
+    expect(parsedContent.dates[0].date).toBe("2024-01-01")
   })
 
-  it("should save package with contributors", async () => {
-    const packageWithContributors: Package = {
-      name: "test-package",
-      resources: [
-        {
-          name: "test-resource",
-          path: path.join(testDir, "data.csv"),
-        },
-      ],
+  it("should save dataset with contributors", async () => {
+    const datasetWithContributors: Dataset = {
+      ...testDataset,
       contributors: [
         {
-          title: "John Doe",
-          email: "john@example.com",
-          role: "author",
+          name: "John Doe",
+          contributorType: "DataCollector",
         },
         {
-          title: "Jane Smith",
-          path: "https://example.org",
+          name: "Jane Smith",
+          contributorType: "Editor",
         },
       ],
     }
 
-    await savePackageDescriptor(packageWithContributors, { path: testPath })
+    await saveDatasetDescriptor(datasetWithContributors, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
     expect(parsedContent.contributors).toHaveLength(2)
-    expect(parsedContent.contributors[0]?.title).toBe("John Doe")
-    expect(parsedContent.contributors[1]?.title).toBe("Jane Smith")
+    expect(parsedContent.contributors[0]?.name).toBe("John Doe")
+    expect(parsedContent.contributors[0]?.contributorType).toBe("DataCollector")
+    expect(parsedContent.contributors[1]?.name).toBe("Jane Smith")
   })
 
-  it("should save package with licenses", async () => {
-    const packageWithLicenses: Package = {
-      name: "test-package",
-      resources: [
+  it("should save dataset with rightsList", async () => {
+    const datasetWithRights: Dataset = {
+      ...testDataset,
+      rightsList: [
         {
-          name: "test-resource",
-          path: path.join(testDir, "data.csv"),
-        },
-      ],
-      licenses: [
-        {
-          name: "MIT",
-          path: "https://opensource.org/licenses/MIT",
+          rights: "MIT License",
+          rightsUri: "https://opensource.org/licenses/MIT",
         },
       ],
     }
 
-    await savePackageDescriptor(packageWithLicenses, { path: testPath })
+    await saveDatasetDescriptor(datasetWithRights, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
-    expect(parsedContent.licenses).toHaveLength(1)
-    expect(parsedContent.licenses[0]?.name).toBe("MIT")
+    expect(parsedContent.rightsList).toHaveLength(1)
+    expect(parsedContent.rightsList[0]?.rights).toBe("MIT License")
   })
 
-  it("should save package with sources", async () => {
-    const packageWithSources: Package = {
-      name: "test-package",
-      resources: [
+  it("should save dataset with relatedIdentifiers", async () => {
+    const datasetWithRelated: Dataset = {
+      ...testDataset,
+      relatedIdentifiers: [
         {
-          name: "test-resource",
-          path: path.join(testDir, "data.csv"),
-        },
-      ],
-      sources: [
-        {
-          title: "Example Source",
-          path: "https://example.com/data",
+          relatedIdentifier: "https://example.com/data",
+          relatedIdentifierType: "URL",
+          relationType: "IsSourceOf",
         },
       ],
     }
 
-    await savePackageDescriptor(packageWithSources, { path: testPath })
+    await saveDatasetDescriptor(datasetWithRelated, { path: testPath })
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
-    expect(parsedContent.sources).toHaveLength(1)
-    expect(parsedContent.sources[0]?.title).toBe("Example Source")
+    expect(parsedContent.relatedIdentifiers).toHaveLength(1)
+    expect(parsedContent.relatedIdentifiers[0]?.relatedIdentifier).toBe(
+      "https://example.com/data",
+    )
   })
 })

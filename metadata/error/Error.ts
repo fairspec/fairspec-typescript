@@ -1,4 +1,7 @@
-import type { BoundError } from "./Bound.ts"
-import type { UnboundError } from "./Unbound.ts"
+import { z } from "zod"
+import { GeneralError } from "./General.ts"
+import { ResourceError } from "./Resource.ts"
 
-export type FrictionlessError = BoundError | UnboundError
+export const FairspecError = z.union([GeneralError, ResourceError])
+
+export type FairspecError = z.infer<typeof FairspecError>

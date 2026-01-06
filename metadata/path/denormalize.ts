@@ -1,5 +1,5 @@
 import { node } from "../platform/index.ts"
-import { isRemotePath } from "./path.ts"
+import { isRemotePath } from "./general.ts"
 
 export function denormalizePath(path: string, options: { basepath?: string }) {
   const isPathRemote = isRemotePath(path)

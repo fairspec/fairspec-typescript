@@ -1,110 +1,46 @@
-import type { Dialect } from "../dialect/index.ts"
-import type { Metadata } from "../metadata/index.ts"
-import type { Profile } from "../profile/index.ts"
-import type { Schema } from "../schema/index.ts"
-import type { License } from "./License.ts"
-import type { Source } from "./Source.ts"
+import { z } from "zod"
+import { Datacite } from "../datacite/index.ts"
+import { Format } from "../format/index.ts"
+import { JsonSchema } from "../jsonSchema/index.ts"
+import { Path } from "../path/Path.ts"
+import { TableSchema } from "../tableSchema/index.ts"
+import { Data } from "./Data.ts"
+import { Integrity } from "./Integrity.ts"
 
-/**
- * Data Resource interface built on top of the Data Package standard and Polars DataFrames
- * @see https://datapackage.org/standard/data-resource/
- */
-export interface Resource extends Metadata {
-  /**
-   * JSON schema profile URL for validation
-   */
-  $schema?: string
+export const Resource = Datacite.extend({
+  data: Data.describe(
+    "Data or content of the resource. It must be a path to a file, array of paths to files, inline JSON object, or inline JSON array of objects.",
+  ),
 
-  /**
-   * Unique resource identifier
-   * Should use lowercase alphanumeric characters, periods, hyphens, and underscores
-   */
-  name: string
+  name: z
+    .string()
+    .regex(/^[a-zA-Z0-9_]+$/)
+    .optional()
+    .describe(
+      "An optional name for the resource consisting of alphanumeric characters and underscores. If provided, it can be used to reference resource within a dataset context.",
+    ),
 
-  /**
-   * A reference to the data itself, can be a path URL or array of paths
-   * Either path or data must be provided
-   */
-  path?: string | string[]
+  format: Format.optional().describe(
+    "The format definition of the file. For multiple files the format property defines the format for all the files.",
+  ),
 
-  /**
-   * Inline data content instead of referencing an external file
-   * Either path or data must be provided
-   */
-  data?: unknown | unknown[][] | Record<string, unknown>[]
+  integrity: Integrity.optional().describe(
+    "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",
+  ),
 
-  /**
-   * The resource type
-   * @example "table"
-   */
-  type?: "table"
+  jsonSchema: z
+    .union([Path, JsonSchema])
+    .optional()
+    .describe(
+      "A path to a JSON Schema or an object with the JSON Schema. The JSON Schema must be compatible with the JSONSchema Draft 2020-12 specification.",
+    ),
 
-  /**
-   * The file format
-   * @example "csv", "json", "xlsx"
-   */
-  format?: string
+  tableSchema: z
+    .union([Path, TableSchema])
+    .optional()
+    .describe(
+      "A path to a Table Schema or an object with the Table Schema. The Table Schema must be compatible with the Fairspec Table specification.",
+    ),
+})
 
-  /**
-   * The media type of the resource
-   * @example "text/csv", "application/json"
-   */
-  mediatype?: string
-
-  /**
-   * Character encoding of the resource
-   * @default "utf-8"
-   */
-  encoding?: string
-
-  /**
-   * Human-readable title
-   */
-  title?: string
-
-  /**
-   * A description of the resource
-   */
-  description?: string
-
-  /**
-   * Size of the file in bytes
-   */
-  bytes?: number
-
-  /**
-   * Hash of the resource data
-   */
-  hash?: string
-
-  /**
-   * Data sources
-   */
-  sources?: Source[]
-
-  /**
-   * License information
-   */
-  licenses?: License[]
-
-  /**
-   * Table dialect specification
-   * Describes delimiters, quote characters, etc.
-   * @see https://datapackage.org/standard/table-dialect/
-   */
-  dialect?: string | Dialect
-
-  /**
-   * Schema for the tabular data
-   * Describes fields in the table, constraints, etc.
-   * @see https://datapackage.org/standard/table-schema/
-   */
-  schema?: string | Schema
-
-  /**
-   * Schema for the json data
-   * Describes fields in the json, constraints, etc.
-   * @see https://json-schema.org/
-   */
-  jsonSchema?: string | Profile
-}
+export type Resource = z.infer<typeof Resource>

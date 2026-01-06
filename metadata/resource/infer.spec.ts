@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { inferFormat, inferName } from "./infer.ts"
+import { inferFormatName, inferName } from "./infer.ts"
 
 describe("inferName", () => {
   it("returns existing name when provided", () => {
@@ -8,17 +8,17 @@ describe("inferName", () => {
   })
 
   it("infers name from single string path", () => {
-    const resource = { path: "/data/users.csv" }
+    const resource = { data: "/data/users.csv" }
     expect(inferName(resource)).toBe("users")
   })
 
   it("infers name from first path in array", () => {
-    const resource = { path: ["/data/users.csv", "/data/backup.csv"] }
+    const resource = { data: ["/data/users.csv", "/data/backup.csv"] }
     expect(inferName(resource)).toBe("users")
   })
 
   it("infers name from URL path", () => {
-    const resource = { path: "https://example.com/data/products.json" }
+    const resource = { data: "https://example.com/data/products.json" }
     expect(inferName(resource)).toBe("products")
   })
 
@@ -28,98 +28,98 @@ describe("inferName", () => {
   })
 
   it("returns default name when path has no filename", () => {
-    const resource = { path: "/data/folder/" }
+    const resource = { data: "/data/folder/" }
     expect(inferName(resource)).toBe("resource")
   })
 
   it("handles complex filename with multiple dots", () => {
-    const resource = { path: "/data/file.backup.csv" }
+    const resource = { data: "/data/file.backup.csv" }
     expect(inferName(resource)).toBe("file")
   })
 
   it("slugifies filename with spaces and special characters", () => {
-    const resource = { path: "/data/My Data File!.csv" }
+    const resource = { data: "/data/My Data File!.csv" }
     expect(inferName(resource)).toBe("my-data-file")
   })
 })
 
-describe("inferFormat", () => {
-  it("returns existing format when provided", () => {
-    const resource = { format: "json" }
-    expect(inferFormat(resource)).toBe("json")
+describe("inferFormatName", () => {
+  it("returns existing format name when provided", () => {
+    const resource = { format: { name: "json" as const } }
+    expect(inferFormatName(resource)).toBe("json")
   })
 
   it("infers format from single string path", () => {
-    const resource = { path: "/data/users.csv" }
-    expect(inferFormat(resource)).toBe("csv")
+    const resource = { data: "/data/users.csv" }
+    expect(inferFormatName(resource)).toBe("csv")
   })
 
   it("infers format from first path in array", () => {
-    const resource = { path: ["/data/users.xlsx", "/data/backup.csv"] }
-    expect(inferFormat(resource)).toBe("xlsx")
+    const resource = { data: ["/data/users.xlsx", "/data/backup.csv"] }
+    expect(inferFormatName(resource)).toBe("xlsx")
   })
 
   it("infers format from URL path", () => {
-    const resource = { path: "https://example.com/data/products.json" }
-    expect(inferFormat(resource)).toBe("json")
+    const resource = { data: "https://example.com/data/products.json" }
+    expect(inferFormatName(resource)).toBe("json")
   })
 
   it("returns lowercase format", () => {
-    const resource = { path: "/data/file.CSV" }
-    expect(inferFormat(resource)).toBe("csv")
+    const resource = { data: "/data/file.CSV" }
+    expect(inferFormatName(resource)).toBe("csv")
   })
 
-  it("handles multiple extensions", () => {
-    const resource = { path: "/data/file.tar.gz" }
-    expect(inferFormat(resource)).toBe("gz")
+  it("returns format name even for unsupported extensions", () => {
+    const resource = { data: "/data/file.tar.gz" }
+    expect(inferFormatName(resource)).toBe("gz")
   })
 
   it("returns undefined when no path", () => {
     const resource = {}
-    expect(inferFormat(resource)).toBeUndefined()
+    expect(inferFormatName(resource)).toBeUndefined()
   })
 
   it("returns undefined when path has no extension", () => {
-    const resource = { path: "/data/file" }
-    expect(inferFormat(resource)).toBeUndefined()
+    const resource = { data: "/data/file" }
+    expect(inferFormatName(resource)).toBeUndefined()
   })
 
   it("returns undefined when filename cannot be determined", () => {
-    const resource = { path: "/data/folder/" }
-    expect(inferFormat(resource)).toBeUndefined()
+    const resource = { data: "/data/folder/" }
+    expect(inferFormatName(resource)).toBeUndefined()
   })
 
   it("infers postgresql protocol from connection string", () => {
     const resource = {
-      path: "postgresql://user:password@localhost:5432/database",
+      data: "postgresql://user:password@localhost:5432/database",
     }
-    expect(inferFormat(resource)).toBe("postgresql")
+    expect(inferFormatName(resource)).toBe("postgresql")
   })
 
   it("infers mysql protocol from connection string", () => {
-    const resource = { path: "mysql://user:password@localhost:3306/database" }
-    expect(inferFormat(resource)).toBe("mysql")
+    const resource = { data: "mysql://user:password@localhost:3306/database" }
+    expect(inferFormatName(resource)).toBe("mysql")
   })
 
   it("infers sqlite protocol from file path", () => {
-    const resource = { path: "sqlite:///path/to/database.db" }
-    expect(inferFormat(resource)).toBe("sqlite")
+    const resource = { data: "sqlite:///path/to/database.db" }
+    expect(inferFormatName(resource)).toBe("sqlite")
   })
 
   it("infers sqlite protocol with file scheme", () => {
-    const resource = { path: "sqlite://localhost/path/to/database.db" }
-    expect(inferFormat(resource)).toBe("sqlite")
+    const resource = { data: "sqlite://localhost/path/to/database.db" }
+    expect(inferFormatName(resource)).toBe("sqlite")
   })
 
   it("handles postgres protocol with ssl parameters", () => {
     const resource = {
-      path: "postgresql://user:pass@host:5432/db?sslmode=require",
+      data: "postgresql://user:pass@host:5432/db?sslmode=require",
     }
-    expect(inferFormat(resource)).toBe("postgresql")
+    expect(inferFormatName(resource)).toBe("postgresql")
   })
 
   it("handles mysql protocol with options", () => {
-    const resource = { path: "mysql://user:pass@host:3306/db?charset=utf8" }
-    expect(inferFormat(resource)).toBe("mysql")
+    const resource = { data: "mysql://user:pass@host:3306/db?charset=utf8" }
+    expect(inferFormatName(resource)).toBe("mysql")
   })
 })

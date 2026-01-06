@@ -1,12 +1,14 @@
-import type { CellError } from "./Cell.ts"
-import type { FieldError } from "./Field.ts"
-import type { FieldsError } from "./Fields.ts"
-import type { ForeignKeyError } from "./ForeignKey.ts"
-import type { RowError } from "./Row.ts"
+import { z } from "zod"
+import { CellError } from "./Cell.ts"
+import { ColumnError } from "./Column.ts"
+import { ForeignKeyError } from "./ForeignKey.ts"
+import { RowError } from "./Row.ts"
 
-export type TableError =
-  | FieldsError
-  | FieldError
-  | RowError
-  | CellError
-  | ForeignKeyError
+export const TableError = z.union([
+  ColumnError,
+  RowError,
+  CellError,
+  ForeignKeyError,
+])
+
+export type TableError = z.infer<typeof TableError>

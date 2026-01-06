@@ -1,5 +1,5 @@
-export type Descriptor = Record<string, unknown>
+import { z } from "zod"
 
-export function isDescriptor(value: unknown): value is Descriptor {
-  return !!value && typeof value === "object" && !Array.isArray(value)
-}
+export const Descriptor = z.record(z.string(), z.unknown())
+
+export type Descriptor = z.infer<typeof Descriptor>

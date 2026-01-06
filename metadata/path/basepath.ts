@@ -1,5 +1,5 @@
 import { node } from "../platform/index.ts"
-import { isRemotePath } from "./path.ts"
+import { isRemotePath } from "./general.ts"
 
 export async function resolveBasepath(path: string) {
   const isRemote = isRemotePath(path)

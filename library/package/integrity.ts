@@ -1,5 +1,5 @@
 import type { BoundError, Package } from "@fairspec/metadata"
-import { createReport, resolveSchema } from "@fairspec/metadata"
+import { createReport, resolveTableSchema } from "@fairspec/metadata"
 import type { Table } from "@fairspec/table"
 import { loadTable } from "../table/index.ts"
 
@@ -16,7 +16,7 @@ export async function validatePackageIntegrity(
   const tables: Record<string, Table> = {}
 
   for (const resource of dataPackage.resources) {
-    const schema = await resolveSchema(resource.schema)
+    const schema = await resolveTableSchema(resource.schema)
     if (!schema) continue
 
     const foreignKeys = schema.foreignKeys

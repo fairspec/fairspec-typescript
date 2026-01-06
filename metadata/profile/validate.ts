@@ -1,20 +1,39 @@
 import type { Descriptor } from "../descriptor/index.ts"
-import type { MetadataError } from "../error/index.ts"
-import { inspectJsonValue } from "../json/index.ts"
+import { inspectJsonValue } from "../jsonSchema/index.ts"
 import { createReport } from "../report/index.ts"
-import type { Profile } from "./Profile.ts"
-import { resolveProfile } from "./resolve.ts"
+import { loadProfile } from "./load.ts"
+import type { ProfileType } from "./Profile.ts"
 
 export async function validateDescriptor(
   descriptor: Descriptor,
   options: {
-    profile: Profile | string
+    profileType: ProfileType
+    rootJsonPointer?: string
   },
 ) {
-  const profile = await resolveProfile(options.profile)
-  const errors = await inspectJsonValue(descriptor, { jsonSchema: profile })
+  const $schema =
+    typeof descriptor.$schema === "string" ? descriptor.$schema : undefined
 
-  return createReport<MetadataError>(
+  if (!$schema) {
+    return createReport([
+      {
+        type: "metadata",
+        message: "Must have required property $schema at /",
+        jsonPointer: "$schema",
+      },
+    ])
+  }
+
+  const profile = await loadProfile($schema, {
+    profileType: options.profileType,
+  })
+
+  const errors = await inspectJsonValue(descriptor, {
+    jsonSchema: profile,
+    rootJsonPointer: options.rootJsonPointer,
+  })
+
+  return createReport(
     errors.map(error => ({
       type: "metadata",
       ...error,

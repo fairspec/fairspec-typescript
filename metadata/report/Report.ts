@@ -1,6 +1,12 @@
-import type { FrictionlessError } from "../error/index.ts"
+import { z } from "zod"
+import { FairspecError } from "../error/index.ts"
 
-export interface Report<T extends FrictionlessError = FrictionlessError> {
-  valid: boolean
-  errors: T[]
-}
+export const Report = z.object({
+  valid: z.boolean().describe("Whether the validation passed without errors"),
+
+  errors: z
+    .array(FairspecError)
+    .describe("Array of validation errors encountered"),
+})
+
+export type Report = z.infer<typeof Report>

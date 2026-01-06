@@ -1,6 +1,6 @@
 import { node } from "../platform/index.ts"
 import type { Descriptor } from "./Descriptor.ts"
-import { stringifyDescriptor } from "./process/stringify.ts"
+import { stringifyDescriptor } from "./stringify.ts"
 
 /**
  * Save a descriptor (JSON Object) to a file path

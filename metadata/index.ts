@@ -1,22 +1,41 @@
-export type { Descriptor } from "./descriptor/index.ts"
+export { Catalog } from "./catalog/index.ts"
 export {
+  ArrayColumn,
+  Base64Column,
+  BooleanColumn,
+  Column,
+  DateColumn,
+  DatetimeColumn,
+  DurationColumn,
+  EmailColumn,
+  GeojsonColumn,
+  HexColumn,
+  IntegerColumn,
+  NumberColumn,
+  ObjectColumn,
+  StringColumn,
+  TimeColumn,
+  TopojsonColumn,
+  UrlColumn,
+  UuidColumn,
+  WkbColumn,
+  WktColumn,
+  YearColumn,
+} from "./column/index.ts"
+export { Datacite } from "./datacite/index.ts"
+export {
+  Dataset,
+  loadDatasetDescriptor,
+  saveDatasetDescriptor,
+  validateDatasetMetadata,
+} from "./dataset/index.ts"
+export {
+  Descriptor,
   loadDescriptor,
   saveDescriptor,
   stringifyDescriptor,
 } from "./descriptor/index.ts"
-export type { Dialect } from "./dialect/index.ts"
 export {
-  loadDialect,
-  resolveDialect,
-  validateDialect,
-} from "./dialect/index.ts"
-export type {
-  BaseCellError,
-  BaseFieldError,
-  BaseFieldsError,
-  BaseRowError,
-  BoundError,
-  BytesError,
   CellEnumError,
   CellError,
   CellExclusiveMaximumError,
@@ -30,95 +49,46 @@ export type {
   CellRequiredError,
   CellTypeError,
   CellUniqueError,
-  DataError,
-  DocumentError,
+  ColumnError,
+  ColumnMissingError,
+  ColumnTypeError,
   EncodingError,
-  FieldError,
-  FieldNameError,
-  FieldsError,
-  FieldsExtraError,
-  FieldsMissingError,
-  FieldTypeError,
-  FileError,
+  FairspecError,
   ForeignKeyError,
-  FrictionlessError,
-  HashError,
-  JsonDocumentError,
+  FormatError,
+  GeneralError,
+  IntegrityError,
+  JsonError,
   MetadataError,
+  ResourceError,
   RowError,
   RowUniqueError,
   TableError,
-  UnboundError,
 } from "./error/index.ts"
-export type {
-  AnyConstraints,
-  AnyField,
-  ArrayConstraints,
-  ArrayField,
-  BooleanConstraints,
-  BooleanField,
-  DateConstraints,
-  DateField,
-  DatetimeConstraints,
-  DatetimeField,
-  DurationConstraints,
-  DurationField,
-  Field,
-  FieldType,
-  GeojsonConstraints,
-  GeojsonField,
-  GeopointConstraints,
-  GeopointField,
-  IntegerConstraints,
-  IntegerField,
-  ListConstraints,
-  ListField,
-  NumberConstraints,
-  NumberField,
-  ObjectConstraints,
-  ObjectField,
-  StringConstraints,
-  StringField,
-  TimeConstraints,
-  TimeField,
-  YearConstraints,
-  YearField,
-  YearmonthConstraints,
-  YearmonthField,
-} from "./field/index.ts"
-export { inspectJsonValue, resolveJsonSchema } from "./json/index.ts"
-export type { Contributor, Package } from "./package/index.ts"
 export {
-  convertPackageToDescriptor,
-  loadPackageDescriptor,
-  savePackageDescriptor,
-  validatePackageMetadata,
-} from "./package/index.ts"
+  inspectJsonValue,
+  JsonSchema,
+  resolveJsonSchema,
+} from "./jsonSchema/index.ts"
 export {
   denormalizePath,
   getBasepath,
-  getFilename,
-  getFormat,
+  getFileName,
+  getFormatName,
   getName,
   isRemotePath,
   resolveBasepath,
 } from "./path/index.ts"
-export type { Report } from "./report/index.ts"
-export { createReport } from "./report/index.ts"
-export type { License, Resource, Source } from "./resource/index.ts"
+export { createReport, Report } from "./report/index.ts"
 export {
-  convertResourceToDescriptor,
-  inferFormat,
+  inferFormatName,
   inferName,
   isRemoteResource,
-  loadResourceDescriptor,
-  validateResourceMetadata,
+  Resource,
 } from "./resource/index.ts"
 export {
-  convertSchemaFromJsonSchema,
-  convertSchemaToJsonSchema,
-  loadSchema,
-  resolveSchema,
-  validateSchema,
-} from "./schema/index.ts"
-export type { Schema } from "./schema/Schema.ts"
+  loadTableSchema,
+  resolveTableSchema,
+  TableSchema,
+  validateTableSchema,
+} from "./tableSchema/index.ts"

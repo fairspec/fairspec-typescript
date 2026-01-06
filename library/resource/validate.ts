@@ -1,4 +1,5 @@
 import { validateFile } from "@fairspec/dataset"
+// TODO: rebase on validateJsonValue
 import { validateDocument } from "@fairspec/document"
 import type { Descriptor, Resource } from "@fairspec/metadata"
 import {

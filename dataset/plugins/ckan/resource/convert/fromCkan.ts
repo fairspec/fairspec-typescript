@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import { getFilename } from "@fairspec/metadata"
-import { convertSchemaFromCkan } from "../../schema/index.ts"
+import { convertTableSchemaFromCkan } from "../../schema/index.ts"
 import type { CkanResource } from "../Resource.ts"
 
 export function convertResourceFromCkan(ckanResource: CkanResource): Resource {
@@ -33,7 +33,7 @@ export function convertResourceFromCkan(ckanResource: CkanResource): Resource {
 
   if (ckanResource.schema) {
     resource.type = "table"
-    resource.schema = convertSchemaFromCkan(ckanResource.schema)
+    resource.schema = convertTableSchemaFromCkan(ckanResource.schema)
   }
 
   return resource

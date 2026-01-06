@@ -2,7 +2,7 @@ import type { Field, Schema } from "@fairspec/metadata"
 import type { CkanField, CkanFieldInfo } from "../Field.ts"
 import type { CkanSchema } from "../Schema.ts"
 
-export function convertSchemaToCkan(schema: Schema): CkanSchema {
+export function convertTableSchemaToCkan(schema: Schema): CkanSchema {
   const fields = schema.fields.map(convertField)
 
   return { fields }

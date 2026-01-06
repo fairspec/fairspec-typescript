@@ -1,11 +1,11 @@
 import { node } from "../platform/index.ts"
 import { getProtocol, isRemotePath } from "../path/index.ts"
-import { parseDescriptor } from "./process/parse.ts"
+import { parseDescriptor } from "./parse.ts"
 
 /**
  * Load a descriptor (JSON Object) from a file or URL
  * Uses dynamic imports to work in both Node.js and browser environments
- * Supports HTTP, HTTPS, FTP, and FTPS protocols
+ * Supports HTTP, HTTPS protocols
  */
 export async function loadDescriptor(
   path: string,
@@ -38,7 +38,7 @@ async function loadRemoteDescriptor(path: string) {
   const url = new URL(path)
 
   const protocol = getProtocol(path)
-  if (!["http", "https", "ftp", "ftps"].includes(protocol)) {
+  if (!["http", "https"].includes(protocol)) {
     throw new Error(`Unsupported remote protocol: ${protocol}`)
   }
 

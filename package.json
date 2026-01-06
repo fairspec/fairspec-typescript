@@ -12,6 +12,7 @@
     "bump": "ncu -ws -u",
     "clean": "rm -rf **/node_modules",
     "coverage": "sensible-browser coverage/index.html",
+    "debug": "pnpm vitest --no-file-parallelism --test-timeout=0 --inspect-brk --browser run",
     "format": "biome check --write",
     "lint": "biome check",
     "install:ci": "pnpm install --ignore-scripts",

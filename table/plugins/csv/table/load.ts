@@ -1,5 +1,5 @@
 import type { Dialect, Resource } from "@fairspec/metadata"
-import { resolveDialect, resolveSchema } from "@fairspec/metadata"
+import { resolveDialect, resolveTableSchema } from "@fairspec/metadata"
 import { prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../plugin.ts"
 import { inferSchemaFromTable } from "../../../schema/index.ts"
@@ -54,7 +54,7 @@ export async function loadCsvTable(
   }
 
   if (!options?.denormalized) {
-    let schema = await resolveSchema(resource.schema)
+    let schema = await resolveTableSchema(resource.schema)
     if (!schema) schema = await inferSchemaFromTable(table, options)
     table = await normalizeTable(table, schema)
   }

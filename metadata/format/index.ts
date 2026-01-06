@@ -1,5 +1,5 @@
-export { ArrowFormat } from "./types/Arrow.ts"
 export { Format } from "./Format.ts"
+export { ArrowFormat } from "./types/Arrow.ts"
 export { CsvFormat } from "./types/Csv.ts"
 export { JsonFormat } from "./types/Json.ts"
 export { JsonlFormat } from "./types/Jsonl.ts"

@@ -1,5 +1,9 @@
 import { z } from "zod"
-import { ContentTypeGeneral, RelatedIdentifierType, RelationType } from "./Common.ts"
+import {
+  ContentTypeGeneral,
+  RelatedIdentifierType,
+  RelationType,
+} from "./Common.ts"
 
 export const RelatedObject = z.object({
   relationType: RelationType.describe(
@@ -8,34 +12,38 @@ export const RelatedObject = z.object({
   relatedMetadataScheme: z
     .string()
     .optional()
-    .describe("The name of the scheme (only for HasMetadata/IsMetadataFor relations)"),
+    .describe(
+      "The name of the scheme (only for HasMetadata/IsMetadataFor relations)",
+    ),
   schemeUri: z
     .string()
     .optional()
-    .describe("The URI of the relatedMetadataScheme (only for HasMetadata/IsMetadataFor relations)"),
+    .describe(
+      "The URI of the relatedMetadataScheme (only for HasMetadata/IsMetadataFor relations)",
+    ),
   schemeType: z
     .string()
     .optional()
-    .describe("The type of the relatedMetadataScheme (only for HasMetadata/IsMetadataFor relations)"),
+    .describe(
+      "The type of the relatedMetadataScheme (only for HasMetadata/IsMetadataFor relations)",
+    ),
   resourceTypeGeneral: ContentTypeGeneral.optional().describe(
     "The general type of the related resource",
   ),
 })
 
 export const RelatedIdentifier = RelatedObject.extend({
-  relatedIdentifier: z
-    .string()
-    .describe("Identifiers of related resources"),
+  relatedIdentifier: z.string().describe("Identifiers of related resources"),
   relatedIdentifierType: RelatedIdentifierType.describe(
     "The type of the RelatedIdentifier (e.g., DOI, Handle, URL, etc.)",
   ),
 }).refine(
-  (data) => {
-    const hasMetadataRelation = ["HasMetadata", "IsMetadataFor"].includes(data.relationType)
-    if (hasMetadataRelation) return true
-    return (
-      !data.relatedMetadataScheme && !data.schemeUri && !data.schemeType
+  data => {
+    const hasMetadataRelation = ["HasMetadata", "IsMetadataFor"].includes(
+      data.relationType,
     )
+    if (hasMetadataRelation) return true
+    return !data.relatedMetadataScheme && !data.schemeUri && !data.schemeType
   },
   {
     message:

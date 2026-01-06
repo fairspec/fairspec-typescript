@@ -86,8 +86,12 @@ export type CellTypeError = z.infer<typeof CellTypeError>
 export type CellRequiredError = z.infer<typeof CellRequiredError>
 export type CellMinimumError = z.infer<typeof CellMinimumError>
 export type CellMaximumError = z.infer<typeof CellMaximumError>
-export type CellExclusiveMinimumError = z.infer<typeof CellExclusiveMinimumError>
-export type CellExclusiveMaximumError = z.infer<typeof CellExclusiveMaximumError>
+export type CellExclusiveMinimumError = z.infer<
+  typeof CellExclusiveMinimumError
+>
+export type CellExclusiveMaximumError = z.infer<
+  typeof CellExclusiveMaximumError
+>
 export type CellMinLengthError = z.infer<typeof CellMinLengthError>
 export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>
 export type CellPatternError = z.infer<typeof CellPatternError>

@@ -78,7 +78,9 @@ describe("assertProfile", () => {
         path: "https://fairspec.org/profiles/1.0.0/catalog.json",
         type: "dataset",
       }),
-    ).rejects.toThrow("Profile at path https://fairspec.org/profiles/1.0.0/catalog.json is not a valid dataset profile")
+    ).rejects.toThrow(
+      "Profile at path https://fairspec.org/profiles/1.0.0/catalog.json is not a valid dataset profile",
+    )
   })
 
   it("throws error for invalid URL format", async () => {
@@ -91,7 +93,9 @@ describe("assertProfile", () => {
         path: "https://example.com/catalog.json",
         type: "catalog",
       }),
-    ).rejects.toThrow("Profile at path https://example.com/catalog.json is not a valid catalog profile")
+    ).rejects.toThrow(
+      "Profile at path https://example.com/catalog.json is not a valid catalog profile",
+    )
   })
 
   it("accepts 'latest' version", async () => {
@@ -118,7 +122,9 @@ describe("assertProfile", () => {
         path: "https://example.com/custom-catalog.json",
         type: "catalog",
       }),
-    ).rejects.toThrow("Profile at path https://example.com/custom-catalog.json is not a valid catalog profile")
+    ).rejects.toThrow(
+      "Profile at path https://example.com/custom-catalog.json is not a valid catalog profile",
+    )
   })
 
   it("returns profile when custom profile extends official profile via allOf", async () => {

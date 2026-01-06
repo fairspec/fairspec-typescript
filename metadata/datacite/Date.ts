@@ -8,7 +8,9 @@ export const DateValue = z
   )
 
 export const Date = z.object({
-  date: DateValue.describe("The date associated with an event in the lifecycle of the resource"),
+  date: DateValue.describe(
+    "The date associated with an event in the lifecycle of the resource",
+  ),
   dateType: DateType.describe(
     "The type of date (e.g., Accepted, Available, Created, Issued, Submitted, Updated, etc.)",
   ),

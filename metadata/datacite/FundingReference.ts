@@ -6,7 +6,9 @@ export const FundingReference = z.object({
   funderIdentifier: z
     .string()
     .optional()
-    .describe("Uniquely identifies a funding entity, according to various identifier schemes"),
+    .describe(
+      "Uniquely identifies a funding entity, according to various identifier schemes",
+    ),
   funderIdentifierType: FunderIdentifierType.optional().describe(
     "The type of the funderIdentifier (e.g., ISNI, GRID, Crossref Funder ID, ROR, Other)",
   ),
@@ -17,7 +19,9 @@ export const FundingReference = z.object({
   awardUri: z
     .string()
     .optional()
-    .describe("The URI leading to a page provided by the funder for more information about the award (grant)"),
+    .describe(
+      "The URI leading to a page provided by the funder for more information about the award (grant)",
+    ),
   awardTitle: z
     .string()
     .optional()
@@ -26,7 +30,9 @@ export const FundingReference = z.object({
 
 export const FundingReferences = z
   .array(FundingReference)
-  .describe("Information about financial support (funding) for the resource being registered")
+  .describe(
+    "Information about financial support (funding) for the resource being registered",
+  )
 
 export type FundingReference = z.infer<typeof FundingReference>
 export type FundingReferences = z.infer<typeof FundingReferences>

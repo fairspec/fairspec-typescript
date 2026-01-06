@@ -7,14 +7,24 @@ export const GeoLocationPoint = z.object({
 })
 
 export const GeoLocationBox = z.object({
-  westBoundLongitude: Longitude.describe("Western longitudinal dimension of box"),
-  eastBoundLongitude: Longitude.describe("Eastern longitudinal dimension of box"),
-  southBoundLatitude: Latitude.describe("Southern latitudinal dimension of box"),
-  northBoundLatitude: Latitude.describe("Northern latitudinal dimension of box"),
+  westBoundLongitude: Longitude.describe(
+    "Western longitudinal dimension of box",
+  ),
+  eastBoundLongitude: Longitude.describe(
+    "Eastern longitudinal dimension of box",
+  ),
+  southBoundLatitude: Latitude.describe(
+    "Southern latitudinal dimension of box",
+  ),
+  northBoundLatitude: Latitude.describe(
+    "Northern latitudinal dimension of box",
+  ),
 })
 
 export const GeoLocationPolygonItem = z.object({
-  polygonPoint: GeoLocationPoint.optional().describe("A point location in a polygon"),
+  polygonPoint: GeoLocationPoint.optional().describe(
+    "A point location in a polygon",
+  ),
   inPolygonPoint: GeoLocationPoint.optional().describe(
     "For any bound area that is larger than half the earth, define a (random) point inside",
   ),
@@ -24,7 +34,9 @@ export const GeoLocation = z.object({
   geoLocationPlace: z
     .string()
     .optional()
-    .describe("Spatial region or named place where the data was gathered or about which the data is focused"),
+    .describe(
+      "Spatial region or named place where the data was gathered or about which the data is focused",
+    ),
   geoLocationPoint: GeoLocationPoint.optional().describe(
     "A point location in space",
   ),
@@ -34,12 +46,16 @@ export const GeoLocation = z.object({
   geoLocationPolygon: z
     .array(GeoLocationPolygonItem)
     .optional()
-    .describe("A drawn polygon area, defined by a set of points and lines connecting the points in a closed chain"),
+    .describe(
+      "A drawn polygon area, defined by a set of points and lines connecting the points in a closed chain",
+    ),
 })
 
 export const GeoLocations = z
   .array(GeoLocation)
-  .describe("Spatial region or named place where the data was gathered or about which the data is focused")
+  .describe(
+    "Spatial region or named place where the data was gathered or about which the data is focused",
+  )
 
 export type GeoLocationPoint = z.infer<typeof GeoLocationPoint>
 export type GeoLocationBox = z.infer<typeof GeoLocationBox>

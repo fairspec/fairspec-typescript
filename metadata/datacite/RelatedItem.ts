@@ -1,5 +1,9 @@
 import { z } from "zod"
-import { ContentTypeGeneral, NumberType, RelatedIdentifierType } from "./Common.ts"
+import {
+  ContentTypeGeneral,
+  NumberType,
+  RelatedIdentifierType,
+} from "./Common.ts"
 import { Contributors } from "./Contributor.ts"
 import { Creators } from "./Creator.ts"
 import { PublicationYear } from "./PublicationYear.ts"
@@ -7,9 +11,7 @@ import { RelatedObject } from "./RelatedIdentifier.ts"
 import { Titles } from "./Title.ts"
 
 export const RelatedItemIdentifier = z.object({
-  relatedItemIdentifier: z
-    .string()
-    .describe("Identifier for the related item"),
+  relatedItemIdentifier: z.string().describe("Identifier for the related item"),
   relatedItemIdentifierType: RelatedIdentifierType.describe(
     "The type of the RelatedItemIdentifier",
   ),
@@ -35,15 +37,17 @@ export const RelatedItem = RelatedObject.extend({
   number: z
     .string()
     .optional()
-    .describe("Number of the related item (e.g., report number, article number)"),
+    .describe(
+      "Number of the related item (e.g., report number, article number)",
+    ),
   numberType: NumberType.optional().describe("The type of the number"),
 }).refine(
-  (data) => {
-    const hasMetadataRelation = ["HasMetadata", "IsMetadataFor"].includes(data.relationType)
-    if (hasMetadataRelation) return true
-    return (
-      !data.relatedMetadataScheme && !data.schemeUri && !data.schemeType
+  data => {
+    const hasMetadataRelation = ["HasMetadata", "IsMetadataFor"].includes(
+      data.relationType,
     )
+    if (hasMetadataRelation) return true
+    return !data.relatedMetadataScheme && !data.schemeUri && !data.schemeType
   },
   {
     message:

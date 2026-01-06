@@ -5,10 +5,7 @@ export const Rights = z.object({
     .string()
     .optional()
     .describe("Any rights information for this resource"),
-  rightsUri: z
-    .string()
-    .optional()
-    .describe("The URI of the license"),
+  rightsUri: z.string().optional().describe("The URI of the license"),
   rightsIdentifier: z
     .string()
     .optional()
@@ -24,7 +21,9 @@ export const Rights = z.object({
   lang: z
     .string()
     .optional()
-    .describe("Language of the rights statement, specified using ISO 639-1 or ISO 639-3 codes"),
+    .describe(
+      "Language of the rights statement, specified using ISO 639-1 or ISO 639-3 codes",
+    ),
 })
 
 export const RightsList = z

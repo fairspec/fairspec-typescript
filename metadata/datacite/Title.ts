@@ -9,7 +9,9 @@ export const Title = z.object({
   lang: z
     .string()
     .optional()
-    .describe("Language of the title, specified using ISO 639-1 or ISO 639-3 codes"),
+    .describe(
+      "Language of the title, specified using ISO 639-1 or ISO 639-3 codes",
+    ),
 })
 
 export const Titles = z

@@ -1,4 +1,5 @@
 import { isRemotePath } from "../path/index.ts"
+import type { JsonData } from "./Data.ts"
 import type { Resource } from "./Resource.ts"
 
 export function isRemoteResource(resource: Partial<Resource>) {
@@ -27,7 +28,8 @@ export function getJsonData(resource: Partial<Resource>) {
   const pathData = getPathData(resource)
 
   if (!pathData) {
-    return resource.data
+    // TODO: dont cast
+    return resource.data as JsonData
   }
 
   return undefined

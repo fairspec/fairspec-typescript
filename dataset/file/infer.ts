@@ -1,18 +1,19 @@
 import { stat } from "node:fs/promises"
 import type { Resource } from "@fairspec/metadata"
+import { getFirstPath } from "@fairspec/metadata"
 import chardet from "chardet"
 import * as hasha from "hasha"
 import { isBinaryFile } from "isbinaryfile"
 import pMap from "p-map"
+import { loadFile } from "../file/index.ts"
 import { concatFileStreams } from "../stream/concat.ts"
 import { loadFileStream } from "../stream/index.ts"
 import { prefetchFiles } from "./fetch.ts"
-import { loadFile } from "./load.ts"
 
-export type HashType = "md5" | "sha1" | "sha256" | "sha512"
+export type HashType = NonNullable<Resource["integrity"]>["type"]
 
 export async function inferBytes(resource: Partial<Resource>) {
-  const localPaths = await prefetchFiles(resource.path)
+  const localPaths = await prefetchFiles(resource)
 
   let bytes = 0
   for (const localPath of localPaths) {
@@ -28,7 +29,7 @@ export async function inferHash(
   options?: { hashType?: HashType },
 ) {
   const algorithm = options?.hashType ?? "sha256"
-  const localPaths = await prefetchFiles(resource.path)
+  const localPaths = await prefetchFiles(resource)
 
   const streams = await pMap(localPaths, async path => loadFileStream(path))
   const stream = concatFileStreams(streams)
@@ -44,10 +45,7 @@ export async function inferEncoding(
   const maxBytes = options?.sampleBytes ?? 10_000
   const confidencePercent = options?.confidencePercent ?? 80
 
-  const firstPath = Array.isArray(resource.path)
-    ? resource.path[0]
-    : resource.path
-
+  const firstPath = getFirstPath(resource)
   if (!firstPath) {
     return undefined
   }

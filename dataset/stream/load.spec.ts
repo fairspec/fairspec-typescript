@@ -72,9 +72,9 @@ describe("loadFileStream", () => {
   it("should throw error for invalid index", async () => {
     const filePath = await writeTempFile("content")
 
-    await expect(
-      loadFileStream([filePath], { index: 5 }),
-    ).rejects.toThrow("Cannot stream resource")
+    await expect(loadFileStream([filePath], { index: 5 })).rejects.toThrow(
+      "Cannot stream resource",
+    )
   })
 
   it("should throw error for empty array with index 0", async () => {

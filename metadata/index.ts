@@ -81,6 +81,10 @@ export {
 } from "./path/index.ts"
 export { createReport, Report } from "./report/index.ts"
 export {
+  getFirstPath,
+  getJsonData,
+  getPathData,
+  getPaths,
   inferFormatName,
   inferName,
   isRemoteResource,

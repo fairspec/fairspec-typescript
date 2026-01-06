@@ -1,7 +1,7 @@
 import type { Descriptor } from "../descriptor/index.ts"
 import { normalizePath } from "../path/index.ts"
 
-export function normalizeResource(
+export function normalizeDataset(
   descriptor: Descriptor,
   options?: {
     basepath?: string

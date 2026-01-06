@@ -10,6 +10,7 @@ export async function inspectJsonValue(
   value: unknown,
   options: {
     jsonSchema: JsonSchema | string
+    rootJsonPointer?: string
   },
 ) {
   const jsonSchema =
@@ -21,10 +22,21 @@ export async function inspectJsonValue(
   validate(value)
 
   const errors = validate.errors
-    ? validate.errors?.map(error => ({
-        message: error.message ?? "error",
-        jsonPointer: error.instancePath ?? "/",
-      }))
+    ? validate.errors?.map(error => {
+        const instancePath = error.instancePath ?? "/"
+        const rootPath = options.rootJsonPointer ?? ""
+        const jsonPointer =
+          rootPath === "" || rootPath === "/"
+            ? instancePath
+            : instancePath === "/"
+              ? rootPath
+              : `${rootPath}${instancePath}`
+
+        return {
+          message: error.message ?? "error",
+          jsonPointer,
+        }
+      })
     : []
 
   return errors

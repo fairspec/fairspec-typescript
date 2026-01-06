@@ -9,13 +9,19 @@ import type { TableSchema } from "./Schema.ts"
  */
 export async function validateTableSchema(
   source: TableSchema | Descriptor | string,
+  options?: {
+    rootJsonPointer?: string
+  },
 ) {
   const descriptor =
     typeof source === "string"
       ? await loadDescriptor(source)
       : (source as Descriptor)
 
-  const report = await validateDescriptor(descriptor, { type: "table" })
+  const report = await validateDescriptor(descriptor, {
+    profileType: "table",
+    rootJsonPointer: options?.rootJsonPointer,
+  })
 
   let tableSchema: TableSchema | undefined
   if (report.valid) {

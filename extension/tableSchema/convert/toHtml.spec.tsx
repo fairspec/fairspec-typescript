@@ -1,29 +1,28 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
 import { convertTableSchemaToHtml } from "./toHtml.tsx"
 
 describe("convertTableSchemaToHtml", () => {
   it("converts a simple schema to html table", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "id",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        id: {
           type: "integer",
           title: "Identifier",
           description: "Unique identifier",
         },
-        {
-          name: "name",
+        name: {
           type: "string",
           title: "Name",
           description: "Person name",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToHtml(schema)
 
-    expect(result).toContain("<h2>Fields</h2>")
+    expect(result).toContain("<h2>Columns</h2>")
     expect(result).toContain("<table>")
     expect(result).toContain("<th>Name</th>")
     expect(result).toContain("<th>Definition</th>")
@@ -36,52 +35,27 @@ describe("convertTableSchemaToHtml", () => {
     expect(result).toContain("<code>string</code>")
   })
 
-  it("includes schema title and description", () => {
-    const schema: Schema = {
-      title: "Test Schema",
-      description: "A test schema for validation",
-      fields: [
-        {
-          name: "field1",
-          type: "string",
-        },
-      ],
-    }
-
-    const result = convertTableSchemaToHtml(schema)
-
-    expect(result).toContain('<h1 id="test-schema">Test Schema</h1>')
-    expect(result).toContain("<p>A test schema for validation</p>")
-  })
-
-  it("handles field constraints", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "age",
+  it("handles column constraints", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        age: {
           type: "integer",
-          constraints: {
-            required: true,
-            minimum: 0,
-            maximum: 120,
-          },
+
+          minimum: 0,
+          maximum: 120,
         },
-        {
-          name: "email",
+        email: {
           type: "string",
-          constraints: {
-            required: true,
-            pattern: "^[a-z]+@[a-z]+\\.[a-z]+$",
-          },
+          pattern: "^[a-z]+@[a-z]+\\.[a-z]+$",
         },
-      ],
+      },
+      required: ["age", "email"],
     }
 
     const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<strong>Constraints</strong>")
-    expect(result).toContain("required:")
-    expect(result).toContain("<code>true</code>")
     expect(result).toContain("minimum:")
     expect(result).toContain("<code>0</code>")
     expect(result).toContain("maximum:")
@@ -90,20 +64,17 @@ describe("convertTableSchemaToHtml", () => {
   })
 
   it("handles required field indicator", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "requiredField",
-          type: "string",
-          constraints: {
-            required: true,
-          },
-        },
-        {
-          name: "optionalField",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        requiredField: {
           type: "string",
         },
-      ],
+        optionalField: {
+          type: "string",
+        },
+      },
+      required: ["requiredField"],
     }
 
     const result = convertTableSchemaToHtml(schema)
@@ -113,53 +84,46 @@ describe("convertTableSchemaToHtml", () => {
     expect(result).toContain("<strong>optionalField?</strong>")
   })
 
-  it("handles empty fields array", () => {
-    const schema: Schema = {
-      fields: [],
+  it("handles empty properties object", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {},
     }
 
     const result = convertTableSchemaToHtml(schema)
 
-    expect(result).toContain("<h2>Fields</h2>")
+    expect(result).toContain("<h2>Columns</h2>")
     expect(result).toContain("<table>")
     expect(result).toContain("</table>")
   })
 
   it("escapes HTML special characters", () => {
-    const schema: Schema = {
-      title: "Test & <Schema>",
-      description: 'Description with "quotes" and <tags>',
-      fields: [
-        {
-          name: "field",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field: {
           type: "string",
           description: "Description with <script>alert('xss')</script>",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToHtml(schema)
 
-    expect(result).toContain("Test &amp; &lt;Schema&gt;")
-    expect(result).toContain(
-      "Description with &quot;quotes&quot; and &lt;tags&gt;",
-    )
     expect(result).toContain(
       "Description with &lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;",
     )
   })
 
-  it("handles fields with enum constraints", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "status",
+  it("handles columns with enum constraints", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        status: {
           type: "string",
-          constraints: {
-            enum: ["active", "inactive", "pending"],
-          },
+          enum: ["active", "inactive", "pending"],
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToHtml(schema)
@@ -169,26 +133,21 @@ describe("convertTableSchemaToHtml", () => {
   })
 
   it("handles multiple constraint types", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "username",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        username: {
           type: "string",
-          constraints: {
-            required: true,
-            unique: true,
-            minLength: 3,
-            maxLength: 20,
-            pattern: "^[a-zA-Z0-9_]+$",
-          },
+          minLength: 3,
+          maxLength: 20,
+          pattern: "^[a-zA-Z0-9_]+$",
         },
-      ],
+      },
+      required: ["username"],
     }
 
     const result = convertTableSchemaToHtml(schema)
 
-    expect(result).toContain("required:")
-    expect(result).toContain("unique:")
     expect(result).toContain("minLength:")
     expect(result).toContain("<code>3</code>")
     expect(result).toContain("maxLength:")
@@ -196,41 +155,17 @@ describe("convertTableSchemaToHtml", () => {
     expect(result).toContain("pattern:")
   })
 
-  it("handles field examples", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "email",
-          type: "string",
-          examples: ["user@example.com", "admin@test.org"],
-        },
-        {
-          name: "age",
-          type: "integer",
-          examples: [25, 30],
-        },
-      ],
-    }
-
-    const result = convertTableSchemaToHtml(schema)
-
-    expect(result).toContain("<strong>Examples</strong>")
-    expect(result).toContain("<code>user@example.com</code>")
-    expect(result).toContain("<code>admin@test.org</code>")
-    expect(result).toContain("<code>25</code>")
-    expect(result).toContain("<code>30</code>")
-  })
-
-  it("handles different field types", () => {
-    const schema: Schema = {
-      fields: [
-        { name: "field1", type: "string" },
-        { name: "field2", type: "integer" },
-        { name: "field3", type: "number" },
-        { name: "field4", type: "boolean" },
-        { name: "field5", type: "datetime" },
-        { name: "field6", type: "any" },
-      ],
+  it("handles different column types", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: { type: "string" },
+        field2: { type: "integer" },
+        field3: { type: "number" },
+        field4: { type: "boolean" },
+        field5: { type: "string", format: "date-time" },
+        field6: { type: "array" },
+      },
     }
 
     const result = convertTableSchemaToHtml(schema)
@@ -239,36 +174,34 @@ describe("convertTableSchemaToHtml", () => {
     expect(result).toContain("<code>integer</code>")
     expect(result).toContain("<code>number</code>")
     expect(result).toContain("<code>boolean</code>")
-    expect(result).toContain("<code>datetime</code>")
-    expect(result).toContain("<code>any</code>")
+    expect(result).toContain("<code>array</code>")
   })
 
   it("sanitizes IDs for anchors", () => {
-    const schema: Schema = {
-      title: "Test Schema & More!",
-      fields: [
-        {
-          name: "field-with-dashes",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        "field-with-dashes": {
           type: "string",
         },
-        {
-          name: "Field With Spaces",
+        "Field With Spaces": {
           type: "string",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToHtml(schema)
 
-    expect(result).toContain('id="test-schema-more"')
     expect(result).toContain('id="field-with-dashes"')
     expect(result).toContain('id="field-with-spaces"')
   })
 
   it("does not include top-level html tags", () => {
-    const schema: Schema = {
-      title: "Test",
-      fields: [{ name: "field1", type: "string" }],
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: { type: "string" },
+      },
     }
 
     const result = convertTableSchemaToHtml(schema)
@@ -280,27 +213,14 @@ describe("convertTableSchemaToHtml", () => {
     expect(result).not.toContain("<style>")
   })
 
-  it("handles schema without title", () => {
-    const schema: Schema = {
-      description: "Description only",
-      fields: [{ name: "field1", type: "string" }],
-    }
-
-    const result = convertTableSchemaToHtml(schema)
-
-    expect(result).toContain("<p>Description only</p>")
-    expect(result).not.toContain("<h2 id=")
-    expect(result).toContain("<h2>Fields</h2>")
-  })
-
-  it("handles field without description", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "field1",
+  it("handles column without description", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: {
           type: "string",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToHtml(schema)
@@ -310,55 +230,32 @@ describe("convertTableSchemaToHtml", () => {
   })
 
   it("uses frontmatter when frontmatter option is true", () => {
-    const schema: Schema = {
-      title: "Test Schema",
-      description: "A test schema with frontmatter",
-      fields: [
-        {
-          name: "field1",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: {
           type: "string",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToHtml(schema, { frontmatter: true })
 
     expect(result).toContain("---")
-    expect(result).toContain("Test Schema")
-    expect(result).not.toContain("<h1")
-    expect(result).toContain("<p>A test schema with frontmatter</p>")
-  })
-
-  it("uses H1 heading when frontmatter option is false or not provided", () => {
-    const schema: Schema = {
-      title: "Test Schema",
-      fields: [
-        {
-          name: "field1",
-          type: "string",
-        },
-      ],
-    }
-
-    const result = convertTableSchemaToHtml(schema, { frontmatter: false })
-
-    expect(result).toContain('<h1 id="test-schema">Test Schema</h1>')
-    expect(result).not.toContain("title: Test Schema")
-    expect(result.startsWith("<h1")).toBe(true)
+    expect(result).toContain("title: Table Schema")
   })
 
   it("handles schema with primary key", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "id",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        id: {
           type: "integer",
         },
-        {
-          name: "name",
+        name: {
           type: "string",
         },
-      ],
+      },
       primaryKey: ["id"],
     }
 
@@ -369,17 +266,16 @@ describe("convertTableSchemaToHtml", () => {
   })
 
   it("handles schema with composite primary key", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "user_id",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        user_id: {
           type: "integer",
         },
-        {
-          name: "project_id",
+        project_id: {
           type: "integer",
         },
-      ],
+      },
       primaryKey: ["user_id", "project_id"],
     }
 
@@ -390,19 +286,19 @@ describe("convertTableSchemaToHtml", () => {
   })
 
   it("handles schema with foreign keys", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "user_id",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        user_id: {
           type: "integer",
         },
-      ],
+      },
       foreignKeys: [
         {
-          fields: ["user_id"],
+          columns: ["user_id"],
           reference: {
             resource: "users",
-            fields: ["id"],
+            columns: ["id"],
           },
         },
       ],
@@ -411,39 +307,38 @@ describe("convertTableSchemaToHtml", () => {
     const result = convertTableSchemaToHtml(schema)
 
     expect(result).toContain("<h2>Foreign Keys</h2>")
-    expect(result).toContain("<th>Fields</th>")
+    expect(result).toContain("<th>Columns</th>")
     expect(result).toContain("<th>Reference Resource</th>")
-    expect(result).toContain("<th>Reference Fields</th>")
+    expect(result).toContain("<th>Reference Columns</th>")
     expect(result).toContain("<code>user_id</code>")
     expect(result).toContain("<code>users</code>")
     expect(result).toContain("<code>id</code>")
   })
 
   it("handles schema with multiple foreign keys", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "user_id",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        user_id: {
           type: "integer",
         },
-        {
-          name: "project_id",
+        project_id: {
           type: "integer",
         },
-      ],
+      },
       foreignKeys: [
         {
-          fields: ["user_id"],
+          columns: ["user_id"],
           reference: {
             resource: "users",
-            fields: ["id"],
+            columns: ["id"],
           },
         },
         {
-          fields: ["project_id"],
+          columns: ["project_id"],
           reference: {
             resource: "projects",
-            fields: ["id"],
+            columns: ["id"],
           },
         },
       ],
@@ -459,18 +354,18 @@ describe("convertTableSchemaToHtml", () => {
   })
 
   it("handles foreign key without resource specified", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "parent_id",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        parent_id: {
           type: "integer",
         },
-      ],
+      },
       foreignKeys: [
         {
-          fields: ["parent_id"],
+          columns: ["parent_id"],
           reference: {
-            fields: ["id"],
+            columns: ["id"],
           },
         },
       ],
@@ -485,18 +380,60 @@ describe("convertTableSchemaToHtml", () => {
   })
 
   it("does not render primary key or foreign keys sections when not present", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "field1",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: {
           type: "string",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToHtml(schema)
 
     expect(result).not.toContain("<h2>Primary Key</h2>")
     expect(result).not.toContain("<h2>Foreign Keys</h2>")
+  })
+
+  it("handles string categories", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        status: {
+          type: "string",
+          categories: ["active", "inactive"],
+        },
+      },
+    }
+
+    const result = convertTableSchemaToHtml(schema)
+
+    expect(result).toContain("<strong>Categories</strong>")
+    expect(result).toContain("<code>active</code>")
+    expect(result).toContain("<code>inactive</code>")
+  })
+
+  it("handles integer categories with labels", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        level: {
+          type: "integer",
+
+          categories: [
+            { value: 1, label: "Beginner" },
+            { value: 2, label: "Advanced" },
+          ],
+        },
+      },
+    }
+
+    const result = convertTableSchemaToHtml(schema)
+
+    expect(result).toContain("<strong>Categories</strong>")
+    expect(result).toContain("<code>1</code>")
+    expect(result).toContain(" - Beginner")
+    expect(result).toContain("<code>2</code>")
+    expect(result).toContain(" - Advanced")
   })
 })

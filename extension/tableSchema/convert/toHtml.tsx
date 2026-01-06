@@ -1,58 +1,46 @@
-import type { Field, Schema } from "@fairspec/metadata"
+import type { Column, TableSchema } from "@fairspec/metadata"
 import { prettify } from "htmlfy"
 import { renderToStaticMarkup } from "react-dom/server"
 
 export function convertTableSchemaToHtml(
-  schema: Schema,
+  schema: TableSchema,
   options?: { frontmatter?: boolean },
 ): string {
   let html = prettify(
-    renderToStaticMarkup(
-      <SchemaTable schema={schema} withTitle={!options?.frontmatter} />,
-    ),
+    renderToStaticMarkup(<SchemaTable schema={schema} />),
   )
 
   if (options?.frontmatter) {
-    if (schema.title) {
-      html = `---\ntitle: ${schema.title}\n---\n\n${html}`
-    }
+    html = `---\ntitle: Table Schema\n---\n\n${html}`
   }
 
   return html
 }
 
-function SchemaTable(props: { schema: Schema; withTitle?: boolean }) {
-  const { schema, withTitle } = props
-  const title = withTitle ? schema.title : undefined
+function SchemaTable(props: { schema: TableSchema }) {
+  const { schema } = props
 
   return (
     <>
-      <SchemaHeader title={title} description={schema.description} />
       {schema.primaryKey && <PrimaryKey fields={schema.primaryKey} />}
       {schema.foreignKeys && schema.foreignKeys.length > 0 && (
         <ForeignKeys foreignKeys={schema.foreignKeys} />
       )}
-      <FieldsTable fields={schema.fields} />
+      <FieldsTable properties={schema.properties} required={schema.required} />
     </>
   )
 }
 
-function SchemaHeader(props: { title?: string; description?: string }) {
-  const { title, description } = props
+function FieldsTable(props: {
+  properties: Record<string, Column>
+  required?: string[]
+}) {
+  const { properties, required } = props
+  const columns = Object.entries(properties)
 
   return (
     <>
-      {title && <h1 id={sanitizeId(title)}>{title}</h1>}
-      {description && <p>{description}</p>}
-    </>
-  )
-}
-
-function FieldsTable(props: { fields: Field[] }) {
-  const { fields } = props
-  return (
-    <>
-      <h2>Fields</h2>
+      <h2>Columns</h2>
       <table>
         <colgroup>
           <col width="20%" />
@@ -67,8 +55,13 @@ function FieldsTable(props: { fields: Field[] }) {
           </tr>
         </thead>
         <tbody>
-          {fields.map((field, index) => (
-            <FieldRow key={index} field={field} />
+          {columns.map(([name, column]) => (
+            <FieldRow
+              key={name}
+              name={name}
+              column={column}
+              isRequired={required?.includes(name) ?? false}
+            />
           ))}
         </tbody>
       </table>
@@ -76,48 +69,40 @@ function FieldsTable(props: { fields: Field[] }) {
   )
 }
 
-function FieldRow(props: { field: Field }) {
-  const { field } = props
-  const fieldName = field.name || ""
-  const fieldType = field.type || "any"
-  const fieldDescription = field.description || ""
+function FieldRow(props: {
+  name: string
+  column: Column
+  isRequired: boolean
+}) {
+  const { name, column, isRequired } = props
+  const columnType = column.type || "any"
+  const columnDescription = column.description || ""
 
-  let isRequired = false
-  if ("constraints" in field && field.constraints) {
-    const c = field.constraints as any
-    if (c.required) {
-      isRequired = true
-    }
-  }
-
-  const constraints = extractConstraints(field)
+  const constraints = extractConstraints(column)
 
   return (
     <tr>
-      <td id={sanitizeId(fieldName)}>
+      <td id={sanitizeId(name)}>
         <code>
           <strong>
-            {fieldName}
+            {name}
             {!isRequired && "?"}
           </strong>
         </code>
       </td>
       <td>
-        {fieldDescription && <p>{fieldDescription}</p>}
+        {columnDescription && <p>{columnDescription}</p>}
         {constraints.length > 0 && (
           <ConstraintsList constraints={constraints} />
         )}
-        {(field.type === "string" || field.type === "integer") &&
-          "categories" in field &&
-          field.categories !== undefined && (
-            <CategoriesList categories={field.categories} />
+        {(column.type === "string" || column.type === "integer") &&
+          "categories" in column &&
+          column.categories !== undefined && (
+            <CategoriesList categories={column.categories} />
           )}
-        {field.examples !== undefined && (
-          <ExamplesList examples={field.examples} />
-        )}
       </td>
       <td>
-        <code>{fieldType}</code>
+        <code>{columnType}</code>
       </td>
     </tr>
   )
@@ -139,28 +124,8 @@ function ConstraintsList(props: { constraints: Constraint[] }) {
   )
 }
 
-function ExamplesList(props: { examples: any[] }) {
-  const { examples } = props
-  return (
-    <>
-      <strong>Examples</strong>
-      <ul>
-        {examples.map((example, index) => (
-          <li key={index}>
-            <code>{String(example)}</code>
-          </li>
-        ))}
-      </ul>
-    </>
-  )
-}
 
-function CategoriesList(props: {
-  categories:
-    | string[]
-    | number[]
-    | Array<{ value: string | number; label: string }>
-}) {
+function CategoriesList(props: { categories: any[] }) {
   const { categories } = props
   return (
     <>
@@ -182,37 +147,27 @@ function CategoriesList(props: {
   )
 }
 
-function extractConstraints(field: Field): Constraint[] {
+function extractConstraints(column: Column): Constraint[] {
   const constraints: Constraint[] = []
 
-  if ("constraints" in field && field.constraints) {
-    const c = field.constraints as any
-
-    if (c.required) {
-      constraints.push({ name: "required", value: "true" })
-    }
-    if (c.unique) {
-      constraints.push({ name: "unique", value: "true" })
-    }
-    if (c.minimum !== undefined) {
-      constraints.push({ name: "minimum", value: String(c.minimum) })
-    }
-    if (c.maximum !== undefined) {
-      constraints.push({ name: "maximum", value: String(c.maximum) })
-    }
-    if (c.minLength !== undefined) {
-      constraints.push({ name: "minLength", value: String(c.minLength) })
-    }
-    if (c.maxLength !== undefined) {
-      constraints.push({ name: "maxLength", value: String(c.maxLength) })
-    }
-    if (c.pattern) {
-      constraints.push({ name: "pattern", value: c.pattern })
-    }
-    if (c.enum) {
-      const enumValues = c.enum.map((v: any) => String(v)).join(", ")
-      constraints.push({ name: "enum", value: enumValues })
-    }
+  if ("minimum" in column && column.minimum !== undefined) {
+    constraints.push({ name: "minimum", value: String(column.minimum) })
+  }
+  if ("maximum" in column && column.maximum !== undefined) {
+    constraints.push({ name: "maximum", value: String(column.maximum) })
+  }
+  if ("minLength" in column && column.minLength !== undefined) {
+    constraints.push({ name: "minLength", value: String(column.minLength) })
+  }
+  if ("maxLength" in column && column.maxLength !== undefined) {
+    constraints.push({ name: "maxLength", value: String(column.maxLength) })
+  }
+  if ("pattern" in column && column.pattern) {
+    constraints.push({ name: "pattern", value: column.pattern })
+  }
+  if ("enum" in column && column.enum) {
+    const enumValues = column.enum.map((v: any) => String(v)).join(", ")
+    constraints.push({ name: "enum", value: enumValues })
   }
 
   return constraints
@@ -230,7 +185,7 @@ function PrimaryKey(props: { fields: string[] }) {
   )
 }
 
-function ForeignKeys(props: { foreignKeys: Schema["foreignKeys"] }) {
+function ForeignKeys(props: { foreignKeys: TableSchema["foreignKeys"] }) {
   const { foreignKeys } = props
   if (!foreignKeys) return null
 
@@ -245,22 +200,22 @@ function ForeignKeys(props: { foreignKeys: Schema["foreignKeys"] }) {
         </colgroup>
         <thead>
           <tr>
-            <th>Fields</th>
+            <th>Columns</th>
             <th>Reference Resource</th>
-            <th>Reference Fields</th>
+            <th>Reference Columns</th>
           </tr>
         </thead>
         <tbody>
           {foreignKeys.map((fk, index) => (
             <tr key={index}>
               <td>
-                <code>{fk.fields.join(", ")}</code>
+                <code>{fk.columns.join(", ")}</code>
               </td>
               <td>
                 <code>{fk.reference.resource || "-"}</code>
               </td>
               <td>
-                <code>{fk.reference.fields.join(", ")}</code>
+                <code>{fk.reference.columns.join(", ")}</code>
               </td>
             </tr>
           ))}

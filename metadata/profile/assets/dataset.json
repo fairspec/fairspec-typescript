@@ -36,6 +36,10 @@
       "type": "string",
       "pattern": "dataset.json$"
     },
+    "Resources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Resource" }
+    },
     "Resource": {
       "type": "object",
       "required": ["data"],

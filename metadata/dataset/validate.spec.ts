@@ -1,52 +1,76 @@
 import { describe, expect, it } from "vitest"
 import { useRecording } from "vitest-polly"
-import { loadDescriptor } from "../descriptor/index.ts"
-import { validatePackageMetadata } from "./validate.ts"
+import { validateDatasetMetadata } from "./validate.ts"
 
 useRecording()
 
-describe("validatePackageMetadata", () => {
-  it("returns valid result for valid package", async () => {
-    const descriptor = {
-      name: "example-package",
+describe("validateDatasetMetadata", () => {
+  it("returns valid result for valid dataset", async () => {
+    const dataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
-          name: "resource-1",
-          path: "data.csv",
+          data: "data.csv",
         },
       ],
     }
 
-    const report = await validatePackageMetadata(descriptor)
+    const report = await validateDatasetMetadata(dataset)
 
     expect(report.valid).toBe(true)
     expect(report.errors).toEqual([])
   })
 
-  it("returns validation errors for invalid package", async () => {
-    const descriptor = {
-      name: 123, // Should be a string
-      resources: "not-an-array", // Should be an array
+  it("returns validation errors for invalid dataset", async () => {
+    const dataset = {
+      $schema: "invalid-schema",
+      resources: "not-an-array",
     }
 
-    const report = await validatePackageMetadata(descriptor)
+    const report = await validateDatasetMetadata(dataset)
 
     expect(report.valid).toBe(false)
     expect(report.errors.length).toBeGreaterThan(0)
-
-    const error = report.errors[0]
-    expect(error).toBeDefined()
-    if (error) {
-      expect(error.pointer).toBe("/name")
-    }
   })
 
-  it("should validate camtrap dp (#144)", async () => {
-    const descriptor = await loadDescriptor(
-      "https://raw.githubusercontent.com/tdwg/camtrap-dp/refs/tags/1.0.2/example/datapackage.json",
-    )
+  it("returns validation error for missing schema", async () => {
+    const dataset = {
+      resources: [
+        {
+          data: "data.csv",
+        },
+      ],
+    }
 
-    const report = await validatePackageMetadata(descriptor)
+    const report = await validateDatasetMetadata(dataset)
+
+    expect(report.valid).toBe(false)
+    expect(report.errors.length).toBeGreaterThan(0)
+  })
+
+  it("validates dataset with datacite metadata", async () => {
+    const dataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
+      creators: [
+        {
+          name: "John Doe",
+        },
+      ],
+      titles: [
+        {
+          title: "Example Dataset",
+        },
+      ],
+      resources: [
+        {
+          data: "data.csv",
+        },
+      ],
+    }
+
+    const report = await validateDatasetMetadata(dataset)
+
     expect(report.valid).toBe(true)
+    expect(report.errors).toEqual([])
   })
 })

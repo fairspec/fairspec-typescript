@@ -27,7 +27,8 @@
     "datahub"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "type": "tsc --noEmit"
   },
   "dependencies": {
     "@fairspec/metadata": "workspace:*",

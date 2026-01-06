@@ -23,7 +23,7 @@ describe("validateDatasetMetadata", () => {
 
   it("returns validation errors for invalid dataset", async () => {
     const dataset = {
-      $schema: "invalid-schema",
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: "not-an-array",
     }
 

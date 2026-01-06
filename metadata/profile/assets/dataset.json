@@ -355,6 +355,7 @@
     },
     "Creator": {
       "type": "object",
+      "required": ["name"],
       "properties": {
         "name": { "type": "string" },
         "nameType": { "$ref": "#/$defs/CreatorNameType" },
@@ -363,8 +364,7 @@
         "nameIdentifiers": { "$ref": "#/$defs/CreatorNameIdentifiers" },
         "affiliation": { "$ref": "#/$defs/CreatorAffiliations" },
         "lang": { "type": "string" }
-      },
-      "required": ["name"]
+      }
     },
     "CreatorNameType": {
       "enum": ["Organizational", "Personal"]
@@ -458,12 +458,12 @@
     },
     "Contributor": {
       "type": "object",
-      "allOf": [{ "$ref": "#/$defs/Person" }],
+      "required": ["name", "contributorType"],
+      "allOf": [{ "$ref": "#/$defs/Creator" }],
       "unevaluatedProperties": false,
       "properties": {
         "contributorType": { "$ref": "#/$defs/ContributorType" }
-      },
-      "required": ["name", "contributorType"]
+      }
     },
     "ContributorType": {
       "enum": [
@@ -628,7 +628,7 @@
         "relatedMetadataScheme": { "type": "string" },
         "schemeUri": { "type": "string", "format": "uri" },
         "schemeType": { "type": "string" },
-        "resourceTypeGeneral": { "$ref": "#/$defs/ResourceTypeGeneral" }
+        "resourceTypeGeneral": { "$ref": "#/$defs/ContentTypeGeneral" }
       },
       "required": ["relationType"]
     },
@@ -871,7 +871,7 @@
         "relatedItemIdentifier": {
           "$ref": "#/$defs/RelatedItemIdentifier"
         },
-        "relatedItemType": { "$ref": "#/$defs/ResourceTypeGeneral" },
+        "relatedItemType": { "$ref": "#/$defs/ContentTypeGeneral" },
         "creators": { "$ref": "#/$defs/Creators" },
         "contributors": { "$ref": "#/$defs/Contributors" },
         "titles": { "$ref": "#/$defs/Titles" },

@@ -1,23 +1,8 @@
 import { z } from "zod"
-import { ContributorType, CreatorNameType } from "./Common.ts"
-import { CreatorAffiliations, CreatorNameIdentifiers } from "./Creator.ts"
+import { ContributorType } from "./Common.ts"
+import { Creator } from "./Creator.ts"
 
-const Person = z.object({
-  name: z.string().describe("The name of the contributor"),
-  nameType: CreatorNameType.optional().describe(
-    "The type of name (Organizational or Personal)",
-  ),
-  givenName: z.string().optional().describe("The personal or first name of the contributor"),
-  familyName: z.string().optional().describe("The surname or last name of the contributor"),
-  nameIdentifiers: CreatorNameIdentifiers.optional(),
-  affiliation: CreatorAffiliations.optional(),
-  lang: z
-    .string()
-    .optional()
-    .describe("Language of the name, specified using ISO 639-1 or ISO 639-3 codes"),
-})
-
-export const Contributor = Person.extend({
+export const Contributor = Creator.extend({
   contributorType: ContributorType.describe(
     "The type of contributor (e.g., ContactPerson, DataCollector, Editor, etc.)",
   ),

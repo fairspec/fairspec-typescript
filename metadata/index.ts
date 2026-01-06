@@ -84,6 +84,8 @@ export {
   inferFormatName,
   inferName,
   isRemoteResource,
+  JsonData,
+  PathData,
   Resource,
 } from "./resource/index.ts"
 export {

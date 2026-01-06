@@ -6,9 +6,7 @@ export function convertTableSchemaToHtml(
   schema: TableSchema,
   options?: { frontmatter?: boolean },
 ): string {
-  let html = prettify(
-    renderToStaticMarkup(<SchemaTable schema={schema} />),
-  )
+  let html = prettify(renderToStaticMarkup(<SchemaTable schema={schema} />))
 
   if (options?.frontmatter) {
     html = `---\ntitle: Table Schema\n---\n\n${html}`
@@ -123,7 +121,6 @@ function ConstraintsList(props: { constraints: Constraint[] }) {
     </>
   )
 }
-
 
 function CategoriesList(props: { categories: any[] }) {
   const { categories } = props

@@ -251,7 +251,6 @@ describe("convertTableSchemaToHtml", () => {
       properties: {
         id: {
           type: "integer",
-
         },
         name: {
           type: "string",
@@ -272,11 +271,9 @@ describe("convertTableSchemaToHtml", () => {
       properties: {
         user_id: {
           type: "integer",
-
         },
         project_id: {
           type: "integer",
-
         },
       },
       primaryKey: ["user_id", "project_id"],
@@ -294,7 +291,6 @@ describe("convertTableSchemaToHtml", () => {
       properties: {
         user_id: {
           type: "integer",
-
         },
       },
       foreignKeys: [
@@ -325,11 +321,9 @@ describe("convertTableSchemaToHtml", () => {
       properties: {
         user_id: {
           type: "integer",
-
         },
         project_id: {
           type: "integer",
-
         },
       },
       foreignKeys: [
@@ -365,7 +359,6 @@ describe("convertTableSchemaToHtml", () => {
       properties: {
         parent_id: {
           type: "integer",
-
         },
       },
       foreignKeys: [

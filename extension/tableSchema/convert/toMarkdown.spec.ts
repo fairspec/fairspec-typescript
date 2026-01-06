@@ -1,24 +1,23 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
 import { convertTableSchemaToMarkdown } from "./toMarkdown.ts"
 
 describe("convertTableSchemaToMarkdown", () => {
   it("converts a simple schema to markdown table", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "id",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        id: {
           type: "integer",
           title: "Identifier",
           description: "Unique identifier",
         },
-        {
-          name: "name",
+        name: {
           type: "string",
           title: "Name",
           description: "Person name",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToMarkdown(schema)
@@ -32,45 +31,21 @@ describe("convertTableSchemaToMarkdown", () => {
     expect(result).toContain("| name | string | Name | Person name |")
   })
 
-  it("includes schema title and description", () => {
-    const schema: Schema = {
-      title: "Test Schema",
-      description: "A test schema for validation",
-      fields: [
-        {
-          name: "field1",
-          type: "string",
-        },
-      ],
-    }
-
-    const result = convertTableSchemaToMarkdown(schema)
-
-    expect(result).toContain("# Test Schema")
-    expect(result).toContain("A test schema for validation")
-  })
-
-  it("handles field constraints", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "age",
+  it("handles column constraints", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        age: {
           type: "integer",
-          constraints: {
-            required: true,
-            minimum: 0,
-            maximum: 120,
-          },
+          minimum: 0,
+          maximum: 120,
         },
-        {
-          name: "email",
+        email: {
           type: "string",
-          constraints: {
-            required: true,
-            pattern: "^[a-z]+@[a-z]+\\.[a-z]+$",
-          },
+          pattern: "^[a-z]+@[a-z]+\\.[a-z]+$",
         },
-      ],
+      },
+      required: ["age", "email"],
     }
 
     const result = convertTableSchemaToMarkdown(schema)
@@ -81,9 +56,10 @@ describe("convertTableSchemaToMarkdown", () => {
     expect(result).toContain("pattern:")
   })
 
-  it("handles empty fields array", () => {
-    const schema: Schema = {
-      fields: [],
+  it("handles empty properties object", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {},
     }
 
     const result = convertTableSchemaToMarkdown(schema)
@@ -93,15 +69,15 @@ describe("convertTableSchemaToMarkdown", () => {
     )
   })
 
-  it("handles pipe characters in field values", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "field",
+  it("handles pipe characters in column values", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field: {
           type: "string",
           description: "Description with pipe character",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToMarkdown(schema)
@@ -109,17 +85,15 @@ describe("convertTableSchemaToMarkdown", () => {
     expect(result).toContain("Description with pipe character")
   })
 
-  it("handles fields with enum constraints", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "status",
+  it("handles columns with enum constraints", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        status: {
           type: "string",
-          constraints: {
-            enum: ["active", "inactive", "pending"],
-          },
+          enum: ["active", "inactive", "pending"],
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToMarkdown(schema)
@@ -128,40 +102,73 @@ describe("convertTableSchemaToMarkdown", () => {
   })
 
   it("uses frontmatter when frontmatter option is true", () => {
-    const schema: Schema = {
-      title: "Test Schema",
-      description: "A test schema with frontmatter",
-      fields: [
-        {
-          name: "field1",
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: {
           type: "string",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToMarkdown(schema, { frontmatter: true })
 
     expect(result).toContain("---")
-    expect(result).toContain("title: Test Schema")
-    expect(result).not.toContain("# Test Schema")
-    expect(result).toContain("A test schema with frontmatter")
+    expect(result).toContain("title: Table Schema")
   })
 
-  it("uses H1 heading when frontmatter option is false or not provided", () => {
-    const schema: Schema = {
-      title: "Test Schema",
-      fields: [
-        {
-          name: "field1",
+  it("does not use frontmatter when option is false or not provided", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: {
           type: "string",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToMarkdown(schema, { frontmatter: false })
 
-    expect(result).toContain("# Test Schema")
-    expect(result).not.toContain("title: Test Schema")
-    expect(result.startsWith("# Test Schema")).toBe(true)
+    expect(result).not.toContain("title: Table Schema")
+    expect(result.startsWith("\n## Columns")).toBe(true)
+  })
+
+  it("handles multiple constraint types", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        username: {
+          type: "string",
+          minLength: 3,
+          maxLength: 20,
+          pattern: "^[a-zA-Z0-9_]+$",
+        },
+      },
+      required: ["username"],
+    }
+
+    const result = convertTableSchemaToMarkdown(schema)
+
+    expect(result).toContain("required")
+    expect(result).toContain("minLength: 3")
+    expect(result).toContain("maxLength: 20")
+    expect(result).toContain("pattern:")
+  })
+
+  it("handles columns with newlines in descriptions", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field: {
+          type: "string",
+          description: "Description with\nnewline",
+        },
+      },
+    }
+
+    const result = convertTableSchemaToMarkdown(schema)
+
+    expect(result).toContain("Description with newline")
+    expect(result).not.toContain("Description with\nnewline")
   })
 })

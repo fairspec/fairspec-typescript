@@ -1,39 +1,48 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 
 export function convertTableSchemaToMarkdown(
-  schema: Schema,
+  schema: TableSchema,
   options?: { frontmatter?: boolean },
 ): string {
   const rows: string[] = []
 
   rows.push("")
-  rows.push("## Fields")
+  rows.push("## Columns")
   rows.push("")
   rows.push("| Name | Type | Title | Description | Constraints |")
   rows.push("|------|------|-------|-------------|-------------|")
 
-  for (const field of schema.fields) {
-    const name = field.name || ""
-    const type = field.type || "any"
-    const title = field.title || ""
-    const description = field.description || ""
+  const columns = Object.entries(schema.properties)
+  const required = schema.required || []
+
+  for (const [name, column] of columns) {
+    const type = column.type || "any"
+    const title = column.title || ""
+    const description = column.description || ""
 
     const constraints: string[] = []
-    if ("required" in field && field.required) {
+
+    if (required.includes(name)) {
       constraints.push("required")
     }
-    if ("constraints" in field && field.constraints) {
-      const c = field.constraints as any
-      if (c.required) constraints.push("required")
-      if (c.unique) constraints.push("unique")
-      if (c.minimum !== undefined) constraints.push(`min: ${c.minimum}`)
-      if (c.maximum !== undefined) constraints.push(`max: ${c.maximum}`)
-      if (c.minLength !== undefined)
-        constraints.push(`minLength: ${c.minLength}`)
-      if (c.maxLength !== undefined)
-        constraints.push(`maxLength: ${c.maxLength}`)
-      if (c.pattern) constraints.push(`pattern: ${c.pattern}`)
-      if (c.enum) constraints.push(`enum: ${c.enum.join(", ")}`)
+
+    if ("minimum" in column && column.minimum !== undefined) {
+      constraints.push(`min: ${column.minimum}`)
+    }
+    if ("maximum" in column && column.maximum !== undefined) {
+      constraints.push(`max: ${column.maximum}`)
+    }
+    if ("minLength" in column && column.minLength !== undefined) {
+      constraints.push(`minLength: ${column.minLength}`)
+    }
+    if ("maxLength" in column && column.maxLength !== undefined) {
+      constraints.push(`maxLength: ${column.maxLength}`)
+    }
+    if ("pattern" in column && column.pattern) {
+      constraints.push(`pattern: ${column.pattern}`)
+    }
+    if ("enum" in column && column.enum) {
+      constraints.push(`enum: ${column.enum.join(", ")}`)
     }
 
     const constraintsStr = constraints.join(", ")
@@ -50,33 +59,12 @@ export function convertTableSchemaToMarkdown(
 
   let markdown = `${rows.join("\n")}\n`
 
-  if (schema.title || schema.description) {
+  if (options?.frontmatter) {
     const header: string[] = []
-
-    if (options?.frontmatter) {
-      header.push("---")
-      if (schema.title) {
-        header.push(`title: ${schema.title}`)
-      }
-      header.push("---")
-      header.push("")
-
-      if (schema.description) {
-        header.push(schema.description)
-        header.push("")
-      }
-    } else {
-      if (schema.title) {
-        header.push(`# ${schema.title}`)
-        header.push("")
-      }
-
-      if (schema.description) {
-        header.push(schema.description)
-        header.push("")
-      }
-    }
-
+    header.push("---")
+    header.push("title: Table Schema")
+    header.push("---")
+    header.push("")
     markdown = header.join("\n") + markdown
   }
 

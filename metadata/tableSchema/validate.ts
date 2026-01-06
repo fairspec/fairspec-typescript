@@ -2,7 +2,7 @@ import type { Descriptor } from "../descriptor/index.ts"
 import { loadDescriptor } from "../descriptor/index.ts"
 import { validateDescriptor } from "../profile/index.ts"
 import { normalizeTableSchema } from "./normalize.ts"
-import type { TableSchema } from "./Schema.ts"
+import type { TableSchema } from "./TableSchema.ts"
 
 /**
  * Validate a Schema descriptor (JSON Object) against its profile

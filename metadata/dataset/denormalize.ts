@@ -1,19 +1,27 @@
-import type { Descriptor } from "../descriptor/index.ts"
+import { denormalizeJsonSchema } from "../jsonSchema/index.ts"
 import { denormalizePath } from "../path/index.ts"
-import type { Resource } from "./Resource.ts"
+import type { Resource } from "../resource/index.ts"
+import { denormalizeTableSchema } from "../tableSchema/index.ts"
+import type { Dataset } from "./Dataset.ts"
 
-export function denormalizeResource(
-  resource: Resource,
+export function denormalizeDataset(
+  dataset: Dataset,
   options?: {
     basepath?: string
   },
 ) {
-  resource = globalThis.structuredClone(resource)
-  denormalizeResourcePaths(resource, options)
-  return resource as Descriptor
+  dataset = globalThis.structuredClone(dataset)
+
+  dataset.resources?.forEach(resource => {
+    denormalizeResourceData(resource, options)
+    denormalizeResourceJsonSchema(resource, options)
+    denormalizeResourceTableSchema(resource, options)
+  })
+
+  return dataset
 }
 
-function denormalizeResourcePaths(
+function denormalizeResourceData(
   resource: Resource,
   options?: {
     basepath?: string
@@ -21,15 +29,45 @@ function denormalizeResourcePaths(
 ) {
   const basepath = options?.basepath
 
-  if (resource.path) {
-    resource.path = Array.isArray(resource.path)
-      ? resource.path.map(path => denormalizePath(path, { basepath }))
-      : denormalizePath(resource.path, { basepath })
+  if (typeof resource.data === "string") {
+    resource.data = denormalizePath(resource.data, { basepath })
   }
 
-  for (const name of ["dialect", "schema"] as const) {
-    if (typeof resource[name] === "string") {
-      resource[name] = denormalizePath(resource[name], { basepath })
+  if (Array.isArray(resource.data)) {
+    for (const [index, path] of resource.data.entries()) {
+      if (typeof path === "string") {
+        resource.data[index] = denormalizePath(path, { basepath })
+      }
     }
+  }
+}
+
+function denormalizeResourceJsonSchema(
+  resource: Resource,
+  options?: {
+    basepath?: string
+  },
+) {
+  const basepath = options?.basepath
+
+  if (typeof resource.jsonSchema === "string") {
+    resource.jsonSchema = denormalizePath(resource.jsonSchema, { basepath })
+  } else if (resource.jsonSchema) {
+    resource.jsonSchema = denormalizeJsonSchema(resource.jsonSchema)
+  }
+}
+
+function denormalizeResourceTableSchema(
+  resource: Resource,
+  options?: {
+    basepath?: string
+  },
+) {
+  const basepath = options?.basepath
+
+  if (typeof resource.tableSchema === "string") {
+    resource.tableSchema = denormalizePath(resource.tableSchema, { basepath })
+  } else if (resource.tableSchema) {
+    resource.tableSchema = denormalizeTableSchema(resource.tableSchema)
   }
 }

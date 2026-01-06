@@ -1,6 +1,6 @@
 import { saveDescriptor } from "../descriptor/index.ts"
 import { denormalizeTableSchema } from "./denormalize.ts"
-import type { TableSchema } from "./Schema.ts"
+import type { TableSchema } from "./TableSchema.ts"
 
 /**
  * Save a Schema to a file path

@@ -1,6 +1,6 @@
 import { saveDescriptor } from "../descriptor/index.ts"
 import { denormalizeJsonSchema } from "./denormalize.ts"
-import type { JsonSchema } from "./Schema.ts"
+import type { JsonSchema } from "./JsonSchema.ts"
 
 export async function saveJsonSchema(
   jsonSchema: JsonSchema,

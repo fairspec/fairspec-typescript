@@ -1,5 +1,5 @@
 import type { Descriptor } from "../descriptor/index.ts"
-import type { TableSchema } from "./Schema.ts"
+import type { TableSchema } from "./TableSchema.ts"
 import { validateTableSchema } from "./validate.ts"
 
 /**

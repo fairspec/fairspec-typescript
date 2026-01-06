@@ -97,7 +97,10 @@
       ]
     },
     "TableSchema": {
-      "oneOf": [{ "$ref": "#/$defs/Path" }, { "$ref": "table.json" }]
+      "oneOf": [
+        { "$ref": "#/$defs/Path" },
+        { "$ref": "https://fairspec.org/profiles/latest/table.json" }
+      ]
     },
     "PathData": {
       "oneOf": [

@@ -1,21 +1,20 @@
 import { blob } from "node:stream/consumers"
-import type { Descriptor, Package } from "@fairspec/metadata"
+import type { Dataset, Descriptor } from "@fairspec/metadata"
 import {
-  convertPackageToDescriptor,
-  getFilename,
-  getFormat,
+  denormalizeDataset,
+  getFileExtension,
   stringifyDescriptor,
 } from "@fairspec/metadata"
-import { getPackageBasepath } from "../../../package/index.ts"
+import { getDatasetBasepath } from "../../../dataset/index.ts"
 import { saveResourceFiles } from "../../../resource/index.ts"
 import { loadFileStream } from "../../../stream/index.ts"
-import { makeCkanApiRequest } from "../ckan/index.ts"
+import { makeCkanApiRequest } from "../platform/index.ts"
 import type { CkanResource } from "../resource/index.ts"
 import { convertResourceToCkan } from "../resource/index.ts"
-import { convertPackageToCkan } from "./convert/toCkan.ts"
+import { convertDatasetToCkan } from "./convert/toCkan.ts"
 
 export async function saveDatasetToCkan(
-  dataPackage: Package,
+  dataset: Dataset,
   options: {
     apiKey: string
     ckanUrl: string
@@ -25,11 +24,11 @@ export async function saveDatasetToCkan(
 ) {
   const { apiKey, ckanUrl, ownerOrg, datasetName } = options
 
-  const basepath = getPackageBasepath(dataPackage)
-  const ckanPackage = convertPackageToCkan(dataPackage)
+  const basepath = getDatasetBasepath(dataset)
+  const ckanDataset = convertDatasetToCkan(dataset)
 
   const payload = {
-    ...ckanPackage,
+    ...ckanDataset,
     name: datasetName,
     owner_org: ownerOrg,
     resources: [],
@@ -46,21 +45,21 @@ export async function saveDatasetToCkan(
   url.pathname = `/dataset/${result.name}`
 
   const resourceDescriptors: Descriptor[] = []
-  for (const resource of dataPackage.resources) {
+  for (const resource of dataset.resources ?? []) {
     resourceDescriptors.push(
       await saveResourceFiles(resource, {
         basepath,
         withRemote: true,
         withoutFolders: true,
         saveFile: async options => {
-          const filename = getFilename(options.normalizedPath)
           const ckanResource = convertResourceToCkan(resource)
+          const extension = getFileExtension(options.normalizedPath)
 
           const payload = {
             ...ckanResource,
             package_id: datasetName,
             name: options.denormalizedPath,
-            format: getFormat(filename)?.toUpperCase(),
+            format: extension ? extension.toUpperCase() : undefined,
           }
 
           const upload = {
@@ -83,7 +82,7 @@ export async function saveDatasetToCkan(
   }
 
   const descriptor = {
-    ...convertPackageToDescriptor(dataPackage, { basepath }),
+    ...denormalizeDataset(dataset, { basepath }),
     resources: resourceDescriptors,
   }
 

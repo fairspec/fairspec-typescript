@@ -1,24 +1,28 @@
 import { relative } from "node:path"
-import type { Package } from "@fairspec/metadata"
-import { loadPackageDescriptor } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
+import { loadDatasetDescriptor } from "@fairspec/metadata"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { savePackageToCkan } from "./save.ts"
+import { saveDatasetToCkan } from "./save.ts"
 
-describe("savePackageToCkan", () => {
+describe("saveDatasetToCkan", () => {
   const getFixturePath = (name: string) =>
     relative(process.cwd(), `${import.meta.dirname}/fixtures/${name}`)
 
-  const mockPackage: Package = {
-    name: "test-package",
-    title: "Test Package",
-    description: "A test package",
+  const mockDataset: Dataset = {
+    $schema: "https://fairspec.org/profiles/latest/dataset.json",
+    titles: [{ title: "Test Package" }],
+    descriptions: [
+      {
+        description: "A test package",
+        descriptionType: "Abstract",
+      },
+    ],
     version: "1.0.0",
     resources: [
       {
         name: "test-resource",
-        path: getFixturePath("data.csv"),
-        format: "csv",
-        bytes: 100,
+        data: getFixturePath("data.csv"),
+        format: { name: "csv" },
       },
     ],
   }
@@ -44,12 +48,12 @@ describe("savePackageToCkan", () => {
     vi.resetAllMocks()
   })
 
-  it.skip("should save a package", async () => {
-    const dataPackage = await loadPackageDescriptor(
-      "core/package/fixtures/package.json",
+  it.skip("should save a dataset", async () => {
+    const dataset = await loadDatasetDescriptor(
+      "core/dataset/fixtures/dataset.json",
     )
 
-    const result = await savePackageToCkan(dataPackage, {
+    const result = await saveDatasetToCkan(dataset, {
       ckanUrl: "http://localhost:5000/",
       apiKey:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJ1T0Y0VUNybTU5Y0dzdlk3ejhreF9CeC02R0w4RDBOdW9QS0J0WkJFXzlJIiwiaWF0IjoxNzQ3OTI0NDg5fQ.ioGiLlZkm24xHQRBas5X5ig5eU7u_fIjkl4oifGnLaA",
@@ -60,7 +64,7 @@ describe("savePackageToCkan", () => {
     expect(result).toBeDefined()
   })
 
-  it("creates a package in CKAN with correct API calls", async () => {
+  it("creates a dataset in CKAN with correct API calls", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: () =>
@@ -97,18 +101,18 @@ describe("savePackageToCkan", () => {
         }),
     })
 
-    const result = await savePackageToCkan(mockPackage, mockOptions)
+    const result = await saveDatasetToCkan(mockDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(3)
 
-    const packageCreateCall = fetchMock.mock.calls[0]
-    expect(packageCreateCall).toBeDefined()
-    if (!packageCreateCall) return
+    const datasetCreateCall = fetchMock.mock.calls[0]
+    expect(datasetCreateCall).toBeDefined()
+    if (!datasetCreateCall) return
 
-    expect(packageCreateCall[0]).toEqual(
+    expect(datasetCreateCall[0]).toEqual(
       "https://ckan.example.com/api/3/action/package_create",
     )
-    expect(packageCreateCall[1]).toMatchObject({
+    expect(datasetCreateCall[1]).toMatchObject({
       method: "POST",
       headers: {
         Authorization: "test-api-key",
@@ -116,12 +120,12 @@ describe("savePackageToCkan", () => {
       },
     })
 
-    const packagePayload = JSON.parse(packageCreateCall[1].body)
-    expect(packagePayload.name).toEqual("test-dataset")
-    expect(packagePayload.owner_org).toEqual("test-org")
-    expect(packagePayload.title).toEqual("Test Package")
-    expect(packagePayload.notes).toEqual("A test package")
-    expect(packagePayload.resources).toEqual([])
+    const datasetPayload = JSON.parse(datasetCreateCall[1].body)
+    expect(datasetPayload.name).toEqual("test-dataset")
+    expect(datasetPayload.owner_org).toEqual("test-org")
+    expect(datasetPayload.title).toEqual("Test Package")
+    expect(datasetPayload.notes).toEqual("A test package")
+    expect(datasetPayload.resources).toEqual([])
 
     expect(result).toEqual({
       path: "https://ckan.example.com/dataset/test-dataset",
@@ -166,7 +170,7 @@ describe("savePackageToCkan", () => {
         }),
     })
 
-    await savePackageToCkan(mockPackage, mockOptions)
+    await saveDatasetToCkan(mockDataset, mockOptions)
 
     const resourceCreateCall = fetchMock.mock.calls[1]
     expect(resourceCreateCall).toBeDefined()
@@ -225,7 +229,7 @@ describe("savePackageToCkan", () => {
         }),
     })
 
-    await savePackageToCkan(mockPackage, mockOptions)
+    await saveDatasetToCkan(mockDataset, mockOptions)
 
     const datapackageCreateCall = fetchMock.mock.calls[2]
     expect(datapackageCreateCall).toBeDefined()
@@ -252,7 +256,7 @@ describe("savePackageToCkan", () => {
       text: () => Promise.resolve("Invalid package data"),
     })
 
-    await expect(savePackageToCkan(mockPackage, mockOptions)).rejects.toThrow(
+    await expect(saveDatasetToCkan(mockDataset, mockOptions)).rejects.toThrow(
       "CKAN API error: 400 Bad Request",
     )
   })
@@ -277,7 +281,7 @@ describe("savePackageToCkan", () => {
       text: () => Promise.resolve("Failed to create resource"),
     })
 
-    await expect(savePackageToCkan(mockPackage, mockOptions)).rejects.toThrow(
+    await expect(saveDatasetToCkan(mockDataset, mockOptions)).rejects.toThrow(
       "CKAN API error: 500 Internal Server Error",
     )
   })
@@ -294,24 +298,24 @@ describe("savePackageToCkan", () => {
         }),
     })
 
-    await expect(savePackageToCkan(mockPackage, mockOptions)).rejects.toThrow(
+    await expect(saveDatasetToCkan(mockDataset, mockOptions)).rejects.toThrow(
       "CKAN API error",
     )
   })
 
-  it("handles packages with multiple resources", async () => {
-    const multiResourcePackage: Package = {
-      ...mockPackage,
+  it("handles datasets with multiple resources", async () => {
+    const multiResourceDataset: Dataset = {
+      ...mockDataset,
       resources: [
         {
           name: "resource-1",
-          path: getFixturePath("data.csv"),
-          format: "csv",
+          data: getFixturePath("data.csv"),
+          format: { name: "csv" },
         },
         {
           name: "resource-2",
-          path: getFixturePath("data.csv"),
-          format: "json",
+          data: getFixturePath("data.csv"),
+          format: { name: "json" },
         },
       ],
     }
@@ -328,7 +332,7 @@ describe("savePackageToCkan", () => {
         }),
     })
 
-    await savePackageToCkan(multiResourcePackage, mockOptions)
+    await saveDatasetToCkan(multiResourceDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(4)
 
@@ -341,9 +345,9 @@ describe("savePackageToCkan", () => {
     )
   })
 
-  it("handles packages with no resources", async () => {
-    const emptyPackage: Package = {
-      ...mockPackage,
+  it("handles datasets with no resources", async () => {
+    const emptyDataset: Dataset = {
+      ...mockDataset,
       resources: [],
     }
 
@@ -371,7 +375,7 @@ describe("savePackageToCkan", () => {
         }),
     })
 
-    const result = await savePackageToCkan(emptyPackage, mockOptions)
+    const result = await saveDatasetToCkan(emptyDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(2)
     expect(result.datasetUrl).toEqual(
@@ -389,7 +393,7 @@ describe("savePackageToCkan", () => {
         }),
     })
 
-    await savePackageToCkan(mockPackage, {
+    await saveDatasetToCkan(mockDataset, {
       ...mockOptions,
       apiKey: "custom-api-key",
     })

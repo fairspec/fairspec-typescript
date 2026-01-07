@@ -34,22 +34,14 @@ export async function loadDatasetFromCkan(datasetUrl: string) {
   const userDatasetPath = (systemDataset.resources ?? [])
     .filter(
       resource =>
-        resource.unstable_customMetadata?.["ckan:key"] === "datapackage.json",
+        resource.unstable_customMetadata?.ckanKey === "fairspec.json",
     )
-    .map(resource => resource.unstable_customMetadata?.["ckan:url"] as string)
+    .map(resource => resource.unstable_customMetadata?.ckanUrl as string)
     .at(0)
 
   const dataset = await mergeDatasets({ systemDataset, userDatasetPath })
-  dataset.resources = dataset.resources?.map(resource => {
-    if (resource.unstable_customMetadata) {
-      const { "ckan:key": _key, "ckan:url": _url, ...rest } =
-        resource.unstable_customMetadata
-      return {
-        ...resource,
-        unstable_customMetadata: Object.keys(rest).length > 0 ? rest : undefined,
-      }
-    }
-    return resource
+  dataset.resources?.forEach(resource => {
+    delete resource.unstable_customMetadata
   })
 
   return dataset

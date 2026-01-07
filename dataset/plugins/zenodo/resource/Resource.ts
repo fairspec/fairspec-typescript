@@ -1,31 +1,17 @@
-/**
- * Zenodo File interface
- */
-export interface ZenodoResource {
-  /**
-   * File identifier
-   */
-  id: string
+import { z } from "zod"
 
-  /**
-   * File key
-   */
-  key: string
+export const ZenodoResource = z
+  .object({
+    id: z.string().describe("File identifier"),
+    key: z.string().describe("File key"),
+    size: z.number().describe("File size in bytes"),
+    checksum: z.string().describe("File checksum"),
+    links: z
+      .object({
+        self: z.string(),
+      })
+      .describe("Links related to the file"),
+  })
+  .describe("Zenodo File interface")
 
-  /**
-   * File size in bytes
-   */
-  size: number
-
-  /**
-   * File checksum
-   */
-  checksum: string
-
-  /**
-   * Links related to the file
-   */
-  links: {
-    self: string
-  }
-}
+export type ZenodoResource = z.infer<typeof ZenodoResource>

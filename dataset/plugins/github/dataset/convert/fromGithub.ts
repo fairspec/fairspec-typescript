@@ -1,50 +1,59 @@
-import type { Contributor, License, Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import { convertResourceFromGithub } from "../../resource/index.ts"
-import type { GithubPackage } from "../Package.ts"
+import type { GithubDataset } from "../Dataset.ts"
 
 export function convertDatasetFromGithub(
-  githubDataset: GithubPackage,
-): Package {
-  const dataset: Package = {
-    name: githubDataset.name,
+  githubDataset: GithubDataset,
+): Dataset {
+  const dataset: Dataset = {
+    $schema: "https://fairspec.org/schema/latest/dataset.json",
     resources: [],
   }
 
-  if (githubDataset.description) {
-    dataset.description = githubDataset.description
+  if (githubDataset.full_name) {
+    dataset.titles = [{ title: githubDataset.full_name }]
   }
 
-  dataset.title = githubDataset.full_name
-
-  if (githubDataset.homepage) {
-    dataset.homepage = githubDataset.homepage
+  if (githubDataset.description) {
+    dataset.descriptions = [
+      {
+        description: githubDataset.description,
+        descriptionType: "Abstract",
+      },
+    ]
   }
 
   if (githubDataset.license) {
-    const license: License = {
-      name: githubDataset.license.spdx_id || githubDataset.license.key,
-    }
-
-    if (githubDataset.license.name) {
-      license.title = githubDataset.license.name
-    }
-
-    if (githubDataset.license.url) {
-      license.path = githubDataset.license.url
-    }
-
-    dataset.licenses = [license]
+    dataset.rightsList = [
+      {
+        rights: githubDataset.license.name,
+        rightsUri: githubDataset.license.url,
+        rightsIdentifier:
+          githubDataset.license.spdx_id || githubDataset.license.key,
+        rightsIdentifierScheme: "SPDX",
+      },
+    ]
   }
 
   if (githubDataset.owner) {
-    const contributor: Contributor = {
-      title: githubDataset.owner.login,
-      role:
-        githubDataset.owner.type === "Organization" ? "publisher" : "author",
-      path: githubDataset.owner.html_url,
-    }
+    const contributor = {
+      name: githubDataset.owner.login,
+      nameType:
+        githubDataset.owner.type === "Organization"
+          ? "Organizational"
+          : "Personal",
+    } as const
 
-    dataset.contributors = [contributor]
+    if (githubDataset.owner.type === "Organization") {
+      dataset.contributors = [
+        {
+          ...contributor,
+          contributorType: "HostingInstitution",
+        },
+      ]
+    } else {
+      dataset.creators = [contributor]
+    }
   }
 
   if (githubDataset.resources && githubDataset.resources.length > 0) {
@@ -59,11 +68,16 @@ export function convertDatasetFromGithub(
   }
 
   if (githubDataset.topics && githubDataset.topics.length > 0) {
-    dataset.keywords = githubDataset.topics
+    dataset.subjects = githubDataset.topics.map(topic => ({ subject: topic }))
   }
 
   if (githubDataset.created_at) {
-    dataset.created = githubDataset.created_at
+    dataset.dates = [
+      {
+        date: githubDataset.created_at,
+        dateType: "Created",
+      },
+    ]
   }
 
   return dataset

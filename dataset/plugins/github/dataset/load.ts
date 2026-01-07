@@ -37,18 +37,17 @@ export async function loadDatasetFromGithub(
   ).tree
 
   const systemDataset = convertDatasetFromGithub(githubDataset)
-  const userDatasetPath = systemDataset.resources
-    .filter(resource => resource["github:key"] === "datapackage.json")
-    .map(resource => resource["github:url"])
-    .at(0)
+  const userDatasetPath = (systemDataset.resources ?? [])
+    .filter(resource => resource.unstable_customMetadata?.githubKey === "fairspec.json")
+    .map(resource => resource.unstable_customMetadata?.githubUrl)
+    .at(0) as string | undefined
 
-  const datapackage = await mergeDatasets({ systemDataset, userDatasetPath })
-  datapackage.resources = datapackage.resources.map(resource => {
-    // TODO: remove these keys completely
-    return { ...resource, "github:key": undefined, "github:url": undefined }
+  const dataset = await mergeDatasets({ systemDataset, userDatasetPath })
+  dataset.resources?.forEach(resource => {
+    delete resource.unstable_customMetadata
   })
 
-  return datapackage
+  return dataset
 }
 
 /**

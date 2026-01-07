@@ -25,7 +25,7 @@ describe("inferHash", () => {
     expect(mockPrefetchFiles).toHaveBeenCalledWith({
       data: "https://example.com/file.txt",
     })
-    expect(result).toMatch(/^sha256:[a-f0-9]{64}$/)
+    expect(result).toMatch(/^[a-f0-9]{64}$/)
   })
 
   it("should compute md5 hash when specified", async () => {
@@ -41,7 +41,7 @@ describe("inferHash", () => {
     expect(mockPrefetchFiles).toHaveBeenCalledWith({
       data: "https://example.com/file.txt",
     })
-    expect(result).toMatch(/^md5:[a-f0-9]{32}$/)
+    expect(result).toMatch(/^[a-f0-9]{32}$/)
   })
 
   it("should compute sha1 hash when specified", async () => {
@@ -57,7 +57,7 @@ describe("inferHash", () => {
     expect(mockPrefetchFiles).toHaveBeenCalledWith({
       data: "https://example.com/file.txt",
     })
-    expect(result).toMatch(/^sha1:[a-f0-9]{40}$/)
+    expect(result).toMatch(/^[a-f0-9]{40}$/)
   })
 
   it("should compute sha512 hash when specified", async () => {
@@ -73,7 +73,7 @@ describe("inferHash", () => {
     expect(mockPrefetchFiles).toHaveBeenCalledWith({
       data: "https://example.com/file.txt",
     })
-    expect(result).toMatch(/^sha512:[a-f0-9]{128}$/)
+    expect(result).toMatch(/^[a-f0-9]{128}$/)
   })
 
   it("should compute consistent hashes for same content", async () => {

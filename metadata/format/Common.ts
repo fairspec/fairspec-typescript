@@ -1,7 +1,5 @@
 import { z } from "zod"
 
-export const Encoding = z.enum(["utf-8", "ascii"])
-
 export const Delimiter = z.string().max(1)
 
 export const LineTerminator = z.string()
@@ -33,7 +31,6 @@ export const SheetName = z.string()
 
 export const TableName = z.string()
 
-export type Encoding = z.infer<typeof Encoding>
 export type Delimiter = z.infer<typeof Delimiter>
 export type LineTerminator = z.infer<typeof LineTerminator>
 export type QuoteChar = z.infer<typeof QuoteChar>

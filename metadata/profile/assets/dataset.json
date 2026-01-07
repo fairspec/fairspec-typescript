@@ -47,6 +47,7 @@
         "name": { "$ref": "#/$defs/Name" },
         "data": { "$ref": "#/$defs/Data" },
         "format": { "$ref": "#/$defs/Format" },
+        "encoding": { "$ref": "#/$defs/Encoding" },
         "integrity": { "$ref": "#/$defs/Integrity" },
         "jsonSchema": { "$ref": "#/$defs/JsonSchema" },
         "tableSchema": { "$ref": "#/$defs/TableSchema" },
@@ -181,7 +182,6 @@
       "required": ["name"],
       "properties": {
         "name": { "const": "csv" },
-        "encoding": { "$ref": "#/$defs/Encoding" },
         "delimiter": { "$ref": "#/$defs/Delimiter" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
         "quoteChar": { "$ref": "#/$defs/QuoteChar" },
@@ -198,7 +198,6 @@
       "required": ["name"],
       "properties": {
         "name": { "const": "tsv" },
-        "encoding": { "$ref": "#/$defs/Encoding" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
         "nullSequence": { "$ref": "#/$defs/NullSequence" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },

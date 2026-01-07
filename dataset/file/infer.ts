@@ -35,7 +35,7 @@ export async function inferHash(
   const stream = concatFileStreams(streams)
 
   const hash = await hasha.hash(stream, { algorithm })
-  return `${algorithm}:${hash}`
+  return hash
 }
 
 export async function inferEncoding(

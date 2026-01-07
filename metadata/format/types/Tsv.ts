@@ -3,7 +3,6 @@ import {
   ColumnNames,
   CommentChar,
   CommentRows,
-  Encoding,
   HeaderJoin,
   HeaderRows,
   LineTerminator,
@@ -12,7 +11,6 @@ import {
 
 export const TsvFormat = z.object({
   name: z.literal("tsv"),
-  encoding: Encoding.optional(),
   lineTerminator: LineTerminator.optional(),
   nullSequence: NullSequence.optional(),
   headerRows: HeaderRows.optional(),

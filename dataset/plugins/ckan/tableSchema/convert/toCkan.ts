@@ -3,11 +3,11 @@ import type { CkanColumn, CkanColumnInfo } from "../Column.ts"
 import type { CkanTableSchema } from "../TableSchema.ts"
 
 export function convertTableSchemaToCkan(
-  schema: TableSchema,
+  tableSchema: TableSchema,
 ): CkanTableSchema {
   const fields: CkanColumn[] = []
 
-  for (const [columnName, column] of Object.entries(schema.properties)) {
+  for (const [columnName, column] of Object.entries(tableSchema.properties)) {
     fields.push(convertColumn(columnName, column))
   }
 

@@ -1,69 +1,28 @@
-import type { SetRequired } from "type-fest"
-import type { CkanSchema } from "../schema/index.ts"
+import { z } from "zod"
+import { CkanTableSchema } from "../tableSchema/TableSchema.ts"
 
-/**
- * CKAN Resource interface
- */
-export interface CkanResource {
-  /**
-   * Resource identifier
-   */
-  id: string
+export const CkanResource = z
+  .object({
+    id: z.string().describe("Resource identifier"),
+    url: z.string().describe("Resource URL"),
+    name: z.string().describe("Resource name"),
+    created: z.string().describe("Resource creation timestamp"),
+    description: z.string().describe("Resource description"),
+    format: z.string().describe("Resource format"),
+    hash: z.string().describe("Resource hash"),
+    last_modified: z.string().describe("Resource last modification timestamp"),
+    metadata_modified: z
+      .string()
+      .describe("Resource metadata modification timestamp"),
+    mimetype: z.string().describe("Resource MIME type"),
+    size: z.number().describe("Resource size in bytes"),
+    schema: CkanTableSchema.optional().describe("Resource schema"),
+  })
+  .describe("CKAN Resource interface")
 
-  /**
-   * Resource URL
-   */
-  url: string
+export const NewCkanResource = CkanResource.partial()
+  .required({ url: true, name: true })
+  .describe("New CKAN Resource with only url and name required")
 
-  /**
-   * Resource name
-   */
-  name: string
-
-  /**
-   * Resource creation timestamp
-   */
-  created: string
-
-  /**
-   * Resource description
-   */
-  description: string
-
-  /**
-   * Resource format
-   */
-  format: string
-
-  /**
-   * Resource hash
-   */
-  hash: string
-
-  /**
-   * Resource last modification timestamp
-   */
-  last_modified: string
-
-  /**
-   * Resource metadata modification timestamp
-   */
-  metadata_modified: string
-
-  /**
-   * Resource MIME type
-   */
-  mimetype: string
-
-  /**
-   * Resource size in bytes
-   */
-  size: number
-
-  /**
-   * Resource schema
-   */
-  schema?: CkanSchema
-}
-
-export type NewCkanResource = SetRequired<Partial<CkanResource>, "url" | "name">
+export type CkanResource = z.infer<typeof CkanResource>
+export type NewCkanResource = z.infer<typeof NewCkanResource>

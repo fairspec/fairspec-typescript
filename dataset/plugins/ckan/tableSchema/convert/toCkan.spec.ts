@@ -1,6 +1,6 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import type { CkanSchema } from "../Schema.ts"
+import type { CkanTableSchema } from "../TableSchema.ts"
 import ckanSchemaFixture from "./fixtures/ckan-schema.json" with {
   type: "json",
 }
@@ -8,75 +8,61 @@ import { convertTableSchemaFromCkan } from "./fromCkan.ts"
 import { convertTableSchemaToCkan } from "./toCkan.ts"
 
 describe("convertTableSchemaToCkan", () => {
-  it("converts a Frictionless schema to a CKAN schema", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "id",
+  it("converts a Fairspec table schema to a CKAN schema", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        id: {
           type: "integer",
           title: "ID",
           description: "Unique identifier",
         },
-        {
-          name: "name",
+        name: {
           type: "string",
           title: "Name",
           description: "Person's full name",
         },
-        {
-          name: "age",
+        age: {
           type: "integer",
         },
-        {
-          name: "score",
+        score: {
           type: "number",
           title: "Score",
           description: "Test score",
         },
-        {
-          name: "is_active",
+        is_active: {
           type: "boolean",
         },
-        {
-          name: "birth_date",
-          type: "date",
+        birth_date: {
+          type: "string",
+          format: "date",
           title: "Birth Date",
           description: "Date of birth",
         },
-        {
-          name: "start_time",
-          type: "time",
+        start_time: {
+          type: "string",
+          format: "time",
         },
-        {
-          name: "created_at",
-          type: "datetime",
+        created_at: {
+          type: "string",
+          format: "date-time",
           title: "Created At",
           description: "Timestamp when record was created",
         },
-        {
-          name: "metadata",
+        metadata: {
           type: "object",
         },
-        {
-          name: "tags",
+        tags: {
           type: "array",
           title: "Tags",
           description: "List of tags",
         },
-        {
-          name: "location",
-          type: "geopoint",
-        },
-        {
-          name: "boundary",
-          type: "geojson",
-        },
-      ],
+      },
     }
 
     const result = convertTableSchemaToCkan(schema)
 
-    expect(result.fields).toHaveLength(schema.fields.length)
+    expect(result.fields).toHaveLength(Object.keys(schema.properties).length)
 
     const idField = result.fields.find(f => f.id === "id")
     expect(idField).toBeDefined()
@@ -167,29 +153,17 @@ describe("convertTableSchemaToCkan", () => {
       expect(tagsField.info?.notes).toEqual("List of tags")
       expect(tagsField.info?.type_override).toEqual("array")
     }
-
-    const locationField = result.fields.find(f => f.id === "location")
-    expect(locationField).toBeDefined()
-    if (locationField) {
-      expect(locationField.type).toEqual("geopoint")
-    }
-
-    const boundaryField = result.fields.find(f => f.id === "boundary")
-    expect(boundaryField).toBeDefined()
-    if (boundaryField) {
-      expect(boundaryField.type).toEqual("geojson")
-    }
   })
 
-  it("handles fields with only title", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "field1",
+  it("handles columns with only title", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: {
           type: "string",
           title: "Field 1",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToCkan(schema)
@@ -207,15 +181,15 @@ describe("convertTableSchemaToCkan", () => {
     }
   })
 
-  it("handles fields with only description", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "field1",
+  it("handles columns with only description", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        field1: {
           type: "string",
           description: "Field 1 description",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToCkan(schema)
@@ -233,14 +207,14 @@ describe("convertTableSchemaToCkan", () => {
     }
   })
 
-  it("handles fields without title or description", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "simple_field",
+  it("handles columns without title or description", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        simple_field: {
           type: "string",
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToCkan(schema)
@@ -255,9 +229,10 @@ describe("convertTableSchemaToCkan", () => {
     }
   })
 
-  it("handles empty fields array", () => {
-    const schema: Schema = {
-      fields: [],
+  it("handles empty properties object", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {},
     }
 
     const result = convertTableSchemaToCkan(schema)
@@ -265,14 +240,14 @@ describe("convertTableSchemaToCkan", () => {
     expect(result.fields).toEqual([])
   })
 
-  it("converts unknown field types to 'text'", () => {
-    const schema: Schema = {
-      fields: [
-        {
-          name: "unknown_field",
+  it("converts unknown column types to 'text'", () => {
+    const schema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        unknown_field: {
           type: "unknown" as any,
         },
-      ],
+      },
     }
 
     const result = convertTableSchemaToCkan(schema)
@@ -285,12 +260,12 @@ describe("convertTableSchemaToCkan", () => {
     }
   })
 
-  it("performs a round-trip conversion (CKAN → Frictionless → CKAN)", () => {
-    const originalCkanSchema = ckanSchemaFixture as CkanSchema
+  it("performs a round-trip conversion (CKAN → Fairspec → CKAN)", () => {
+    const originalCkanSchema = ckanSchemaFixture as CkanTableSchema
 
-    const frictionlessSchema = convertTableSchemaFromCkan(originalCkanSchema)
+    const fairspecSchema = convertTableSchemaFromCkan(originalCkanSchema)
 
-    const resultCkanSchema = convertTableSchemaToCkan(frictionlessSchema)
+    const resultCkanSchema = convertTableSchemaToCkan(fairspecSchema)
 
     expect(resultCkanSchema.fields).toHaveLength(
       originalCkanSchema.fields.length,

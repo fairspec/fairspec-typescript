@@ -1,37 +1,56 @@
-import type { Field, Schema } from "@fairspec/metadata"
-import type { CkanField, CkanFieldInfo } from "../Field.ts"
-import type { CkanSchema } from "../Schema.ts"
+import type { Column, TableSchema } from "@fairspec/metadata"
+import type { CkanColumn, CkanColumnInfo } from "../Column.ts"
+import type { CkanTableSchema } from "../TableSchema.ts"
 
-export function convertTableSchemaToCkan(schema: Schema): CkanSchema {
-  const fields = schema.fields.map(convertField)
+export function convertTableSchemaToCkan(
+  schema: TableSchema,
+): CkanTableSchema {
+  const fields: CkanColumn[] = []
+
+  for (const [columnName, column] of Object.entries(schema.properties)) {
+    fields.push(convertColumn(columnName, column))
+  }
 
   return { fields }
 }
 
-function convertField(field: Field): CkanField {
-  const { name, title, description, type } = field
+function convertColumn(columnName: string, column: Column): CkanColumn {
+  const { title, description } = column
 
-  const ckanField: CkanField = {
-    id: name,
-    type: convertType(type),
+  const ckanColumn: CkanColumn = {
+    id: columnName,
+    type: convertType(column),
   }
 
   if (title || description) {
-    const fieldInfo: CkanFieldInfo = {} as CkanFieldInfo
+    const columnInfo: CkanColumnInfo = {} as CkanColumnInfo
 
-    if (title) fieldInfo.label = title
-    if (description) fieldInfo.notes = description
+    if (title) columnInfo.label = title
+    if (description) columnInfo.notes = description
 
-    fieldInfo.type_override = convertType(type)
+    columnInfo.type_override = convertType(column)
 
-    ckanField.info = fieldInfo
+    ckanColumn.info = columnInfo
   }
 
-  return ckanField
+  return ckanColumn
 }
 
-function convertType(type?: string): string {
-  switch (type) {
+function convertType(column: Column): string {
+  if (column.type === "string" && "format" in column) {
+    switch (column.format) {
+      case "date":
+        return "date"
+      case "time":
+        return "time"
+      case "date-time":
+        return "timestamp"
+      default:
+        return "text"
+    }
+  }
+
+  switch (column.type) {
     case "string":
       return "text"
     case "integer":
@@ -40,20 +59,10 @@ function convertType(type?: string): string {
       return "numeric"
     case "boolean":
       return "bool"
-    case "date":
-      return "date"
-    case "time":
-      return "time"
-    case "datetime":
-      return "timestamp"
     case "object":
       return "json"
     case "array":
       return "array"
-    case "geopoint":
-      return "geopoint"
-    case "geojson":
-      return "geojson"
     default:
       return "text"
   }

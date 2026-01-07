@@ -1,65 +1,79 @@
 import type {
-  ArrayField,
-  BooleanField,
-  DateField,
-  DatetimeField,
-  Field,
-  IntegerField,
-  NumberField,
-  ObjectField,
-  Schema,
-  StringField,
-  TimeField,
+  ArrayColumn,
+  BooleanColumn,
+  Column,
+  DateColumn,
+  DatetimeColumn,
+  IntegerColumn,
+  NumberColumn,
+  ObjectColumn,
+  StringColumn,
+  TableSchema,
+  TimeColumn,
 } from "@fairspec/metadata"
-import type { CkanField } from "../Field.ts"
-import type { CkanSchema } from "../Schema.ts"
+import type { CkanColumn } from "../Column.ts"
+import type { CkanTableSchema } from "../TableSchema.ts"
 
-export function convertTableSchemaFromCkan(ckanSchema: CkanSchema): Schema {
-  const fields = ckanSchema.fields.map(convertField)
+export function convertTableSchemaFromCkan(
+  ckanTableSchema: CkanTableSchema,
+): TableSchema {
+  const properties: Record<string, Column> = {}
 
-  return { fields }
+  for (const ckanColumn of ckanTableSchema.fields) {
+    properties[ckanColumn.id] = convertColumn(ckanColumn)
+  }
+
+  return {
+    $schema: "https://fairspec.org/profiles/latest/table.json",
+    properties,
+  }
 }
 
-function convertField(ckanField: CkanField) {
-  const { id, type, info } = ckanField
+function convertColumn(ckanColumn: CkanColumn): Column {
+  const { info } = ckanColumn
 
-  const field: Partial<Field> = {
-    name: id,
-  }
+  const baseColumn: {
+    title?: string
+    description?: string
+  } = {}
 
   if (info) {
-    if (info.label) field.title = info.label
-    if (info.notes) field.description = info.notes
+    if (info.label) baseColumn.title = info.label
+    if (info.notes) baseColumn.description = info.notes
   }
 
-  const fieldType = (info?.type_override || type).toLowerCase()
-  switch (fieldType) {
+  const columnType = (info?.type_override || ckanColumn.type).toLowerCase()
+  switch (columnType) {
     case "text":
     case "string":
-      return { ...field, type: "string" } as StringField
+      return { ...baseColumn, type: "string" } as StringColumn
     case "int":
     case "integer":
-      return { ...field, type: "integer" } as IntegerField
+      return { ...baseColumn, type: "integer" } as IntegerColumn
     case "numeric":
     case "number":
     case "float":
-      return { ...field, type: "number" } as NumberField
+      return { ...baseColumn, type: "number" } as NumberColumn
     case "bool":
     case "boolean":
-      return { ...field, type: "boolean" } as BooleanField
+      return { ...baseColumn, type: "boolean" } as BooleanColumn
     case "date":
-      return { ...field, type: "date" } as DateField
+      return { ...baseColumn, type: "string", format: "date" } as DateColumn
     case "time":
-      return { ...field, type: "time" } as TimeField
+      return { ...baseColumn, type: "string", format: "time" } as TimeColumn
     case "timestamp":
     case "datetime":
-      return { ...field, type: "datetime" } as DatetimeField
+      return {
+        ...baseColumn,
+        type: "string",
+        format: "date-time",
+      } as DatetimeColumn
     case "json":
     case "object":
-      return { ...field, type: "object" } as ObjectField
+      return { ...baseColumn, type: "object" } as ObjectColumn
     case "array":
-      return { ...field, type: "array" } as ArrayField
+      return { ...baseColumn, type: "array" } as ArrayColumn
     default:
-      return { ...field, type: "any" } as Field
+      return { ...baseColumn, type: "string" } as StringColumn
   }
 }

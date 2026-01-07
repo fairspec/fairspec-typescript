@@ -1,160 +1,167 @@
 import { describe, expect, it } from "vitest"
-import type { CkanSchema } from "../Schema.ts"
+import type { CkanTableSchema } from "../TableSchema.ts"
 import ckanSchemaFixture from "./fixtures/ckan-schema.json" with {
   type: "json",
 }
 import { convertTableSchemaFromCkan } from "./fromCkan.ts"
 
 describe("convertTableSchemaFromCkan", () => {
-  it("converts a CKAN schema to a Frictionless schema", () => {
-    const ckanSchema = ckanSchemaFixture as CkanSchema
+  it("converts a CKAN schema to a Fairspec table schema", () => {
+    const ckanSchema = ckanSchemaFixture as CkanTableSchema
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(result.fields).toHaveLength(ckanSchema.fields.length)
+    expect(result.$schema).toEqual(
+      "https://fairspec.org/profiles/latest/table.json",
+    )
+    expect(Object.keys(result.properties)).toHaveLength(ckanSchema.fields.length)
 
-    const idField = result.fields.find(f => f.name === "id")
-    expect(idField).toBeDefined()
-    if (idField) {
-      expect(idField.type).toEqual("integer")
-      expect(idField.title).toEqual("ID")
-      expect(idField.description).toEqual("Unique identifier")
+    const idColumn = result.properties.id
+    expect(idColumn).toBeDefined()
+    if (idColumn) {
+      expect(idColumn.type).toEqual("integer")
+      expect(idColumn.title).toEqual("ID")
+      expect(idColumn.description).toEqual("Unique identifier")
     }
 
-    const nameField = result.fields.find(f => f.name === "name")
-    expect(nameField).toBeDefined()
-    if (nameField) {
-      expect(nameField.type).toEqual("string")
-      expect(nameField.title).toEqual("Name")
-      expect(nameField.description).toEqual("Person's full name")
+    const nameColumn = result.properties.name
+    expect(nameColumn).toBeDefined()
+    if (nameColumn) {
+      expect(nameColumn.type).toEqual("string")
+      expect(nameColumn.title).toEqual("Name")
+      expect(nameColumn.description).toEqual("Person's full name")
     }
 
-    const ageField = result.fields.find(f => f.name === "age")
-    expect(ageField).toBeDefined()
-    if (ageField) {
-      expect(ageField.type).toEqual("integer")
-      expect(ageField.title).toBeUndefined()
-      expect(ageField.description).toBeUndefined()
+    const ageColumn = result.properties.age
+    expect(ageColumn).toBeDefined()
+    if (ageColumn) {
+      expect(ageColumn.type).toEqual("integer")
+      expect(ageColumn.title).toBeUndefined()
+      expect(ageColumn.description).toBeUndefined()
     }
 
-    const scoreField = result.fields.find(f => f.name === "score")
-    expect(scoreField).toBeDefined()
-    if (scoreField) {
-      expect(scoreField.type).toEqual("number")
-      expect(scoreField.title).toEqual("Score")
-      expect(scoreField.description).toEqual("Test score")
+    const scoreColumn = result.properties.score
+    expect(scoreColumn).toBeDefined()
+    if (scoreColumn) {
+      expect(scoreColumn.type).toEqual("number")
+      expect(scoreColumn.title).toEqual("Score")
+      expect(scoreColumn.description).toEqual("Test score")
     }
 
-    const isActiveField = result.fields.find(f => f.name === "is_active")
-    expect(isActiveField).toBeDefined()
-    if (isActiveField) {
-      expect(isActiveField.type).toEqual("boolean")
+    const isActiveColumn = result.properties.is_active
+    expect(isActiveColumn).toBeDefined()
+    if (isActiveColumn) {
+      expect(isActiveColumn.type).toEqual("boolean")
     }
 
-    const birthDateField = result.fields.find(f => f.name === "birth_date")
-    expect(birthDateField).toBeDefined()
-    if (birthDateField) {
-      expect(birthDateField.type).toEqual("date")
-      expect(birthDateField.title).toEqual("Birth Date")
-      expect(birthDateField.description).toEqual("Date of birth")
+    const birthDateColumn = result.properties.birth_date
+    expect(birthDateColumn).toBeDefined()
+    if (birthDateColumn) {
+      expect(birthDateColumn.type).toEqual("string")
+      expect(birthDateColumn.format).toEqual("date")
+      expect(birthDateColumn.title).toEqual("Birth Date")
+      expect(birthDateColumn.description).toEqual("Date of birth")
     }
 
-    const startTimeField = result.fields.find(f => f.name === "start_time")
-    expect(startTimeField).toBeDefined()
-    if (startTimeField) {
-      expect(startTimeField.type).toEqual("time")
+    const startTimeColumn = result.properties.start_time
+    expect(startTimeColumn).toBeDefined()
+    if (startTimeColumn) {
+      expect(startTimeColumn.type).toEqual("string")
+      expect(startTimeColumn.format).toEqual("time")
     }
 
-    const createdAtField = result.fields.find(f => f.name === "created_at")
-    expect(createdAtField).toBeDefined()
-    if (createdAtField) {
-      expect(createdAtField.type).toEqual("datetime")
-      expect(createdAtField.title).toEqual("Created At")
-      expect(createdAtField.description).toEqual(
+    const createdAtColumn = result.properties.created_at
+    expect(createdAtColumn).toBeDefined()
+    if (createdAtColumn) {
+      expect(createdAtColumn.type).toEqual("string")
+      expect(createdAtColumn.format).toEqual("date-time")
+      expect(createdAtColumn.title).toEqual("Created At")
+      expect(createdAtColumn.description).toEqual(
         "Timestamp when record was created",
       )
     }
 
-    const metadataField = result.fields.find(f => f.name === "metadata")
-    expect(metadataField).toBeDefined()
-    if (metadataField) {
-      expect(metadataField.type).toEqual("object")
+    const metadataColumn = result.properties.metadata
+    expect(metadataColumn).toBeDefined()
+    if (metadataColumn) {
+      expect(metadataColumn.type).toEqual("object")
     }
 
-    const tagsField = result.fields.find(f => f.name === "tags")
-    expect(tagsField).toBeDefined()
-    if (tagsField) {
-      expect(tagsField.type).toEqual("array")
-      expect(tagsField.title).toEqual("Tags")
-      expect(tagsField.description).toEqual("List of tags")
+    const tagsColumn = result.properties.tags
+    expect(tagsColumn).toBeDefined()
+    if (tagsColumn) {
+      expect(tagsColumn.type).toEqual("array")
+      expect(tagsColumn.title).toEqual("Tags")
+      expect(tagsColumn.description).toEqual("List of tags")
     }
   })
 
-  it("converts CKAN type aliases to Frictionless types", () => {
-    const ckanSchema = ckanSchemaFixture as CkanSchema
+  it("converts CKAN type aliases to Fairspec types", () => {
+    const ckanSchema = ckanSchemaFixture as CkanTableSchema
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    const stringField = result.fields.find(f => f.name === "string_field")
-    expect(stringField?.type).toEqual("string")
+    const stringColumn = result.properties.string_field
+    expect(stringColumn?.type).toEqual("string")
 
-    const integerField = result.fields.find(f => f.name === "integer_field")
-    expect(integerField?.type).toEqual("integer")
+    const integerColumn = result.properties.integer_field
+    expect(integerColumn?.type).toEqual("integer")
 
-    const numberField = result.fields.find(f => f.name === "number_field")
-    expect(numberField?.type).toEqual("number")
+    const numberColumn = result.properties.number_field
+    expect(numberColumn?.type).toEqual("number")
 
-    const floatField = result.fields.find(f => f.name === "float_field")
-    expect(floatField?.type).toEqual("number")
+    const floatColumn = result.properties.float_field
+    expect(floatColumn?.type).toEqual("number")
 
-    const booleanField = result.fields.find(f => f.name === "boolean_field")
-    expect(booleanField?.type).toEqual("boolean")
+    const booleanColumn = result.properties.boolean_field
+    expect(booleanColumn?.type).toEqual("boolean")
 
-    const datetimeField = result.fields.find(f => f.name === "datetime_field")
-    expect(datetimeField?.type).toEqual("datetime")
+    const datetimeColumn = result.properties.datetime_field
+    expect(datetimeColumn?.type).toEqual("string")
+    expect(datetimeColumn?.format).toEqual("date-time")
 
-    const objectField = result.fields.find(f => f.name === "object_field")
-    expect(objectField?.type).toEqual("object")
+    const objectColumn = result.properties.object_field
+    expect(objectColumn?.type).toEqual("object")
   })
 
-  it("handles unknown field types by converting to 'any'", () => {
-    const ckanSchema = ckanSchemaFixture as CkanSchema
+  it("handles unknown field types by converting to 'string'", () => {
+    const ckanSchema = ckanSchemaFixture as CkanTableSchema
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    const unknownField = result.fields.find(f => f.name === "unknown_field")
-    expect(unknownField).toBeDefined()
-    if (unknownField) {
-      expect(unknownField.type).toEqual("any")
+    const unknownColumn = result.properties.unknown_field
+    expect(unknownColumn).toBeDefined()
+    if (unknownColumn) {
+      expect(unknownColumn.type).toEqual("string")
     }
   })
 
   it("respects type_override in field info", () => {
-    const ckanSchema = ckanSchemaFixture as CkanSchema
+    const ckanSchema = ckanSchemaFixture as CkanTableSchema
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    const overrideField = result.fields.find(f => f.name === "override_field")
-    expect(overrideField).toBeDefined()
-    if (overrideField) {
-      expect(overrideField.type).toEqual("integer")
-      expect(overrideField.title).toEqual("Override Field")
-      expect(overrideField.description).toEqual("Field with type override")
+    const overrideColumn = result.properties.override_field
+    expect(overrideColumn).toBeDefined()
+    if (overrideColumn) {
+      expect(overrideColumn.type).toEqual("integer")
+      expect(overrideColumn.title).toEqual("Override Field")
+      expect(overrideColumn.description).toEqual("Field with type override")
     }
   })
 
   it("handles empty fields array", () => {
-    const ckanSchema: CkanSchema = {
+    const ckanSchema: CkanTableSchema = {
       fields: [],
     }
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(result.fields).toEqual([])
+    expect(Object.keys(result.properties)).toHaveLength(0)
   })
 
   it("handles fields without info object", () => {
-    const ckanSchema: CkanSchema = {
+    const ckanSchema: CkanTableSchema = {
       fields: [
         {
           id: "simple_field",
@@ -165,19 +172,18 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(result.fields).toHaveLength(1)
-    const field = result.fields[0]
-    expect(field).toBeDefined()
-    if (field) {
-      expect(field.name).toEqual("simple_field")
-      expect(field.type).toEqual("string")
-      expect(field.title).toBeUndefined()
-      expect(field.description).toBeUndefined()
+    expect(Object.keys(result.properties)).toHaveLength(1)
+    const column = result.properties.simple_field
+    expect(column).toBeDefined()
+    if (column) {
+      expect(column.type).toEqual("string")
+      expect(column.title).toBeUndefined()
+      expect(column.description).toBeUndefined()
     }
   })
 
   it("handles case insensitivity in type conversion", () => {
-    const ckanSchema: CkanSchema = {
+    const ckanSchema: CkanTableSchema = {
       fields: [
         { id: "field1", type: "TEXT" },
         { id: "field2", type: "INT" },
@@ -188,9 +194,10 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(result.fields[0]?.type).toEqual("string")
-    expect(result.fields[1]?.type).toEqual("integer")
-    expect(result.fields[2]?.type).toEqual("boolean")
-    expect(result.fields[3]?.type).toEqual("datetime")
+    expect(result.properties.field1?.type).toEqual("string")
+    expect(result.properties.field2?.type).toEqual("integer")
+    expect(result.properties.field3?.type).toEqual("boolean")
+    expect(result.properties.field4?.type).toEqual("string")
+    expect(result.properties.field4?.format).toEqual("date-time")
   })
 })

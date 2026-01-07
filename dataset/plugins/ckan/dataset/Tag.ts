@@ -1,19 +1,11 @@
-/**
- * CKAN Tag interface
- */
-export interface CkanTag {
-  /**
-   * Tag identifier
-   */
-  id: string
+import { z } from "zod"
 
-  /**
-   * Tag name
-   */
-  name: string
+export const CkanTag = z
+  .object({
+    id: z.string().describe("Tag identifier"),
+    name: z.string().describe("Tag name"),
+    display_name: z.string().describe("Tag display name"),
+  })
+  .describe("CKAN Tag interface")
 
-  /**
-   * Tag display name
-   */
-  display_name: string
-}
+export type CkanTag = z.infer<typeof CkanTag>

@@ -1,86 +1,91 @@
-import type { Contributor, License, Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import { convertResourceFromCkan } from "../../resource/index.ts"
-import type { CkanPackage } from "../Package.ts"
+import type { CkanDataset } from "../Dataset.ts"
 
-export function convertPackageFromCkan(ckanPackage: CkanPackage): Package {
-  const datapackage: Package = {
-    name: ckanPackage.name,
+export function convertDatasetFromCkan(ckanDataset: CkanDataset): Dataset {
+  const dataset: Dataset = {
+    $schema: "https://fairspec.org/profiles/latest/dataset.json",
     resources: [],
   }
 
-  if (ckanPackage.title) {
-    datapackage.title = ckanPackage.title
+  if (ckanDataset.title) {
+    dataset.titles = [{ title: ckanDataset.title }]
   }
 
-  if (ckanPackage.notes) {
-    datapackage.description = ckanPackage.notes
+  if (ckanDataset.notes) {
+    dataset.descriptions = [
+      {
+        description: ckanDataset.notes,
+        descriptionType: "Abstract",
+      },
+    ]
   }
 
-  if (ckanPackage.version) {
-    datapackage.version = ckanPackage.version
+  if (ckanDataset.version) {
+    dataset.version = ckanDataset.version
   }
 
-  if (ckanPackage.resources && ckanPackage.resources.length > 0) {
-    datapackage.resources = ckanPackage.resources.map(resource =>
+  if (ckanDataset.resources && ckanDataset.resources.length > 0) {
+    dataset.resources = ckanDataset.resources.map(resource =>
       convertResourceFromCkan(resource),
     )
   }
 
-  if (ckanPackage.license_id) {
-    const license: License = {
-      name: ckanPackage.license_id,
-    }
-
-    if (ckanPackage.license_title) {
-      license.title = ckanPackage.license_title
-    }
-
-    if (ckanPackage.license_url) {
-      license.path = ckanPackage.license_url
-    }
-
-    datapackage.licenses = [license]
+  if (ckanDataset.license_id || ckanDataset.license_title) {
+    dataset.rightsList = [
+      {
+        rights: ckanDataset.license_title || ckanDataset.license_id || "",
+        rightsUri: ckanDataset.license_url,
+        rightsIdentifier: ckanDataset.license_id,
+      },
+    ]
   }
 
-  const contributors: Contributor[] = []
-
-  if (ckanPackage.author) {
-    const authorContributor: Contributor = {
-      title: ckanPackage.author,
-      role: "author",
-    }
-
-    if (ckanPackage.author_email) {
-      authorContributor.email = ckanPackage.author_email
-    }
-
-    contributors.push(authorContributor)
+  if (ckanDataset.author) {
+    dataset.creators = [
+      {
+        name: ckanDataset.author,
+        nameType: "Personal",
+      },
+    ]
   }
 
-  if (ckanPackage.maintainer) {
-    const maintainerContributor: Contributor = {
-      title: ckanPackage.maintainer,
-      role: "maintainer",
-    }
+  const contributors = []
 
-    if (ckanPackage.maintainer_email) {
-      maintainerContributor.email = ckanPackage.maintainer_email
-    }
-
-    contributors.push(maintainerContributor)
+  if (ckanDataset.maintainer) {
+    contributors.push({
+      name: ckanDataset.maintainer,
+      nameType: "Personal" as const,
+      contributorType: "ContactPerson" as const,
+    })
   }
 
   if (contributors.length > 0) {
-    datapackage.contributors = contributors
+    dataset.contributors = contributors
   }
 
-  if (ckanPackage.tags && ckanPackage.tags.length > 0) {
-    datapackage.keywords = ckanPackage.tags.map(tag => tag.name)
+  if (ckanDataset.tags && ckanDataset.tags.length > 0) {
+    dataset.subjects = ckanDataset.tags.map(tag => ({ subject: tag.name }))
   }
 
-  if (ckanPackage.metadata_created) {
-    datapackage.created = ckanPackage.metadata_created
+  if (ckanDataset.metadata_created) {
+    dataset.dates = [
+      {
+        date: ckanDataset.metadata_created,
+        dateType: "Created",
+      },
+    ]
   }
 
-  return datapackage
+  if (ckanDataset.metadata_modified) {
+    dataset.dates = [
+      ...(dataset.dates || []),
+      {
+        date: ckanDataset.metadata_modified,
+        dateType: "Updated",
+      },
+    ]
+  }
+
+  return dataset
 }

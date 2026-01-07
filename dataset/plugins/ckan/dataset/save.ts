@@ -14,7 +14,7 @@ import type { CkanResource } from "../resource/index.ts"
 import { convertResourceToCkan } from "../resource/index.ts"
 import { convertPackageToCkan } from "./convert/toCkan.ts"
 
-export async function savePackageToCkan(
+export async function saveDatasetToCkan(
   dataPackage: Package,
   options: {
     apiKey: string

@@ -8,7 +8,7 @@ import { convertPackageFromCkan } from "./convert/fromCkan.ts"
  * @param props Object containing the URL to the CKAN package
  * @returns Package object and cleanup function
  */
-export async function loadPackageFromCkan(datasetUrl: string) {
+export async function loadDatasetFromCkan(datasetUrl: string) {
   const packageId = extractPackageId(datasetUrl)
   if (!packageId) {
     throw new Error(`Failed to extract package ID from URL: ${datasetUrl}`)

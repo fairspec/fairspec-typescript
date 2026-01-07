@@ -1,24 +1,12 @@
-/**
- * CKAN Organization interface
- */
-export interface CkanOrganization {
-  /**
-   * Organization identifier
-   */
-  id: string
+import { z } from "zod"
 
-  /**
-   * Organization name
-   */
-  name: string
+export const CkanOrganization = z
+  .object({
+    id: z.string().describe("Organization identifier"),
+    name: z.string().describe("Organization name"),
+    title: z.string().describe("Organization title"),
+    description: z.string().describe("Organization description"),
+  })
+  .describe("CKAN Organization interface")
 
-  /**
-   * Organization title
-   */
-  title: string
-
-  /**
-   * Organization description
-   */
-  description: string
-}
+export type CkanOrganization = z.infer<typeof CkanOrganization>

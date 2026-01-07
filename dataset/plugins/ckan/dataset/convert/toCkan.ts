@@ -1,57 +1,80 @@
-import type { Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import type { SetRequired } from "type-fest"
 import { convertResourceToCkan } from "../../resource/index.ts"
 import type { CkanResource } from "../../resource/Resource.ts"
-import type { CkanPackage } from "../Package.ts"
+import type { CkanDataset } from "../Dataset.ts"
 import type { CkanTag } from "../Tag.ts"
 
-export function convertPackageToCkan(dataPackage: Package) {
-  const ckanPackage: SetRequired<Partial<CkanPackage>, "resources" | "tags"> = {
+export function convertDatasetToCkan(dataset: Dataset) {
+  const ckanDataset: SetRequired<Partial<CkanDataset>, "resources" | "tags"> = {
     resources: [],
     tags: [],
   }
 
-  if (dataPackage.name) ckanPackage.name = dataPackage.name
-  if (dataPackage.title) ckanPackage.title = dataPackage.title
-  if (dataPackage.description) ckanPackage.notes = dataPackage.description
-  if (dataPackage.version) ckanPackage.version = dataPackage.version
-
-  if (dataPackage.licenses && dataPackage.licenses.length > 0) {
-    const license = dataPackage.licenses[0]
-
-    if (license?.name) ckanPackage.license_id = license.name
-    if (license?.title) ckanPackage.license_title = license.title
-    if (license?.path) ckanPackage.license_url = license.path
+  if (dataset.titles?.[0]?.title) {
+    ckanDataset.title = dataset.titles[0].title
   }
 
-  if (dataPackage.contributors) {
-    const author = dataPackage.contributors.find(c => c.role === "author")
-    if (author) {
-      ckanPackage.author = author.title
-      if (author.email) ckanPackage.author_email = author.email
-    }
+  if (dataset.descriptions?.[0]?.description) {
+    ckanDataset.notes = dataset.descriptions[0].description
+  }
 
-    const maintainer = dataPackage.contributors.find(
-      c => c.role === "maintainer",
+  if (dataset.version) {
+    ckanDataset.version = dataset.version
+  }
+
+  if (dataset.rightsList && dataset.rightsList.length > 0) {
+    const rights = dataset.rightsList[0]
+
+    if (rights?.rightsIdentifier) {
+      ckanDataset.license_id = rights.rightsIdentifier
+    }
+    if (rights?.rights) {
+      ckanDataset.license_title = rights.rights
+    }
+    if (rights?.rightsUri) {
+      ckanDataset.license_url = rights.rightsUri
+    }
+  }
+
+  if (dataset.creators && dataset.creators.length > 0) {
+    const creator = dataset.creators[0]
+    if (creator?.name) {
+      ckanDataset.author = creator.name
+    }
+  }
+
+  if (dataset.contributors) {
+    const maintainer = dataset.contributors.find(
+      c => c.contributorType === "ContactPerson",
     )
-    if (maintainer) {
-      ckanPackage.maintainer = maintainer.title
-      if (maintainer.email) ckanPackage.maintainer_email = maintainer.email
+    if (maintainer?.name) {
+      ckanDataset.maintainer = maintainer.name
     }
   }
 
-  if (dataPackage.resources && dataPackage.resources.length > 0) {
-    ckanPackage.resources = dataPackage.resources
+  if (dataset.resources && dataset.resources.length > 0) {
+    ckanDataset.resources = dataset.resources
       .map(resource => convertResourceToCkan(resource))
       .filter((resource): resource is CkanResource => resource !== undefined)
   }
 
-  if (dataPackage.keywords && dataPackage.keywords.length > 0) {
-    ckanPackage.tags = dataPackage.keywords.map(keyword => ({
-      name: keyword,
-      display_name: keyword,
+  if (dataset.subjects && dataset.subjects.length > 0) {
+    ckanDataset.tags = dataset.subjects.map(subject => ({
+      name: subject.subject,
+      display_name: subject.subject,
     })) as CkanTag[]
   }
 
-  return ckanPackage
+  const createdDate = dataset.dates?.find(d => d.dateType === "Created")
+  if (createdDate?.date) {
+    ckanDataset.metadata_created = createdDate.date
+  }
+
+  const updatedDate = dataset.dates?.find(d => d.dateType === "Updated")
+  if (updatedDate?.date) {
+    ckanDataset.metadata_modified = updatedDate.date
+  }
+
+  return ckanDataset
 }

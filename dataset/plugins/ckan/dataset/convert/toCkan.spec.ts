@@ -1,193 +1,225 @@
-import type { Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import ckanPackageFixture from "../fixtures/ckan-package.json" with {
+import type { CkanDataset } from "../Dataset.ts"
+import ckanPackageFixture from "../fixtures/ckan-dataset.json" with {
   type: "json",
 }
-import type { CkanPackage } from "../Package.ts"
-import { convertPackageFromCkan } from "./fromCkan.ts"
-import { convertPackageToCkan } from "./toCkan.ts"
+import { convertDatasetFromCkan } from "./fromCkan.ts"
+import { convertDatasetToCkan } from "./toCkan.ts"
 
-describe("convertPackageToCkan", () => {
-  it("converts a Frictionless Data Package to a CKAN package", () => {
-    const dataPackage: Package = {
-      name: "test-package",
-      title: "Test Package",
-      description: "This is a test package",
-      version: "1.0.0",
-      licenses: [
+describe("convertDatasetToCkan", () => {
+  it("converts a Fairspec Dataset to a CKAN dataset", () => {
+    const dataset: Dataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
+      titles: [{ title: "Test Package" }],
+      descriptions: [
         {
-          name: "cc-by",
-          title: "Creative Commons Attribution",
-          path: "http://www.opendefinition.org/licenses/cc-by",
+          description: "This is a test package",
+          descriptionType: "Abstract",
+        },
+      ],
+      version: "1.0.0",
+      rightsList: [
+        {
+          rights: "Creative Commons Attribution",
+          rightsUri: "http://www.opendefinition.org/licenses/cc-by",
+          rightsIdentifier: "cc-by",
+        },
+      ],
+      creators: [
+        {
+          name: "Test Author",
+          nameType: "Personal",
         },
       ],
       contributors: [
         {
-          title: "Test Author",
-          email: "author@example.com",
-          role: "author",
-        },
-        {
-          title: "Test Maintainer",
-          email: "maintainer@example.com",
-          role: "maintainer",
+          name: "Test Maintainer",
+          nameType: "Personal",
+          contributorType: "ContactPerson",
         },
       ],
-      keywords: ["test", "sample", "data"],
-      created: "2023-01-01T00:00:00Z",
+      subjects: [
+        { subject: "test" },
+        { subject: "sample" },
+        { subject: "data" },
+      ],
+      dates: [
+        {
+          date: "2023-01-01T00:00:00Z",
+          dateType: "Created",
+        },
+        {
+          date: "2023-01-02T00:00:00Z",
+          dateType: "Updated",
+        },
+      ],
       resources: [
         {
           name: "test-resource",
-          path: "https://example.com/data.csv",
-          format: "csv",
-          mediatype: "text/csv",
-          description: "Test resource",
-          bytes: 1024,
-          hash: "md5:1234567890abcdef",
+          data: "https://example.com/data.csv",
+          format: { name: "csv" },
+          descriptions: [
+            {
+              description: "Test resource",
+              descriptionType: "Abstract",
+            },
+          ],
+          integrity: {
+            type: "md5",
+            hash: "1234567890abcdef",
+          },
         },
       ],
     }
 
-    const result = convertPackageToCkan(dataPackage)
+    const result = convertDatasetToCkan(dataset)
 
-    expect(result.name).toEqual(dataPackage.name)
-    expect(result.title).toEqual(dataPackage.title)
-    expect(result.notes).toEqual(dataPackage.description)
-    expect(result.version).toEqual(dataPackage.version)
+    expect(result.title).toEqual(dataset.titles?.[0]?.title)
+    expect(result.notes).toEqual(dataset.descriptions?.[0]?.description)
+    expect(result.version).toEqual(dataset.version)
 
-    if (
-      dataPackage.licenses &&
-      dataPackage.licenses.length > 0 &&
-      dataPackage.licenses[0]
-    ) {
-      const license = dataPackage.licenses[0]
-      if (license.name) expect(result.license_id).toEqual(license.name)
-      if (license.title) expect(result.license_title).toEqual(license.title)
-      if (license.path) expect(result.license_url).toEqual(license.path)
+    if (dataset.rightsList && dataset.rightsList.length > 0) {
+      const rights = dataset.rightsList[0]
+      if (rights) {
+        expect(result.license_id).toEqual(rights.rightsIdentifier)
+        expect(result.license_title).toEqual(rights.rights)
+        expect(result.license_url).toEqual(rights.rightsUri)
+      }
     }
 
-    if (dataPackage.contributors && dataPackage.contributors.length >= 2) {
-      const author = dataPackage.contributors.find(c => c.role === "author")
-      const maintainer = dataPackage.contributors.find(
-        c => c.role === "maintainer",
+    if (dataset.creators && dataset.creators.length > 0) {
+      const creator = dataset.creators[0]
+      if (creator) {
+        expect(result.author).toEqual(creator.name)
+      }
+    }
+
+    if (dataset.contributors && dataset.contributors.length > 0) {
+      const maintainer = dataset.contributors.find(
+        c => c.contributorType === "ContactPerson",
       )
-
-      if (author) {
-        expect(result.author).toEqual(author.title)
-        expect(result.author_email).toEqual(author.email)
-      }
-
       if (maintainer) {
-        expect(result.maintainer).toEqual(maintainer.title)
-        expect(result.maintainer_email).toEqual(maintainer.email)
+        expect(result.maintainer).toEqual(maintainer.name)
       }
     }
 
-    if (dataPackage.keywords && dataPackage.keywords.length > 0) {
-      expect(result.tags).toHaveLength(dataPackage.keywords.length)
-      dataPackage.keywords.forEach((keyword, index) => {
+    if (dataset.subjects && dataset.subjects.length > 0) {
+      expect(result.tags).toHaveLength(dataset.subjects.length)
+      dataset.subjects.forEach((subject, index) => {
         const tag = result.tags?.[index]
-        if (tag && keyword) {
-          expect(tag.name).toEqual(keyword)
-          expect(tag.display_name).toEqual(keyword)
+        if (tag && subject.subject) {
+          expect(tag.name).toEqual(subject.subject)
+          expect(tag.display_name).toEqual(subject.subject)
         }
       })
     }
 
-    expect(result.resources).toHaveLength(dataPackage.resources.length)
+    const createdDate = dataset.dates?.find(d => d.dateType === "Created")
+    if (createdDate) {
+      expect(result.metadata_created).toEqual(createdDate.date)
+    }
 
-    expect(dataPackage.resources.length).toBeGreaterThan(0)
+    const updatedDate = dataset.dates?.find(d => d.dateType === "Updated")
+    if (updatedDate) {
+      expect(result.metadata_modified).toEqual(updatedDate.date)
+    }
+
+    expect.assert(dataset.resources)
+    expect(result.resources).toHaveLength(dataset.resources.length)
+
+    expect(dataset.resources.length).toBeGreaterThan(0)
     expect(result.resources?.length).toBeGreaterThan(0)
 
-    if (dataPackage.resources.length > 0 && result.resources.length > 0) {
-      const firstResource = dataPackage.resources[0]
+    if (dataset.resources.length > 0 && result.resources.length > 0) {
+      const firstResource = dataset.resources[0]
       const firstCkanResource = result.resources[0]
 
       expect(firstCkanResource).toBeDefined()
       expect(firstResource).toBeDefined()
 
       if (firstResource && firstCkanResource) {
-        expect(firstCkanResource.description).toEqual(firstResource.description)
-        expect(firstCkanResource.format).toEqual(
-          firstResource.format?.toUpperCase(),
+        expect(firstCkanResource.name).toEqual(firstResource.name)
+        expect(firstCkanResource.description).toEqual(
+          firstResource.descriptions?.[0]?.description,
         )
-        expect(firstCkanResource.mimetype).toEqual(firstResource.mediatype)
-        expect(firstCkanResource.size).toEqual(firstResource.bytes)
-        expect(firstCkanResource.hash).toEqual(firstResource.hash)
+        expect(firstCkanResource.format).toEqual(
+          firstResource.format?.name.toUpperCase(),
+        )
+        expect(firstCkanResource.hash).toEqual(firstResource.integrity?.hash)
       }
     }
   })
 
   it("handles empty resources array", () => {
-    const dataPackage: Package = {
-      name: "test-package",
+    const dataset: Dataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [],
     }
 
-    const result = convertPackageToCkan(dataPackage)
+    const result = convertDatasetToCkan(dataset)
 
     expect(result.resources).toEqual([])
   })
 
   it("handles undefined optional properties", () => {
-    const dataPackage: Package = {
+    const dataset: Dataset = {
+      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [],
     }
 
-    const result = convertPackageToCkan(dataPackage)
+    const result = convertDatasetToCkan(dataset)
 
-    expect(result.name).toBeUndefined()
     expect(result.title).toBeUndefined()
     expect(result.notes).toBeUndefined()
     expect(result.version).toBeUndefined()
     expect(result.metadata_created).toBeUndefined()
+    expect(result.metadata_modified).toBeUndefined()
     expect(result.license_id).toBeUndefined()
     expect(result.license_title).toBeUndefined()
     expect(result.license_url).toBeUndefined()
     expect(result.author).toBeUndefined()
-    expect(result.author_email).toBeUndefined()
     expect(result.maintainer).toBeUndefined()
-    expect(result.maintainer_email).toBeUndefined()
     expect(result.tags).toEqual([])
     expect(result.resources).toEqual([])
   })
 
-  it("performs a round-trip conversion (CKAN → DP → CKAN)", () => {
-    const originalCkanPackage = ckanPackageFixture as CkanPackage
+  it("performs a round-trip conversion (CKAN → Dataset → CKAN)", () => {
+    const originalCkanDataset = ckanPackageFixture as CkanDataset
 
-    const dataPackage = convertPackageFromCkan(originalCkanPackage)
+    const dataset = convertDatasetFromCkan(originalCkanDataset)
 
-    const resultCkanPackage = convertPackageToCkan(dataPackage)
+    const resultCkanDataset = convertDatasetToCkan(dataset)
 
-    expect(resultCkanPackage.name).toEqual(originalCkanPackage.name)
-    expect(resultCkanPackage.title).toEqual(originalCkanPackage.title)
-    expect(resultCkanPackage.notes).toEqual(originalCkanPackage.notes)
-    expect(resultCkanPackage.version).toEqual(originalCkanPackage.version)
+    expect(resultCkanDataset.title).toEqual(originalCkanDataset.title)
+    expect(resultCkanDataset.notes).toEqual(originalCkanDataset.notes)
+    expect(resultCkanDataset.version).toEqual(originalCkanDataset.version)
 
-    expect(resultCkanPackage.license_id).toEqual(originalCkanPackage.license_id)
-    expect(resultCkanPackage.license_title).toEqual(
-      originalCkanPackage.license_title,
+    expect(resultCkanDataset.license_id).toEqual(originalCkanDataset.license_id)
+    expect(resultCkanDataset.license_title).toEqual(
+      originalCkanDataset.license_title,
     )
-    expect(resultCkanPackage.license_url).toEqual(
-      originalCkanPackage.license_url,
-    )
-
-    expect(resultCkanPackage.author).toEqual(originalCkanPackage.author)
-    expect(resultCkanPackage.author_email).toEqual(
-      originalCkanPackage.author_email,
-    )
-    expect(resultCkanPackage.maintainer).toEqual(originalCkanPackage.maintainer)
-    expect(resultCkanPackage.maintainer_email).toEqual(
-      originalCkanPackage.maintainer_email,
+    expect(resultCkanDataset.license_url).toEqual(
+      originalCkanDataset.license_url,
     )
 
-    expect(resultCkanPackage.resources.length).toBeGreaterThan(0)
+    expect(resultCkanDataset.author).toEqual(originalCkanDataset.author)
+    expect(resultCkanDataset.maintainer).toEqual(originalCkanDataset.maintainer)
 
-    expect(resultCkanPackage.tags.length).toEqual(
-      originalCkanPackage.tags.length,
+    expect(resultCkanDataset.metadata_created).toEqual(
+      originalCkanDataset.metadata_created,
     )
-    originalCkanPackage.tags.forEach(originalTag => {
-      const matchingTag = resultCkanPackage.tags.find(
+    expect(resultCkanDataset.metadata_modified).toEqual(
+      originalCkanDataset.metadata_modified,
+    )
+
+    expect(resultCkanDataset.resources.length).toBeGreaterThan(0)
+
+    expect(resultCkanDataset.tags.length).toEqual(
+      originalCkanDataset.tags.length,
+    )
+    originalCkanDataset.tags.forEach(originalTag => {
+      const matchingTag = resultCkanDataset.tags.find(
         tag => tag.name === originalTag.name,
       )
       expect(matchingTag).toBeTruthy()

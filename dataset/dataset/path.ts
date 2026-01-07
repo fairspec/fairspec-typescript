@@ -1,18 +1,16 @@
 import { join, relative, resolve, sep } from "node:path"
-import { getBasepath, isRemotePath, type Package } from "@fairspec/metadata"
+import {
+  type Dataset,
+  getBasepath,
+  getPaths,
+  isRemotePath,
+} from "@fairspec/metadata"
 
-export function getPackageBasepath(dataPackage: Package) {
+export function getDatasetBasepath(dataset: Dataset) {
   const paths: string[] = []
 
-  for (const resource of dataPackage.resources) {
-    if (!resource.path) {
-      continue
-    }
-
-    const resourcePaths = Array.isArray(resource.path)
-      ? resource.path
-      : [resource.path]
-
+  for (const resource of dataset.resources ?? []) {
+    const resourcePaths = getPaths(resource)
     paths.push(...resourcePaths)
   }
 

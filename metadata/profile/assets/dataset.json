@@ -100,7 +100,7 @@
     "TableSchema": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
-        { "$ref": "https://fairspec.org/profiles/table.json" }
+        { "$ref": "https://fairspec.org/profiles/latest/table.json" }
       ]
     },
     "PathData": {

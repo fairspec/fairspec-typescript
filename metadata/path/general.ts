@@ -2,41 +2,43 @@ import slugify from "@sindresorhus/slugify"
 import { node } from "../platform/index.ts"
 
 export function isRemotePath(path: string) {
-  const protocol = getProtocol(path)
-  return protocol !== "file"
+  const protocolName = getProtocolName(path)
+  return protocolName !== "file"
 }
 
-export function getName(filename?: string) {
-  if (!filename) {
+export function getFileNameSlug(path: string) {
+  const fileName = getFileName(path)
+  if (!fileName) {
     return undefined
   }
 
-  const name = filename.split(".")[0]
-  if (!name) {
+  const basename = fileName.split(".")[0]
+  if (!basename) {
     return undefined
   }
 
-  return slugify(name)
+  return slugify(basename, { separator: "_" })
 }
 
-export function getProtocol(path: string) {
+export function getProtocolName(path: string) {
   try {
     const url = new URL(path)
-    const protocol = url.protocol.replace(":", "")
+    const protocolName = url.protocol.replace(":", "")
 
     // Handle Windows drive letters
-    if (protocol.length < 2) {
+    if (protocolName.length < 2) {
       return "file"
     }
 
-    return protocol
+    return protocolName
   } catch {
     return "file"
   }
 }
 
-export function getFormatName(filename?: string) {
-  return filename?.split(".").slice(-1)[0]?.toLowerCase()
+export function getFormatName(path: string) {
+  const fileName = getFileName(path)
+  return fileName?.split(".").slice(-1)[0]?.toLowerCase()
 }
 
 export function getFileName(path: string) {
@@ -44,8 +46,8 @@ export function getFileName(path: string) {
 
   if (isRemote) {
     const pathname = new URL(path).pathname
-    const filename = pathname.split("/").slice(-1)[0]
-    return filename?.includes(".") ? filename : undefined
+    const fileName = pathname.split("/").slice(-1)[0]
+    return fileName?.includes(".") ? fileName : undefined
   }
 
   if (!node) {
@@ -53,6 +55,6 @@ export function getFileName(path: string) {
   }
 
   const resolvedPath = node.path.resolve(path)
-  const filename = node.path.parse(resolvedPath).base
-  return filename?.includes(".") ? filename : undefined
+  const fileName = node.path.parse(resolvedPath).base
+  return fileName?.includes(".") ? fileName : undefined
 }

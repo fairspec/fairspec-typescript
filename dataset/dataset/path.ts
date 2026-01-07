@@ -2,7 +2,7 @@ import { join, relative, resolve, sep } from "node:path"
 import {
   type Dataset,
   getBasepath,
-  getPaths,
+  getDataPaths,
   isRemotePath,
 } from "@fairspec/metadata"
 
@@ -10,7 +10,7 @@ export function getDatasetBasepath(dataset: Dataset) {
   const paths: string[] = []
 
   for (const resource of dataset.resources ?? []) {
-    const resourcePaths = getPaths(resource)
+    const resourcePaths = getDataPaths(resource)
     paths.push(...resourcePaths)
   }
 

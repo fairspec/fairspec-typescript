@@ -1,6 +1,6 @@
 import { stat } from "node:fs/promises"
 import type { Resource } from "@fairspec/metadata"
-import { getFirstPath } from "@fairspec/metadata"
+import { getFirstDataPath } from "@fairspec/metadata"
 import chardet from "chardet"
 import * as hasha from "hasha"
 import { isBinaryFile } from "isbinaryfile"
@@ -45,7 +45,7 @@ export async function inferTextual(
   const maxBytes = options?.sampleBytes ?? 10_000
   const confidencePercent = options?.confidencePercent ?? 80
 
-  const firstPath = getFirstPath(resource)
+  const firstPath = getFirstDataPath(resource)
   if (!firstPath) {
     return false
   }

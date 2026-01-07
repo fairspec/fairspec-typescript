@@ -1,52 +1,55 @@
 import { describe, expect, it } from "vitest"
-import { inferFormatName, inferName } from "./infer.ts"
+import { inferFormatName, inferResourceName } from "./infer.ts"
 
-describe("inferName", () => {
-  it("returns existing name when provided", () => {
-    const resource = { name: "existing-name" }
-    expect(inferName(resource)).toBe("existing-name")
+describe("inferResourceName", () => {
+  it("dont returns existing name when provided", () => {
+    const resource = { name: "existing-name", data: "/data/users.csv" }
+    expect(inferResourceName(resource)).toBe("users")
   })
 
   it("infers name from single string path", () => {
     const resource = { data: "/data/users.csv" }
-    expect(inferName(resource)).toBe("users")
+    expect(inferResourceName(resource)).toBe("users")
   })
 
   it("infers name from first path in array", () => {
     const resource = { data: ["/data/users.csv", "/data/backup.csv"] }
-    expect(inferName(resource)).toBe("users")
+    expect(inferResourceName(resource)).toBe("users")
   })
 
   it("infers name from URL path", () => {
     const resource = { data: "https://example.com/data/products.json" }
-    expect(inferName(resource)).toBe("products")
+    expect(inferResourceName(resource)).toBe("products")
   })
 
   it("returns default name when no path or name", () => {
     const resource = {}
-    expect(inferName(resource)).toBe("resource")
+    expect(inferResourceName(resource)).toBe("resource")
   })
 
   it("returns default name when path has no filename", () => {
     const resource = { data: "/data/folder/" }
-    expect(inferName(resource)).toBe("resource")
+    expect(inferResourceName(resource)).toBe("resource")
   })
 
   it("handles complex filename with multiple dots", () => {
     const resource = { data: "/data/file.backup.csv" }
-    expect(inferName(resource)).toBe("file")
+    expect(inferResourceName(resource)).toBe("file")
   })
 
   it("slugifies filename with spaces and special characters", () => {
     const resource = { data: "/data/My Data File!.csv" }
-    expect(inferName(resource)).toBe("my-data-file")
+    expect(inferResourceName(resource)).toBe("my_data_file")
   })
 })
 
 describe("inferFormatName", () => {
-  it("returns existing format name when provided", () => {
-    const resource = { format: { name: "json" as const } }
-    expect(inferFormatName(resource)).toBe("json")
+  it("dont returns existing format name when provided", () => {
+    const resource = {
+      data: "/data/users.csv",
+      format: { name: "json" as const },
+    }
+    expect(inferFormatName(resource)).toBe("csv")
   })
 
   it("infers format from single string path", () => {

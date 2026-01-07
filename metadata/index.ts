@@ -75,19 +75,19 @@ export {
   denormalizePath,
   getBasepath,
   getFileName,
+  getFileNameSlug,
   getFormatName,
-  getName,
   isRemotePath,
   resolveBasepath,
 } from "./path/index.ts"
 export { createReport, Report } from "./report/index.ts"
 export {
-  getFirstPath,
+  getDataPaths,
+  getFirstDataPath,
   getJsonData,
   getPathData,
-  getPaths,
   inferFormatName,
-  inferName,
+  inferResourceName,
   isRemoteResource,
   JsonData,
   PathData,

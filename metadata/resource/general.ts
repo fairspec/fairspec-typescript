@@ -35,13 +35,13 @@ export function getJsonData(resource: Partial<Resource>) {
   return undefined
 }
 
-export function getPaths(resource: Partial<Resource>) {
+export function getDataPaths(resource: Partial<Resource>) {
   const pathData = getPathData(resource)
   if (!pathData) return []
   return Array.isArray(pathData) ? pathData : [pathData]
 }
 
-export function getFirstPath(resource: Partial<Resource>) {
+export function getFirstDataPath(resource: Partial<Resource>) {
   const pathData = getPathData(resource)
   if (!pathData) return undefined
   return Array.isArray(pathData) ? pathData[0] : pathData

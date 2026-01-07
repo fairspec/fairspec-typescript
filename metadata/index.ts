@@ -30,6 +30,7 @@ export {
   validateDatasetMetadata,
 } from "./dataset/index.ts"
 export {
+  copyDescriptor,
   Descriptor,
   loadDescriptor,
   saveDescriptor,

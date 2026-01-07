@@ -1,3 +1,4 @@
+import { copyDescriptor } from "../descriptor/index.ts"
 import { denormalizeJsonSchema } from "../jsonSchema/index.ts"
 import { denormalizePath } from "../path/index.ts"
 import type { Resource } from "../resource/index.ts"
@@ -10,7 +11,7 @@ export function denormalizeDataset(
     basepath?: string
   },
 ) {
-  dataset = globalThis.structuredClone(dataset)
+  dataset = copyDescriptor(dataset)
 
   dataset.resources?.forEach(resource => {
     denormalizeResourceData(resource, options)

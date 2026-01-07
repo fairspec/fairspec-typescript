@@ -1,6 +1,6 @@
 import type { Descriptor } from "../descriptor/index.ts"
+import { copyDescriptor } from "../descriptor/index.ts"
 
 export function normalizeJsonSchema(descriptor: Descriptor) {
-  descriptor = globalThis.structuredClone(descriptor)
-  return descriptor
+  return copyDescriptor(descriptor)
 }

@@ -1,4 +1,5 @@
 import type { Descriptor } from "../descriptor/index.ts"
+import { copyDescriptor } from "../descriptor/index.ts"
 import { normalizeJsonSchema } from "../jsonSchema/index.ts"
 import { normalizePath } from "../path/index.ts"
 import { normalizeTableSchema } from "../tableSchema/index.ts"
@@ -9,7 +10,7 @@ export function normalizeDataset(
     basepath?: string
   },
 ) {
-  descriptor = globalThis.structuredClone(descriptor)
+  descriptor = copyDescriptor(descriptor)
 
   if (Array.isArray(descriptor.resources)) {
     // TODO: why resource is any here?

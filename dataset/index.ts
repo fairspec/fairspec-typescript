@@ -4,8 +4,8 @@ export {
   describeFile,
   getTempFilePath,
   inferBytes,
-  inferEncoding,
   inferHash,
+  inferTextual,
   isLocalPathExist,
   loadFile,
   prefetchFile,
@@ -15,21 +15,17 @@ export {
   writeTempFile,
 } from "./file/index.ts"
 export { getTempFolderPath } from "./folder/index.ts"
-export type { DatasetPlugin, SavePackageOptions } from "./plugin.ts"
+export type { DatasetPlugin, SaveDatasetOptions } from "./plugin.ts"
 export {
   CkanPlugin,
   loadPackageFromCkan,
   savePackageToCkan,
 } from "./plugins/ckan/index.ts"
-export {
-  DatahubPlugin,
-  loadPackageFromDatahub,
-} from "./plugins/datahub/index.ts"
 export { DescriptorPlugin } from "./plugins/descriptor/index.ts"
 export {
   FolderPlugin,
-  loadPackageFromFolder,
-  savePackageToFolder,
+  loadDatasetFromFolder,
+  saveDatasetToFolder,
 } from "./plugins/folder/index.ts"
 export {
   GithubPlugin,

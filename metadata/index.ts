@@ -52,7 +52,6 @@ export {
   ColumnError,
   ColumnMissingError,
   ColumnTypeError,
-  EncodingError,
   FairspecError,
   FileError,
   ForeignKeyError,
@@ -64,6 +63,7 @@ export {
   RowError,
   RowUniqueError,
   TableError,
+  TextualError,
 } from "./error/index.ts"
 export {
   inspectJsonValue,

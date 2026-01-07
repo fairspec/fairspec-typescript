@@ -24,6 +24,11 @@ export const Resource = Datacite.extend({
     "The format definition of the file. For multiple files the format property defines the format for all the files.",
   ),
 
+  textual: z
+    .boolean()
+    .optional()
+    .describe("Whether the resource is text-based."),
+
   integrity: Integrity.optional().describe(
     "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",
   ),

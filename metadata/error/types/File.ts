@@ -1,9 +1,11 @@
 import { z } from "zod"
 
-export const EncodingError = z.object({
-  type: z.literal("file/encoding").describe("Error type identifier"),
-  expectedEncoding: z.string().describe("The expected encoding format"),
-  actualEncoding: z.string().describe("The actual encoding format found"),
+export const TextualError = z.object({
+  type: z.literal("file/textual").describe("Error type identifier"),
+  actualEncoding: z
+    .string()
+    .optional()
+    .describe("The actual encoding format found"),
 })
 
 export const IntegrityError = z.object({
@@ -14,10 +16,10 @@ export const IntegrityError = z.object({
 })
 
 export const FileError = z.discriminatedUnion("type", [
-  EncodingError,
+  TextualError,
   IntegrityError,
 ])
 
-export type EncodingError = z.infer<typeof EncodingError>
+export type TextualError = z.infer<typeof TextualError>
 export type IntegrityError = z.infer<typeof IntegrityError>
 export type FileError = z.infer<typeof FileError>

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { writeTempFile } from "../file/index.ts"
 import * as fetchModule from "./fetch.ts"
-import { inferBytes, inferEncoding, inferHash } from "./infer.ts"
+import { inferBytes, inferHash, inferTextual } from "./infer.ts"
 
 vi.mock("./fetch.ts", () => ({
   prefetchFiles: vi.fn(),
@@ -139,26 +139,23 @@ describe("inferBytes", () => {
   })
 })
 
-describe("inferEncoding", () => {
-  it("should detect utf-8 encoding", async () => {
+describe("inferTextual", () => {
+  it("should return true for utf-8 text", async () => {
     const tempFilePath = await writeTempFile(
       "Hello, World! This is UTF-8 text.",
     )
 
-    const result = await inferEncoding({ data: tempFilePath })
-
-    expect(result).toBeDefined()
-    expect(["utf-8", "utf8", "ascii"]).toContain(result)
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
   })
 
-  it("should return undefined for binary files", async () => {
+  it("should return false for binary files", async () => {
     const tempFilePath = await writeTempFile(
       Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00]),
     )
 
-    const result = await inferEncoding({ data: tempFilePath })
-
-    expect(result).toBeUndefined()
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(false)
   })
 
   it("should use custom sample bytes", async () => {
@@ -166,74 +163,122 @@ describe("inferEncoding", () => {
       "This is a test file with UTF-8 content.",
     )
 
-    const result = await inferEncoding(
+    const result = await inferTextual(
       { data: tempFilePath },
       { sampleBytes: 20 },
     )
 
-    expect(result).toBeDefined()
+    expect(result).toBe(true)
   })
 
   it("should use custom confidence threshold", async () => {
     const tempFilePath = await writeTempFile("Sample text content")
 
-    const result = await inferEncoding(
+    const result = await inferTextual(
       { data: tempFilePath },
       {
         confidencePercent: 50,
       },
     )
 
-    expect(result).toBeDefined()
+    expect(result).toBe(true)
   })
 
   it("should handle large text files", async () => {
     const tempFilePath = await writeTempFile("Hello World! ".repeat(1000))
 
-    const result = await inferEncoding({ data: tempFilePath })
-
-    expect(result).toBeDefined()
-    expect(["utf-8", "utf8", "ascii"]).toContain(result)
-  })
-
-  it("should return encoding in lowercase", async () => {
-    const tempFilePath = await writeTempFile(
-      "Test content for encoding detection",
-    )
-
-    const result = await inferEncoding({ data: tempFilePath })
-
-    if (result) {
-      expect(result).toBe(result.toLowerCase())
-    }
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
   })
 
   it("should handle empty files", async () => {
     const tempFilePath = await writeTempFile("")
 
-    const result = await inferEncoding({ data: tempFilePath })
-
-    expect([undefined, "utf-8", "utf8", "ascii"]).toContain(result)
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
   })
 
   it("should handle files with special characters", async () => {
     const tempFilePath = await writeTempFile("Special: é, ñ, ü, ö, à")
 
-    const result = await inferEncoding({ data: tempFilePath })
-
-    expect(result).toBeDefined()
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
   })
 
-  it("should detect encoding with low confidence threshold", async () => {
+  it("should return true with low confidence threshold", async () => {
     const tempFilePath = await writeTempFile("Simple text")
 
-    const result = await inferEncoding(
+    const result = await inferTextual(
       { data: tempFilePath },
       {
         confidencePercent: 30,
       },
     )
 
-    expect(result).toBeDefined()
+    expect(result).toBe(true)
+  })
+
+  it("should return true for ascii text", async () => {
+    const buffer = Buffer.from("Simple ASCII text only", "ascii")
+    const tempFilePath = await writeTempFile(buffer)
+
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
+  })
+
+  it("should return true for utf-8 with non-ascii unicode characters", async () => {
+    const buffer = Buffer.from("Héllo, Wörld! 你好 مرحبا 🌍", "utf-8")
+    const tempFilePath = await writeTempFile(buffer)
+
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
+  })
+
+  it("should return true for files with cyrillic characters", async () => {
+    const buffer = Buffer.from("Привет мир", "utf-8")
+    const tempFilePath = await writeTempFile(buffer)
+
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
+  })
+
+  it("should return true for files with japanese characters", async () => {
+    const buffer = Buffer.from("こんにちは世界", "utf-8")
+    const tempFilePath = await writeTempFile(buffer)
+
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
+  })
+
+  it("should return true for files with arabic characters", async () => {
+    const buffer = Buffer.from("مرحبا بالعالم", "utf-8")
+    const tempFilePath = await writeTempFile(buffer)
+
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(true)
+  })
+
+  it("should return false for latin1 encoded file", async () => {
+    const buffer = Buffer.from([
+      0x43, 0x61, 0x66, 0xe9, 0x20, 0x72, 0xe9, 0x73, 0x75, 0x6d, 0xe9, 0x20,
+      0x6e, 0x61, 0xef, 0x76, 0x65, 0x20, 0xe0, 0x20, 0x50, 0x61, 0x72, 0x69,
+      0x73, 0x2e, 0x20, 0xc7, 0x61, 0x20, 0x63, 0x27, 0x65, 0x73, 0x74, 0x20,
+      0x62, 0x6f, 0x6e, 0x21,
+    ])
+    const tempFilePath = await writeTempFile(buffer)
+
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(false)
+  })
+
+  it("should return false for windows-1252 encoded file", async () => {
+    const buffer = Buffer.from([
+      0x43, 0x61, 0x66, 0xe9, 0x20, 0x6e, 0x61, 0xef, 0x76, 0x65, 0x20, 0x72,
+      0xe9, 0x73, 0x75, 0x6d, 0xe9,
+    ])
+    const tempFilePath = await writeTempFile(buffer)
+
+    const result = await inferTextual({ data: tempFilePath })
+    expect(result).toBe(false)
   })
 })

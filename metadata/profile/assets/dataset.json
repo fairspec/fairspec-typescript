@@ -47,7 +47,7 @@
         "name": { "$ref": "#/$defs/Name" },
         "data": { "$ref": "#/$defs/Data" },
         "format": { "$ref": "#/$defs/Format" },
-        "encoding": { "$ref": "#/$defs/Encoding" },
+        "textual": { "$ref": "#/$defs/Textual" },
         "integrity": { "$ref": "#/$defs/Integrity" },
         "jsonSchema": { "$ref": "#/$defs/JsonSchema" },
         "tableSchema": { "$ref": "#/$defs/TableSchema" },
@@ -100,7 +100,7 @@
     "TableSchema": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
-        { "$ref": "https://fairspec.org/profiles/latest/table.json" }
+        { "$ref": "https://fairspec.org/profiles/table.json" }
       ]
     },
     "PathData": {
@@ -134,8 +134,8 @@
       "type": "string",
       "pattern": "^https?://"
     },
-    "Encoding": {
-      "enum": ["utf-8", "ascii"]
+    "Textual": {
+      "type": "boolean"
     },
     "Format": {
       "allOf": [

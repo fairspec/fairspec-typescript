@@ -38,7 +38,7 @@ export async function inferHash(
   return hash
 }
 
-export async function inferEncoding(
+export async function inferTextual(
   resource: Partial<Resource>,
   options?: { sampleBytes?: number; confidencePercent?: number },
 ) {
@@ -47,20 +47,22 @@ export async function inferEncoding(
 
   const firstPath = getFirstPath(resource)
   if (!firstPath) {
-    return undefined
+    return false
   }
 
   const buffer = await loadFile(firstPath, { maxBytes })
   const isBinary = await isBinaryFile(buffer)
+  if (isBinary) {
+    return false
+  }
 
-  if (!isBinary) {
-    const matches = chardet.analyse(buffer)
-    for (const match of matches) {
-      if (match.confidence >= confidencePercent) {
-        return match.name.toLowerCase()
-      }
+  const matches = chardet.analyse(buffer)
+  for (const match of matches) {
+    if (match.confidence >= confidencePercent) {
+      const encoding = match.name.toLowerCase()
+      return ["utf-8", "ascii"].includes(encoding)
     }
   }
 
-  return undefined
+  return false
 }

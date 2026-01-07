@@ -1,14 +1,14 @@
 import { isRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
-import { loadPackageFromGithub } from "./package/load.ts"
+import { loadDatasetFromGithub } from "./dataset/load.ts"
 
 export class GithubPlugin implements DatasetPlugin {
-  async loadPackage(source: string) {
+  async loadDataset(source: string) {
     const isGithub = getIsGithub(source)
     if (!isGithub) return undefined
 
-    const dataPackage = await loadPackageFromGithub(source)
-    return dataPackage
+    const dataset = await loadDatasetFromGithub(source)
+    return dataset
   }
 }
 

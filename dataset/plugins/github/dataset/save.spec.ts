@@ -1,24 +1,25 @@
 import { relative } from "node:path"
-import type { Package } from "@fairspec/metadata"
-import { loadPackageDescriptor } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
+import { loadDatasetDescriptor } from "@fairspec/metadata"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { savePackageToGithub } from "./save.ts"
+import { saveDatasetToGithub } from "./save.ts"
 
-describe("savePackageToGithub", () => {
+describe("saveDatasetToGithub", () => {
   const getFixturePath = (name: string) =>
     relative(process.cwd(), `${import.meta.dirname}/fixtures/${name}`)
 
-  const mockPackage: Package = {
-    name: "test-package",
-    title: "Test Package",
-    description: "A test package",
-    version: "1.0.0",
+  const mockDataset: Dataset = {
+    $schema: "https://fairspec.org/profiles/latest/dataset.json",
+    titles: [{ title: "Test Dataset" }],
+    descriptions: [
+      {
+        description: "A test dataset",
+        descriptionType: "Abstract",
+      },
+    ],
     resources: [
       {
-        name: "test-resource",
-        path: getFixturePath("data.csv"),
-        format: "csv",
-        bytes: 100,
+        data: getFixturePath("data.csv"),
       },
     ],
   }
@@ -42,12 +43,12 @@ describe("savePackageToGithub", () => {
     vi.resetAllMocks()
   })
 
-  it.skip("should save a package", async () => {
-    const dataPackage = await loadPackageDescriptor(
-      "core/package/fixtures/package.json",
+  it.skip("should save a dataset", async () => {
+    const dataset = await loadDatasetDescriptor(
+      "core/dataset/fixtures/dataset.json",
     )
 
-    const result = await savePackageToGithub(dataPackage, {
+    const result = await saveDatasetToGithub(dataset, {
       apiKey: "<key>",
       repo: "test",
     })
@@ -109,14 +110,14 @@ describe("savePackageToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "datapackage.json",
-            path: "datapackage.json",
+            name: "fairspec.json",
+            path: "fairspec.json",
             sha: "def456",
           },
         }),
     })
 
-    const result = await savePackageToGithub(mockPackage, mockOptions)
+    const result = await saveDatasetToGithub(mockDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(3)
 
@@ -138,7 +139,7 @@ describe("savePackageToGithub", () => {
     expect(repoPayload.auto_init).toEqual(true)
 
     expect(result).toEqual({
-      path: "https://raw.githubusercontent.com/test-user/test-repo/refs/heads/main/dataPackage.json",
+      path: "https://raw.githubusercontent.com/test-user/test-repo/refs/heads/main/fairspec.json",
       repoUrl: "https://github.com/test-user/test-repo",
     })
   })
@@ -190,7 +191,7 @@ describe("savePackageToGithub", () => {
         }),
     })
 
-    await savePackageToGithub(mockPackage, {
+    await saveDatasetToGithub(mockDataset, {
       ...mockOptions,
       org: "test-org",
     })
@@ -256,14 +257,14 @@ describe("savePackageToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "datapackage.json",
-            path: "datapackage.json",
+            name: "fairspec.json",
+            path: "fairspec.json",
             sha: "def456",
           },
         }),
     })
 
-    await savePackageToGithub(mockPackage, mockOptions)
+    await saveDatasetToGithub(mockDataset, mockOptions)
 
     const fileUploadCall = fetchMock.mock.calls[1]
     expect(fileUploadCall).toBeDefined()
@@ -287,7 +288,7 @@ describe("savePackageToGithub", () => {
     expect(typeof filePayload.content).toEqual("string")
   })
 
-  it("uploads datapackage.json metadata file", async () => {
+  it("uploads fairspec.json metadata file", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: () =>
@@ -339,28 +340,28 @@ describe("savePackageToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "datapackage.json",
-            path: "datapackage.json",
+            name: "fairspec.json",
+            path: "fairspec.json",
             sha: "def456",
           },
         }),
     })
 
-    await savePackageToGithub(mockPackage, mockOptions)
+    await saveDatasetToGithub(mockDataset, mockOptions)
 
-    const datapackageUploadCall = fetchMock.mock.calls[2]
-    expect(datapackageUploadCall).toBeDefined()
-    if (!datapackageUploadCall) return
+    const datasetUploadCall = fetchMock.mock.calls[2]
+    expect(datasetUploadCall).toBeDefined()
+    if (!datasetUploadCall) return
 
-    expect(datapackageUploadCall[0]).toEqual(
-      "https://api.github.com/repos/test-user/test-repo/contents/datapackage.json",
+    expect(datasetUploadCall[0]).toEqual(
+      "https://api.github.com/repos/test-user/test-repo/contents/fairspec.json",
     )
 
-    const datapackagePayload = JSON.parse(datapackageUploadCall[1].body)
-    expect(datapackagePayload.path).toEqual("datapackage.json")
-    expect(datapackagePayload.message).toEqual('Added file "datapackage.json"')
-    expect(datapackagePayload.content).toBeDefined()
-    expect(typeof datapackagePayload.content).toEqual("string")
+    const datasetPayload = JSON.parse(datasetUploadCall[1].body)
+    expect(datasetPayload.path).toEqual("fairspec.json")
+    expect(datasetPayload.message).toEqual('Added file "fairspec.json"')
+    expect(datasetPayload.content).toBeDefined()
+    expect(typeof datasetPayload.content).toEqual("string")
   })
 
   it("passes API key as Bearer token in Authorization header", async () => {
@@ -397,7 +398,7 @@ describe("savePackageToGithub", () => {
         }),
     })
 
-    await savePackageToGithub(mockPackage, {
+    await saveDatasetToGithub(mockDataset, {
       ...mockOptions,
       apiKey: "custom-api-key",
     })
@@ -418,7 +419,7 @@ describe("savePackageToGithub", () => {
       text: () => Promise.resolve("Repository name already exists"),
     })
 
-    await expect(savePackageToGithub(mockPackage, mockOptions)).rejects.toThrow(
+    await expect(saveDatasetToGithub(mockDataset, mockOptions)).rejects.toThrow(
       "Github API error: 400 Bad Request",
     )
   })
@@ -465,24 +466,20 @@ describe("savePackageToGithub", () => {
       text: () => Promise.resolve("Failed to upload file"),
     })
 
-    await expect(savePackageToGithub(mockPackage, mockOptions)).rejects.toThrow(
+    await expect(saveDatasetToGithub(mockDataset, mockOptions)).rejects.toThrow(
       "Github API error: 500 Internal Server Error",
     )
   })
 
-  it("handles packages with multiple resources", async () => {
-    const multiResourcePackage: Package = {
-      ...mockPackage,
+  it("handles datasets with multiple resources", async () => {
+    const multiResourceDataset: Dataset = {
+      ...mockDataset,
       resources: [
         {
-          name: "resource-1",
-          path: getFixturePath("data.csv"),
-          format: "csv",
+          data: getFixturePath("data.csv"),
         },
         {
-          name: "resource-2",
-          path: getFixturePath("data.csv"),
-          format: "json",
+          data: getFixturePath("data.csv"),
         },
       ],
     }
@@ -521,7 +518,7 @@ describe("savePackageToGithub", () => {
         }),
     })
 
-    await savePackageToGithub(multiResourcePackage, mockOptions)
+    await saveDatasetToGithub(multiResourceDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(4)
 
@@ -532,9 +529,9 @@ describe("savePackageToGithub", () => {
     expect(secondFileUploadCall[0]).toContain("/contents/")
   })
 
-  it("handles packages with no resources", async () => {
-    const emptyPackage: Package = {
-      ...mockPackage,
+  it("handles datasets with no resources", async () => {
+    const emptyDataset: Dataset = {
+      ...mockDataset,
       resources: [],
     }
 
@@ -577,26 +574,25 @@ describe("savePackageToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "datapackage.json",
-            path: "datapackage.json",
+            name: "fairspec.json",
+            path: "fairspec.json",
             sha: "def456",
           },
         }),
     })
 
-    const result = await savePackageToGithub(emptyPackage, mockOptions)
+    const result = await saveDatasetToGithub(emptyDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(2)
     expect(result.repoUrl).toEqual("https://github.com/test-user/test-repo")
   })
 
   it("skips resources without path", async () => {
-    const packageWithoutPath: Package = {
-      ...mockPackage,
+    const datasetWithoutPath: Dataset = {
+      ...mockDataset,
       resources: [
         {
-          name: "resource-without-path",
-          format: "csv",
+          data: { key: "value" },
         },
       ],
     }
@@ -640,14 +636,14 @@ describe("savePackageToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "datapackage.json",
-            path: "datapackage.json",
+            name: "fairspec.json",
+            path: "fairspec.json",
             sha: "def456",
           },
         }),
     })
 
-    await savePackageToGithub(packageWithoutPath, mockOptions)
+    await saveDatasetToGithub(datasetWithoutPath, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })

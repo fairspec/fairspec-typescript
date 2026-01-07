@@ -1,106 +1,106 @@
-import type { Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import * as packageModule from "./package/load.ts"
+import * as datasetModule from "./dataset/load.ts"
 import { GithubPlugin } from "./plugin.ts"
 
-vi.mock("./package/load.ts", () => ({
-  loadPackageFromGithub: vi.fn(),
+vi.mock("./dataset/load.ts", () => ({
+  loadDatasetFromGithub: vi.fn(),
 }))
 
 describe("GithubPlugin", () => {
   let plugin: GithubPlugin
-  let mockLoadPackageFromGithub: ReturnType<typeof vi.fn>
+  let mockLoadDatasetFromGithub: ReturnType<typeof vi.fn>
 
   beforeEach(() => {
     plugin = new GithubPlugin()
-    mockLoadPackageFromGithub = vi.mocked(packageModule.loadPackageFromGithub)
+    mockLoadDatasetFromGithub = vi.mocked(datasetModule.loadDatasetFromGithub)
     vi.clearAllMocks()
   })
 
-  describe("loadPackage", () => {
-    it("should load package from github.com url", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+  describe("loadDataset", () => {
+    it("should load dataset from github.com url", async () => {
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ data: [] }],
       }
-      mockLoadPackageFromGithub.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromGithub.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://github.com/owner/repo/data",
       )
 
-      expect(mockLoadPackageFromGithub).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromGithub).toHaveBeenCalledWith(
         "https://github.com/owner/repo/data",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should return undefined for non-github urls", async () => {
-      const result = await plugin.loadPackage("https://example.com/data")
+      const result = await plugin.loadDataset("https://example.com/data")
 
-      expect(mockLoadPackageFromGithub).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromGithub).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should return undefined for local paths", async () => {
-      const result = await plugin.loadPackage("./data")
+      const result = await plugin.loadDataset("./data")
 
-      expect(mockLoadPackageFromGithub).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromGithub).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should return undefined for zenodo urls", async () => {
-      const result = await plugin.loadPackage("https://zenodo.org/record/123")
+      const result = await plugin.loadDataset("https://zenodo.org/record/123")
 
-      expect(mockLoadPackageFromGithub).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromGithub).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should handle github urls with paths", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ data: [] }],
       }
-      mockLoadPackageFromGithub.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromGithub.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://github.com/owner/repo/tree/main/data",
       )
 
-      expect(mockLoadPackageFromGithub).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromGithub).toHaveBeenCalledWith(
         "https://github.com/owner/repo/tree/main/data",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should handle github urls with query parameters", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ data: [] }],
       }
-      mockLoadPackageFromGithub.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromGithub.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://github.com/owner/repo?tab=readme",
       )
 
-      expect(mockLoadPackageFromGithub).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromGithub).toHaveBeenCalledWith(
         "https://github.com/owner/repo?tab=readme",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should return undefined for http non-github urls", async () => {
-      const result = await plugin.loadPackage("http://example.com/data")
+      const result = await plugin.loadDataset("http://example.com/data")
 
-      expect(mockLoadPackageFromGithub).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromGithub).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should return undefined for gitlab urls", async () => {
-      const result = await plugin.loadPackage("https://gitlab.com/owner/repo")
+      const result = await plugin.loadDataset("https://gitlab.com/owner/repo")
 
-      expect(mockLoadPackageFromGithub).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromGithub).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
   })

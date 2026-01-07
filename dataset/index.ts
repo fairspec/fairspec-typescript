@@ -29,8 +29,8 @@ export {
 } from "./plugins/folder/index.ts"
 export {
   GithubPlugin,
-  loadPackageFromGithub,
-  savePackageToGithub,
+  loadDatasetFromGithub,
+  saveDatasetToGithub,
 } from "./plugins/github/index.ts"
 export {
   loadPackageFromZenodo,
@@ -38,8 +38,8 @@ export {
   ZenodoPlugin,
 } from "./plugins/zenodo/index.ts"
 export {
-  loadPackageFromZip,
-  savePackageToZip,
+  loadDatasetFromZip,
+  saveDatasetToZip,
   ZipPlugin,
 } from "./plugins/zip/index.ts"
 export { loadFileStream } from "./stream/index.ts"

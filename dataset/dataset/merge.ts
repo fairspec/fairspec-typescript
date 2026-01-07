@@ -2,7 +2,7 @@ import type { Dataset } from "@fairspec/metadata"
 import { loadDatasetDescriptor } from "@fairspec/metadata"
 
 /**
- * Merges a system data package into a user data package if provided
+ * Merges a custom dataset into a user dataset if provided
  */
 export async function mergeDatasets(options: {
   systemDataset: Dataset

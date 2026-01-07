@@ -22,10 +22,14 @@ export async function validateDatasetMetadata(
 
   let dataset: Dataset | undefined
   if (report.valid) {
-    // Validation + normalization = we can cast it
-    dataset = normalizeDataset(descriptor, {
+    // Valid -> we can cast it
+    dataset = descriptor as Dataset
+  }
+
+  if (dataset) {
+    dataset = normalizeDataset(dataset, {
       basepath: options?.basepath,
-    }) as Dataset
+    })
   }
 
   if (dataset) {

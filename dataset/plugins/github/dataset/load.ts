@@ -1,15 +1,15 @@
-import { mergePackages } from "../../../package/index.ts"
-import { makeGithubApiRequest } from "../github/index.ts"
+import { mergeDatasets } from "../../../dataset/index.ts"
+import { makeGithubApiRequest } from "../platform/index.ts"
 import type { GithubResource } from "../resource/index.ts"
-import type { GithubPackage } from "./Package.ts"
-import { convertPackageFromGithub } from "./convert/fromGithub.ts"
+import type { GithubDataset } from "./Dataset.ts"
+import { convertDatasetFromGithub } from "./convert/fromGithub.ts"
 
 /**
  * Load a package from a Github repository
  * @param props Object containing the URL to the Github repository
- * @returns Package object
+ * @returns Dataset object
  */
-export async function loadPackageFromGithub(
+export async function loadDatasetFromGithub(
   repoUrl: string,
   options?: {
     apiKey?: string
@@ -23,26 +23,26 @@ export async function loadPackageFromGithub(
     throw new Error(`Failed to extract repository info from URL: ${repoUrl}`)
   }
 
-  const githubPackage = await makeGithubApiRequest<GithubPackage>({
+  const githubDataset = await makeGithubApiRequest<GithubDataset>({
     endpoint: `/repos/${owner}/${repo}`,
     apiKey,
   })
 
-  const ref = githubPackage.default_branch
-  githubPackage.resources = (
+  const ref = githubDataset.default_branch
+  githubDataset.resources = (
     await makeGithubApiRequest<{ tree: GithubResource[] }>({
       endpoint: `/repos/${owner}/${repo}/git/trees/${ref}?recursive=1`,
       apiKey,
     })
   ).tree
 
-  const systemPackage = convertPackageFromGithub(githubPackage)
-  const userPackagePath = systemPackage.resources
+  const systemDataset = convertDatasetFromGithub(githubDataset)
+  const userDatasetPath = systemDataset.resources
     .filter(resource => resource["github:key"] === "datapackage.json")
     .map(resource => resource["github:url"])
     .at(0)
 
-  const datapackage = await mergePackages({ systemPackage, userPackagePath })
+  const datapackage = await mergeDatasets({ systemDataset, userDatasetPath })
   datapackage.resources = datapackage.resources.map(resource => {
     // TODO: remove these keys completely
     return { ...resource, "github:key": undefined, "github:url": undefined }

@@ -3,7 +3,7 @@ import { GithubResource } from "../resource/index.ts"
 import { GithubLicense } from "./License.ts"
 import { GithubOwner } from "./Owner.ts"
 
-export const GithubPackage = z
+export const GithubDataset = z
   .object({
     id: z.number().describe("Repository identifier"),
     name: z.string().describe("Repository name"),
@@ -26,8 +26,11 @@ export const GithubPackage = z
     git_url: z.string(),
     ssh_url: z.string(),
     clone_url: z.string(),
-    resources: z.array(GithubResource).optional().describe("Repository resources"),
+    resources: z
+      .array(GithubResource)
+      .optional()
+      .describe("Repository resources"),
   })
   .describe("Github repository as a package")
 
-export type GithubPackage = z.infer<typeof GithubPackage>
+export type GithubDataset = z.infer<typeof GithubDataset>

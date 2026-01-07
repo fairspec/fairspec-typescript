@@ -2,69 +2,69 @@ import type { Contributor, License, Package } from "@fairspec/metadata"
 import { convertResourceFromGithub } from "../../resource/index.ts"
 import type { GithubPackage } from "../Package.ts"
 
-export function convertPackageFromGithub(
-  githubPackage: GithubPackage,
+export function convertDatasetFromGithub(
+  githubDataset: GithubPackage,
 ): Package {
-  const datapackage: Package = {
-    name: githubPackage.name,
+  const dataset: Package = {
+    name: githubDataset.name,
     resources: [],
   }
 
-  if (githubPackage.description) {
-    datapackage.description = githubPackage.description
+  if (githubDataset.description) {
+    dataset.description = githubDataset.description
   }
 
-  datapackage.title = githubPackage.full_name
+  dataset.title = githubDataset.full_name
 
-  if (githubPackage.homepage) {
-    datapackage.homepage = githubPackage.homepage
+  if (githubDataset.homepage) {
+    dataset.homepage = githubDataset.homepage
   }
 
-  if (githubPackage.license) {
+  if (githubDataset.license) {
     const license: License = {
-      name: githubPackage.license.spdx_id || githubPackage.license.key,
+      name: githubDataset.license.spdx_id || githubDataset.license.key,
     }
 
-    if (githubPackage.license.name) {
-      license.title = githubPackage.license.name
+    if (githubDataset.license.name) {
+      license.title = githubDataset.license.name
     }
 
-    if (githubPackage.license.url) {
-      license.path = githubPackage.license.url
+    if (githubDataset.license.url) {
+      license.path = githubDataset.license.url
     }
 
-    datapackage.licenses = [license]
+    dataset.licenses = [license]
   }
 
-  if (githubPackage.owner) {
+  if (githubDataset.owner) {
     const contributor: Contributor = {
-      title: githubPackage.owner.login,
+      title: githubDataset.owner.login,
       role:
-        githubPackage.owner.type === "Organization" ? "publisher" : "author",
-      path: githubPackage.owner.html_url,
+        githubDataset.owner.type === "Organization" ? "publisher" : "author",
+      path: githubDataset.owner.html_url,
     }
 
-    datapackage.contributors = [contributor]
+    dataset.contributors = [contributor]
   }
 
-  if (githubPackage.resources && githubPackage.resources.length > 0) {
-    datapackage.resources = githubPackage.resources
+  if (githubDataset.resources && githubDataset.resources.length > 0) {
+    dataset.resources = githubDataset.resources
       .filter(resource => !resource.path.startsWith("."))
       .filter(resource => resource.type === "blob")
       .map(resource =>
         convertResourceFromGithub(resource, {
-          defaultBranch: githubPackage.default_branch,
+          defaultBranch: githubDataset.default_branch,
         }),
       )
   }
 
-  if (githubPackage.topics && githubPackage.topics.length > 0) {
-    datapackage.keywords = githubPackage.topics
+  if (githubDataset.topics && githubDataset.topics.length > 0) {
+    dataset.keywords = githubDataset.topics
   }
 
-  if (githubPackage.created_at) {
-    datapackage.created = githubPackage.created_at
+  if (githubDataset.created_at) {
+    dataset.created = githubDataset.created_at
   }
 
-  return datapackage
+  return dataset
 }

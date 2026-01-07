@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { getFileName, isRemotePath } from "./general.ts"
+import { getFileExtension, getFileName, isRemotePath } from "./general.ts"
 
 describe("isRemotePath", () => {
   it.each([
@@ -108,5 +108,51 @@ describe("getFileName", () => {
     },
   ])("$description", ({ path, filename }) => {
     expect(getFileName(path)).toEqual(filename)
+  })
+})
+
+describe("getFileExtension", () => {
+  it("infers format from single string path", () => {
+    expect(getFileExtension("/data/users.csv")).toBe("csv")
+  })
+
+  it("infers format from URL path", () => {
+    expect(getFileExtension("https://example.com/data/products.json")).toBe(
+      "json",
+    )
+  })
+
+  it("returns lowercase format", () => {
+    expect(getFileExtension("/data/file.CSV")).toBe("csv")
+  })
+
+  it("returns format name even for unsupported extensions", () => {
+    expect(getFileExtension("/data/file.tar.gz")).toBe("gz")
+  })
+
+  it("returns undefined when path has no extension", () => {
+    expect(getFileExtension("/data/file")).toBeUndefined()
+  })
+
+  it("returns undefined when filename cannot be determined", () => {
+    expect(getFileExtension("/data/folder/")).toBeUndefined()
+  })
+
+  it("handles multiple extensions", () => {
+    expect(getFileExtension("/data/file.backup.csv")).toBe("csv")
+  })
+
+  it("handles hidden files with extension", () => {
+    expect(getFileExtension("/data/.gitignore")).toBe("gitignore")
+  })
+
+  it("handles URL with query parameters", () => {
+    expect(getFileExtension("https://example.com/file.json?key=value")).toBe(
+      "json",
+    )
+  })
+
+  it("handles URL with hash", () => {
+    expect(getFileExtension("https://example.com/file.pdf#page=1")).toBe("pdf")
   })
 })

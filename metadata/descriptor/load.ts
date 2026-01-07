@@ -1,5 +1,5 @@
 import { node } from "../platform/index.ts"
-import { getProtocolName, isRemotePath } from "../path/index.ts"
+import { getFileProtocol, isRemotePath } from "../path/index.ts"
 import { parseDescriptor } from "./parse.ts"
 
 /**
@@ -37,7 +37,7 @@ async function loadLocalDescriptor(path: string) {
 async function loadRemoteDescriptor(path: string) {
   const url = new URL(path)
 
-  const protocol = getProtocolName(path)
+  const protocol = getFileProtocol(path)
   if (!["http", "https"].includes(protocol)) {
     throw new Error(`Unsupported remote protocol: ${protocol}`)
   }

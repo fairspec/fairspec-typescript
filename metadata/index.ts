@@ -74,9 +74,10 @@ export {
 export {
   denormalizePath,
   getBasepath,
+  getFileExtension,
   getFileName,
   getFileNameSlug,
-  getFormatName,
+  getFileProtocol,
   isRemotePath,
   resolveBasepath,
 } from "./path/index.ts"
@@ -86,7 +87,6 @@ export {
   getFirstDataPath,
   getJsonData,
   getPathData,
-  inferFormatName,
   inferResourceName,
   isRemoteResource,
   JsonData,

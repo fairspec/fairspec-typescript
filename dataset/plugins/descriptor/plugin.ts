@@ -1,6 +1,6 @@
 import type { Dataset } from "@fairspec/metadata"
 import {
-  inferFormatName,
+  getFileExtension,
   isRemotePath,
   loadDatasetDescriptor,
   saveDatasetDescriptor,
@@ -35,6 +35,6 @@ export class DescriptorPlugin implements DatasetPlugin {
 
 async function getIsLocalJson(path: string) {
   const isRemote = isRemotePath(path)
-  const format = inferFormatName({ data: path })
-  return !isRemote && format === "json"
+  const extension = getFileExtension(path)
+  return !isRemote && extension === "json"
 }

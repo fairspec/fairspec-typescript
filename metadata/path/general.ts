@@ -2,8 +2,8 @@ import slugify from "@sindresorhus/slugify"
 import { node } from "../platform/index.ts"
 
 export function isRemotePath(path: string) {
-  const protocolName = getProtocolName(path)
-  return protocolName !== "file"
+  const protocol = getFileProtocol(path)
+  return protocol !== "file"
 }
 
 export function getFileNameSlug(path: string) {
@@ -20,7 +20,7 @@ export function getFileNameSlug(path: string) {
   return slugify(basename, { separator: "_" })
 }
 
-export function getProtocolName(path: string) {
+export function getFileProtocol(path: string) {
   try {
     const url = new URL(path)
     const protocolName = url.protocol.replace(":", "")
@@ -36,7 +36,7 @@ export function getProtocolName(path: string) {
   }
 }
 
-export function getFormatName(path: string) {
+export function getFileExtension(path: string) {
   const fileName = getFileName(path)
   return fileName?.split(".").slice(-1)[0]?.toLowerCase()
 }

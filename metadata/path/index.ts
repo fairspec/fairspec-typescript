@@ -1,10 +1,10 @@
 export { getBasepath, resolveBasepath } from "./basepath.ts"
 export { denormalizePath } from "./denormalize.ts"
 export {
+  getFileExtension,
   getFileName,
   getFileNameSlug,
-  getFormatName,
-  getProtocolName,
+  getFileProtocol,
   isRemotePath,
 } from "./general.ts"
 export { normalizePath } from "./normalize.ts"

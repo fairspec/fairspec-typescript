@@ -1,32 +1,29 @@
 import { Buffer } from "node:buffer"
 import { writeFile } from "node:fs/promises"
 import type { Readable } from "node:stream"
-import type { Descriptor, Package } from "@fairspec/metadata"
-import {
-  convertPackageToDescriptor,
-  stringifyDescriptor,
-} from "@fairspec/metadata"
+import type { Dataset, Descriptor } from "@fairspec/metadata"
+import { denormalizeDataset, stringifyDescriptor } from "@fairspec/metadata"
 import { zip } from "fflate"
+import { getDatasetBasepath } from "../../../dataset/index.ts"
 import { assertLocalPathVacant } from "../../../file/index.ts"
-import { getPackageBasepath } from "../../../package/index.ts"
 import { saveResourceFiles } from "../../../resource/index.ts"
 import { loadFileStream } from "../../../stream/index.ts"
 
-export async function savePackageToZip(
-  dataPackage: Package,
+export async function saveDatasetToZip(
+  dataset: Dataset,
   options: {
     archivePath: string
     withRemote?: boolean
   },
 ) {
   const { archivePath, withRemote } = options
-  const basepath = getPackageBasepath(dataPackage)
+  const basepath = getDatasetBasepath(dataset)
 
   await assertLocalPathVacant(archivePath)
   const files: Record<string, Uint8Array> = {}
 
   const resourceDescriptors: Descriptor[] = []
-  for (const resource of dataPackage.resources) {
+  for (const resource of dataset.resources ?? []) {
     resourceDescriptors.push(
       await saveResourceFiles(resource, {
         basepath,
@@ -43,11 +40,11 @@ export async function savePackageToZip(
   }
 
   const descriptor = {
-    ...convertPackageToDescriptor(dataPackage, { basepath }),
+    ...denormalizeDataset(dataset, { basepath }),
     resources: resourceDescriptors,
   }
 
-  files["datapackage.json"] = Buffer.from(stringifyDescriptor(descriptor))
+  files["fairspec.json"] = Buffer.from(stringifyDescriptor(descriptor))
 
   const zipData = await new Promise<Uint8Array>((resolve, reject) => {
     zip(files, (err, data) => {

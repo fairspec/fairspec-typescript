@@ -1,11 +1,11 @@
 import { readFile, writeFile } from "node:fs/promises"
 import { mkdir } from "node:fs/promises"
 import { dirname, join } from "node:path"
-import { loadPackageDescriptor } from "@fairspec/metadata"
+import { loadDatasetDescriptor } from "@fairspec/metadata"
 import { getTempFolderPath } from "../../../folder/index.ts"
 import { unzip } from "fflate"
 
-export async function loadPackageFromZip(archivePath: string) {
+export async function loadDatasetFromZip(archivePath: string) {
   const basepath = getTempFolderPath()
   const zipData = await readFile(archivePath)
 
@@ -30,9 +30,9 @@ export async function loadPackageFromZip(archivePath: string) {
     await writeFile(path, data)
   }
 
-  const dataPackage = await loadPackageDescriptor(
-    join(basepath, "datapackage.json"),
+  const dataset = await loadDatasetDescriptor(
+    join(basepath, "fairspec.json"),
   )
 
-  return dataPackage
+  return dataset
 }

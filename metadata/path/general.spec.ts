@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest"
-import { getFileExtension, getFileName, isRemotePath } from "./general.ts"
+import {
+  getFileExtension,
+  getFileName,
+  getFileNameSlug,
+  isRemotePath,
+} from "./general.ts"
 
 describe("isRemotePath", () => {
   it.each([
@@ -122,8 +127,8 @@ describe("getFileExtension", () => {
     )
   })
 
-  it("returns lowercase format", () => {
-    expect(getFileExtension("/data/file.CSV")).toBe("csv")
+  it("preserve extension case", () => {
+    expect(getFileExtension("/data/file.CSV")).toBe("CSV")
   })
 
   it("returns format name even for unsupported extensions", () => {
@@ -143,7 +148,7 @@ describe("getFileExtension", () => {
   })
 
   it("handles hidden files with extension", () => {
-    expect(getFileExtension("/data/.gitignore")).toBe("gitignore")
+    expect(getFileExtension("/data/.gitignore")).toBeUndefined()
   })
 
   it("handles URL with query parameters", () => {
@@ -154,5 +159,61 @@ describe("getFileExtension", () => {
 
   it("handles URL with hash", () => {
     expect(getFileExtension("https://example.com/file.pdf#page=1")).toBe("pdf")
+  })
+})
+
+describe("getFileNameSlug", () => {
+  it("returns slugified basename from single string path", () => {
+    expect(getFileNameSlug("/data/users.csv")).toBe("users")
+  })
+
+  it("returns slugified basename from URL path", () => {
+    expect(getFileNameSlug("https://example.com/data/products.json")).toBe(
+      "products",
+    )
+  })
+
+  it("returns undefined when path has no filename", () => {
+    expect(getFileNameSlug("/data/folder/")).toBeUndefined()
+  })
+
+  it("handles complex filename with multiple dots", () => {
+    expect(getFileNameSlug("/data/file.backup.csv")).toBe("file_backup")
+  })
+
+  it("slugifies filename with spaces and special characters", () => {
+    expect(getFileNameSlug("/data/My Data File!.csv")).toBe("my_data_file")
+  })
+
+  it("returns undefined for empty string", () => {
+    expect(getFileNameSlug("")).toBeUndefined()
+  })
+
+  it("handles simple filename without directory", () => {
+    expect(getFileNameSlug("document.txt")).toBe("document")
+  })
+
+  it("handles URL with query parameters", () => {
+    expect(getFileNameSlug("https://example.com/file.json?key=value")).toBe(
+      "file",
+    )
+  })
+
+  it("handles URL with hash", () => {
+    expect(getFileNameSlug("https://example.com/report.pdf#page=1")).toBe(
+      "report",
+    )
+  })
+
+  it("handles hidden files", () => {
+    expect(getFileNameSlug("/data/.gitignore")).toBe("gitignore")
+  })
+
+  it("slugifies uppercase letters to lowercase", () => {
+    expect(getFileNameSlug("/data/MyDocument.PDF")).toBe("my_document")
+  })
+
+  it("replaces hyphens with underscores", () => {
+    expect(getFileNameSlug("/data/my-file-name.csv")).toBe("my_file_name")
   })
 })

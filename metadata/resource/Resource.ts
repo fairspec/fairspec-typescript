@@ -46,6 +46,12 @@ export const Resource = Datacite.extend({
     .describe(
       "A path to a Table Schema or an object with the Table Schema. The Table Schema must be compatible with the Fairspec Table specification.",
     ),
+
+  // TODO: remove temporary solution for dataset plugins
+  unstable_customMetadata: z
+    .record(z.string(), z.unknown())
+    .optional()
+    .describe("Custom properties for extending resources"),
 })
 
 export type Resource = z.infer<typeof Resource>

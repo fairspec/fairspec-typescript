@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getFilename, getFormat, getName } from "@fairspec/metadata"
+import { getFileNameSlug } from "@fairspec/metadata"
 import type { GithubResource } from "../Resource.ts"
 
 export function convertResourceFromGithub(
@@ -13,15 +13,17 @@ export function convertResourceFromGithub(
     ref: options.defaultBranch,
   })
 
-  const filename = getFilename(path)
   const resource: Resource = {
-    path,
-    name: getName(filename) ?? githubResource.sha,
-    bytes: githubResource.size,
-    hash: `sha1:${githubResource.sha}`,
-    format: getFormat(filename),
-    "github:key": githubResource.path,
-    "github:url": path,
+    data: path,
+    name: getFileNameSlug(path) ?? githubResource.sha,
+    integrity: {
+      type: "sha1",
+      hash: githubResource.sha,
+    },
+    unstable_customMetadata: {
+      githubKey: githubResource.path,
+      githubUrl: path,
+    },
   }
 
   return resource

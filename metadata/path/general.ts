@@ -6,18 +6,31 @@ export function isRemotePath(path: string) {
   return protocol !== "file"
 }
 
-export function getFileNameSlug(path: string) {
-  const fileName = getFileName(path)
-  if (!fileName) {
-    return undefined
+export function getFileName(path: string) {
+  const isRemote = isRemotePath(path)
+
+  if (isRemote) {
+    const pathname = new URL(path).pathname
+    const fileName = pathname.split("/").slice(-1)[0]
+    return fileName?.includes(".") ? fileName : undefined
   }
 
-  const basename = fileName.split(".")[0]
+  if (!node) {
+    throw new Error("File system is not supported in this environment")
+  }
+
+  const resolvedPath = node.path.resolve(path)
+  const fileName = node.path.parse(resolvedPath).base
+  return fileName?.includes(".") ? fileName : undefined
+}
+
+export function getFileNameSlug(path: string) {
+  const basename = getFileBasename(path)
   if (!basename) {
     return undefined
   }
 
-  return slugify(basename, { separator: "_" })
+  return slugify(basename, { separator: "_" }).replace(/[^a-zA-Z0-9_]/g, "")
 }
 
 export function getFileProtocol(path: string) {
@@ -38,23 +51,12 @@ export function getFileProtocol(path: string) {
 
 export function getFileExtension(path: string) {
   const fileName = getFileName(path)
-  return fileName?.split(".").slice(-1)[0]?.toLowerCase()
+  const extension = fileName?.split(".").slice(-1)[0]
+  return fileName !== `.${extension}` ? extension : undefined
 }
 
-export function getFileName(path: string) {
-  const isRemote = isRemotePath(path)
-
-  if (isRemote) {
-    const pathname = new URL(path).pathname
-    const fileName = pathname.split("/").slice(-1)[0]
-    return fileName?.includes(".") ? fileName : undefined
-  }
-
-  if (!node) {
-    throw new Error("File system is not supported in this environment")
-  }
-
-  const resolvedPath = node.path.resolve(path)
-  const fileName = node.path.parse(resolvedPath).base
-  return fileName?.includes(".") ? fileName : undefined
+export function getFileBasename(path: string) {
+  const fileName = getFileName(path)
+  const extension = getFileExtension(path)
+  return extension ? fileName?.replace(`.${extension}`, "") : fileName
 }

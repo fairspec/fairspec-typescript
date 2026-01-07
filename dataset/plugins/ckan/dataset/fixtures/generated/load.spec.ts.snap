@@ -1,15 +1,27 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`loadPackageFromCkan > should load a package 1`] = `
+exports[`loadDatasetFromCkan > should load a package 1`] = `
 {
-  "contributors": [
+  "$schema": "https://fairspec.org/profiles/latest/dataset.json",
+  "creators": [
     {
-      "role": "author",
-      "title": "Natural History Museum",
+      "name": "Natural History Museum",
+      "nameType": "Personal",
     },
   ],
-  "created": "2022-03-29T17:19:40.385253",
-  "description": "The records in this dataset provide a high-level summary of the Natural History Museum's collection and encompass the material managed by its Life Sciences, Earth Sciences and Library & Archives departments. The data has been gathered, structured and published with the intention of providing some level of visibility into the scope, nature and composition of the Museum's holdings, the majority of which have yet to be digitised. The 2,800+ records in this dataset represent the majority of the NHM collection, approximately 78 million items, and should be treated as an index or discovery tool: they are an indicative view of the Museum's holdings, a source of high-level figures and a signpost towards the relevant curatorial team to contact for more in-depth information.
+  "dates": [
+    {
+      "date": "2022-03-29T17:19:40.385253",
+      "dateType": "Created",
+    },
+    {
+      "date": "2025-04-29T14:13:19.793337",
+      "dateType": "Updated",
+    },
+  ],
+  "descriptions": [
+    {
+      "description": "The records in this dataset provide a high-level summary of the Natural History Museum's collection and encompass the material managed by its Life Sciences, Earth Sciences and Library & Archives departments. The data has been gathered, structured and published with the intention of providing some level of visibility into the scope, nature and composition of the Museum's holdings, the majority of which have yet to be digitised. The 2,800+ records in this dataset represent the majority of the NHM collection, approximately 78 million items, and should be treated as an index or discovery tool: they are an indicative view of the Museum's holdings, a source of high-level figures and a signpost towards the relevant curatorial team to contact for more in-depth information.
  
 ## Descriptive fields
  
@@ -32,230 +44,257 @@ The criteria underpinning collection units and the methodology by which they are
 - [Archives Catalogues](https://www.nhm.ac.uk/CalmView/default.aspx)
 - [Specimen-level collection dataset](https://doi.org/10.5519/0002965)
 - [Join the Dots: assessing a collection of 80 million items at The Natural History Museum, London, 2022](https://www.tandfonline.com/doi/full/10.1080/09647775.2021.2023900) - currently paywalled: contact the dataset curator for a copy",
-  "keywords": [
-    "collection descriptions",
-    "collections assessment",
-    "curation",
-    "natural history collections",
-  ],
-  "licenses": [
-    {
-      "name": "odc-by",
-      "path": "http://www.opendefinition.org/licenses/odc-by",
-      "title": "Open Data Commons Attribution License",
+      "descriptionType": "Abstract",
     },
   ],
-  "name": "join-the-dots-collection-level-descriptions",
   "resources": [
     {
-      "bytes": 896648,
-      "ckan:key": undefined,
-      "ckan:url": undefined,
-      "description": "Collection-level records describing the holdings of the Natural History Museum as of April 2025. See the dataset description and the other resources in this repository for more detail on navigating and interpreting this data:
+      "data": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/660de433-447b-40ad-9aaf-77c98f8c2ba9/download/jtd_cld_public_dataset_20250425.csv",
+      "dates": [
+        {
+          "date": "2022-03-29T17:27:59.198498",
+          "dateType": "Created",
+        },
+        {
+          "date": "2025-04-29T14:13:19.775868",
+          "dateType": "Updated",
+        },
+      ],
+      "descriptions": [
+        {
+          "description": "Collection-level records describing the holdings of the Natural History Museum as of April 2025. See the dataset description and the other resources in this repository for more detail on navigating and interpreting this data:
 
 - [Data dictionary](https://data.nhm.ac.uk/dataset/join-the-dots-collection-level-descriptions/resource/09b2f07b-9e77-44b7-8645-ddcba1266629)
 - [Join the Dots user manual](https://data.nhm.ac.uk/dataset/join-the-dots-collection-level-descriptions/resource/6920d9c9-6ea4-415c-95c8-54512a70346c)
   ",
-      "format": "csv",
-      "mediatype": "text/csv",
+          "descriptionType": "Abstract",
+        },
+      ],
       "name": "jtd_collection-level_records",
-      "path": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/660de433-447b-40ad-9aaf-77c98f8c2ba9/download/jtd_cld_public_dataset_20250425.csv",
-      "schema": {
-        "fields": [
-          {
-            "name": "Collection unit ID",
+      "sizes": [
+        "896648 bytes",
+      ],
+      "tableSchema": {
+        "$schema": "https://fairspec.org/profiles/latest/table.json",
+        "properties": {
+          "Bibliographic level": {
+            "type": "string",
+          },
+          "C1: Physical accessibility": {
             "type": "number",
           },
-          {
-            "name": "Department",
+          "Collection unit ID": {
+            "type": "number",
+          },
+          "Collection unit name": {
             "type": "string",
           },
-          {
-            "name": "Division",
+          "Curatorial unit count": {
+            "type": "number",
+          },
+          "Curatorial unit count confidence": {
             "type": "string",
           },
-          {
-            "name": "Section",
+          "Curatorial unit type": {
             "type": "string",
           },
-          {
-            "name": "Collection unit name",
+          "Department": {
             "type": "string",
           },
-          {
-            "name": "Taxon",
+          "Division": {
             "type": "string",
           },
-          {
-            "name": "Taxon rank",
+          "Earliest geological period": {
             "type": "string",
           },
-          {
-            "name": "Taxon ID",
+          "Fond reference": {
             "type": "string",
           },
-          {
-            "name": "Taxon ID source",
+          "Geographic origin": {
             "type": "string",
           },
-          {
-            "name": "Informal taxon",
+          "I1: Digitisation": {
+            "type": "number",
+          },
+          "I2: Identification": {
+            "type": "number",
+          },
+          "I4: Development potential": {
+            "type": "number",
+          },
+          "Informal taxon": {
             "type": "string",
           },
-          {
-            "name": "Type collection",
+          "Item count": {
+            "type": "number",
+          },
+          "Item count confidence": {
+            "type": "string",
+          },
+          "Item type": {
+            "type": "string",
+          },
+          "Latest geological period": {
+            "type": "string",
+          },
+          "O1: Education suitability": {
+            "type": "number",
+          },
+          "O3: Exhibition suitability": {
+            "type": "number",
+          },
+          "Preservation method": {
+            "type": "string",
+          },
+          "Reporting count": {
+            "type": "number",
+          },
+          "Reporting metric used": {
+            "type": "string",
+          },
+          "S1: Strategy/mission/research": {
+            "type": "number",
+          },
+          "S2: Scope and depth": {
+            "type": "number",
+          },
+          "S3: Significance by comparison": {
+            "type": "number",
+          },
+          "S4: Usage": {
+            "type": "number",
+          },
+          "Section": {
+            "type": "string",
+          },
+          "Taxon": {
+            "type": "string",
+          },
+          "Taxon ID": {
+            "type": "string",
+          },
+          "Taxon ID source": {
+            "type": "string",
+          },
+          "Taxon rank": {
+            "type": "string",
+          },
+          "Type collection": {
             "type": "boolean",
           },
-          {
-            "name": "Geographic origin",
-            "type": "string",
-          },
-          {
-            "name": "Earliest geological period",
-            "type": "string",
-          },
-          {
-            "name": "Latest geological period",
-            "type": "string",
-          },
-          {
-            "name": "Item type",
-            "type": "string",
-          },
-          {
-            "name": "Preservation method",
-            "type": "string",
-          },
-          {
-            "name": "Curatorial unit type",
-            "type": "string",
-          },
-          {
-            "name": "Bibliographic level",
-            "type": "string",
-          },
-          {
-            "name": "Fond reference",
-            "type": "string",
-          },
-          {
-            "name": "Reporting count",
-            "type": "number",
-          },
-          {
-            "name": "Reporting metric used",
-            "type": "string",
-          },
-          {
-            "name": "Item count",
-            "type": "number",
-          },
-          {
-            "name": "Item count confidence",
-            "type": "string",
-          },
-          {
-            "name": "Curatorial unit count",
-            "type": "number",
-          },
-          {
-            "name": "Curatorial unit count confidence",
-            "type": "string",
-          },
-          {
-            "name": "C1: Physical accessibility",
-            "type": "number",
-          },
-          {
-            "name": "S1: Strategy/mission/research",
-            "type": "number",
-          },
-          {
-            "name": "S2: Scope and depth",
-            "type": "number",
-          },
-          {
-            "name": "S3: Significance by comparison",
-            "type": "number",
-          },
-          {
-            "name": "S4: Usage",
-            "type": "number",
-          },
-          {
-            "name": "I1: Digitisation",
-            "type": "number",
-          },
-          {
-            "name": "I2: Identification",
-            "type": "number",
-          },
-          {
-            "name": "I4: Development potential",
-            "type": "number",
-          },
-          {
-            "name": "O1: Education suitability",
-            "type": "number",
-          },
-          {
-            "name": "O3: Exhibition suitability",
-            "type": "number",
-          },
-        ],
+        },
       },
-      "type": "table",
+      "unstable_customMetadata": {
+        "ckanId": "660de433-447b-40ad-9aaf-77c98f8c2ba9",
+        "ckanKey": "jtd_cld_public_dataset_20250425.csv",
+        "ckanUrl": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/660de433-447b-40ad-9aaf-77c98f8c2ba9/download/jtd_cld_public_dataset_20250425.csv",
+      },
     },
     {
-      "bytes": 5868,
-      "ckan:key": undefined,
-      "ckan:url": undefined,
-      "description": "Description of the fields found in [JtD collection-level records](https://data.nhm.ac.uk/dataset/join-the-dots-collection-level-descriptions/resource/660de433-447b-40ad-9aaf-77c98f8c2ba9)",
-      "format": "csv",
-      "mediatype": "text/csv",
+      "data": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/09b2f07b-9e77-44b7-8645-ddcba1266629/download/jtd-collection-level-records-data-dictionary.csv",
+      "dates": [
+        {
+          "date": "2022-04-01T15:30:41.146689",
+          "dateType": "Created",
+        },
+        {
+          "date": "2022-04-01T16:22:52.158232",
+          "dateType": "Updated",
+        },
+      ],
+      "descriptions": [
+        {
+          "description": "Description of the fields found in [JtD collection-level records](https://data.nhm.ac.uk/dataset/join-the-dots-collection-level-descriptions/resource/660de433-447b-40ad-9aaf-77c98f8c2ba9)",
+          "descriptionType": "Abstract",
+        },
+      ],
       "name": "data_dictionary",
-      "path": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/09b2f07b-9e77-44b7-8645-ddcba1266629/download/jtd-collection-level-records-data-dictionary.csv",
-      "schema": {
-        "fields": [
-          {
-            "name": "fieldname",
+      "sizes": [
+        "5868 bytes",
+      ],
+      "tableSchema": {
+        "$schema": "https://fairspec.org/profiles/latest/table.json",
+        "properties": {
+          "Documentation reference": {
             "type": "string",
           },
-          {
-            "name": "description",
+          "constraints": {
             "type": "string",
           },
-          {
-            "name": "datatype",
+          "datatype": {
             "type": "string",
           },
-          {
-            "name": "constraints",
+          "description": {
             "type": "string",
           },
-          {
-            "name": "nullable",
+          "fieldname": {
+            "type": "string",
+          },
+          "nullable": {
             "type": "boolean",
           },
-          {
-            "name": "Documentation reference",
-            "type": "string",
-          },
-        ],
+        },
       },
-      "type": "table",
+      "unstable_customMetadata": {
+        "ckanId": "09b2f07b-9e77-44b7-8645-ddcba1266629",
+        "ckanKey": "jtd-collection-level-records-data-dictionary.csv",
+        "ckanUrl": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/09b2f07b-9e77-44b7-8645-ddcba1266629/download/jtd-collection-level-records-data-dictionary.csv",
+      },
     },
     {
-      "bytes": 8108818,
-      "ckan:key": undefined,
-      "ckan:url": undefined,
-      "description": "Documentation produced for NHM staff in 2018: a thorough overview of the Join the Dots data, processes and rationale. Some elements of the JtD framework have been amended slightly since this document was assembled, but it remains a useful reference for navigating the collection-level dataset presented in this package. ",
-      "format": "pdf",
-      "mediatype": "application/pdf",
+      "data": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/6920d9c9-6ea4-415c-95c8-54512a70346c/download/join-the-dots-user-manual.pdf",
+      "dates": [
+        {
+          "date": "2022-04-01T12:24:09.228702",
+          "dateType": "Created",
+        },
+        {
+          "date": "2022-04-01T12:24:09.178476",
+          "dateType": "Updated",
+        },
+      ],
+      "descriptions": [
+        {
+          "description": "Documentation produced for NHM staff in 2018: a thorough overview of the Join the Dots data, processes and rationale. Some elements of the JtD framework have been amended slightly since this document was assembled, but it remains a useful reference for navigating the collection-level dataset presented in this package. ",
+          "descriptionType": "Abstract",
+        },
+      ],
       "name": "join_the_dots_user_manual",
-      "path": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/6920d9c9-6ea4-415c-95c8-54512a70346c/download/join-the-dots-user-manual.pdf",
+      "sizes": [
+        "8108818 bytes",
+      ],
+      "unstable_customMetadata": {
+        "ckanId": "6920d9c9-6ea4-415c-95c8-54512a70346c",
+        "ckanKey": "join-the-dots-user-manual.pdf",
+        "ckanUrl": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/6920d9c9-6ea4-415c-95c8-54512a70346c/download/join-the-dots-user-manual.pdf",
+      },
     },
   ],
-  "title": "Join the Dots collection-level descriptions",
+  "rightsList": [
+    {
+      "rights": "Open Data Commons Attribution License",
+      "rightsIdentifier": "odc-by",
+      "rightsUri": "http://www.opendefinition.org/licenses/odc-by",
+    },
+  ],
+  "subjects": [
+    {
+      "subject": "collection descriptions",
+    },
+    {
+      "subject": "collections assessment",
+    },
+    {
+      "subject": "curation",
+    },
+    {
+      "subject": "natural history collections",
+    },
+  ],
+  "titles": [
+    {
+      "title": "Join the Dots collection-level descriptions",
+    },
+  ],
 }
 `;

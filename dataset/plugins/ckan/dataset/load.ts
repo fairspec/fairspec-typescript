@@ -1,26 +1,26 @@
-import { mergePackages } from "../../../package/index.ts"
-import { makeCkanApiRequest } from "../ckan/index.ts"
-import type { CkanPackage } from "./Package.ts"
-import { convertPackageFromCkan } from "./convert/fromCkan.ts"
+import { mergeDatasets } from "../../../dataset/index.ts"
+import { makeCkanApiRequest } from "../platform/index.ts"
+import type { CkanDataset } from "./Dataset.ts"
+import { convertDatasetFromCkan } from "./convert/fromCkan.ts"
 
 /**
- * Load a package from a CKAN instance
- * @param props Object containing the URL to the CKAN package
- * @returns Package object and cleanup function
+ * Load a dataset from a CKAN instance
+ * @param datasetUrl URL to the CKAN dataset
+ * @returns Dataset object
  */
 export async function loadDatasetFromCkan(datasetUrl: string) {
-  const packageId = extractPackageId(datasetUrl)
-  if (!packageId) {
-    throw new Error(`Failed to extract package ID from URL: ${datasetUrl}`)
+  const datasetId = extractDatasetId(datasetUrl)
+  if (!datasetId) {
+    throw new Error(`Failed to extract dataset ID from URL: ${datasetUrl}`)
   }
 
-  const ckanPackage = await makeCkanApiRequest<CkanPackage>({
+  const ckanDataset = await makeCkanApiRequest<CkanDataset>({
     ckanUrl: datasetUrl,
     action: "package_show",
-    payload: { id: packageId },
+    payload: { id: datasetId },
   })
 
-  for (const resource of ckanPackage.resources) {
+  for (const resource of ckanDataset.resources) {
     const resourceId = resource.id
     if (["CSV", "XLS", "XLSX"].includes(resource.format)) {
       const schema = await loadCkanSchema({ datasetUrl, resourceId })
@@ -30,23 +30,33 @@ export async function loadDatasetFromCkan(datasetUrl: string) {
     }
   }
 
-  const systemPackage = convertPackageFromCkan(ckanPackage)
-  const userPackagePath = systemPackage.resources
-    .filter(resource => resource["ckan:key"] === "datapackage.json")
-    .map(resource => resource["ckan:url"])
+  const systemDataset = convertDatasetFromCkan(ckanDataset)
+  const userDatasetPath = (systemDataset.resources ?? [])
+    .filter(
+      resource =>
+        resource.unstable_customMetadata?.["ckan:key"] === "datapackage.json",
+    )
+    .map(resource => resource.unstable_customMetadata?.["ckan:url"] as string)
     .at(0)
 
-  const datapackage = await mergePackages({ systemPackage, userPackagePath })
-  datapackage.resources = datapackage.resources.map(resource => {
-    // TODO: remove these keys completely
-    return { ...resource, "ckan:key": undefined, "ckan:url": undefined }
+  const dataset = await mergeDatasets({ systemDataset, userDatasetPath })
+  dataset.resources = dataset.resources?.map(resource => {
+    if (resource.unstable_customMetadata) {
+      const { "ckan:key": _key, "ckan:url": _url, ...rest } =
+        resource.unstable_customMetadata
+      return {
+        ...resource,
+        unstable_customMetadata: Object.keys(rest).length > 0 ? rest : undefined,
+      }
+    }
+    return resource
   })
 
-  return datapackage
+  return dataset
 }
 
 /**
- * Extract package ID from URL
+ * Extract dataset ID from URL
  *
  * Examples:
  * - https://hri.fi/data/en_GB/dataset/helsingin-kaupungin-verkkosivustojen-kavijaanalytiikka
@@ -54,7 +64,7 @@ export async function loadDatasetFromCkan(datasetUrl: string) {
  * - https://open.africa/dataset/pib-annual-senegal
  * - https://data.nhm.ac.uk/dataset/join-the-dots-collection-level-descriptions
  */
-function extractPackageId(datasetUrl: string) {
+function extractDatasetId(datasetUrl: string) {
   const url = new URL(datasetUrl)
   const pathParts = url.pathname.split("/").filter(Boolean)
   return pathParts.at(-1)

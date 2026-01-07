@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest"
 import { useRecording } from "vitest-polly"
-import { loadPackageFromCkan } from "./load.ts"
+import { loadDatasetFromCkan } from "./load.ts"
 
 useRecording()
 
-describe("loadPackageFromCkan", () => {
+describe("loadDatasetFromCkan", () => {
   it("should load a package", async () => {
-    const dataPackage = await loadPackageFromCkan(
+    const dataset = await loadDatasetFromCkan(
       "https://data.nhm.ac.uk/dataset/join-the-dots-collection-level-descriptions",
     )
 
-    expect(dataPackage).toMatchSnapshot()
+    expect(dataset).toMatchSnapshot()
   })
 })

@@ -106,7 +106,7 @@
     "PathData": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
-        { "type": "array", "item": { "$ref": "#/$defs/Path" } }
+        { "type": "array", "items": { "$ref": "#/$defs/Path" } }
       ]
     },
     "JsonData": {

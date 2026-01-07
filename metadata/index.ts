@@ -25,6 +25,7 @@ export {
 export { Datacite } from "./datacite/index.ts"
 export {
   Dataset,
+  denormalizeDataset,
   loadDatasetDescriptor,
   saveDatasetDescriptor,
   validateDatasetMetadata,

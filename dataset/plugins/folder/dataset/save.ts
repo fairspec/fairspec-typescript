@@ -1,26 +1,26 @@
 import { join } from "node:path"
-import type { Descriptor, Package } from "@fairspec/metadata"
-import { convertPackageToDescriptor, saveDescriptor } from "@fairspec/metadata"
+import type { Dataset, Descriptor } from "@fairspec/metadata"
+import { denormalizeDataset, saveDescriptor } from "@fairspec/metadata"
+import { getDatasetBasepath } from "../../../dataset/index.ts"
 import { assertLocalPathVacant, copyFile } from "../../../file/index.ts"
 import { createFolder } from "../../../folder/index.ts"
-import { getPackageBasepath } from "../../../package/index.ts"
 import { saveResourceFiles } from "../../../resource/index.ts"
 
-export async function savePackageToFolder(
-  dataPackage: Package,
+export async function saveDatasetToFolder(
+  dataset: Dataset,
   options: {
     folderPath: string
     withRemote?: boolean
   },
 ) {
-  const basepath = getPackageBasepath(dataPackage)
+  const basepath = getDatasetBasepath(dataset)
   const { folderPath, withRemote } = options
 
   await assertLocalPathVacant(folderPath)
   await createFolder(folderPath)
 
   const resourceDescriptors: Descriptor[] = []
-  for (const resource of dataPackage.resources) {
+  for (const resource of dataset.resources ?? []) {
     resourceDescriptors.push(
       await saveResourceFiles(resource, {
         basepath,
@@ -38,12 +38,12 @@ export async function savePackageToFolder(
   }
 
   const descriptor = {
-    ...convertPackageToDescriptor(dataPackage, { basepath }),
+    ...denormalizeDataset(dataset, { basepath }),
     resources: resourceDescriptors,
   }
 
   await saveDescriptor(descriptor, {
-    path: join(folderPath, "datapackage.json"),
+    path: join(folderPath, "fairspec.json"),
   })
 
   return descriptor

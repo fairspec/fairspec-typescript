@@ -24,7 +24,7 @@ export async function saveResourceFiles(
 ) {
   const { basepath, withRemote, withoutFolders } = options
 
-  const denormalizedResource = copyDescriptor(resource)
+  const descriptor = copyDescriptor(resource)
   const dedupIndexes = new Map<string, number>()
 
   const saveFile = async (path: string, name: string, index: number) => {
@@ -63,18 +63,14 @@ export async function saveResourceFiles(
     return denormalizedPath
   }
 
-  if (typeof denormalizedResource.data === "string") {
-    denormalizedResource.data = await saveFile(
-      denormalizedResource.data,
-      "data",
-      0,
-    )
+  if (typeof descriptor.data === "string") {
+    descriptor.data = await saveFile(descriptor.data, "data", 0)
   }
 
-  if (Array.isArray(denormalizedResource.data)) {
-    for (const [index, item] of denormalizedResource.data.entries()) {
+  if (Array.isArray(descriptor.data)) {
+    for (const [index, item] of descriptor.data.entries()) {
       if (typeof item === "string") {
-        denormalizedResource.data[index] = await saveFile(item, "data", index)
+        descriptor.data[index] = await saveFile(item, "data", index)
       }
     }
   }
@@ -82,9 +78,9 @@ export async function saveResourceFiles(
   for (const name of ["jsonSchema", "tableSchema"] as const) {
     const property = resource[name]
     if (typeof property === "string") {
-      denormalizedResource[name] = await saveFile(property, name, 0)
+      descriptor[name] = await saveFile(property, name, 0)
     }
   }
 
-  return denormalizedResource
+  return descriptor
 }

@@ -1,23 +1,20 @@
 import { Buffer } from "node:buffer"
 import { buffer } from "node:stream/consumers"
-import type { Descriptor, Package } from "@fairspec/metadata"
-import {
-  convertPackageToDescriptor,
-  stringifyDescriptor,
-} from "@fairspec/metadata"
-import { getPackageBasepath } from "../../../package/index.ts"
+import type { Dataset, Descriptor } from "@fairspec/metadata"
+import { denormalizeDataset, stringifyDescriptor } from "@fairspec/metadata"
+import { getDatasetBasepath } from "../../../dataset/index.ts"
 import { saveResourceFiles } from "../../../resource/index.ts"
 import { loadFileStream } from "../../../stream/index.ts"
-import { makeGithubApiRequest } from "../github/index.ts"
-import type { GithubPackage } from "./Package.ts"
+import { makeGithubApiRequest } from "../platform/index.ts"
+import type { GithubDataset } from "./Dataset.ts"
 
 /**
- * Save a package to a Github repository
+ * Save a dataset to a Github repository
  * @param options Object containing the package to save and Github details
  * @returns Object with the repository URL
  */
-export async function savePackageToGithub(
-  dataPackage: Package,
+export async function saveDatasetToGithub(
+  dataset: Dataset,
   options: {
     apiKey: string
     repo: string
@@ -25,9 +22,9 @@ export async function savePackageToGithub(
   },
 ) {
   const { apiKey, org, repo } = options
-  const basepath = getPackageBasepath(dataPackage)
+  const basepath = getDatasetBasepath(dataset)
 
-  const githubPackage = await makeGithubApiRequest<GithubPackage>({
+  const githubDataset = await makeGithubApiRequest<GithubDataset>({
     endpoint: org ? `/orgs/${org}/repos` : "/user/repos",
     payload: { name: repo, auto_init: true },
     method: "POST",
@@ -35,9 +32,7 @@ export async function savePackageToGithub(
   })
 
   const resourceDescriptors: Descriptor[] = []
-  for (const resource of dataPackage.resources) {
-    if (!resource.path) continue
-
+  for (const resource of dataset.resources ?? []) {
     resourceDescriptors.push(
       await saveResourceFiles(resource, {
         basepath,
@@ -52,7 +47,7 @@ export async function savePackageToGithub(
           }
 
           await makeGithubApiRequest({
-            endpoint: `/repos/${githubPackage.owner.login}/${repo}/contents/${options.denormalizedPath}`,
+            endpoint: `/repos/${githubDataset.owner.login}/${repo}/contents/${options.denormalizedPath}`,
             method: "PUT",
             payload,
             apiKey,
@@ -65,11 +60,11 @@ export async function savePackageToGithub(
   }
 
   const descriptor = {
-    ...convertPackageToDescriptor(dataPackage, { basepath }),
+    ...denormalizeDataset(dataset, { basepath }),
     resources: resourceDescriptors,
   }
 
-  for (const denormalizedPath of ["datapackage.json"]) {
+  for (const denormalizedPath of ["fairspec.json"]) {
     const payload = {
       path: denormalizedPath,
       message: `Added file "${denormalizedPath}"`,
@@ -77,7 +72,7 @@ export async function savePackageToGithub(
     }
 
     await makeGithubApiRequest({
-      endpoint: `/repos/${githubPackage.owner.login}/${repo}/contents/${denormalizedPath}`,
+      endpoint: `/repos/${githubDataset.owner.login}/${repo}/contents/${denormalizedPath}`,
       method: "PUT",
       payload,
       apiKey,
@@ -85,7 +80,7 @@ export async function savePackageToGithub(
   }
 
   return {
-    path: `https://raw.githubusercontent.com/${githubPackage.owner.login}/${repo}/refs/heads/main/dataPackage.json`,
-    repoUrl: githubPackage.html_url,
+    path: `https://raw.githubusercontent.com/${githubDataset.owner.login}/${repo}/refs/heads/main/fairspec.json`,
+    repoUrl: githubDataset.html_url,
   }
 }

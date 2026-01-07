@@ -1,125 +1,125 @@
-import type { Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import * as packageModule from "./package/load.ts"
+import * as datasetModule from "./dataset/load.ts"
 import { CkanPlugin } from "./plugin.ts"
 
-vi.mock("./package/load.ts", () => ({
-  loadPackageFromCkan: vi.fn(),
+vi.mock("./dataset/load.ts", () => ({
+  loadDatasetFromCkan: vi.fn(),
 }))
 
 describe("CkanPlugin", () => {
   let plugin: CkanPlugin
-  let mockLoadPackageFromCkan: ReturnType<typeof vi.fn>
+  let mockLoadDatasetFromCkan: ReturnType<typeof vi.fn>
 
   beforeEach(() => {
     plugin = new CkanPlugin()
-    mockLoadPackageFromCkan = vi.mocked(packageModule.loadPackageFromCkan)
+    mockLoadDatasetFromCkan = vi.mocked(datasetModule.loadDatasetFromCkan)
     vi.clearAllMocks()
   })
 
-  describe("loadPackage", () => {
-    it("should load package from ckan url with /dataset/ path", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+  describe("loadDataset", () => {
+    it("should load dataset from ckan url with /dataset/ path", async () => {
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
-      mockLoadPackageFromCkan.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromCkan.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://data.example.com/dataset/test-dataset",
       )
 
-      expect(mockLoadPackageFromCkan).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromCkan).toHaveBeenCalledWith(
         "https://data.example.com/dataset/test-dataset",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should return undefined for urls without /dataset/", async () => {
-      const result = await plugin.loadPackage("https://example.com/data")
+      const result = await plugin.loadDataset("https://example.com/data")
 
-      expect(mockLoadPackageFromCkan).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromCkan).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should return undefined for local paths", async () => {
-      const result = await plugin.loadPackage("./data")
+      const result = await plugin.loadDataset("./data")
 
-      expect(mockLoadPackageFromCkan).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromCkan).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should return undefined for github urls", async () => {
-      const result = await plugin.loadPackage("https://github.com/owner/repo")
+      const result = await plugin.loadDataset("https://github.com/owner/repo")
 
-      expect(mockLoadPackageFromCkan).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromCkan).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should handle ckan urls with additional path segments", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
-      mockLoadPackageFromCkan.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromCkan.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://data.example.com/dataset/test-dataset/resource/123",
       )
 
-      expect(mockLoadPackageFromCkan).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromCkan).toHaveBeenCalledWith(
         "https://data.example.com/dataset/test-dataset/resource/123",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should handle ckan urls with query parameters", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
-      mockLoadPackageFromCkan.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromCkan.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://data.example.com/dataset/test-dataset?id=456",
       )
 
-      expect(mockLoadPackageFromCkan).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromCkan).toHaveBeenCalledWith(
         "https://data.example.com/dataset/test-dataset?id=456",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should handle http ckan urls", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
-      mockLoadPackageFromCkan.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromCkan.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "http://data.example.com/dataset/test-dataset",
       )
 
-      expect(mockLoadPackageFromCkan).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromCkan).toHaveBeenCalledWith(
         "http://data.example.com/dataset/test-dataset",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should return undefined for zenodo urls", async () => {
-      const result = await plugin.loadPackage("https://zenodo.org/record/123")
+      const result = await plugin.loadDataset("https://zenodo.org/record/123")
 
-      expect(mockLoadPackageFromCkan).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromCkan).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should return undefined for urls with dataset in query params only", async () => {
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://example.com/api?name=dataset",
       )
 
-      expect(mockLoadPackageFromCkan).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromCkan).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
   })

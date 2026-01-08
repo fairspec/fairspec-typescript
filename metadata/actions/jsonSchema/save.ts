@@ -1,5 +1,5 @@
-import { saveDescriptor } from "../descriptor/index.ts"
-import type { JsonSchema } from "./JsonSchema.ts"
+import { saveDescriptor } from "../../actions/descriptor/save.ts"
+import type { JsonSchema } from "../../models/jsonSchema.ts"
 
 export async function saveJsonSchema(
   jsonSchema: JsonSchema,

@@ -1,5 +1,5 @@
-import { node } from "../platform/index.ts"
-import type { Descriptor } from "./Descriptor.ts"
+import type { Descriptor } from "../../models/descriptor.ts"
+import { node } from "../../services/node.ts"
 import { stringifyDescriptor } from "./stringify.ts"
 
 /**

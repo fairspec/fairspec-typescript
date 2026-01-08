@@ -1,5 +1,5 @@
-import type { Descriptor } from "../descriptor/index.ts"
-import type { Dataset } from "./Dataset.ts"
+import type { Dataset } from "../../models/dataset.ts"
+import type { Descriptor } from "../../models/descriptor.ts"
 import { validateDatasetMetadata } from "./validate.ts"
 
 /**

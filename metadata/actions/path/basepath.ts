@@ -1,4 +1,4 @@
-import { node } from "../platform/node.ts"
+import { node } from "../../services/node.ts"
 import { isRemotePath } from "./general.ts"
 
 export async function resolveBasepath(path: string) {

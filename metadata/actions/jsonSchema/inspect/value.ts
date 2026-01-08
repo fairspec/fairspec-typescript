@@ -1,5 +1,5 @@
+import type { JsonSchema } from "../../../models/jsonSchema.ts"
 import { ajv } from "../ajv.ts"
-import type { JsonSchema } from "../JsonSchema.ts"
 import { loadJsonSchema } from "../load.ts"
 
 /**

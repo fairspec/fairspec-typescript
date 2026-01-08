@@ -2,8 +2,8 @@ import * as fs from "node:fs/promises"
 import * as path from "node:path"
 import { temporaryDirectory } from "tempy"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
+import type { TableSchema } from "../../models/tableSchema.ts"
 import { saveTableSchema } from "./save.ts"
-import type { TableSchema } from "./TableSchema.ts"
 
 describe("saveTableSchema", () => {
   const testSchema: TableSchema = {

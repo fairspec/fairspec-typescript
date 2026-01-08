@@ -1,6 +1,6 @@
-import type { Descriptor } from "../descriptor/index.ts"
+import type { Descriptor } from "../../models/descriptor.ts"
+import type { JsonSchema } from "../../models/jsonSchema.ts"
 import { inspectJsonSchema } from "./inspect/schema.ts"
-import type { JsonSchema } from "./JsonSchema.ts"
 
 export async function assertJsonSchema(descriptor: Descriptor) {
   const errors = await inspectJsonSchema(descriptor)

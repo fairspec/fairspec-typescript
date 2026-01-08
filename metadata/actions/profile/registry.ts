@@ -1,7 +1,7 @@
-import catalog from "./assets/catalog.json" with { type: "json" }
-import dataset from "./assets/dataset.json" with { type: "json" }
-import table from "./assets/table.json" with { type: "json" }
-import type { ProfileRegistry } from "./Profile.ts"
+import catalog from "../../profiles/catalog.json" with { type: "json" }
+import dataset from "../../profiles/dataset.json" with { type: "json" }
+import table from "../../profiles/table.json" with { type: "json" }
+import type { ProfileRegistry } from "./types.ts"
 
 export const profileRegistry: ProfileRegistry = [
   {

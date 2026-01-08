@@ -1,5 +1,5 @@
-import type { FairspecError } from "../../models/Error/Error.ts"
-import type { Report } from "../../models/Report.ts"
+import type { FairspecError } from "../../models/error/error.ts"
+import type { Report } from "../../models/report.ts"
 
 export function createReport(
   errors?: FairspecError[],

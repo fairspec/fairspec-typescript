@@ -1,6 +1,6 @@
-import { isRemotePath } from "../path/index.ts"
-import type { JsonData } from "./Data.ts"
-import type { Resource } from "./Resource.ts"
+import { isRemotePath } from "../../actions/path/general.ts"
+import type { JsonData } from "../../models/data.ts"
+import type { Resource } from "../../models/resource.ts"
 
 export function isRemoteResource(resource: Partial<Resource>) {
   const pathData = getPathData(resource)

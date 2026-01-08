@@ -1,6 +1,6 @@
-import { copyDescriptor } from "../descriptor/index.ts"
-import { denormalizeResource } from "../resource/index.ts"
-import type { Dataset } from "./Dataset.ts"
+import { copyDescriptor } from "../../actions/descriptor/copy.ts"
+import { denormalizeResource } from "../../actions/resource/denormalize.ts"
+import type { Dataset } from "../../models/dataset.ts"
 
 export function denormalizeDataset(
   dataset: Dataset,

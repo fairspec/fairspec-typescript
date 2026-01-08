@@ -1,8 +1,8 @@
-import type { Descriptor } from "../descriptor/index.ts"
-import { inspectJsonValue } from "../jsonSchema/index.ts"
-import { createReport } from "../report/index.ts"
-import { loadProfile } from "./load.ts"
-import type { ProfileType } from "./Profile.ts"
+import { inspectJsonValue } from "../../actions/jsonSchema/inspect/value.ts"
+import { loadProfile } from "../../actions/profile/load.ts"
+import { createReport } from "../../actions/report/create.ts"
+import type { Descriptor } from "../../models/descriptor.ts"
+import type { ProfileType } from "../../models/profile.ts"
 
 export async function validateDescriptor(
   descriptor: Descriptor,

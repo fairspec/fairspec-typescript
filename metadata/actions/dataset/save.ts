@@ -1,6 +1,6 @@
-import { saveDescriptor } from "../descriptor/index.ts"
-import { getBasepath } from "../path/index.ts"
-import type { Dataset } from "./Dataset.ts"
+import { saveDescriptor } from "../../actions/descriptor/save.ts"
+import { getBasepath } from "../../actions/path/basepath.ts"
+import type { Dataset } from "../../models/dataset.ts"
 import { denormalizeDataset } from "./denormalize.ts"
 
 /**

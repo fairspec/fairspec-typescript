@@ -1,7 +1,7 @@
-import type { Descriptor } from "../descriptor/index.ts"
-import { loadDescriptor } from "../descriptor/index.ts"
-import { validateDescriptor } from "../profile/index.ts"
-import type { TableSchema } from "./TableSchema.ts"
+import { loadDescriptor } from "../../actions/descriptor/load.ts"
+import { validateDescriptor } from "../../actions/descriptor/validate.ts"
+import type { Descriptor } from "../../models/descriptor.ts"
+import type { TableSchema } from "../../models/tableSchema.ts"
 
 /**
  * Validate a Schema descriptor (JSON Object) against its profile

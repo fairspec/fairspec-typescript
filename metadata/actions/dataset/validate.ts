@@ -1,8 +1,8 @@
-import type { Descriptor } from "../descriptor/index.ts"
-import { loadDescriptor } from "../descriptor/index.ts"
-import { validateDescriptor } from "../profile/index.ts"
-import { validateTableSchema } from "../tableSchema/index.ts"
-import type { Dataset } from "./Dataset.ts"
+import { loadDescriptor } from "../../actions/descriptor/load.ts"
+import { validateDescriptor } from "../../actions/descriptor/validate.ts"
+import { validateTableSchema } from "../../actions/tableSchema/validate.ts"
+import type { Dataset } from "../../models/dataset.ts"
+import type { Descriptor } from "../../models/descriptor.ts"
 import { normalizeDataset } from "./normalize.ts"
 
 export async function validateDatasetMetadata(

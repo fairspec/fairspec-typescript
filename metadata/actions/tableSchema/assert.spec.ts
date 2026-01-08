@@ -1,6 +1,6 @@
 import { describe, expect, expectTypeOf, it } from "vitest"
+import type { TableSchema } from "../../models/tableSchema.ts"
 import { assertTableSchema } from "./assert.ts"
-import type { TableSchema } from "./TableSchema.ts"
 
 describe("assertTableSchema", () => {
   it("returns typed schema when valid", async () => {

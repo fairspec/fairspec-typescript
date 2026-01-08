@@ -1,6 +1,6 @@
-import { copyDescriptor } from "../descriptor/index.ts"
-import { denormalizePath } from "../path/index.ts"
-import type { Resource } from "./Resource.ts"
+import { copyDescriptor } from "../../actions/descriptor/copy.ts"
+import { denormalizePath } from "../../actions/path/denormalize.ts"
+import type { Resource } from "../../models/resource.ts"
 
 export function denormalizeResource(
   resource: Resource,

@@ -1,6 +1,6 @@
-import { copyDescriptor } from "../descriptor/index.ts"
-import { normalizeResource } from "../resource/index.ts"
-import type { Dataset } from "./Dataset.ts"
+import { copyDescriptor } from "../../actions/descriptor/copy.ts"
+import { normalizeResource } from "../../actions/resource/normalize.ts"
+import type { Dataset } from "../../models/dataset.ts"
 
 export function normalizeDataset(
   dataset: Dataset,

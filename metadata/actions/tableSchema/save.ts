@@ -1,5 +1,5 @@
-import { saveDescriptor } from "../descriptor/index.ts"
-import type { TableSchema } from "./TableSchema.ts"
+import { saveDescriptor } from "../../actions/descriptor/save.ts"
+import type { TableSchema } from "../../models/tableSchema.ts"
 
 /**
  * Save a Schema to a file path

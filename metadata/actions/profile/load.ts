@@ -1,7 +1,7 @@
-import { loadJsonSchema } from "../jsonSchema/index.ts"
+import { loadJsonSchema } from "../../actions/jsonSchema/load.ts"
 import { assertProfile } from "./assert.ts"
 import { profileRegistry } from "./registry.ts"
-import type { ProfileType } from "./Profile.ts"
+import type { ProfileType } from "../../models/profile.ts"
 
 export async function loadProfile(path: string, options: { profileType: ProfileType }) {
   let jsonSchema = profileRegistry.find(profile => profile.path === path)?.profile

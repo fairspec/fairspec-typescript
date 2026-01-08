@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises"
 import * as path from "node:path"
 import { temporaryDirectory } from "tempy"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
-import type { Dataset } from "./Dataset.ts"
+import type { Dataset } from "../../models/dataset.ts"
 import { saveDatasetDescriptor } from "./save.ts"
 
 describe("saveDatasetDescriptor", () => {

@@ -1,4 +1,4 @@
-import type { Descriptor } from "../../descriptor/index.ts"
+import type { Descriptor } from "../../../models/descriptor.ts"
 import { ajv } from "../ajv.ts"
 
 export async function inspectJsonSchema(descriptor: Descriptor) {

@@ -1,5 +1,5 @@
+import type { TableSchema } from "../../models/tableSchema.ts"
 import { loadTableSchema } from "./load.ts"
-import type { TableSchema } from "./TableSchema.ts"
 
 export async function resolveTableSchema(tableSchema?: TableSchema | string) {
   if (!tableSchema) {

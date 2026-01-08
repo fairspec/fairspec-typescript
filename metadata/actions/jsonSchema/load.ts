@@ -1,4 +1,4 @@
-import { loadDescriptor } from "../descriptor/index.ts"
+import { loadDescriptor } from "../../actions/descriptor/load.ts"
 import { cache } from "./cache.ts"
 import { assertJsonSchema } from "./assert.ts"
 
@@ -9,7 +9,7 @@ export async function loadJsonSchema(
   let jsonSchema = cache.get(path)
 
   if (!jsonSchema) {
-    const { profileRegistry } = await import("../profile/index.ts")
+    const { profileRegistry } = await import("../../actions/profile/registry.ts")
     for (const item of profileRegistry) {
       if (item.path === path) {
         jsonSchema = item.profile

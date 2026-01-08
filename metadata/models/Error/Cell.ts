@@ -1,0 +1,101 @@
+import { z } from "zod"
+import { ColumnType } from "../Column/Column.ts"
+
+const BaseCellError = z.object({
+  fieldName: z.string().describe("The name of the field/column"),
+  rowNumber: z.number().describe("The row number where the error occurred"),
+  cell: z.string().describe("The cell value that caused the error"),
+})
+
+export const CellTypeError = BaseCellError.extend({
+  type: z.literal("cell/type").describe("Error type identifier"),
+  fieldType: ColumnType.describe("The expected column type"),
+  fieldFormat: z.string().optional().describe("The expected field format"),
+})
+
+export const CellRequiredError = BaseCellError.extend({
+  type: z.literal("cell/required").describe("Error type identifier"),
+})
+
+export const CellMinimumError = BaseCellError.extend({
+  type: z.literal("cell/minimum").describe("Error type identifier"),
+  minimum: z.string().describe("The minimum value allowed"),
+})
+
+export const CellMaximumError = BaseCellError.extend({
+  type: z.literal("cell/maximum").describe("Error type identifier"),
+  maximum: z.string().describe("The maximum value allowed"),
+})
+
+export const CellExclusiveMinimumError = BaseCellError.extend({
+  type: z.literal("cell/exclusiveMinimum").describe("Error type identifier"),
+  minimum: z.string().describe("The exclusive minimum value"),
+})
+
+export const CellExclusiveMaximumError = BaseCellError.extend({
+  type: z.literal("cell/exclusiveMaximum").describe("Error type identifier"),
+  maximum: z.string().describe("The exclusive maximum value"),
+})
+
+export const CellMinLengthError = BaseCellError.extend({
+  type: z.literal("cell/minLength").describe("Error type identifier"),
+  minLength: z.number().describe("The minimum length required"),
+})
+
+export const CellMaxLengthError = BaseCellError.extend({
+  type: z.literal("cell/maxLength").describe("Error type identifier"),
+  maxLength: z.number().describe("The maximum length allowed"),
+})
+
+export const CellPatternError = BaseCellError.extend({
+  type: z.literal("cell/pattern").describe("Error type identifier"),
+  pattern: z.string().describe("The pattern that must be matched"),
+})
+
+export const CellUniqueError = BaseCellError.extend({
+  type: z.literal("cell/unique").describe("Error type identifier"),
+})
+
+export const CellEnumError = BaseCellError.extend({
+  type: z.literal("cell/enum").describe("Error type identifier"),
+  enum: z.array(z.string()).describe("The allowed enumeration values"),
+})
+
+export const CellJsonSchemaError = BaseCellError.extend({
+  type: z.literal("cell/jsonSchema").describe("Error type identifier"),
+  pointer: z.string().describe("JSON Pointer to the validation error location"),
+  message: z.string().describe("The JSON schema validation error message"),
+})
+
+export const CellError = z.discriminatedUnion("type", [
+  CellTypeError,
+  CellRequiredError,
+  CellMinimumError,
+  CellMaximumError,
+  CellExclusiveMinimumError,
+  CellExclusiveMaximumError,
+  CellMinLengthError,
+  CellMaxLengthError,
+  CellPatternError,
+  CellUniqueError,
+  CellEnumError,
+  CellJsonSchemaError,
+])
+
+export type CellTypeError = z.infer<typeof CellTypeError>
+export type CellRequiredError = z.infer<typeof CellRequiredError>
+export type CellMinimumError = z.infer<typeof CellMinimumError>
+export type CellMaximumError = z.infer<typeof CellMaximumError>
+export type CellExclusiveMinimumError = z.infer<
+  typeof CellExclusiveMinimumError
+>
+export type CellExclusiveMaximumError = z.infer<
+  typeof CellExclusiveMaximumError
+>
+export type CellMinLengthError = z.infer<typeof CellMinLengthError>
+export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>
+export type CellPatternError = z.infer<typeof CellPatternError>
+export type CellUniqueError = z.infer<typeof CellUniqueError>
+export type CellEnumError = z.infer<typeof CellEnumError>
+export type CellJsonSchemaError = z.infer<typeof CellJsonSchemaError>
+export type CellError = z.infer<typeof CellError>

@@ -1,44 +1,34 @@
 import { blob } from "node:stream/consumers"
-import type { Descriptor, Package } from "@fairspec/metadata"
-import {
-  convertPackageToDescriptor,
-  stringifyDescriptor,
-} from "@fairspec/metadata"
-import { getPackageBasepath } from "../../../package/index.ts"
+import type { Dataset, Descriptor } from "@fairspec/metadata"
+import { denormalizeDataset, stringifyDescriptor } from "@fairspec/metadata"
+import { getDatasetBasepath } from "../../../dataset/index.ts"
 import { saveResourceFiles } from "../../../resource/index.ts"
 import { loadFileStream } from "../../../stream/index.ts"
-import { makeZenodoApiRequest } from "../zenodo/index.ts"
-import { convertPackageToZenodo } from "./convert/toZenodo.ts"
-import type { ZenodoPackage } from "./Package.ts"
+import { makeZenodoApiRequest } from "../platform/index.ts"
+import { convertDatasetToZenodo } from "./convert/toZenodo.ts"
+import type { ZenodoDataset } from "./Dataset.ts"
 
-/**
- * Save a package to Zenodo
- * @param options Object containing the package to save and Zenodo API details
- * @returns Object with the deposit URL and DOI
- */
-export async function savePackageToZenodo(
-  dataPackage: Package,
+export async function saveDatasetToZenodo(
+  dataset: Dataset,
   options: {
     sandbox?: boolean
     apiKey: string
   },
 ) {
   const { apiKey, sandbox = false } = options
-  const basepath = getPackageBasepath(dataPackage)
+  const basepath = getDatasetBasepath(dataset)
 
-  const newZenodoPackage = convertPackageToZenodo(dataPackage)
-  const zenodoPackage = (await makeZenodoApiRequest({
-    payload: newZenodoPackage,
+  const newZenodoDataset = convertDatasetToZenodo(dataset)
+  const zenodoDataset = (await makeZenodoApiRequest({
+    payload: newZenodoDataset,
     endpoint: "/deposit/depositions",
     method: "POST",
     apiKey,
     sandbox,
-  })) as ZenodoPackage
+  })) as ZenodoDataset
 
   const resourceDescriptors: Descriptor[] = []
-  for (const resource of dataPackage.resources) {
-    if (!resource.path) continue
-
+  for (const resource of dataset.resources ?? []) {
     resourceDescriptors.push(
       await saveResourceFiles(resource, {
         basepath,
@@ -50,10 +40,8 @@ export async function savePackageToZenodo(
             data: await blob(await loadFileStream(options.normalizedPath)),
           }
 
-          // It seems that record and deposition files have different metadata
-          // structure, e.g. size vs filesize etc
           await makeZenodoApiRequest({
-            endpoint: `/deposit/depositions/${zenodoPackage.id}/files`,
+            endpoint: `/deposit/depositions/${zenodoDataset.id}/files`,
             method: "POST",
             upload,
             apiKey,
@@ -67,18 +55,18 @@ export async function savePackageToZenodo(
   }
 
   const descriptor = {
-    ...convertPackageToDescriptor(dataPackage, { basepath }),
+    ...denormalizeDataset(dataset, { basepath }),
     resources: resourceDescriptors,
   }
 
-  for (const denormalizedPath of ["datapackage.json"]) {
+  for (const denormalizedPath of ["dataset.json"]) {
     const upload = {
       name: denormalizedPath,
       data: new Blob([stringifyDescriptor(descriptor)]),
     }
 
     await makeZenodoApiRequest({
-      endpoint: `/deposit/depositions/${zenodoPackage.id}/files`,
+      endpoint: `/deposit/depositions/${zenodoDataset.id}/files`,
       method: "POST",
       upload,
       apiKey,
@@ -86,9 +74,9 @@ export async function savePackageToZenodo(
     })
   }
 
-  const url = new URL(zenodoPackage.links.html)
+  const url = new URL(zenodoDataset.links.html)
   return {
-    path: `${url.origin}/records/${zenodoPackage.id}/files/datapackage.json`,
-    datasetUrl: `${url.origin}/uploads/${zenodoPackage.id}`,
+    path: `${url.origin}/records/${zenodoDataset.id}/files/dataset.json`,
+    datasetUrl: `${url.origin}/uploads/${zenodoDataset.id}`,
   }
 }

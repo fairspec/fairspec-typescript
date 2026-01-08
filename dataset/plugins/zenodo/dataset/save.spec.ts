@@ -1,24 +1,28 @@
 import { relative } from "node:path"
-import type { Package } from "@fairspec/metadata"
-import { loadPackageDescriptor } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
+import { loadDatasetDescriptor } from "@fairspec/metadata"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { savePackageToZenodo } from "./save.ts"
+import { saveDatasetToZenodo } from "./save.ts"
 
-describe("savePackageToZenodo", () => {
+describe("saveDatasetToZenodo", () => {
   const getFixturePath = (name: string) =>
     relative(process.cwd(), `${import.meta.dirname}/fixtures/${name}`)
 
-  const mockPackage: Package = {
-    name: "test-package",
-    title: "Test Package",
-    description: "A test package",
+  const mockDataset: Dataset = {
+    $schema: "https://fairspec.org/profiles/latest/dataset.json",
+    titles: [{ title: "Test Package" }],
+    descriptions: [
+      {
+        description: "A test package",
+        descriptionType: "Abstract",
+      },
+    ],
     version: "1.0.0",
     resources: [
       {
         name: "test-resource",
-        path: getFixturePath("data.csv"),
-        format: "csv",
-        bytes: 100,
+        data: getFixturePath("data.csv"),
+        format: { name: "csv" },
       },
     ],
   }
@@ -42,12 +46,12 @@ describe("savePackageToZenodo", () => {
     vi.resetAllMocks()
   })
 
-  it.skip("should save a package", async () => {
-    const dataPackage = await loadPackageDescriptor(
+  it.skip("should save a dataset", async () => {
+    const dataset = await loadDatasetDescriptor(
       "core/package/fixtures/package.json",
     )
 
-    const result = await savePackageToZenodo(dataPackage, {
+    const result = await saveDatasetToZenodo(dataset, {
       apiKey: "<key>",
       sandbox: true,
     })
@@ -95,12 +99,12 @@ describe("savePackageToZenodo", () => {
       json: () =>
         Promise.resolve({
           id: "file-2",
-          filename: "datapackage.json",
+          filename: "dataset.json",
           filesize: 500,
         }),
     })
 
-    const result = await savePackageToZenodo(mockPackage, mockOptions)
+    const result = await saveDatasetToZenodo(mockDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(3)
 
@@ -124,7 +128,7 @@ describe("savePackageToZenodo", () => {
     expect(depositionPayload.metadata.description).toEqual("A test package")
 
     expect(result).toEqual({
-      path: "https://sandbox.zenodo.org/records/12345/files/datapackage.json",
+      path: "https://sandbox.zenodo.org/records/12345/files/dataset.json",
       datasetUrl: "https://sandbox.zenodo.org/uploads/12345",
     })
   })
@@ -169,12 +173,12 @@ describe("savePackageToZenodo", () => {
       json: () =>
         Promise.resolve({
           id: "file-2",
-          filename: "datapackage.json",
+          filename: "dataset.json",
           filesize: 500,
         }),
     })
 
-    await savePackageToZenodo(mockPackage, mockOptions)
+    await saveDatasetToZenodo(mockDataset, mockOptions)
 
     const fileUploadCall = fetchMock.mock.calls[1]
     expect(fileUploadCall).toBeDefined()
@@ -192,7 +196,7 @@ describe("savePackageToZenodo", () => {
     expect(formData).toBeInstanceOf(FormData)
   })
 
-  it("uploads datapackage.json metadata file", async () => {
+  it("uploads dataset.json metadata file", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: () =>
@@ -232,22 +236,22 @@ describe("savePackageToZenodo", () => {
       json: () =>
         Promise.resolve({
           id: "file-2",
-          filename: "datapackage.json",
+          filename: "dataset.json",
           filesize: 500,
         }),
     })
 
-    await savePackageToZenodo(mockPackage, mockOptions)
+    await saveDatasetToZenodo(mockDataset, mockOptions)
 
-    const datapackageUploadCall = fetchMock.mock.calls[2]
-    expect(datapackageUploadCall).toBeDefined()
-    if (!datapackageUploadCall) return
+    const datasetUploadCall = fetchMock.mock.calls[2]
+    expect(datasetUploadCall).toBeDefined()
+    if (!datasetUploadCall) return
 
-    expect(datapackageUploadCall[0]).toContain(
+    expect(datasetUploadCall[0]).toContain(
       "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
     )
 
-    const formData = datapackageUploadCall[1].body
+    const formData = datasetUploadCall[1].body
     expect(formData).toBeInstanceOf(FormData)
 
     const fileBlob = formData.get("file")
@@ -287,7 +291,7 @@ describe("savePackageToZenodo", () => {
         }),
     })
 
-    await savePackageToZenodo(mockPackage, {
+    await saveDatasetToZenodo(mockDataset, {
       apiKey: "test-api-key",
       sandbox: false,
     })
@@ -325,7 +329,7 @@ describe("savePackageToZenodo", () => {
         }),
     })
 
-    await savePackageToZenodo(mockPackage, {
+    await saveDatasetToZenodo(mockDataset, {
       apiKey: "custom-api-key",
       sandbox: true,
     })
@@ -345,9 +349,9 @@ describe("savePackageToZenodo", () => {
       text: () => Promise.resolve("Invalid deposition data"),
     })
 
-    await expect(savePackageToZenodo(mockPackage, mockOptions)).rejects.toThrow(
-      "Zenodo API error: 400 Bad Request",
-    )
+    await expect(
+      saveDatasetToZenodo(mockDataset, mockOptions),
+    ).rejects.toThrow("Zenodo API error: 400 Bad Request")
   })
 
   it("handles API errors from file upload", async () => {
@@ -382,24 +386,24 @@ describe("savePackageToZenodo", () => {
       text: () => Promise.resolve("Failed to upload file"),
     })
 
-    await expect(savePackageToZenodo(mockPackage, mockOptions)).rejects.toThrow(
-      "Zenodo API error: 500 Internal Server Error",
-    )
+    await expect(
+      saveDatasetToZenodo(mockDataset, mockOptions),
+    ).rejects.toThrow("Zenodo API error: 500 Internal Server Error")
   })
 
-  it("handles packages with multiple resources", async () => {
-    const multiResourcePackage: Package = {
-      ...mockPackage,
+  it("handles datasets with multiple resources", async () => {
+    const multiResourceDataset: Dataset = {
+      ...mockDataset,
       resources: [
         {
           name: "resource-1",
-          path: getFixturePath("data.csv"),
-          format: "csv",
+          data: getFixturePath("data.csv"),
+          format: { name: "csv" },
         },
         {
           name: "resource-2",
-          path: getFixturePath("data.csv"),
-          format: "json",
+          data: getFixturePath("data.csv"),
+          format: { name: "json" },
         },
       ],
     }
@@ -428,7 +432,7 @@ describe("savePackageToZenodo", () => {
         }),
     })
 
-    await savePackageToZenodo(multiResourcePackage, mockOptions)
+    await saveDatasetToZenodo(multiResourceDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(4)
 
@@ -439,9 +443,9 @@ describe("savePackageToZenodo", () => {
     expect(secondFileUploadCall[0]).toContain("/files")
   })
 
-  it("handles packages with no resources", async () => {
-    const emptyPackage: Package = {
-      ...mockPackage,
+  it("handles datasets with no resources", async () => {
+    const emptyDataset: Dataset = {
+      ...mockDataset,
       resources: [],
     }
 
@@ -474,12 +478,12 @@ describe("savePackageToZenodo", () => {
       json: () =>
         Promise.resolve({
           id: "file-1",
-          filename: "datapackage.json",
+          filename: "dataset.json",
           filesize: 500,
         }),
     })
 
-    const result = await savePackageToZenodo(emptyPackage, mockOptions)
+    const result = await saveDatasetToZenodo(emptyDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(2)
     expect(result.datasetUrl).toEqual(
@@ -487,13 +491,13 @@ describe("savePackageToZenodo", () => {
     )
   })
 
-  it("skips resources without path", async () => {
-    const packageWithoutPath: Package = {
-      ...mockPackage,
+  it("skips resources without data", async () => {
+    const datasetWithoutData: Dataset = {
+      ...mockDataset,
       resources: [
         {
-          name: "resource-without-path",
-          format: "csv",
+          name: "resource-without-data",
+          format: { name: "csv" },
         },
       ],
     }
@@ -527,33 +531,29 @@ describe("savePackageToZenodo", () => {
       json: () =>
         Promise.resolve({
           id: "file-1",
-          filename: "datapackage.json",
+          filename: "dataset.json",
           filesize: 500,
         }),
     })
 
-    await savePackageToZenodo(packageWithoutPath, mockOptions)
+    await saveDatasetToZenodo(datasetWithoutData, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 
-  it("includes contributors with author role as creators in metadata", async () => {
-    const packageWithContributors: Package = {
-      ...mockPackage,
-      contributors: [
+  it("includes creators in metadata", async () => {
+    const datasetWithCreators: Dataset = {
+      ...mockDataset,
+      creators: [
         {
-          title: "Alice Smith",
-          role: "author",
-          path: "University of Example",
+          name: "Alice Smith",
+          nameType: "Personal",
+          affiliation: [{ name: "University of Example" }],
         },
         {
-          title: "Bob Jones",
-          role: "author",
-          path: "Institute of Testing",
-        },
-        {
-          title: "Charlie Brown",
-          role: "contributor",
+          name: "Bob Jones",
+          nameType: "Personal",
+          affiliation: [{ name: "Institute of Testing" }],
         },
       ],
     }
@@ -606,12 +606,12 @@ describe("savePackageToZenodo", () => {
       json: () =>
         Promise.resolve({
           id: "file-2",
-          filename: "datapackage.json",
+          filename: "dataset.json",
           filesize: 500,
         }),
     })
 
-    await savePackageToZenodo(packageWithContributors, mockOptions)
+    await saveDatasetToZenodo(datasetWithCreators, mockOptions)
 
     const depositionCreateCall = fetchMock.mock.calls[0]
     expect(depositionCreateCall).toBeDefined()

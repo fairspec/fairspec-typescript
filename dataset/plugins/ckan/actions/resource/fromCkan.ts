@@ -1,7 +1,7 @@
 import type { Resource } from "@fairspec/metadata"
 import { getFileName } from "@fairspec/metadata"
 import { convertTableSchemaFromCkan } from "../../actions/tableSchema/fromCkan.ts"
-import type { CkanResource } from "../../models/Resource.ts"
+import type { CkanResource } from "../../models/resource.ts"
 
 export function convertResourceFromCkan(ckanResource: CkanResource): Resource {
   const resource: Resource = {

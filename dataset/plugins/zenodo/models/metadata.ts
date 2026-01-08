@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { ZenodoCreator } from "./Creator.ts"
+import { ZenodoCreator } from "./creator.ts"
 
 export const ZenodoMetadata = z
   .object({

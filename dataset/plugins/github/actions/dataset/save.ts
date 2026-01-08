@@ -5,7 +5,7 @@ import { denormalizeDataset, stringifyDescriptor } from "@fairspec/metadata"
 import { getDatasetBasepath } from "../../../../actions/dataset/basepath.ts"
 import { saveResourceFiles } from "../../../../actions/resource/save.ts"
 import { loadFileStream } from "../../../../actions/stream/load.ts"
-import type { GithubRepository } from "../../models/Repository.ts"
+import type { GithubRepository } from "../../models/repository.ts"
 import { makeGithubApiRequest } from "../../services/github.ts"
 
 /**

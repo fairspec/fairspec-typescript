@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import type { ZenodoFile } from "../../models/File.ts"
+import type { ZenodoFile } from "../../models/file.ts"
 
 export function convertResourceToZenodo(resource: Resource) {
   const zenodoFile: Partial<ZenodoFile> = {

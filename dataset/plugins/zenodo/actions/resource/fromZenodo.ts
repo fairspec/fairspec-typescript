@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import { getFileNameSlug } from "@fairspec/metadata"
-import type { ZenodoFile } from "../../models/File.ts"
+import type { ZenodoFile } from "../../models/file.ts"
 
 export function convertResourceFromZenodo(zenodoFile: ZenodoFile) {
   const path = convertPath(zenodoFile.links.self)

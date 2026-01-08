@@ -11,8 +11,8 @@ import type {
   TableSchema,
   TimeColumn,
 } from "@fairspec/metadata"
-import type { CkanField } from "../../models/Field.ts"
-import type { CkanSchema } from "../../models/Schema.ts"
+import type { CkanField } from "../../models/field.ts"
+import type { CkanSchema } from "../../models/schema.ts"
 
 export function convertTableSchemaFromCkan(
   ckanSchema: CkanSchema,

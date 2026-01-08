@@ -9,7 +9,7 @@ import { getDatasetBasepath } from "../../../../actions/dataset/basepath.ts"
 import { saveResourceFiles } from "../../../../actions/resource/save.ts"
 import { loadFileStream } from "../../../../actions/stream/load.ts"
 import { convertResourceToCkan } from "../../actions/resource/toCkan.ts"
-import type { CkanResource } from "../../models/Resource.ts"
+import type { CkanResource } from "../../models/resource.ts"
 import { makeCkanApiRequest } from "../../services/ckan.ts"
 import { convertDatasetToCkan } from "./toCkan.ts"
 

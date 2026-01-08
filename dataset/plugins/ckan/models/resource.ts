@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { CkanSchema } from "./Schema.ts"
+import { CkanSchema } from "./schema.ts"
 
 export const CkanResource = z
   .object({

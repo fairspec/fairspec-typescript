@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import { convertTableSchemaToCkan } from "../../actions/tableSchema/toCkan.ts"
-import type { CkanResource } from "../../models/Resource.ts"
+import type { CkanResource } from "../../models/resource.ts"
 
 export function convertResourceToCkan(resource: Resource) {
   const ckanResource: Partial<CkanResource> = {}

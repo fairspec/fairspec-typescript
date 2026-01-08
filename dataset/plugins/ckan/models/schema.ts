@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { CkanField } from "./Field.ts"
+import { CkanField } from "./field.ts"
 
 export const CkanSchema = z
   .object({

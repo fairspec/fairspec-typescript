@@ -1,10 +1,11 @@
 import { join } from "node:path"
 import type { Dataset, Descriptor } from "@fairspec/metadata"
 import { denormalizeDataset, saveDescriptor } from "@fairspec/metadata"
-import { getDatasetBasepath } from "../../../dataset/index.ts"
-import { assertLocalPathVacant, copyFile } from "../../../file/index.ts"
-import { createFolder } from "../../../folder/index.ts"
-import { saveResourceFiles } from "../../../resource/index.ts"
+import { getDatasetBasepath } from "../../../../actions/dataset/basepath.ts"
+import { copyFile } from "../../../../actions/file/copy.ts"
+import { assertLocalPathVacant } from "../../../../actions/file/path.ts"
+import { createFolder } from "../../../../actions/folder/create.ts"
+import { saveResourceFiles } from "../../../../actions/resource/save.ts"
 
 export async function saveDatasetToFolder(
   dataset: Dataset,

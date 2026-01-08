@@ -2,7 +2,10 @@ import { access, readFile } from "node:fs/promises"
 import { join } from "node:path"
 import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it } from "vitest"
-import { getTempFilePath, writeTempFile } from "../../../file/index.ts"
+import {
+  getTempFilePath,
+  writeTempFile,
+} from "../../../../actions/file/temp.ts"
 import { loadDatasetFromFolder } from "./load.ts"
 import { saveDatasetToFolder } from "./save.ts"
 

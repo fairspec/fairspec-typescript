@@ -9,6 +9,16 @@ export const TableSchema = z.object({
     .regex(/table\.json$/)
     .describe("URI to one of the officially published Fairspec Table profiles"),
 
+  title: z
+    .string()
+    .optional()
+    .describe("A human-readable title of the table schema"),
+
+  description: z
+    .string()
+    .optional()
+    .describe("A human-readable description of the table schema"),
+
   required: z
     .array(z.string())
     .optional()

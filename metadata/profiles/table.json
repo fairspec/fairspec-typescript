@@ -6,6 +6,8 @@
       "type": "object",
       "properties": {
         "$schema": { "$ref": "#/$defs/MetaSchema" },
+        "title": { "$ref": "#/$defs/Title" },
+        "description": { "$ref": "#/$defs/Description" },
         "required": { "$ref": "#/$defs/Required" },
         "properties": { "$ref": "#/$defs/Properties" },
         "missingValues": { "$ref": "#/$defs/MissingValues" },
@@ -17,6 +19,12 @@
     "MetaSchema": {
       "type": "string",
       "pattern": "table.json$"
+    },
+    "Title": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "string"
     },
     "Required": {
       "type": "array",
@@ -380,12 +388,6 @@
       "properties": {
         "format": { "const": "topojson" }
       }
-    },
-    "Title": {
-      "type": "string"
-    },
-    "Description": {
-      "type": "string"
     },
     "RdfType": {
       "type": "string",

@@ -1,5 +1,5 @@
 import { Readable } from "node:stream"
-import { saveFileStream } from "../stream/index.ts"
+import { saveFileStream } from "../../actions/stream/save.ts"
 
 export async function saveFile(
   path: string,

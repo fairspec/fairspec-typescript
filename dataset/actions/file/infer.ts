@@ -5,9 +5,9 @@ import chardet from "chardet"
 import * as hasha from "hasha"
 import { isBinaryFile } from "isbinaryfile"
 import pMap from "p-map"
-import { loadFile } from "../file/index.ts"
-import { concatFileStreams } from "../stream/concat.ts"
-import { loadFileStream } from "../stream/index.ts"
+import { loadFile } from "../../actions/file/load.ts"
+import { concatFileStreams } from "../../actions/stream/concat.ts"
+import { loadFileStream } from "../../actions/stream/load.ts"
 import { prefetchFiles } from "./fetch.ts"
 
 export type HashType = NonNullable<Resource["integrity"]>["type"]

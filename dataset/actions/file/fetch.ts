@@ -2,7 +2,8 @@ import os from "node:os"
 import type { Resource } from "@fairspec/metadata"
 import { getDataPaths, isRemotePath } from "@fairspec/metadata"
 import pAll from "p-all"
-import { copyFile, getTempFilePath } from "../file/index.ts"
+import { copyFile } from "../../actions/file/copy.ts"
+import { getTempFilePath } from "../../actions/file/temp.ts"
 
 export async function prefetchFiles(resource: Partial<Resource>) {
   const paths = getDataPaths(resource)

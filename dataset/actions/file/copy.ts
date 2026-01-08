@@ -1,5 +1,5 @@
-import { loadFileStream } from "../stream/load.ts"
-import { saveFileStream } from "../stream/save.ts"
+import { loadFileStream } from "../../actions/stream/load.ts"
+import { saveFileStream } from "../../actions/stream/save.ts"
 
 export async function copyFile(options: {
   sourcePath: string

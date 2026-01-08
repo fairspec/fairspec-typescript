@@ -1,5 +1,5 @@
 import type { JsonSchema } from "../../models/jsonSchema.ts"
-import type { Profile, ProfileType } from "./types.ts"
+import type { Profile, ProfileType } from "../../models/profile.ts"
 
 export async function assertProfile(
   jsonSchema: JsonSchema,

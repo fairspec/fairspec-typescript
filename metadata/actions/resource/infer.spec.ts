@@ -34,7 +34,7 @@ describe("inferResourceName", () => {
 
   it("handles complex filename with multiple dots", () => {
     const resource = { data: "/data/file.backup.csv" }
-    expect(inferResourceName(resource)).toBe("file")
+    expect(inferResourceName(resource)).toBe("file_backup")
   })
 
   it("slugifies filename with spaces and special characters", () => {

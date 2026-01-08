@@ -6,7 +6,7 @@ export function convertDatasetFromGithub(
   githubRepository: GithubRepository,
 ): Dataset {
   const dataset: Dataset = {
-    $schema: "https://fairspec.org/schema/latest/dataset.json",
+    $schema: "https://fairspec.org/profiles/latest/dataset.json",
     resources: [],
   }
 

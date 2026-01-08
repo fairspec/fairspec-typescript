@@ -45,7 +45,9 @@ export const FrictionlessStringField = FrictionlessBaseField.extend({
   categoriesOrdered: z
     .boolean()
     .optional()
-    .describe("Whether categories should be considered to have a natural order"),
+    .describe(
+      "Whether categories should be considered to have a natural order",
+    ),
   constraints: FrictionlessStringConstraints.optional(),
 })
 

@@ -110,8 +110,8 @@ describe("saveDatasetToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "fairspec.json",
-            path: "fairspec.json",
+            name: "dataset.json",
+            path: "dataset.json",
             sha: "def456",
           },
         }),
@@ -139,7 +139,7 @@ describe("saveDatasetToGithub", () => {
     expect(repoPayload.auto_init).toEqual(true)
 
     expect(result).toEqual({
-      path: "https://raw.githubusercontent.com/test-user/test-repo/refs/heads/main/fairspec.json",
+      path: "https://raw.githubusercontent.com/test-user/test-repo/refs/heads/main/dataset.json",
       repoUrl: "https://github.com/test-user/test-repo",
     })
   })
@@ -257,8 +257,8 @@ describe("saveDatasetToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "fairspec.json",
-            path: "fairspec.json",
+            name: "dataset.json",
+            path: "dataset.json",
             sha: "def456",
           },
         }),
@@ -288,7 +288,7 @@ describe("saveDatasetToGithub", () => {
     expect(typeof filePayload.content).toEqual("string")
   })
 
-  it("uploads fairspec.json metadata file", async () => {
+  it("uploads dataset.json metadata file", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: () =>
@@ -340,8 +340,8 @@ describe("saveDatasetToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "fairspec.json",
-            path: "fairspec.json",
+            name: "dataset.json",
+            path: "dataset.json",
             sha: "def456",
           },
         }),
@@ -354,12 +354,12 @@ describe("saveDatasetToGithub", () => {
     if (!datasetUploadCall) return
 
     expect(datasetUploadCall[0]).toEqual(
-      "https://api.github.com/repos/test-user/test-repo/contents/fairspec.json",
+      "https://api.github.com/repos/test-user/test-repo/contents/dataset.json",
     )
 
     const datasetPayload = JSON.parse(datasetUploadCall[1].body)
-    expect(datasetPayload.path).toEqual("fairspec.json")
-    expect(datasetPayload.message).toEqual('Added file "fairspec.json"')
+    expect(datasetPayload.path).toEqual("dataset.json")
+    expect(datasetPayload.message).toEqual('Added file "dataset.json"')
     expect(datasetPayload.content).toBeDefined()
     expect(typeof datasetPayload.content).toEqual("string")
   })
@@ -574,8 +574,8 @@ describe("saveDatasetToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "fairspec.json",
-            path: "fairspec.json",
+            name: "dataset.json",
+            path: "dataset.json",
             sha: "def456",
           },
         }),
@@ -636,8 +636,8 @@ describe("saveDatasetToGithub", () => {
       json: () =>
         Promise.resolve({
           content: {
-            name: "fairspec.json",
-            path: "fairspec.json",
+            name: "dataset.json",
+            path: "dataset.json",
             sha: "def456",
           },
         }),

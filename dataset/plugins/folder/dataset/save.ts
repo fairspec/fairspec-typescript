@@ -43,7 +43,7 @@ export async function saveDatasetToFolder(
   }
 
   await saveDescriptor(descriptor, {
-    path: join(folderPath, "fairspec.json"),
+    path: join(folderPath, "dataset.json"),
   })
 
   return descriptor

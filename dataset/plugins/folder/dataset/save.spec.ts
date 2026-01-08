@@ -26,7 +26,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     await expect(access(descriptorPath)).resolves.toBeUndefined()
   })
 
@@ -48,7 +48,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     await expect(access(descriptorPath)).resolves.toBeUndefined()
   })
 
@@ -68,7 +68,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     await expect(access(descriptorPath)).resolves.toBeUndefined()
   })
 
@@ -89,7 +89,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     await expect(access(descriptorPath)).resolves.toBeUndefined()
   })
 
@@ -114,7 +114,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     await expect(access(descriptorPath)).resolves.toBeUndefined()
   })
 
@@ -138,7 +138,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     await expect(access(descriptorPath)).resolves.toBeUndefined()
   })
 
@@ -159,7 +159,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     await expect(access(descriptorPath)).resolves.toBeUndefined()
   })
 
@@ -338,7 +338,7 @@ describe("saveDatasetToFolder", () => {
     expect(reloadedDataset.resources?.[1]?.name).toBe("resource2")
   })
 
-  it("should create fairspec.json in folder", async () => {
+  it("should create dataset.json in folder", async () => {
     const dataset: Dataset = {
       $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
@@ -351,7 +351,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     const descriptorContent = await readFile(descriptorPath, "utf-8")
     const descriptor = JSON.parse(descriptorContent)
 
@@ -378,7 +378,7 @@ describe("saveDatasetToFolder", () => {
 
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
 
-    const descriptorPath = join(tempFolderPath, "fairspec.json")
+    const descriptorPath = join(tempFolderPath, "dataset.json")
     const descriptorContent = await readFile(descriptorPath, "utf-8")
     const descriptor = JSON.parse(descriptorContent)
 

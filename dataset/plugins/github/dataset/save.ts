@@ -64,7 +64,7 @@ export async function saveDatasetToGithub(
     resources: resourceDescriptors,
   }
 
-  for (const denormalizedPath of ["fairspec.json"]) {
+  for (const denormalizedPath of ["dataset.json"]) {
     const payload = {
       path: denormalizedPath,
       message: `Added file "${denormalizedPath}"`,
@@ -80,7 +80,7 @@ export async function saveDatasetToGithub(
   }
 
   return {
-    path: `https://raw.githubusercontent.com/${githubDataset.owner.login}/${repo}/refs/heads/main/fairspec.json`,
+    path: `https://raw.githubusercontent.com/${githubDataset.owner.login}/${repo}/refs/heads/main/dataset.json`,
     repoUrl: githubDataset.html_url,
   }
 }

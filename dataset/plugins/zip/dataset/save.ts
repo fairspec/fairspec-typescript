@@ -44,7 +44,7 @@ export async function saveDatasetToZip(
     resources: resourceDescriptors,
   }
 
-  files["fairspec.json"] = Buffer.from(stringifyDescriptor(descriptor))
+  files["dataset.json"] = Buffer.from(stringifyDescriptor(descriptor))
 
   const zipData = await new Promise<Uint8Array>((resolve, reject) => {
     zip(files, (err, data) => {

@@ -196,7 +196,7 @@ describe("loadDatasetFromFolder", () => {
     await expect(loadDatasetFromFolder(nonExistentPath)).rejects.toThrow()
   })
 
-  it("should throw error for folder without fairspec.json", async () => {
+  it("should throw error for folder without dataset.json", async () => {
     const emptyFolderPath = getTempFilePath()
     const fs = await import("node:fs/promises")
     await fs.mkdir(emptyFolderPath, { recursive: true })

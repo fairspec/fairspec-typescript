@@ -38,7 +38,7 @@ export async function loadDatasetFromGithub(
 
   const systemDataset = convertDatasetFromGithub(githubDataset)
   const userDatasetPath = (systemDataset.resources ?? [])
-    .filter(resource => resource.unstable_customMetadata?.githubKey === "fairspec.json")
+    .filter(resource => resource.unstable_customMetadata?.githubKey === "dataset.json")
     .map(resource => resource.unstable_customMetadata?.githubUrl)
     .at(0) as string | undefined
 

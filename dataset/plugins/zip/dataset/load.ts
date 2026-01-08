@@ -31,7 +31,7 @@ export async function loadDatasetFromZip(archivePath: string) {
   }
 
   const dataset = await loadDatasetDescriptor(
-    join(basepath, "fairspec.json"),
+    join(basepath, "dataset.json"),
   )
 
   return dataset

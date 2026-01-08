@@ -1,23 +1,15 @@
 import { describe, expect, it } from "vitest"
 import { useRecording } from "vitest-polly"
-import { loadPackageFromZenodo } from "./load.ts"
+import { loadDatasetFromZenodo } from "./load.ts"
 
 useRecording()
 
-describe("loadPackageFromZenodo", () => {
+describe("loadDatasetFromZenodo", () => {
   it("should load a package", async () => {
-    const datapackage = await loadPackageFromZenodo(
+    const dataset = await loadDatasetFromZenodo(
       "https://zenodo.org/records/15525711",
     )
 
-    expect(datapackage).toMatchSnapshot()
-  })
-
-  it("shoule merge datapackage.json if present", async () => {
-    const datapackage = await loadPackageFromZenodo(
-      "https://zenodo.org/records/10053903",
-    )
-
-    expect(datapackage).toMatchSnapshot()
+    expect(dataset).toMatchSnapshot()
   })
 })

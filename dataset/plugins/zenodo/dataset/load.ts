@@ -1,14 +1,9 @@
-import { mergePackages } from "../../../package/index.ts"
-import { makeZenodoApiRequest } from "../zenodo/index.ts"
-import type { ZenodoPackage } from "./Package.ts"
-import { convertPackageFromZenodo } from "./convert/fromZenodo.ts"
+import { mergeDatasets } from "../../../dataset/index.ts"
+import { makeZenodoApiRequest } from "../platform/index.ts"
+import type { ZenodoDataset } from "./Dataset.ts"
+import { convertDatasetFromZenodo } from "./convert/fromZenodo.ts"
 
-/**
- * Load a package from a Zenodo deposit
- * @param props Object containing the URL to the Zenodo deposit
- * @returns Package object
- */
-export async function loadPackageFromZenodo(
+export async function loadDatasetFromZenodo(
   datasetUrl: string,
   options?: {
     apiKey?: string
@@ -22,34 +17,26 @@ export async function loadPackageFromZenodo(
     throw new Error(`Failed to extract record ID from URL: ${datasetUrl}`)
   }
 
-  const zenodoPackage = await makeZenodoApiRequest<ZenodoPackage>({
+  const zenodoDataset = await makeZenodoApiRequest<ZenodoDataset>({
     endpoint: `/records/${recordId}`,
     apiKey,
     sandbox,
   })
 
-  const systemPackage = convertPackageFromZenodo(zenodoPackage)
-  const userPackagePath = systemPackage.resources
-    .filter(resource => resource["zenodo:key"] === "datapackage.json")
-    .map(resource => resource["zenodo:url"])
+  const systemDataset = convertDatasetFromZenodo(zenodoDataset)
+  const userDatasetPath = (systemDataset.resources ?? [])
+    .filter(resource => resource.unstable_customMetadata?.zenodoKey === "dataset.json")
+    .map(resource => resource.unstable_customMetadata?.zenodoUrl as string)
     .at(0)
 
-  const datapackage = await mergePackages({ systemPackage, userPackagePath })
-  datapackage.resources = datapackage.resources.map(resource => {
-    // TODO: remove these keys completely
-    return { ...resource, "zenodo:key": undefined, "zenodo:url": undefined }
+  const dataset = await mergeDatasets({ systemDataset, userDatasetPath })
+  dataset.resources?.forEach(resource => {
+    delete resource.unstable_customMetadata
   })
 
-  return datapackage
+  return dataset
 }
 
-/**
- * Extract deposit ID from URL
- *
- * Examples:
- * - https://zenodo.org/records/1234567
- * - https://sandbox.zenodo.org/records/1234567
- */
 function extractRecordId(datasetUrl: string): string | undefined {
   const url = new URL(datasetUrl)
   const pathParts = url.pathname.split("/").filter(Boolean)

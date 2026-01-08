@@ -184,11 +184,6 @@ The criteria underpinning collection units and the methodology by which they are
           },
         },
       },
-      "unstable_customMetadata": {
-        "ckanId": "660de433-447b-40ad-9aaf-77c98f8c2ba9",
-        "ckanKey": "jtd_cld_public_dataset_20250425.csv",
-        "ckanUrl": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/660de433-447b-40ad-9aaf-77c98f8c2ba9/download/jtd_cld_public_dataset_20250425.csv",
-      },
     },
     {
       "data": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/09b2f07b-9e77-44b7-8645-ddcba1266629/download/jtd-collection-level-records-data-dictionary.csv",
@@ -235,11 +230,6 @@ The criteria underpinning collection units and the methodology by which they are
           },
         },
       },
-      "unstable_customMetadata": {
-        "ckanId": "09b2f07b-9e77-44b7-8645-ddcba1266629",
-        "ckanKey": "jtd-collection-level-records-data-dictionary.csv",
-        "ckanUrl": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/09b2f07b-9e77-44b7-8645-ddcba1266629/download/jtd-collection-level-records-data-dictionary.csv",
-      },
     },
     {
       "data": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/6920d9c9-6ea4-415c-95c8-54512a70346c/download/join-the-dots-user-manual.pdf",
@@ -263,11 +253,6 @@ The criteria underpinning collection units and the methodology by which they are
       "sizes": [
         "8108818 bytes",
       ],
-      "unstable_customMetadata": {
-        "ckanId": "6920d9c9-6ea4-415c-95c8-54512a70346c",
-        "ckanKey": "join-the-dots-user-manual.pdf",
-        "ckanUrl": "https://data.nhm.ac.uk/dataset/78941769-a224-41d2-bdd5-527e9bbd9757/resource/6920d9c9-6ea4-415c-95c8-54512a70346c/download/join-the-dots-user-manual.pdf",
-      },
     },
   ],
   "rightsList": [

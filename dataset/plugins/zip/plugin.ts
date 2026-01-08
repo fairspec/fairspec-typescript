@@ -1,4 +1,5 @@
 import type { Dataset } from "@fairspec/metadata"
+import { getFileExtension } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
 import { loadDatasetFromZip, saveDatasetToZip } from "./dataset/index.ts"
 
@@ -28,5 +29,5 @@ export class ZipPlugin implements DatasetPlugin {
 }
 
 function getIsZip(path: string) {
-  return path.endsWith(".zip")
+  return getFileExtension(path) === "zip"
 }

@@ -18,8 +18,8 @@ export { getTempFolderPath } from "./folder/index.ts"
 export type { DatasetPlugin, SaveDatasetOptions } from "./plugin.ts"
 export {
   CkanPlugin,
-  loadPackageFromCkan,
-  savePackageToCkan,
+  loadDatasetFromCkan,
+  saveDatasetToCkan,
 } from "./plugins/ckan/index.ts"
 export { DescriptorPlugin } from "./plugins/descriptor/index.ts"
 export {
@@ -33,8 +33,8 @@ export {
   saveDatasetToGithub,
 } from "./plugins/github/index.ts"
 export {
-  loadPackageFromZenodo,
-  savePackageToZenodo,
+  loadDatasetFromZenodo,
+  saveDatasetToZenodo,
   ZenodoPlugin,
 } from "./plugins/zenodo/index.ts"
 export {

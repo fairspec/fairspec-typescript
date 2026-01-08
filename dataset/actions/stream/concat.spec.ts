@@ -142,9 +142,7 @@ describe("concatFileStreams", () => {
     }
 
     const result = Buffer.concat(chunks).toString("utf-8")
-    expect(result).toBe(
-      `${JSON.stringify(obj1)},${JSON.stringify(obj2)}`,
-    )
+    expect(result).toBe(`${JSON.stringify(obj1)},${JSON.stringify(obj2)}`)
   })
 
   it("should handle streams with newlines and special characters", async () => {

@@ -6,7 +6,9 @@ export const GithubOwner = z
     id: z.number().describe("Owner ID"),
     avatar_url: z.string().describe("Owner avatar URL"),
     html_url: z.string().describe("Owner URL"),
-    type: z.enum(["User", "Organization"]).describe("Owner type (User/Organization)"),
+    type: z
+      .enum(["User", "Organization"])
+      .describe("Owner type (User/Organization)"),
   })
   .describe("GitHub repository owner")
 

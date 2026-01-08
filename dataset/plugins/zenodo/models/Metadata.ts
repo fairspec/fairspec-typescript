@@ -14,7 +14,9 @@ export const ZenodoMetadata = z
     access_right: z
       .string()
       .optional()
-      .describe('Access right, e.g., "open", "embargoed", "restricted", "closed"'),
+      .describe(
+        'Access right, e.g., "open", "embargoed", "restricted", "closed"',
+      ),
     license: z.string().optional().describe("License identifier"),
     doi: z.string().optional().describe("DOI of the deposit"),
     keywords: z.array(z.string()).optional().describe("Keywords/tags"),

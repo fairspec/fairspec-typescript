@@ -349,9 +349,9 @@ describe("saveDatasetToZenodo", () => {
       text: () => Promise.resolve("Invalid deposition data"),
     })
 
-    await expect(
-      saveDatasetToZenodo(mockDataset, mockOptions),
-    ).rejects.toThrow("Zenodo API error: 400 Bad Request")
+    await expect(saveDatasetToZenodo(mockDataset, mockOptions)).rejects.toThrow(
+      "Zenodo API error: 400 Bad Request",
+    )
   })
 
   it("handles API errors from file upload", async () => {
@@ -386,9 +386,9 @@ describe("saveDatasetToZenodo", () => {
       text: () => Promise.resolve("Failed to upload file"),
     })
 
-    await expect(
-      saveDatasetToZenodo(mockDataset, mockOptions),
-    ).rejects.toThrow("Zenodo API error: 500 Internal Server Error")
+    await expect(saveDatasetToZenodo(mockDataset, mockOptions)).rejects.toThrow(
+      "Zenodo API error: 500 Internal Server Error",
+    )
   })
 
   it("handles datasets with multiple resources", async () => {
@@ -491,13 +491,13 @@ describe("saveDatasetToZenodo", () => {
     )
   })
 
-  it("skips resources without data", async () => {
+  it("skips resources without files", async () => {
     const datasetWithoutData: Dataset = {
       ...mockDataset,
       resources: [
         {
           name: "resource-without-data",
-          format: { name: "csv" },
+          data: { key: "value" },
         },
       ],
     }

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it } from "vitest"
 import { inferHash } from "./infer.ts"
 import { writeTempFile } from "./temp.ts"
 import { validateFile } from "./validate.ts"
@@ -207,7 +207,7 @@ describe("validateFile", () => {
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(2)
     expect(report.errors[0]?.type).toBe("file/textual")
-    expect(report.errors[1]?.type).toBe("file/integrity")
+    expect.assert(report.errors[1]?.type === "file/integrity")
     expect(report.errors[1]?.hashType).toBe("md5")
     expect(report.errors[1]?.expectedHash).toBe("wronghash")
     expect(report.errors[1]?.actualHash).toBe(actualHash)

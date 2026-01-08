@@ -151,10 +151,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
-          dialect: {
-            delimiter: ";",
-          },
+          format: { name: "csv", delimiter: ";" },
         },
       ],
     }
@@ -189,7 +186,7 @@ describe("saveDatasetToZip", () => {
       "A test dataset",
     )
     expect(reloadedDataset.resources).toHaveLength(1)
-    expect(reloadedDataset.resources[0]?.name).toBe("test_resource")
+    expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
   })
 
   it("should save and reload dataset preserving metadata", async () => {
@@ -200,7 +197,7 @@ describe("saveDatasetToZip", () => {
         { description: "A test dataset", descriptionType: "Abstract" },
       ],
       version: "1.0.0",
-      keywords: ["test", "dataset"],
+      subjects: [{ subject: "test" }, { subject: "dataset" }],
       resources: [
         {
           name: "test_resource",
@@ -214,7 +211,10 @@ describe("saveDatasetToZip", () => {
 
     expect(reloadedDataset.titles?.[0]?.title).toBe("Test Dataset")
     expect(reloadedDataset.version).toBe("1.0.0")
-    expect(reloadedDataset.keywords).toEqual(["test", "dataset"])
+    expect(reloadedDataset.subjects).toEqual([
+      { subject: "test" },
+      { subject: "dataset" },
+    ])
   })
 
   it("should save and reload dataset with tableSchema", async () => {
@@ -238,7 +238,7 @@ describe("saveDatasetToZip", () => {
     await saveDatasetToZip(originalDataset, { archivePath: tempZipPath })
     const reloadedDataset = await loadDatasetFromZip(tempZipPath)
 
-    const tableSchema = reloadedDataset.resources[0]?.tableSchema
+    const tableSchema = reloadedDataset.resources?.[0]?.tableSchema
     expect(tableSchema).toBeDefined()
     expect(
       typeof tableSchema === "object" && "properties" in tableSchema,
@@ -270,8 +270,8 @@ describe("saveDatasetToZip", () => {
     const reloadedDataset = await loadDatasetFromZip(tempZipPath)
 
     expect(reloadedDataset.resources).toHaveLength(1)
-    expect(reloadedDataset.resources[0]?.name).toBe("test_resource")
-    expect(reloadedDataset.resources[0]?.format?.name).toBe("csv")
+    expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
+    expect(reloadedDataset.resources?.[0]?.format?.name).toBe("csv")
   })
 
   it("should throw error when saving to existing file", async () => {
@@ -342,7 +342,7 @@ describe("saveDatasetToZip", () => {
     const reloadedDataset = await loadDatasetFromZip(tempZipPath)
 
     expect(reloadedDataset.resources).toHaveLength(2)
-    expect(reloadedDataset.resources[0]?.name).toBe("resource_1")
-    expect(reloadedDataset.resources[1]?.name).toBe("resource_2")
+    expect(reloadedDataset.resources?.[0]?.name).toBe("resource_1")
+    expect(reloadedDataset.resources?.[1]?.name).toBe("resource_2")
   })
 })

@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const ZenodoResource = z
+export const ZenodoFile = z
   .object({
     id: z.string().describe("File identifier"),
     key: z.string().describe("File key"),
@@ -14,4 +14,4 @@ export const ZenodoResource = z
   })
   .describe("Zenodo File interface")
 
-export type ZenodoResource = z.infer<typeof ZenodoResource>
+export type ZenodoFile = z.infer<typeof ZenodoFile>

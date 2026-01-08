@@ -1,6 +1,6 @@
 import { isRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
-import { loadDatasetFromZenodo } from "./dataset/load.ts"
+import { loadDatasetFromZenodo } from "./actions/dataset/load.ts"
 
 export class ZenodoPlugin implements DatasetPlugin {
   async loadDataset(source: string) {

@@ -1,19 +1,19 @@
 import type { Resource } from "@fairspec/metadata"
 import { getFileNameSlug } from "@fairspec/metadata"
-import type { ZenodoResource } from "../Resource.ts"
+import type { ZenodoFile } from "../../models/File.ts"
 
-export function convertResourceFromZenodo(zenodoResource: ZenodoResource) {
-  const path = convertPath(zenodoResource.links.self)
+export function convertResourceFromZenodo(zenodoFile: ZenodoFile) {
+  const path = convertPath(zenodoFile.links.self)
 
   const resource: Resource = {
     data: path,
-    name: getFileNameSlug(zenodoResource.key) ?? zenodoResource.id,
+    name: getFileNameSlug(zenodoFile.key) ?? zenodoFile.id,
     integrity: {
       type: "md5",
-      hash: zenodoResource.checksum.replace("md5:", ""),
+      hash: zenodoFile.checksum.replace("md5:", ""),
     },
     unstable_customMetadata: {
-      zenodoKey: zenodoResource.key,
+      zenodoKey: zenodoFile.key,
       zenodoUrl: path,
     },
   }

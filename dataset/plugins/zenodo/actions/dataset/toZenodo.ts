@@ -1,11 +1,12 @@
 import type { Dataset } from "@fairspec/metadata"
-import type { ZenodoCreator } from "../Creator.ts"
-import type { ZenodoDataset } from "../Dataset.ts"
+import type { ZenodoCreator } from "../../models/Creator.ts"
+import type { ZenodoMetadata } from "../../models/Metadata.ts"
+import type { ZenodoRecord } from "../../models/Record.ts"
 
 export function convertDatasetToZenodo(
   dataset: Dataset,
-): Partial<ZenodoDataset> {
-  const metadata: Partial<ZenodoDataset["metadata"]> = {
+): Partial<ZenodoRecord> {
+  const metadata: Partial<ZenodoMetadata> = {
     upload_type: "dataset",
   }
 
@@ -18,7 +19,7 @@ export function convertDatasetToZenodo(
   } else if (dataset.titles?.[0]) {
     metadata.description = dataset.titles[0].title
   } else {
-    metadata.description = "Dataset created with @fairspec/zenodo"
+    metadata.description = "Dataset created with fairspec"
   }
 
   if (dataset.version) {
@@ -69,6 +70,6 @@ export function convertDatasetToZenodo(
   }
 
   return {
-    metadata: metadata as ZenodoDataset["metadata"],
+    metadata: metadata as ZenodoMetadata,
   }
 }

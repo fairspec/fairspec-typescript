@@ -1,7 +1,7 @@
-import { mergeDatasets } from "../../../dataset/index.ts"
-import { makeZenodoApiRequest } from "../platform/index.ts"
-import type { ZenodoDataset } from "./Dataset.ts"
-import { convertDatasetFromZenodo } from "./convert/fromZenodo.ts"
+import { mergeDatasets } from "../../../../actions/dataset/merge.ts"
+import { makeZenodoApiRequest } from "../../services/zenodo.ts"
+import type { ZenodoRecord } from "../../models/Record.ts"
+import { convertDatasetFromZenodo } from "./fromZenodo.ts"
 
 export async function loadDatasetFromZenodo(
   datasetUrl: string,
@@ -17,13 +17,13 @@ export async function loadDatasetFromZenodo(
     throw new Error(`Failed to extract record ID from URL: ${datasetUrl}`)
   }
 
-  const zenodoDataset = await makeZenodoApiRequest<ZenodoDataset>({
+  const zenodoRecord = await makeZenodoApiRequest<ZenodoRecord>({
     endpoint: `/records/${recordId}`,
     apiKey,
     sandbox,
   })
 
-  const systemDataset = convertDatasetFromZenodo(zenodoDataset)
+  const systemDataset = convertDatasetFromZenodo(zenodoRecord)
   const userDatasetPath = (systemDataset.resources ?? [])
     .filter(resource => resource.unstable_customMetadata?.zenodoKey === "dataset.json")
     .map(resource => resource.unstable_customMetadata?.zenodoUrl as string)

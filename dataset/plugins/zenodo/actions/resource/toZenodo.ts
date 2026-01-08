@@ -1,14 +1,14 @@
 import type { Resource } from "@fairspec/metadata"
-import type { ZenodoResource } from "../Resource.ts"
+import type { ZenodoFile } from "../../models/File.ts"
 
 export function convertResourceToZenodo(resource: Resource) {
-  const zenodoResource: Partial<ZenodoResource> = {
+  const zenodoFile: Partial<ZenodoFile> = {
     key: resource.name,
   }
 
   if (resource.integrity && resource.integrity.type === "md5") {
-    zenodoResource.checksum = `md5:${resource.integrity.hash}`
+    zenodoFile.checksum = `md5:${resource.integrity.hash}`
   }
 
-  return zenodoResource
+  return zenodoFile
 }

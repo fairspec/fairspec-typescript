@@ -1,12 +1,12 @@
 import { blob } from "node:stream/consumers"
 import type { Dataset, Descriptor } from "@fairspec/metadata"
 import { denormalizeDataset, stringifyDescriptor } from "@fairspec/metadata"
-import { getDatasetBasepath } from "../../../dataset/index.ts"
-import { saveResourceFiles } from "../../../resource/index.ts"
-import { loadFileStream } from "../../../stream/index.ts"
-import { makeZenodoApiRequest } from "../platform/index.ts"
-import { convertDatasetToZenodo } from "./convert/toZenodo.ts"
-import type { ZenodoDataset } from "./Dataset.ts"
+import { getDatasetBasepath } from "../../../../actions/dataset/basepath.ts"
+import { saveResourceFiles } from "../../../../actions/resource/save.ts"
+import { loadFileStream } from "../../../../actions/stream/load.ts"
+import type { ZenodoRecord } from "../../models/Record.ts"
+import { makeZenodoApiRequest } from "../../services/zenodo.ts"
+import { convertDatasetToZenodo } from "./toZenodo.ts"
 
 export async function saveDatasetToZenodo(
   dataset: Dataset,
@@ -18,14 +18,14 @@ export async function saveDatasetToZenodo(
   const { apiKey, sandbox = false } = options
   const basepath = getDatasetBasepath(dataset)
 
-  const newZenodoDataset = convertDatasetToZenodo(dataset)
-  const zenodoDataset = (await makeZenodoApiRequest({
-    payload: newZenodoDataset,
+  const newZenodoRecord = convertDatasetToZenodo(dataset)
+  const zenodoRecord = (await makeZenodoApiRequest({
+    payload: newZenodoRecord,
     endpoint: "/deposit/depositions",
     method: "POST",
     apiKey,
     sandbox,
-  })) as ZenodoDataset
+  })) as ZenodoRecord
 
   const resourceDescriptors: Descriptor[] = []
   for (const resource of dataset.resources ?? []) {
@@ -41,7 +41,7 @@ export async function saveDatasetToZenodo(
           }
 
           await makeZenodoApiRequest({
-            endpoint: `/deposit/depositions/${zenodoDataset.id}/files`,
+            endpoint: `/deposit/depositions/${zenodoRecord.id}/files`,
             method: "POST",
             upload,
             apiKey,
@@ -66,7 +66,7 @@ export async function saveDatasetToZenodo(
     }
 
     await makeZenodoApiRequest({
-      endpoint: `/deposit/depositions/${zenodoDataset.id}/files`,
+      endpoint: `/deposit/depositions/${zenodoRecord.id}/files`,
       method: "POST",
       upload,
       apiKey,
@@ -74,9 +74,9 @@ export async function saveDatasetToZenodo(
     })
   }
 
-  const url = new URL(zenodoDataset.links.html)
+  const url = new URL(zenodoRecord.links.html)
   return {
-    path: `${url.origin}/records/${zenodoDataset.id}/files/dataset.json`,
-    datasetUrl: `${url.origin}/uploads/${zenodoDataset.id}`,
+    path: `${url.origin}/records/${zenodoRecord.id}/files/dataset.json`,
+    datasetUrl: `${url.origin}/uploads/${zenodoRecord.id}`,
   }
 }

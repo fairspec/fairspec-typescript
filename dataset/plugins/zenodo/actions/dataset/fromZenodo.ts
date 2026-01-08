@@ -1,16 +1,14 @@
 import type { Dataset } from "@fairspec/metadata"
-import { convertResourceFromZenodo } from "../../resource/index.ts"
-import type { ZenodoDataset } from "../Dataset.ts"
+import { convertResourceFromZenodo } from "../../actions/resource/fromZenodo.ts"
+import type { ZenodoRecord } from "../../models/Record.ts"
 
-export function convertDatasetFromZenodo(
-  zenodoDataset: ZenodoDataset,
-): Dataset {
+export function convertDatasetFromZenodo(zenodoRecord: ZenodoRecord): Dataset {
   const dataset: Dataset = {
     $schema: "https://fairspec.org/profiles/latest/dataset.json",
     resources: [],
   }
 
-  const metadata = zenodoDataset.metadata
+  const metadata = zenodoRecord.metadata
 
   if (metadata.title) {
     dataset.titles = [{ title: metadata.title }]
@@ -52,8 +50,8 @@ export function convertDatasetFromZenodo(
     dataset.version = metadata.version
   }
 
-  if (zenodoDataset.files && zenodoDataset.files.length > 0) {
-    dataset.resources = zenodoDataset.files.map(zenodoResource =>
+  if (zenodoRecord.files && zenodoRecord.files.length > 0) {
+    dataset.resources = zenodoRecord.files.map(zenodoResource =>
       convertResourceFromZenodo(zenodoResource),
     )
   }

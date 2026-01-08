@@ -1,15 +1,15 @@
-import type { Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 
-export type SavePackageOptions = {
+export type SaveDatasetOptions = {
   target: string
   withRemote?: boolean
 }
 
 export interface DatasetPlugin {
-  loadPackage?(source: string): Promise<Package | undefined>
+  loadDataset?(source: string): Promise<Dataset | undefined>
 
-  savePackage?(
-    dataPackage: Package,
-    options: SavePackageOptions,
+  saveDataset?(
+    dataset: Dataset,
+    options: SaveDatasetOptions,
   ): Promise<{ path?: string } | undefined>
 }

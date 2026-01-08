@@ -1,114 +1,114 @@
-import type { Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import * as packageModule from "./package/load.ts"
+import * as datasetModule from "./dataset/load.ts"
 import { ZenodoPlugin } from "./plugin.ts"
 
-vi.mock("./package/load.ts", () => ({
-  loadPackageFromZenodo: vi.fn(),
+vi.mock("./dataset/load.ts", () => ({
+  loadDatasetFromZenodo: vi.fn(),
 }))
 
 describe("ZenodoPlugin", () => {
   let plugin: ZenodoPlugin
-  let mockLoadPackageFromZenodo: ReturnType<typeof vi.fn>
+  let mockLoadDatasetFromZenodo: ReturnType<typeof vi.fn>
 
   beforeEach(() => {
     plugin = new ZenodoPlugin()
-    mockLoadPackageFromZenodo = vi.mocked(packageModule.loadPackageFromZenodo)
+    mockLoadDatasetFromZenodo = vi.mocked(datasetModule.loadDatasetFromZenodo)
     vi.clearAllMocks()
   })
 
-  describe("loadPackage", () => {
-    it("should load package from zenodo.org url", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+  describe("loadDataset", () => {
+    it("should load dataset from zenodo.org url", async () => {
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
-      mockLoadPackageFromZenodo.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage("https://zenodo.org/record/123")
+      const result = await plugin.loadDataset("https://zenodo.org/record/123")
 
-      expect(mockLoadPackageFromZenodo).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromZenodo).toHaveBeenCalledWith(
         "https://zenodo.org/record/123",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should return undefined for non-zenodo urls", async () => {
-      const result = await plugin.loadPackage("https://example.com/data")
+      const result = await plugin.loadDataset("https://example.com/data")
 
-      expect(mockLoadPackageFromZenodo).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromZenodo).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should return undefined for local paths", async () => {
-      const result = await plugin.loadPackage("./data")
+      const result = await plugin.loadDataset("./data")
 
-      expect(mockLoadPackageFromZenodo).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromZenodo).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should return undefined for github urls", async () => {
-      const result = await plugin.loadPackage("https://github.com/owner/repo")
+      const result = await plugin.loadDataset("https://github.com/owner/repo")
 
-      expect(mockLoadPackageFromZenodo).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromZenodo).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should handle sandbox.zenodo.org urls", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
-      mockLoadPackageFromZenodo.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://sandbox.zenodo.org/record/456",
       )
 
-      expect(mockLoadPackageFromZenodo).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromZenodo).toHaveBeenCalledWith(
         "https://sandbox.zenodo.org/record/456",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should handle zenodo urls with paths", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
-      mockLoadPackageFromZenodo.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://zenodo.org/record/123/files/data.zip",
       )
 
-      expect(mockLoadPackageFromZenodo).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromZenodo).toHaveBeenCalledWith(
         "https://zenodo.org/record/123/files/data.zip",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should handle zenodo urls with query parameters", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
-        resources: [{ name: "test", data: [] }],
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
-      mockLoadPackageFromZenodo.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage(
+      const result = await plugin.loadDataset(
         "https://zenodo.org/record/123?preview=1",
       )
 
-      expect(mockLoadPackageFromZenodo).toHaveBeenCalledWith(
+      expect(mockLoadDatasetFromZenodo).toHaveBeenCalledWith(
         "https://zenodo.org/record/123?preview=1",
       )
-      expect(result).toEqual(mockPackage)
+      expect(result).toEqual(mockDataset)
     })
 
     it("should return undefined for http non-zenodo urls", async () => {
-      const result = await plugin.loadPackage("http://example.com/data")
+      const result = await plugin.loadDataset("http://example.com/data")
 
-      expect(mockLoadPackageFromZenodo).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromZenodo).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
   })

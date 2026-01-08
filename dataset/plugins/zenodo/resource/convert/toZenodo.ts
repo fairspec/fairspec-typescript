@@ -6,12 +6,8 @@ export function convertResourceToZenodo(resource: Resource) {
     key: resource.name,
   }
 
-  if (resource.bytes) {
-    zenodoResource.size = resource.bytes
-  }
-
-  if (resource.hash) {
-    zenodoResource.checksum = resource.hash
+  if (resource.integrity && resource.integrity.type === "md5") {
+    zenodoResource.checksum = `md5:${resource.integrity.hash}`
   }
 
   return zenodoResource

@@ -1,57 +1,33 @@
-import type { FileError, Resource } from "@fairspec/metadata"
+import type { FairspecError, Resource } from "@fairspec/metadata"
 import { createReport } from "@fairspec/metadata"
-import { prefetchFiles } from "./fetch.ts"
-import { inferBytes, inferEncoding, inferHash } from "./infer.ts"
+import { inferHash, inferTextual } from "./infer.ts"
 
 export async function validateFile(resource: Partial<Resource>) {
-  const errors: FileError[] = []
-  const localPaths = await prefetchFiles(resource.path)
+  const errors: FairspecError[] = []
 
-  if (resource.bytes) {
-    const bytes = resource.bytes
-    const actualBytes = await inferBytes({ path: localPaths })
+  if (resource.textual) {
+    const actualTextual = await inferTextual(resource)
 
-    if (bytes !== actualBytes) {
+    if (!actualTextual) {
       errors.push({
-        type: "file/bytes",
-        bytes,
-        actualBytes,
+        type: "file/textual",
       })
     }
   }
 
-  if (resource.hash) {
-    const [hashValue, hashType = "md5"] = resource.hash.split(":").toReversed()
+  if (resource.integrity) {
+    const expectedHash = resource.integrity.hash
+    const actualHash = await inferHash(resource, {
+      hashType: resource.integrity.type,
+    })
 
-    const hash = `${hashType}:${hashValue}`
-    const actualHash = await inferHash(
-      { path: localPaths },
-      {
-        hashType: hashType as any,
-      },
-    )
-
-    if (hash !== actualHash) {
+    if (actualHash !== expectedHash) {
       errors.push({
-        type: "file/hash",
-        hash,
+        type: "file/integrity",
+        hashType: resource.integrity.type,
+        expectedHash,
         actualHash,
       })
-    }
-  }
-
-  if (resource.encoding) {
-    const encoding = resource.encoding
-    const actualEncoding = await inferEncoding({ path: localPaths })
-
-    if (actualEncoding) {
-      if (encoding !== actualEncoding) {
-        errors.push({
-          type: "file/encoding",
-          encoding,
-          actualEncoding,
-        })
-      }
     }
   }
 

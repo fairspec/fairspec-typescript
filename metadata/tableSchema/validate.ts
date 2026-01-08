@@ -1,7 +1,6 @@
 import type { Descriptor } from "../descriptor/index.ts"
 import { loadDescriptor } from "../descriptor/index.ts"
 import { validateDescriptor } from "../profile/index.ts"
-import { normalizeTableSchema } from "./normalize.ts"
 import type { TableSchema } from "./TableSchema.ts"
 
 /**
@@ -25,8 +24,8 @@ export async function validateTableSchema(
 
   let tableSchema: TableSchema | undefined
   if (report.valid) {
-    // Validation + normalization = we can cast it
-    tableSchema = normalizeTableSchema(descriptor) as TableSchema
+    // Valid -> we can cast it
+    tableSchema = descriptor as TableSchema
   }
 
   return { ...report, tableSchema }

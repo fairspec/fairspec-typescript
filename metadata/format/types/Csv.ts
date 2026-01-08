@@ -4,7 +4,6 @@ import {
   CommentChar,
   CommentRows,
   Delimiter,
-  Encoding,
   HeaderJoin,
   HeaderRows,
   LineTerminator,
@@ -14,7 +13,6 @@ import {
 
 export const CsvFormat = z.object({
   name: z.literal("csv"),
-  encoding: Encoding.optional(),
   delimiter: Delimiter.optional(),
   lineTerminator: LineTerminator.optional(),
   quoteChar: QuoteChar.optional(),

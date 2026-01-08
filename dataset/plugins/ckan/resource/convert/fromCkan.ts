@@ -1,39 +1,63 @@
 import type { Resource } from "@fairspec/metadata"
-import { getFilename } from "@fairspec/metadata"
-import { convertTableSchemaFromCkan } from "../../schema/index.ts"
+import { getFileName } from "@fairspec/metadata"
+import { convertTableSchemaFromCkan } from "../../tableSchema/index.ts"
 import type { CkanResource } from "../Resource.ts"
 
 export function convertResourceFromCkan(ckanResource: CkanResource): Resource {
   const resource: Resource = {
-    name: convertName(ckanResource.name),
-    path: ckanResource.url,
-    "ckan:key": getFilename(ckanResource.url),
-    "ckan:url": ckanResource.url,
+    data: ckanResource.url,
+    unstable_customMetadata: {
+      ckanKey: getFileName(ckanResource.url),
+      ckanUrl: ckanResource.url,
+      ckanId: ckanResource.id,
+    },
+  }
+
+  if (ckanResource.name) {
+    resource.name = convertName(ckanResource.name)
   }
 
   if (ckanResource.description) {
-    resource.description = ckanResource.description
-  }
-
-  if (ckanResource.format) {
-    resource.format = ckanResource.format.toLowerCase()
-  }
-
-  if (ckanResource.mimetype) {
-    resource.mediatype = ckanResource.mimetype
+    resource.descriptions = [
+      {
+        description: ckanResource.description,
+        descriptionType: "Abstract",
+      },
+    ]
   }
 
   if (ckanResource.size) {
-    resource.bytes = ckanResource.size
+    resource.sizes = [`${ckanResource.size} bytes`]
   }
 
   if (ckanResource.hash) {
-    resource.hash = ckanResource.hash
+    resource.integrity = {
+      type: "md5",
+      hash: ckanResource.hash,
+    }
+  }
+
+  if (ckanResource.created) {
+    resource.dates = [
+      {
+        date: ckanResource.created,
+        dateType: "Created",
+      },
+    ]
+  }
+
+  if (ckanResource.last_modified) {
+    resource.dates = [
+      ...(resource.dates || []),
+      {
+        date: ckanResource.last_modified,
+        dateType: "Updated",
+      },
+    ]
   }
 
   if (ckanResource.schema) {
-    resource.type = "table"
-    resource.schema = convertTableSchemaFromCkan(ckanResource.schema)
+    resource.tableSchema = convertTableSchemaFromCkan(ckanResource.schema)
   }
 
   return resource

@@ -1,23 +1,41 @@
 import { stat } from "node:fs/promises"
+import type { Dataset } from "@fairspec/metadata"
 import { isRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
-import { loadPackageFromFolder } from "./package/index.ts"
+import { loadDatasetFromFolder, saveDatasetToFolder } from "./dataset/index.ts"
 
 export class FolderPlugin implements DatasetPlugin {
-  async loadPackage(source: string) {
+  async loadDataset(source: string) {
     const isFolder = await getIsFolder(source)
     if (!isFolder) return undefined
 
-    const dataPackage = await loadPackageFromFolder(source)
-    return dataPackage
+    const dataset = await loadDatasetFromFolder(source)
+    return dataset
   }
 
-  // TOOD: implement savePackage?
+  async saveDataset(
+    dataset: Dataset,
+    options: { target: string; withRemote?: boolean },
+  ) {
+    const isFolder = await getIsFolder(options.target)
+    if (!isFolder) return undefined
+
+    await saveDatasetToFolder(dataset, {
+      folderPath: options.target,
+      withRemote: options.withRemote,
+    })
+
+    return { path: options.target }
+  }
 }
 
 async function getIsFolder(path: string) {
   const isRemote = isRemotePath(path)
   if (isRemote) return false
 
-  return (await stat(path)).isDirectory()
+  try {
+    return (await stat(path)).isDirectory()
+  } catch {
+    return false
+  }
 }

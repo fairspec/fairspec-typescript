@@ -1,3 +1,4 @@
+export { copyDescriptor } from "./copy.ts"
 export { Descriptor } from "./Descriptor.ts"
 export { isDescriptor } from "./general.ts"
 export { loadDescriptor } from "./load.ts"

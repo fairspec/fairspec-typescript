@@ -1,14 +1,14 @@
 import { isRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
-import { loadPackageFromCkan } from "./package/load.ts"
+import { loadDatasetFromCkan } from "./dataset/load.ts"
 
 export class CkanPlugin implements DatasetPlugin {
-  async loadPackage(source: string) {
+  async loadDataset(source: string) {
     const isCkan = getIsCkan(source)
     if (!isCkan) return undefined
 
-    const dataPackage = await loadPackageFromCkan(source)
-    return dataPackage
+    const dataset = await loadDatasetFromCkan(source)
+    return dataset
   }
 }
 

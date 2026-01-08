@@ -24,6 +24,11 @@ export const Resource = Datacite.extend({
     "The format definition of the file. For multiple files the format property defines the format for all the files.",
   ),
 
+  textual: z
+    .boolean()
+    .optional()
+    .describe("Whether the resource is text-based."),
+
   integrity: Integrity.optional().describe(
     "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",
   ),
@@ -41,6 +46,12 @@ export const Resource = Datacite.extend({
     .describe(
       "A path to a Table Schema or an object with the Table Schema. The Table Schema must be compatible with the Fairspec Table specification.",
     ),
+
+  // TODO: remove temporary solution for dataset plugins
+  unstable_customMetadata: z
+    .record(z.string(), z.unknown())
+    .optional()
+    .describe("Custom properties for extending resources"),
 })
 
 export type Resource = z.infer<typeof Resource>

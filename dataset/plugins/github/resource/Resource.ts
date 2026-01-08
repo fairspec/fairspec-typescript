@@ -1,34 +1,14 @@
-/**
- * GitHub repository file content
- */
-export interface GithubResource {
-  /**
-   * File path within repository
-   */
-  path: string
+import { z } from "zod"
 
-  /**
-   * File mode e.g. `100755`
-   */
-  mode: string
+export const GithubResource = z
+  .object({
+    path: z.string().describe("File path within repository"),
+    mode: z.string().describe("File mode e.g. `100755`"),
+    type: z.string().describe("File type e.g. `blob`"),
+    size: z.number().describe("File size in bytes"),
+    sha: z.string().describe("File SHA-1"),
+    url: z.string().describe("File url on GitHub API"),
+  })
+  .describe("GitHub repository file content")
 
-  /**
-   * File type e.g. `blob`
-   */
-  type: string
-
-  /**
-   * File size in bytes
-   */
-  size: number
-
-  /**
-   * File SHA-1
-   */
-  sha: string
-
-  /**
-   * File url on GitHub API
-   */
-  url: string
-}
+export type GithubResource = z.infer<typeof GithubResource>

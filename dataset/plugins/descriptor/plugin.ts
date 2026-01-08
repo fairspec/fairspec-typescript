@@ -1,23 +1,23 @@
-import type { Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import {
-  inferFormat,
+  getFileExtension,
   isRemotePath,
-  loadPackageDescriptor,
-  savePackageDescriptor,
+  loadDatasetDescriptor,
+  saveDatasetDescriptor,
 } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
 
 export class DescriptorPlugin implements DatasetPlugin {
-  async loadPackage(source: string) {
+  async loadDataset(source: string) {
     const isLocalJson = await getIsLocalJson(source)
     if (!isLocalJson) return undefined
 
-    const dataPackage = await loadPackageDescriptor(source)
-    return dataPackage
+    const dataset = await loadDatasetDescriptor(source)
+    return dataset
   }
 
-  async savePackage(
-    dataPackage: Package,
+  async saveDataset(
+    dataset: Dataset,
     options: { target: string; withRemote?: boolean },
   ) {
     const isLocalJson = await getIsLocalJson(options.target)
@@ -27,7 +27,7 @@ export class DescriptorPlugin implements DatasetPlugin {
       return undefined
     }
 
-    await savePackageDescriptor(dataPackage, { path: options.target })
+    await saveDatasetDescriptor(dataset, { path: options.target })
 
     return { path: options.target }
   }
@@ -35,6 +35,6 @@ export class DescriptorPlugin implements DatasetPlugin {
 
 async function getIsLocalJson(path: string) {
   const isRemote = isRemotePath(path)
-  const format = inferFormat({ path })
-  return !isRemote && format === "json"
+  const extension = getFileExtension(path)
+  return !isRemote && extension === "json"
 }

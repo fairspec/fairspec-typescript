@@ -4,8 +4,8 @@ export {
   describeFile,
   getTempFilePath,
   inferBytes,
-  inferEncoding,
   inferHash,
+  inferTextual,
   isLocalPathExist,
   loadFile,
   prefetchFile,
@@ -15,35 +15,31 @@ export {
   writeTempFile,
 } from "./file/index.ts"
 export { getTempFolderPath } from "./folder/index.ts"
-export type { DatasetPlugin, SavePackageOptions } from "./plugin.ts"
+export type { DatasetPlugin, SaveDatasetOptions } from "./plugin.ts"
 export {
   CkanPlugin,
-  loadPackageFromCkan,
-  savePackageToCkan,
+  loadDatasetFromCkan,
+  saveDatasetToCkan,
 } from "./plugins/ckan/index.ts"
-export {
-  DatahubPlugin,
-  loadPackageFromDatahub,
-} from "./plugins/datahub/index.ts"
 export { DescriptorPlugin } from "./plugins/descriptor/index.ts"
 export {
   FolderPlugin,
-  loadPackageFromFolder,
-  savePackageToFolder,
+  loadDatasetFromFolder,
+  saveDatasetToFolder,
 } from "./plugins/folder/index.ts"
 export {
   GithubPlugin,
-  loadPackageFromGithub,
-  savePackageToGithub,
+  loadDatasetFromGithub,
+  saveDatasetToGithub,
 } from "./plugins/github/index.ts"
 export {
-  loadPackageFromZenodo,
-  savePackageToZenodo,
+  loadDatasetFromZenodo,
+  saveDatasetToZenodo,
   ZenodoPlugin,
 } from "./plugins/zenodo/index.ts"
 export {
-  loadPackageFromZip,
-  savePackageToZip,
+  loadDatasetFromZip,
+  saveDatasetToZip,
   ZipPlugin,
 } from "./plugins/zip/index.ts"
 export { loadFileStream } from "./stream/index.ts"

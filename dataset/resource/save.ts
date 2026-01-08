@@ -1,11 +1,10 @@
 import type { Resource } from "@fairspec/metadata"
 import {
-  convertResourceToDescriptor,
+  copyDescriptor,
   denormalizePath,
-  getFilename,
+  getFileName,
   isRemotePath,
 } from "@fairspec/metadata"
-import invariant from "tiny-invariant"
 
 export type SaveFile = (options: {
   propertyName: string
@@ -25,7 +24,7 @@ export async function saveResourceFiles(
 ) {
   const { basepath, withRemote, withoutFolders } = options
 
-  const descriptor = convertResourceToDescriptor(resource, { basepath })
+  const descriptor = copyDescriptor(resource)
   const dedupIndexes = new Map<string, number>()
 
   const saveFile = async (path: string, name: string, index: number) => {
@@ -37,7 +36,7 @@ export async function saveResourceFiles(
 
     if (isRemote) {
       if (!withRemote) return path
-      const filename = getFilename(path)
+      const filename = getFileName(path)
       if (!filename) return path
       denormalizedPath = filename
     } else if (withoutFolders) {
@@ -64,21 +63,22 @@ export async function saveResourceFiles(
     return denormalizedPath
   }
 
-  if (typeof resource.path === "string") {
-    descriptor.path = await saveFile(resource.path, "path", 0)
+  if (typeof descriptor.data === "string") {
+    descriptor.data = await saveFile(descriptor.data, "data", 0)
   }
 
-  if (Array.isArray(resource.path)) {
-    invariant(Array.isArray(descriptor.path), "Multipart as resource.path")
-    for (const [index, path] of resource.path.entries()) {
-      descriptor.path[index] = await saveFile(path, "path", index)
+  if (Array.isArray(descriptor.data)) {
+    for (const [index, item] of descriptor.data.entries()) {
+      if (typeof item === "string") {
+        descriptor.data[index] = await saveFile(item, "data", index)
+      }
     }
   }
 
-  for (const name of ["dialect", "schema"] as const) {
-    const path = resource[name]
-    if (typeof path === "string") {
-      descriptor[name] = await saveFile(path, name, 0)
+  for (const name of ["jsonSchema", "tableSchema"] as const) {
+    const property = resource[name]
+    if (typeof property === "string") {
+      descriptor[name] = await saveFile(property, name, 0)
     }
   }
 

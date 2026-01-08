@@ -1,18 +1,19 @@
 import { stat } from "node:fs/promises"
 import type { Resource } from "@fairspec/metadata"
+import { getFirstDataPath } from "@fairspec/metadata"
 import chardet from "chardet"
 import * as hasha from "hasha"
 import { isBinaryFile } from "isbinaryfile"
 import pMap from "p-map"
+import { loadFile } from "../file/index.ts"
 import { concatFileStreams } from "../stream/concat.ts"
 import { loadFileStream } from "../stream/index.ts"
 import { prefetchFiles } from "./fetch.ts"
-import { loadFile } from "./load.ts"
 
-export type HashType = "md5" | "sha1" | "sha256" | "sha512"
+export type HashType = NonNullable<Resource["integrity"]>["type"]
 
 export async function inferBytes(resource: Partial<Resource>) {
-  const localPaths = await prefetchFiles(resource.path)
+  const localPaths = await prefetchFiles(resource)
 
   let bytes = 0
   for (const localPath of localPaths) {
@@ -28,41 +29,40 @@ export async function inferHash(
   options?: { hashType?: HashType },
 ) {
   const algorithm = options?.hashType ?? "sha256"
-  const localPaths = await prefetchFiles(resource.path)
+  const localPaths = await prefetchFiles(resource)
 
   const streams = await pMap(localPaths, async path => loadFileStream(path))
   const stream = concatFileStreams(streams)
 
   const hash = await hasha.hash(stream, { algorithm })
-  return `${algorithm}:${hash}`
+  return hash
 }
 
-export async function inferEncoding(
+export async function inferTextual(
   resource: Partial<Resource>,
   options?: { sampleBytes?: number; confidencePercent?: number },
 ) {
   const maxBytes = options?.sampleBytes ?? 10_000
   const confidencePercent = options?.confidencePercent ?? 80
 
-  const firstPath = Array.isArray(resource.path)
-    ? resource.path[0]
-    : resource.path
-
+  const firstPath = getFirstDataPath(resource)
   if (!firstPath) {
-    return undefined
+    return false
   }
 
   const buffer = await loadFile(firstPath, { maxBytes })
   const isBinary = await isBinaryFile(buffer)
+  if (isBinary) {
+    return false
+  }
 
-  if (!isBinary) {
-    const matches = chardet.analyse(buffer)
-    for (const match of matches) {
-      if (match.confidence >= confidencePercent) {
-        return match.name.toLowerCase()
-      }
+  const matches = chardet.analyse(buffer)
+  for (const match of matches) {
+    if (match.confidence >= confidencePercent) {
+      const encoding = match.name.toLowerCase()
+      return ["utf-8", "ascii"].includes(encoding)
     }
   }
 
-  return undefined
+  return false
 }

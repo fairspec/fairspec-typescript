@@ -8,9 +8,9 @@ export async function describeFile(
 ) {
   const localPath = await prefetchFile(path)
 
-  const bytes = await inferBytes({ path: localPath })
+  const bytes = await inferBytes({ data: localPath })
   const hash = await inferHash(
-    { path: localPath },
+    { data: localPath },
     { hashType: options?.hashType },
   )
 

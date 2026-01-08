@@ -1,92 +1,92 @@
-import type { Package } from "@fairspec/metadata"
+import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import * as packageModule from "./package/index.ts"
+import * as datasetModule from "./dataset/index.ts"
 import { ZipPlugin } from "./plugin.ts"
 
-vi.mock("./package/index.ts", () => ({
-  loadPackageFromZip: vi.fn(),
-  savePackageToZip: vi.fn(),
+vi.mock("./dataset/index.ts", () => ({
+  loadDatasetFromZip: vi.fn(),
+  saveDatasetToZip: vi.fn(),
 }))
 
 describe("ZipPlugin", () => {
   let plugin: ZipPlugin
-  let mockLoadPackageFromZip: ReturnType<typeof vi.fn>
-  let mockSavePackageToZip: ReturnType<typeof vi.fn>
+  let mockLoadDatasetFromZip: ReturnType<typeof vi.fn>
+  let mockSaveDatasetToZip: ReturnType<typeof vi.fn>
 
   beforeEach(() => {
     plugin = new ZipPlugin()
-    mockLoadPackageFromZip = vi.mocked(packageModule.loadPackageFromZip)
-    mockSavePackageToZip = vi.mocked(packageModule.savePackageToZip)
+    mockLoadDatasetFromZip = vi.mocked(datasetModule.loadDatasetFromZip)
+    mockSaveDatasetToZip = vi.mocked(datasetModule.saveDatasetToZip)
     vi.clearAllMocks()
   })
 
-  describe("loadPackage", () => {
-    it("should load package from zip file", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
+  describe("loadDataset", () => {
+    it("should load dataset from zip file", async () => {
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test-resource", data: [] }],
       }
-      mockLoadPackageFromZip.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromZip.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage("test.zip")
+      const result = await plugin.loadDataset("test.zip")
 
-      expect(mockLoadPackageFromZip).toHaveBeenCalledWith("test.zip")
-      expect(result).toEqual(mockPackage)
+      expect(mockLoadDatasetFromZip).toHaveBeenCalledWith("test.zip")
+      expect(result).toEqual(mockDataset)
     })
 
     it("should return undefined for non-zip files", async () => {
-      const result = await plugin.loadPackage("test.json")
+      const result = await plugin.loadDataset("test.json")
 
-      expect(mockLoadPackageFromZip).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromZip).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should recognize .zip extension case-insensitively", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
-      mockLoadPackageFromZip.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromZip.mockResolvedValue(mockDataset)
 
-      await plugin.loadPackage("test.zip")
+      await plugin.loadDataset("test.zip")
 
-      expect(mockLoadPackageFromZip).toHaveBeenCalledWith("test.zip")
+      expect(mockLoadDatasetFromZip).toHaveBeenCalledWith("test.zip")
     })
 
     it("should handle paths with directories", async () => {
-      const mockPackage: Package = {
-        name: "test-package",
+      const mockDataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
-      mockLoadPackageFromZip.mockResolvedValue(mockPackage)
+      mockLoadDatasetFromZip.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadPackage("/path/to/file.zip")
+      const result = await plugin.loadDataset("/path/to/file.zip")
 
-      expect(mockLoadPackageFromZip).toHaveBeenCalledWith("/path/to/file.zip")
-      expect(result).toEqual(mockPackage)
+      expect(mockLoadDatasetFromZip).toHaveBeenCalledWith("/path/to/file.zip")
+      expect(result).toEqual(mockDataset)
     })
 
     it("should return undefined for files without extension", async () => {
-      const result = await plugin.loadPackage("test")
+      const result = await plugin.loadDataset("test")
 
-      expect(mockLoadPackageFromZip).not.toHaveBeenCalled()
+      expect(mockLoadDatasetFromZip).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
   })
 
-  describe("savePackage", () => {
-    it("should save package to zip file", async () => {
-      const dataPackage: Package = {
-        name: "test-package",
+  describe("saveDataset", () => {
+    it("should save dataset to zip file", async () => {
+      const dataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test-resource", data: [] }],
       }
-      mockSavePackageToZip.mockResolvedValue(undefined)
+      mockSaveDatasetToZip.mockResolvedValue(undefined)
 
-      const result = await plugin.savePackage(dataPackage, {
+      const result = await plugin.saveDataset(dataset, {
         target: "output.zip",
       })
 
-      expect(mockSavePackageToZip).toHaveBeenCalledWith(dataPackage, {
+      expect(mockSaveDatasetToZip).toHaveBeenCalledWith(dataset, {
         archivePath: "output.zip",
         withRemote: false,
       })
@@ -94,101 +94,101 @@ describe("ZipPlugin", () => {
     })
 
     it("should return undefined for non-zip targets", async () => {
-      const dataPackage: Package = {
-        name: "test-package",
+      const dataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
 
-      const result = await plugin.savePackage(dataPackage, {
+      const result = await plugin.saveDataset(dataset, {
         target: "output.json",
       })
 
-      expect(mockSavePackageToZip).not.toHaveBeenCalled()
+      expect(mockSaveDatasetToZip).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
 
     it("should pass withRemote option", async () => {
-      const dataPackage: Package = {
-        name: "test-package",
+      const dataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
-      mockSavePackageToZip.mockResolvedValue(undefined)
+      mockSaveDatasetToZip.mockResolvedValue(undefined)
 
-      await plugin.savePackage(dataPackage, {
+      await plugin.saveDataset(dataset, {
         target: "output.zip",
         withRemote: true,
       })
 
-      expect(mockSavePackageToZip).toHaveBeenCalledWith(dataPackage, {
+      expect(mockSaveDatasetToZip).toHaveBeenCalledWith(dataset, {
         archivePath: "output.zip",
         withRemote: true,
       })
     })
 
     it("should handle withRemote as false when not provided", async () => {
-      const dataPackage: Package = {
-        name: "test-package",
+      const dataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
-      mockSavePackageToZip.mockResolvedValue(undefined)
+      mockSaveDatasetToZip.mockResolvedValue(undefined)
 
-      await plugin.savePackage(dataPackage, {
+      await plugin.saveDataset(dataset, {
         target: "output.zip",
       })
 
-      expect(mockSavePackageToZip).toHaveBeenCalledWith(dataPackage, {
+      expect(mockSaveDatasetToZip).toHaveBeenCalledWith(dataset, {
         archivePath: "output.zip",
         withRemote: false,
       })
     })
 
     it("should handle paths with directories", async () => {
-      const dataPackage: Package = {
-        name: "test-package",
+      const dataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
-      mockSavePackageToZip.mockResolvedValue(undefined)
+      mockSaveDatasetToZip.mockResolvedValue(undefined)
 
-      await plugin.savePackage(dataPackage, {
+      await plugin.saveDataset(dataset, {
         target: "/path/to/output.zip",
       })
 
-      expect(mockSavePackageToZip).toHaveBeenCalledWith(dataPackage, {
+      expect(mockSaveDatasetToZip).toHaveBeenCalledWith(dataset, {
         archivePath: "/path/to/output.zip",
         withRemote: false,
       })
     })
 
-    it("should save package with metadata", async () => {
-      const dataPackage: Package = {
-        name: "test-package",
-        title: "Test Package",
-        description: "A test package",
+    it("should save dataset with metadata", async () => {
+      const dataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
+        titles: [{ title: "Test Dataset" }],
+        descriptions: [{ description: "A test dataset", descriptionType: "Abstract" }],
         resources: [],
       }
-      mockSavePackageToZip.mockResolvedValue(undefined)
+      mockSaveDatasetToZip.mockResolvedValue(undefined)
 
-      await plugin.savePackage(dataPackage, {
+      await plugin.saveDataset(dataset, {
         target: "output.zip",
       })
 
-      expect(mockSavePackageToZip).toHaveBeenCalledWith(dataPackage, {
+      expect(mockSaveDatasetToZip).toHaveBeenCalledWith(dataset, {
         archivePath: "output.zip",
         withRemote: false,
       })
     })
 
     it("should return undefined for files without extension", async () => {
-      const dataPackage: Package = {
-        name: "test-package",
+      const dataset: Dataset = {
+        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
 
-      const result = await plugin.savePackage(dataPackage, {
+      const result = await plugin.saveDataset(dataset, {
         target: "output",
       })
 
-      expect(mockSavePackageToZip).not.toHaveBeenCalled()
+      expect(mockSaveDatasetToZip).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
     })
   })

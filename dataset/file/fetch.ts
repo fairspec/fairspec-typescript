@@ -1,15 +1,14 @@
 import os from "node:os"
-import { isRemotePath } from "@fairspec/metadata"
+import type { Resource } from "@fairspec/metadata"
+import { getDataPaths, isRemotePath } from "@fairspec/metadata"
 import pAll from "p-all"
-import { copyFile } from "./copy.ts"
-import { getTempFilePath } from "./temp.ts"
+import { copyFile, getTempFilePath } from "../file/index.ts"
 
-export async function prefetchFiles(path?: string | string[]) {
-  if (!path) return []
+export async function prefetchFiles(resource: Partial<Resource>) {
+  const paths = getDataPaths(resource)
+  if (!paths.length) return []
 
-  const paths = Array.isArray(path) ? path : [path]
   const concurrency = os.cpus().length
-
   const newPaths = await pAll(
     paths.map(path => () => prefetchFile(path)),
     { concurrency },

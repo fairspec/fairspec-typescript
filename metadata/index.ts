@@ -25,11 +25,13 @@ export {
 export { Datacite } from "./datacite/index.ts"
 export {
   Dataset,
+  denormalizeDataset,
   loadDatasetDescriptor,
   saveDatasetDescriptor,
   validateDatasetMetadata,
 } from "./dataset/index.ts"
 export {
+  copyDescriptor,
   Descriptor,
   loadDescriptor,
   saveDescriptor,
@@ -52,10 +54,9 @@ export {
   ColumnError,
   ColumnMissingError,
   ColumnTypeError,
-  EncodingError,
   FairspecError,
+  FileError,
   ForeignKeyError,
-  FormatError,
   GeneralError,
   IntegrityError,
   JsonError,
@@ -64,6 +65,7 @@ export {
   RowError,
   RowUniqueError,
   TableError,
+  TextualError,
 } from "./error/index.ts"
 export {
   inspectJsonValue,
@@ -73,17 +75,23 @@ export {
 export {
   denormalizePath,
   getBasepath,
+  getFileExtension,
   getFileName,
-  getFormatName,
-  getName,
+  getFileNameSlug,
+  getFileProtocol,
   isRemotePath,
   resolveBasepath,
 } from "./path/index.ts"
 export { createReport, Report } from "./report/index.ts"
 export {
-  inferFormatName,
-  inferName,
+  getDataPaths,
+  getFirstDataPath,
+  getJsonData,
+  getPathData,
+  inferResourceName,
   isRemoteResource,
+  JsonData,
+  PathData,
   Resource,
 } from "./resource/index.ts"
 export {

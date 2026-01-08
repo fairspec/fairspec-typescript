@@ -1,7 +1,7 @@
 export { copyFile } from "./copy.ts"
 export { describeFile } from "./describe.ts"
 export { prefetchFile, prefetchFiles } from "./fetch.ts"
-export { inferBytes, inferEncoding, inferHash } from "./infer.ts"
+export { inferBytes, inferHash, inferTextual } from "./infer.ts"
 export { loadFile } from "./load.ts"
 export { assertLocalPathVacant, isLocalPathExist } from "./path.ts"
 export { saveFile } from "./save.ts"

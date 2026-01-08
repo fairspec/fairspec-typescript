@@ -6,7 +6,11 @@ import { temporaryFile } from "tempy"
 
 export async function writeTempFile(
   content: string | Buffer,
-  options?: { persist?: boolean; filename?: string; format?: string },
+  options?: {
+    persist?: boolean
+    filename?: string
+    format?: string
+  },
 ) {
   const path = getTempFilePath(options)
   await writeFile(path, content)

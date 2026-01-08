@@ -1,7 +1,5 @@
 export { assertTableSchema } from "./assert.ts"
-export { denormalizeTableSchema } from "./denormalize.ts"
 export { loadTableSchema } from "./load.ts"
-export { normalizeTableSchema } from "./normalize.ts"
 export { resolveTableSchema } from "./resolve.ts"
 export { saveTableSchema } from "./save.ts"
 export { TableSchema } from "./TableSchema.ts"

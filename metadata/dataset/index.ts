@@ -1,4 +1,5 @@
 export { Dataset } from "./Dataset.ts"
+export { denormalizeDataset } from "./denormalize.ts"
 export { loadDatasetDescriptor } from "./load.ts"
 export { saveDatasetDescriptor } from "./save.ts"
 export { validateDatasetMetadata } from "./validate.ts"

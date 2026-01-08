@@ -1,6 +1,6 @@
 import type { TableSchema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import type { CkanTableSchema } from "../TableSchema.ts"
+import type { CkanSchema } from "../../models/Schema.ts"
 import ckanSchemaFixture from "./fixtures/ckan-schema.json" with {
   type: "json",
 }
@@ -261,7 +261,7 @@ describe("convertTableSchemaToCkan", () => {
   })
 
   it("performs a round-trip conversion (CKAN → Fairspec → CKAN)", () => {
-    const originalCkanSchema = ckanSchemaFixture as CkanTableSchema
+    const originalCkanSchema = ckanSchemaFixture as CkanSchema
 
     const fairspecSchema = convertTableSchemaFromCkan(originalCkanSchema)
 

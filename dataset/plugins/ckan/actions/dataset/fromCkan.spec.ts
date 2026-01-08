@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import type { CkanDataset } from "../Dataset.ts"
-import ckanPackageFixture from "../fixtures/ckan-dataset.json" with {
+import type { CkanDataset } from "../../models/Dataset.ts"
+import ckanPackageFixture from "./fixtures/ckan-dataset.json" with {
   type: "json",
 }
 import { convertDatasetFromCkan } from "./fromCkan.ts"

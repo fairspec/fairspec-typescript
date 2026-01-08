@@ -1,12 +1,14 @@
 import { z } from "zod"
-import { CkanResource } from "../resource/index.ts"
 import { CkanOrganization } from "./Organization.ts"
+import { CkanResource } from "./Resource.ts"
 import { CkanTag } from "./Tag.ts"
 
 export const CkanDataset = z
   .object({
     resources: z.array(CkanResource).describe("List of resources"),
-    organization: CkanOrganization.optional().describe("Organization information"),
+    organization: CkanOrganization.optional().describe(
+      "Organization information",
+    ),
     tags: z.array(CkanTag).describe("List of tags"),
     id: z.string().describe("Package identifier"),
     name: z.string().describe("Package name"),
@@ -19,8 +21,14 @@ export const CkanDataset = z
     author: z.string().optional().describe("Package author"),
     author_email: z.string().optional().describe("Package author email"),
     maintainer: z.string().optional().describe("Package maintainer"),
-    maintainer_email: z.string().optional().describe("Package maintainer email"),
-    metadata_created: z.string().optional().describe("Metadata creation timestamp"),
+    maintainer_email: z
+      .string()
+      .optional()
+      .describe("Package maintainer email"),
+    metadata_created: z
+      .string()
+      .optional()
+      .describe("Metadata creation timestamp"),
     metadata_modified: z
       .string()
       .optional()

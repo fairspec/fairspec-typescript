@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import type { CkanTableSchema } from "../TableSchema.ts"
+import type { CkanSchema } from "../../models/Schema.ts"
 import ckanSchemaFixture from "./fixtures/ckan-schema.json" with {
   type: "json",
 }
@@ -7,14 +7,16 @@ import { convertTableSchemaFromCkan } from "./fromCkan.ts"
 
 describe("convertTableSchemaFromCkan", () => {
   it("converts a CKAN schema to a Fairspec table schema", () => {
-    const ckanSchema = ckanSchemaFixture as CkanTableSchema
+    const ckanSchema = ckanSchemaFixture as CkanSchema
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
     expect(result.$schema).toEqual(
       "https://fairspec.org/profiles/latest/table.json",
     )
-    expect(Object.keys(result.properties)).toHaveLength(ckanSchema.fields.length)
+    expect(Object.keys(result.properties)).toHaveLength(
+      ckanSchema.fields.length,
+    )
 
     const idColumn = result.properties.id
     expect(idColumn).toBeDefined()
@@ -97,7 +99,7 @@ describe("convertTableSchemaFromCkan", () => {
   })
 
   it("converts CKAN type aliases to Fairspec types", () => {
-    const ckanSchema = ckanSchemaFixture as CkanTableSchema
+    const ckanSchema = ckanSchemaFixture as CkanSchema
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
@@ -125,7 +127,7 @@ describe("convertTableSchemaFromCkan", () => {
   })
 
   it("handles unknown field types by converting to 'string'", () => {
-    const ckanSchema = ckanSchemaFixture as CkanTableSchema
+    const ckanSchema = ckanSchemaFixture as CkanSchema
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
@@ -137,7 +139,7 @@ describe("convertTableSchemaFromCkan", () => {
   })
 
   it("respects type_override in field info", () => {
-    const ckanSchema = ckanSchemaFixture as CkanTableSchema
+    const ckanSchema = ckanSchemaFixture as CkanSchema
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
@@ -151,7 +153,7 @@ describe("convertTableSchemaFromCkan", () => {
   })
 
   it("handles empty fields array", () => {
-    const ckanSchema: CkanTableSchema = {
+    const ckanSchema: CkanSchema = {
       fields: [],
     }
 
@@ -161,7 +163,7 @@ describe("convertTableSchemaFromCkan", () => {
   })
 
   it("handles fields without info object", () => {
-    const ckanSchema: CkanTableSchema = {
+    const ckanSchema: CkanSchema = {
       fields: [
         {
           id: "simple_field",
@@ -183,7 +185,7 @@ describe("convertTableSchemaFromCkan", () => {
   })
 
   it("handles case insensitivity in type conversion", () => {
-    const ckanSchema: CkanTableSchema = {
+    const ckanSchema: CkanSchema = {
       fields: [
         { id: "field1", type: "TEXT" },
         { id: "field2", type: "INT" },

@@ -5,13 +5,13 @@ import {
   getFileExtension,
   stringifyDescriptor,
 } from "@fairspec/metadata"
-import { getDatasetBasepath } from "../../../dataset/index.ts"
-import { saveResourceFiles } from "../../../resource/index.ts"
-import { loadFileStream } from "../../../stream/index.ts"
-import { makeCkanApiRequest } from "../platform/index.ts"
-import type { CkanResource } from "../resource/index.ts"
-import { convertResourceToCkan } from "../resource/index.ts"
-import { convertDatasetToCkan } from "./convert/toCkan.ts"
+import { getDatasetBasepath } from "../../../../actions/dataset/basepath.ts"
+import { saveResourceFiles } from "../../../../actions/resource/save.ts"
+import { loadFileStream } from "../../../../actions/stream/load.ts"
+import { convertResourceToCkan } from "../../actions/resource/toCkan.ts"
+import type { CkanResource } from "../../models/Resource.ts"
+import { makeCkanApiRequest } from "../../services/ckan.ts"
+import { convertDatasetToCkan } from "./toCkan.ts"
 
 export async function saveDatasetToCkan(
   dataset: Dataset,

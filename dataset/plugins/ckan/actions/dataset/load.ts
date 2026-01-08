@@ -1,7 +1,7 @@
-import { mergeDatasets } from "../../../dataset/index.ts"
-import { makeCkanApiRequest } from "../platform/index.ts"
-import type { CkanDataset } from "./Dataset.ts"
-import { convertDatasetFromCkan } from "./convert/fromCkan.ts"
+import { mergeDatasets } from "../../../../actions/dataset/merge.ts"
+import { makeCkanApiRequest } from "../../services/ckan.ts"
+import type { CkanDataset } from "../../models/Dataset.ts"
+import { convertDatasetFromCkan } from "./fromCkan.ts"
 
 /**
  * Load a dataset from a CKAN instance

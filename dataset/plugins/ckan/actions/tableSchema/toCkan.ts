@@ -1,11 +1,9 @@
 import type { Column, TableSchema } from "@fairspec/metadata"
-import type { CkanColumn, CkanColumnInfo } from "../Column.ts"
-import type { CkanTableSchema } from "../TableSchema.ts"
+import type { CkanField, CkanFieldInfo } from "../../models/Field.ts"
+import type { CkanSchema } from "../../models/Schema.ts"
 
-export function convertTableSchemaToCkan(
-  tableSchema: TableSchema,
-): CkanTableSchema {
-  const fields: CkanColumn[] = []
+export function convertTableSchemaToCkan(tableSchema: TableSchema): CkanSchema {
+  const fields: CkanField[] = []
 
   for (const [columnName, column] of Object.entries(tableSchema.properties)) {
     fields.push(convertColumn(columnName, column))
@@ -14,26 +12,26 @@ export function convertTableSchemaToCkan(
   return { fields }
 }
 
-function convertColumn(columnName: string, column: Column): CkanColumn {
+function convertColumn(columnName: string, column: Column): CkanField {
   const { title, description } = column
 
-  const ckanColumn: CkanColumn = {
+  const ckanField: CkanField = {
     id: columnName,
     type: convertType(column),
   }
 
   if (title || description) {
-    const columnInfo: CkanColumnInfo = {} as CkanColumnInfo
+    const columnInfo: CkanFieldInfo = {} as CkanFieldInfo
 
     if (title) columnInfo.label = title
     if (description) columnInfo.notes = description
 
     columnInfo.type_override = convertType(column)
 
-    ckanColumn.info = columnInfo
+    ckanField.info = columnInfo
   }
 
-  return ckanColumn
+  return ckanField
 }
 
 function convertType(column: Column): string {

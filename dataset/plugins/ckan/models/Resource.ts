@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { CkanTableSchema } from "../tableSchema/TableSchema.ts"
+import { CkanSchema } from "./Schema.ts"
 
 export const CkanResource = z
   .object({
@@ -16,7 +16,7 @@ export const CkanResource = z
       .describe("Resource metadata modification timestamp"),
     mimetype: z.string().describe("Resource MIME type"),
     size: z.number().describe("Resource size in bytes"),
-    schema: CkanTableSchema.optional().describe("Resource schema"),
+    schema: CkanSchema.optional().describe("Resource schema"),
   })
   .describe("CKAN Resource interface")
 

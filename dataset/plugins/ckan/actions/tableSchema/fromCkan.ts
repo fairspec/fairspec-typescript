@@ -11,16 +11,16 @@ import type {
   TableSchema,
   TimeColumn,
 } from "@fairspec/metadata"
-import type { CkanColumn } from "../Column.ts"
-import type { CkanTableSchema } from "../TableSchema.ts"
+import type { CkanField } from "../../models/Field.ts"
+import type { CkanSchema } from "../../models/Schema.ts"
 
 export function convertTableSchemaFromCkan(
-  ckanTableSchema: CkanTableSchema,
+  ckanSchema: CkanSchema,
 ): TableSchema {
   const properties: Record<string, Column> = {}
 
-  for (const ckanColumn of ckanTableSchema.fields) {
-    properties[ckanColumn.id] = convertColumn(ckanColumn)
+  for (const ckanField of ckanSchema.fields) {
+    properties[ckanField.id] = convertColumn(ckanField)
   }
 
   return {
@@ -29,8 +29,8 @@ export function convertTableSchemaFromCkan(
   }
 }
 
-function convertColumn(ckanColumn: CkanColumn): Column {
-  const { info } = ckanColumn
+function convertColumn(ckanField: CkanField): Column {
+  const { info } = ckanField
 
   const baseColumn: {
     title?: string
@@ -42,7 +42,7 @@ function convertColumn(ckanColumn: CkanColumn): Column {
     if (info.notes) baseColumn.description = info.notes
   }
 
-  const columnType = (info?.type_override || ckanColumn.type).toLowerCase()
+  const columnType = (info?.type_override || ckanField.type).toLowerCase()
   switch (columnType) {
     case "text":
     case "string":

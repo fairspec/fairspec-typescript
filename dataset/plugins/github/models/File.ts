@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const GithubResource = z
+export const GithubFile = z
   .object({
     path: z.string().describe("File path within repository"),
     mode: z.string().describe("File mode e.g. `100755`"),
@@ -11,4 +11,4 @@ export const GithubResource = z
   })
   .describe("GitHub repository file content")
 
-export type GithubResource = z.infer<typeof GithubResource>
+export type GithubFile = z.infer<typeof GithubFile>

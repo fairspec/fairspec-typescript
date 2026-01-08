@@ -1,9 +1,9 @@
 import { z } from "zod"
-import { GithubResource } from "../resource/index.ts"
+import { GithubFile } from "./File.ts"
 import { GithubLicense } from "./License.ts"
 import { GithubOwner } from "./Owner.ts"
 
-export const GithubDataset = z
+export const GithubRepository = z
   .object({
     id: z.number().describe("Repository identifier"),
     name: z.string().describe("Repository name"),
@@ -26,11 +26,8 @@ export const GithubDataset = z
     git_url: z.string(),
     ssh_url: z.string(),
     clone_url: z.string(),
-    resources: z
-      .array(GithubResource)
-      .optional()
-      .describe("Repository resources"),
+    files: z.array(GithubFile).optional().describe("Repository files"),
   })
   .describe("Github repository as a package")
 
-export type GithubDataset = z.infer<typeof GithubDataset>
+export type GithubRepository = z.infer<typeof GithubRepository>

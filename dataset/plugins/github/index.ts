@@ -1,3 +1,3 @@
-export * from "./dataset/index.ts"
-export * from "./plugin.ts"
-export * from "./resource/index.ts"
+export { loadDatasetFromGithub } from "./actions/dataset/load.ts"
+export { saveDatasetToGithub } from "./actions/dataset/save.ts"
+export { GithubPlugin } from "./plugin.ts"

@@ -2,11 +2,11 @@ import { Buffer } from "node:buffer"
 import { buffer } from "node:stream/consumers"
 import type { Dataset, Descriptor } from "@fairspec/metadata"
 import { denormalizeDataset, stringifyDescriptor } from "@fairspec/metadata"
-import { getDatasetBasepath } from "../../../dataset/index.ts"
-import { saveResourceFiles } from "../../../resource/index.ts"
-import { loadFileStream } from "../../../stream/index.ts"
-import { makeGithubApiRequest } from "../platform/index.ts"
-import type { GithubDataset } from "./Dataset.ts"
+import { getDatasetBasepath } from "../../../../actions/dataset/basepath.ts"
+import { saveResourceFiles } from "../../../../actions/resource/save.ts"
+import { loadFileStream } from "../../../../actions/stream/load.ts"
+import type { GithubRepository } from "../../models/Repository.ts"
+import { makeGithubApiRequest } from "../../services/github.ts"
 
 /**
  * Save a dataset to a Github repository
@@ -24,7 +24,7 @@ export async function saveDatasetToGithub(
   const { apiKey, org, repo } = options
   const basepath = getDatasetBasepath(dataset)
 
-  const githubDataset = await makeGithubApiRequest<GithubDataset>({
+  const githubRepository = await makeGithubApiRequest<GithubRepository>({
     endpoint: org ? `/orgs/${org}/repos` : "/user/repos",
     payload: { name: repo, auto_init: true },
     method: "POST",
@@ -47,7 +47,7 @@ export async function saveDatasetToGithub(
           }
 
           await makeGithubApiRequest({
-            endpoint: `/repos/${githubDataset.owner.login}/${repo}/contents/${options.denormalizedPath}`,
+            endpoint: `/repos/${githubRepository.owner.login}/${repo}/contents/${options.denormalizedPath}`,
             method: "PUT",
             payload,
             apiKey,
@@ -72,7 +72,7 @@ export async function saveDatasetToGithub(
     }
 
     await makeGithubApiRequest({
-      endpoint: `/repos/${githubDataset.owner.login}/${repo}/contents/${denormalizedPath}`,
+      endpoint: `/repos/${githubRepository.owner.login}/${repo}/contents/${denormalizedPath}`,
       method: "PUT",
       payload,
       apiKey,
@@ -80,7 +80,7 @@ export async function saveDatasetToGithub(
   }
 
   return {
-    path: `https://raw.githubusercontent.com/${githubDataset.owner.login}/${repo}/refs/heads/main/dataset.json`,
-    repoUrl: githubDataset.html_url,
+    path: `https://raw.githubusercontent.com/${githubRepository.owner.login}/${repo}/refs/heads/main/dataset.json`,
+    repoUrl: githubRepository.html_url,
   }
 }

@@ -1,27 +1,27 @@
 import type { Resource } from "@fairspec/metadata"
 import { getFileNameSlug } from "@fairspec/metadata"
-import type { GithubResource } from "../Resource.ts"
+import type { GithubFile } from "../../models/File.ts"
 
 export function convertResourceFromGithub(
-  githubResource: GithubResource,
+  githubFile: GithubFile,
   options: {
     defaultBranch: string
   },
 ) {
   const path = convertPath({
-    ...githubResource,
+    ...githubFile,
     ref: options.defaultBranch,
   })
 
   const resource: Resource = {
     data: path,
-    name: getFileNameSlug(path) ?? githubResource.sha,
+    name: getFileNameSlug(path) ?? githubFile.sha,
     integrity: {
       type: "sha1",
-      hash: githubResource.sha,
+      hash: githubFile.sha,
     },
     unstable_customMetadata: {
-      githubKey: githubResource.path,
+      githubKey: githubFile.path,
       githubUrl: path,
     },
   }

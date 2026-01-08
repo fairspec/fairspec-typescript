@@ -1,8 +1,8 @@
-import { mergeDatasets } from "../../../dataset/index.ts"
-import { makeGithubApiRequest } from "../platform/index.ts"
-import type { GithubResource } from "../resource/index.ts"
-import type { GithubDataset } from "./Dataset.ts"
-import { convertDatasetFromGithub } from "./convert/fromGithub.ts"
+import { mergeDatasets } from "../../../../actions/dataset/merge.ts"
+import { makeGithubApiRequest } from "../../services/github.ts"
+import type { GithubFile } from "../../models/File.ts"
+import type { GithubRepository } from "../../models/Repository.ts"
+import { convertDatasetFromGithub } from "./fromGithub.ts"
 
 /**
  * Load a package from a Github repository
@@ -23,20 +23,20 @@ export async function loadDatasetFromGithub(
     throw new Error(`Failed to extract repository info from URL: ${repoUrl}`)
   }
 
-  const githubDataset = await makeGithubApiRequest<GithubDataset>({
+  const githubRepository = await makeGithubApiRequest<GithubRepository>({
     endpoint: `/repos/${owner}/${repo}`,
     apiKey,
   })
 
-  const ref = githubDataset.default_branch
-  githubDataset.resources = (
-    await makeGithubApiRequest<{ tree: GithubResource[] }>({
+  const ref = githubRepository.default_branch
+  githubRepository.files = (
+    await makeGithubApiRequest<{ tree: GithubFile[] }>({
       endpoint: `/repos/${owner}/${repo}/git/trees/${ref}?recursive=1`,
       apiKey,
     })
   ).tree
 
-  const systemDataset = convertDatasetFromGithub(githubDataset)
+  const systemDataset = convertDatasetFromGithub(githubRepository)
   const userDatasetPath = (systemDataset.resources ?? [])
     .filter(resource => resource.unstable_customMetadata?.githubKey === "dataset.json")
     .map(resource => resource.unstable_customMetadata?.githubUrl)

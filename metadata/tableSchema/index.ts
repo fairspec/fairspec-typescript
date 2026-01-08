@@ -1,6 +1,0 @@
-export { assertTableSchema } from "./assert.ts"
-export { loadTableSchema } from "./load.ts"
-export { resolveTableSchema } from "./resolve.ts"
-export { saveTableSchema } from "./save.ts"
-export { TableSchema } from "./TableSchema.ts"
-export { validateTableSchema } from "./validate.ts"

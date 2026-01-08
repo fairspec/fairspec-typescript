@@ -104,3 +104,8 @@ export { Profile } from "./models/profile.ts"
 export { Report } from "./models/report.ts"
 export { Resource } from "./models/resource.ts"
 export { TableSchema } from "./models/tableSchema.ts"
+
+export {
+  convertDatasetFromFrictionless,
+  convertDatasetToFrictionless,
+} from "./plugins/frictionless/index.ts"

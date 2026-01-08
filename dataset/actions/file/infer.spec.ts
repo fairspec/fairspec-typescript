@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { writeTempFile } from "../file/index.ts"
+import { writeTempFile } from "../../actions/file/temp.ts"
 import * as fetchModule from "./fetch.ts"
 import { inferBytes, inferHash, inferTextual } from "./infer.ts"
 

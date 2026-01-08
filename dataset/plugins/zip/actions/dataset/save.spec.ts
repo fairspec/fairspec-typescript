@@ -1,7 +1,10 @@
 import { readFile } from "node:fs/promises"
 import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it } from "vitest"
-import { getTempFilePath, writeTempFile } from "../../../file/index.ts"
+import {
+  getTempFilePath,
+  writeTempFile,
+} from "../../../../actions/file/temp.ts"
 import { loadDatasetFromZip } from "./load.ts"
 import { saveDatasetToZip } from "./save.ts"
 
@@ -240,9 +243,9 @@ describe("saveDatasetToZip", () => {
 
     const tableSchema = reloadedDataset.resources?.[0]?.tableSchema
     expect(tableSchema).toBeDefined()
-    expect(
-      typeof tableSchema === "object" && "properties" in tableSchema,
-    ).toBe(true)
+    expect(typeof tableSchema === "object" && "properties" in tableSchema).toBe(
+      true,
+    )
     if (typeof tableSchema === "object" && "properties" in tableSchema) {
       const properties = Object.entries(tableSchema.properties)
       expect(properties).toHaveLength(2)

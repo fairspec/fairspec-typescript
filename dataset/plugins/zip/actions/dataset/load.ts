@@ -2,7 +2,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import { mkdir } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { loadDatasetDescriptor } from "@fairspec/metadata"
-import { getTempFolderPath } from "../../../folder/index.ts"
+import { getTempFolderPath } from "../../../../actions/folder/temp.ts"
 import { unzip } from "fflate"
 
 export async function loadDatasetFromZip(archivePath: string) {

@@ -4,10 +4,10 @@ import type { Readable } from "node:stream"
 import type { Dataset, Descriptor } from "@fairspec/metadata"
 import { denormalizeDataset, stringifyDescriptor } from "@fairspec/metadata"
 import { zip } from "fflate"
-import { getDatasetBasepath } from "../../../dataset/index.ts"
-import { assertLocalPathVacant } from "../../../file/index.ts"
-import { saveResourceFiles } from "../../../resource/index.ts"
-import { loadFileStream } from "../../../stream/index.ts"
+import { getDatasetBasepath } from "../../../../actions/dataset/basepath.ts"
+import { assertLocalPathVacant } from "../../../../actions/file/path.ts"
+import { saveResourceFiles } from "../../../../actions/resource/save.ts"
+import { loadFileStream } from "../../../../actions/stream/load.ts"
 
 export async function saveDatasetToZip(
   dataset: Dataset,

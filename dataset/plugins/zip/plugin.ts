@@ -1,7 +1,8 @@
 import type { Dataset } from "@fairspec/metadata"
 import { getFileExtension } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
-import { loadDatasetFromZip, saveDatasetToZip } from "./dataset/index.ts"
+import { loadDatasetFromZip } from "./actions/dataset/load.ts"
+import { saveDatasetToZip } from "./actions/dataset/save.ts"
 
 export class ZipPlugin implements DatasetPlugin {
   async loadDataset(source: string) {

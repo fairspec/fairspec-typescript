@@ -1,10 +1,14 @@
 import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import * as datasetModule from "./dataset/index.ts"
+import * as loadModule from "./actions/dataset/load.ts"
+import * as saveModule from "./actions/dataset/save.ts"
 import { ZipPlugin } from "./plugin.ts"
 
-vi.mock("./dataset/index.ts", () => ({
+vi.mock("./actions/dataset/load.ts", () => ({
   loadDatasetFromZip: vi.fn(),
+}))
+
+vi.mock("./actions/dataset/save.ts", () => ({
   saveDatasetToZip: vi.fn(),
 }))
 
@@ -15,8 +19,8 @@ describe("ZipPlugin", () => {
 
   beforeEach(() => {
     plugin = new ZipPlugin()
-    mockLoadDatasetFromZip = vi.mocked(datasetModule.loadDatasetFromZip)
-    mockSaveDatasetToZip = vi.mocked(datasetModule.saveDatasetToZip)
+    mockLoadDatasetFromZip = vi.mocked(loadModule.loadDatasetFromZip)
+    mockSaveDatasetToZip = vi.mocked(saveModule.saveDatasetToZip)
     vi.clearAllMocks()
   })
 
@@ -163,7 +167,9 @@ describe("ZipPlugin", () => {
       const dataset: Dataset = {
         $schema: "https://fairspec.org/profiles/latest/dataset.json",
         titles: [{ title: "Test Dataset" }],
-        descriptions: [{ description: "A test dataset", descriptionType: "Abstract" }],
+        descriptions: [
+          { description: "A test dataset", descriptionType: "Abstract" },
+        ],
         resources: [],
       }
       mockSaveDatasetToZip.mockResolvedValue(undefined)

@@ -1,6 +1,6 @@
 import { mergeDatasets } from "../../../../actions/dataset/merge.ts"
 import { makeZenodoApiRequest } from "../../services/zenodo.ts"
-import type { ZenodoRecord } from "../../models/Record.ts"
+import type { ZenodoRecord } from "../../models/record.ts"
 import { convertDatasetFromZenodo } from "./fromZenodo.ts"
 
 export async function loadDatasetFromZenodo(

@@ -4,7 +4,7 @@ import { denormalizeDataset, stringifyDescriptor } from "@fairspec/metadata"
 import { getDatasetBasepath } from "../../../../actions/dataset/basepath.ts"
 import { saveResourceFiles } from "../../../../actions/resource/save.ts"
 import { loadFileStream } from "../../../../actions/stream/load.ts"
-import type { ZenodoRecord } from "../../models/Record.ts"
+import type { ZenodoRecord } from "../../models/record.ts"
 import { makeZenodoApiRequest } from "../../services/zenodo.ts"
 import { convertDatasetToZenodo } from "./toZenodo.ts"
 

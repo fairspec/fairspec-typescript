@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import { getFileNameSlug } from "@fairspec/metadata"
-import type { GithubFile } from "../../models/File.ts"
+import type { GithubFile } from "../../models/file.ts"
 
 export function convertResourceFromGithub(
   githubFile: GithubFile,

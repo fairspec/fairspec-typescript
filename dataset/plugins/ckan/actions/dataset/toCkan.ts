@@ -1,9 +1,9 @@
 import type { Dataset } from "@fairspec/metadata"
 import type { SetRequired } from "type-fest"
 import { convertResourceToCkan } from "../../actions/resource/toCkan.ts"
-import type { CkanDataset } from "../../models/Dataset.ts"
-import type { CkanResource } from "../../models/Resource.ts"
-import type { CkanTag } from "../../models/Tag.ts"
+import type { CkanDataset } from "../../models/dataset.ts"
+import type { CkanResource } from "../../models/resource.ts"
+import type { CkanTag } from "../../models/tag.ts"
 
 export function convertDatasetToCkan(dataset: Dataset) {
   const ckanDataset: SetRequired<Partial<CkanDataset>, "resources" | "tags"> = {

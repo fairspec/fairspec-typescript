@@ -1,6 +1,6 @@
 import type { Column, TableSchema } from "@fairspec/metadata"
-import type { CkanField, CkanFieldInfo } from "../../models/Field.ts"
-import type { CkanSchema } from "../../models/Schema.ts"
+import type { CkanField, CkanFieldInfo } from "../../models/field.ts"
+import type { CkanSchema } from "../../models/schema.ts"
 
 export function convertTableSchemaToCkan(tableSchema: TableSchema): CkanSchema {
   const fields: CkanField[] = []

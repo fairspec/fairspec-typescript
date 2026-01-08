@@ -1,6 +1,6 @@
 import type { Dataset } from "@fairspec/metadata"
 import { convertResourceFromZenodo } from "../../actions/resource/fromZenodo.ts"
-import type { ZenodoRecord } from "../../models/Record.ts"
+import type { ZenodoRecord } from "../../models/record.ts"
 
 export function convertDatasetFromZenodo(zenodoRecord: ZenodoRecord): Dataset {
   const dataset: Dataset = {

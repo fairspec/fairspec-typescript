@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { CkanOrganization } from "./Organization.ts"
-import { CkanResource } from "./Resource.ts"
-import { CkanTag } from "./Tag.ts"
+import { CkanOrganization } from "./organization.ts"
+import { CkanResource } from "./resource.ts"
+import { CkanTag } from "./tag.ts"
 
 export const CkanDataset = z
   .object({

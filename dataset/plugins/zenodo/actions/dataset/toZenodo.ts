@@ -1,7 +1,7 @@
 import type { Dataset } from "@fairspec/metadata"
-import type { ZenodoCreator } from "../../models/Creator.ts"
-import type { ZenodoMetadata } from "../../models/Metadata.ts"
-import type { ZenodoRecord } from "../../models/Record.ts"
+import type { ZenodoCreator } from "../../models/creator.ts"
+import type { ZenodoMetadata } from "../../models/metadata.ts"
+import type { ZenodoRecord } from "../../models/record.ts"
 
 export function convertDatasetToZenodo(
   dataset: Dataset,

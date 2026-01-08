@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { ZenodoFile } from "./File.ts"
-import { ZenodoLink } from "./Link.ts"
-import { ZenodoMetadata } from "./Metadata.ts"
+import { ZenodoFile } from "./file.ts"
+import { ZenodoLink } from "./link.ts"
+import { ZenodoMetadata } from "./metadata.ts"
 
 export const ZenodoRecord = z
   .object({

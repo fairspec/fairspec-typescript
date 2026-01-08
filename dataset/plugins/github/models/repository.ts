@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { GithubFile } from "./File.ts"
-import { GithubLicense } from "./License.ts"
-import { GithubOwner } from "./Owner.ts"
+import { GithubFile } from "./file.ts"
+import { GithubLicense } from "./license.ts"
+import { GithubOwner } from "./owner.ts"
 
 export const GithubRepository = z
   .object({

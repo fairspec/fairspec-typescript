@@ -1,6 +1,6 @@
 import type { Dataset } from "@fairspec/metadata"
 import { convertResourceFromCkan } from "../../actions/resource/fromCkan.ts"
-import type { CkanDataset } from "../../models/Dataset.ts"
+import type { CkanDataset } from "../../models/dataset.ts"
 
 export function convertDatasetFromCkan(ckanDataset: CkanDataset): Dataset {
   const dataset: Dataset = {

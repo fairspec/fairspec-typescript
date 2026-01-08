@@ -1,7 +1,7 @@
 import { mergeDatasets } from "../../../../actions/dataset/merge.ts"
 import { makeGithubApiRequest } from "../../services/github.ts"
-import type { GithubFile } from "../../models/File.ts"
-import type { GithubRepository } from "../../models/Repository.ts"
+import type { GithubFile } from "../../models/file.ts"
+import type { GithubRepository } from "../../models/repository.ts"
 import { convertDatasetFromGithub } from "./fromGithub.ts"
 
 /**

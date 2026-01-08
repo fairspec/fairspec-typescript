@@ -1,6 +1,6 @@
 import type { TableSchema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import type { CkanSchema } from "../../models/Schema.ts"
+import type { CkanSchema } from "../../models/schema.ts"
 import ckanSchemaFixture from "./fixtures/ckan-schema.json" with {
   type: "json",
 }

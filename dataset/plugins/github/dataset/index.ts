@@ -1,6 +1,0 @@
-export { convertDatasetFromGithub } from "./convert/fromGithub.ts"
-export type { GithubDataset } from "./Dataset.ts"
-export type { GithubLicense } from "./License.ts"
-export { loadDatasetFromGithub } from "./load.ts"
-export type { GithubOwner } from "./Owner.ts"
-export { saveDatasetToGithub } from "./save.ts"

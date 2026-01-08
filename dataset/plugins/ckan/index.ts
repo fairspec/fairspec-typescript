@@ -1,4 +1,3 @@
-export * from "./dataset/index.ts"
-export * from "./plugin.ts"
-export * from "./resource/index.ts"
-export * from "./tableSchema/index.ts"
+export { loadDatasetFromCkan } from "./actions/dataset/load.ts"
+export { saveDatasetToCkan } from "./actions/dataset/save.ts"
+export { CkanPlugin } from "./plugin.ts"

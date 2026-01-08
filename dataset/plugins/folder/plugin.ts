@@ -2,7 +2,8 @@ import { stat } from "node:fs/promises"
 import type { Dataset } from "@fairspec/metadata"
 import { isRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
-import { loadDatasetFromFolder, saveDatasetToFolder } from "./dataset/index.ts"
+import { loadDatasetFromFolder } from "./actions/dataset/load.ts"
+import { saveDatasetToFolder } from "./actions/dataset/save.ts"
 
 export class FolderPlugin implements DatasetPlugin {
   async loadDataset(source: string) {

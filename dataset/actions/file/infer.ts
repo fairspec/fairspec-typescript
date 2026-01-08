@@ -1,0 +1,68 @@
+import { stat } from "node:fs/promises"
+import type { Resource } from "@fairspec/metadata"
+import { getFirstDataPath } from "@fairspec/metadata"
+import chardet from "chardet"
+import * as hasha from "hasha"
+import { isBinaryFile } from "isbinaryfile"
+import pMap from "p-map"
+import { loadFile } from "../../actions/file/load.ts"
+import { concatFileStreams } from "../../actions/stream/concat.ts"
+import { loadFileStream } from "../../actions/stream/load.ts"
+import { prefetchFiles } from "./fetch.ts"
+
+export type HashType = NonNullable<Resource["integrity"]>["type"]
+
+export async function inferBytes(resource: Partial<Resource>) {
+  const localPaths = await prefetchFiles(resource)
+
+  let bytes = 0
+  for (const localPath of localPaths) {
+    const result = await stat(localPath)
+    bytes += result.size
+  }
+
+  return bytes
+}
+
+export async function inferHash(
+  resource: Partial<Resource>,
+  options?: { hashType?: HashType },
+) {
+  const algorithm = options?.hashType ?? "sha256"
+  const localPaths = await prefetchFiles(resource)
+
+  const streams = await pMap(localPaths, async path => loadFileStream(path))
+  const stream = concatFileStreams(streams)
+
+  const hash = await hasha.hash(stream, { algorithm })
+  return hash
+}
+
+export async function inferTextual(
+  resource: Partial<Resource>,
+  options?: { sampleBytes?: number; confidencePercent?: number },
+) {
+  const maxBytes = options?.sampleBytes ?? 10_000
+  const confidencePercent = options?.confidencePercent ?? 80
+
+  const firstPath = getFirstDataPath(resource)
+  if (!firstPath) {
+    return false
+  }
+
+  const buffer = await loadFile(firstPath, { maxBytes })
+  const isBinary = await isBinaryFile(buffer)
+  if (isBinary) {
+    return false
+  }
+
+  const matches = chardet.analyse(buffer)
+  for (const match of matches) {
+    if (match.confidence >= confidencePercent) {
+      const encoding = match.name.toLowerCase()
+      return ["utf-8", "ascii"].includes(encoding)
+    }
+  }
+
+  return false
+}

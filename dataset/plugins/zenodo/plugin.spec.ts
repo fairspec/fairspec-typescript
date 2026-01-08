@@ -1,9 +1,9 @@
 import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import * as datasetModule from "./dataset/load.ts"
+import * as loadModule from "./actions/dataset/load.ts"
 import { ZenodoPlugin } from "./plugin.ts"
 
-vi.mock("./dataset/load.ts", () => ({
+vi.mock("./actions/dataset/load.ts", () => ({
   loadDatasetFromZenodo: vi.fn(),
 }))
 
@@ -13,7 +13,7 @@ describe("ZenodoPlugin", () => {
 
   beforeEach(() => {
     plugin = new ZenodoPlugin()
-    mockLoadDatasetFromZenodo = vi.mocked(datasetModule.loadDatasetFromZenodo)
+    mockLoadDatasetFromZenodo = vi.mocked(loadModule.loadDatasetFromZenodo)
     vi.clearAllMocks()
   })
 

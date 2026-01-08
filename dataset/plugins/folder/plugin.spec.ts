@@ -1,11 +1,15 @@
-import type { Dataset } from "@fairspec/metadata"
 import { stat } from "node:fs/promises"
+import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import * as datasetModule from "./dataset/index.ts"
+import * as loadModule from "./actions/dataset/load.ts"
+import * as saveModule from "./actions/dataset/save.ts"
 import { FolderPlugin } from "./plugin.ts"
 
-vi.mock("./dataset/index.ts", () => ({
+vi.mock("./actions/dataset/load.ts", () => ({
   loadDatasetFromFolder: vi.fn(),
+}))
+
+vi.mock("./actions/dataset/save.ts", () => ({
   saveDatasetToFolder: vi.fn(),
 }))
 
@@ -21,8 +25,8 @@ describe("FolderPlugin", () => {
 
   beforeEach(() => {
     plugin = new FolderPlugin()
-    mockLoadDatasetFromFolder = vi.mocked(datasetModule.loadDatasetFromFolder)
-    mockSaveDatasetFromFolder = vi.mocked(datasetModule.saveDatasetToFolder)
+    mockLoadDatasetFromFolder = vi.mocked(loadModule.loadDatasetFromFolder)
+    mockSaveDatasetFromFolder = vi.mocked(saveModule.saveDatasetToFolder)
     mockStat = vi.mocked(stat)
     vi.clearAllMocks()
   })

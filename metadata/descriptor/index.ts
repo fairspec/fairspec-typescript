@@ -1,7 +1,0 @@
-export { copyDescriptor } from "./copy.ts"
-export { Descriptor } from "./Descriptor.ts"
-export { isDescriptor } from "./general.ts"
-export { loadDescriptor } from "./load.ts"
-export { parseDescriptor } from "./parse.ts"
-export { saveDescriptor } from "./save.ts"
-export { stringifyDescriptor } from "./stringify.ts"

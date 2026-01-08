@@ -1,1 +1,1 @@
-export * from "./plugin.ts"
+export { DescriptorPlugin } from "./plugin.ts"

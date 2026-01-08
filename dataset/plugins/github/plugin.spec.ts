@@ -1,9 +1,9 @@
 import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import * as datasetModule from "./dataset/load.ts"
+import * as loadModule from "./actions/dataset/load.ts"
 import { GithubPlugin } from "./plugin.ts"
 
-vi.mock("./dataset/load.ts", () => ({
+vi.mock("./actions/dataset/load.ts", () => ({
   loadDatasetFromGithub: vi.fn(),
 }))
 
@@ -13,7 +13,7 @@ describe("GithubPlugin", () => {
 
   beforeEach(() => {
     plugin = new GithubPlugin()
-    mockLoadDatasetFromGithub = vi.mocked(datasetModule.loadDatasetFromGithub)
+    mockLoadDatasetFromGithub = vi.mocked(loadModule.loadDatasetFromGithub)
     vi.clearAllMocks()
   })
 

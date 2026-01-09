@@ -1,3 +1,4 @@
+import { getColumns } from "../../../../actions/tableSchema/column.ts"
 import type { Column } from "../../../../models/column/column.ts"
 import type { TableSchema } from "../../../../models/tableSchema.ts"
 import type { FrictionlessArrayField } from "../../models/field/array.ts"
@@ -22,8 +23,8 @@ export function convertTableSchemaToFrictionless(
   const fields: FrictionlessField[] = []
   const requiredSet = new Set(tableSchema.required ?? [])
 
-  for (const [name, column] of Object.entries(tableSchema.properties)) {
-    const field = convertColumnToField(name, column, requiredSet.has(name))
+  for (const column of getColumns(tableSchema)) {
+    const field = convertColumnToField(column, requiredSet.has(column.name))
     fields.push(field)
   }
 
@@ -67,139 +68,133 @@ export function convertTableSchemaToFrictionless(
 }
 
 function convertColumnToField(
-  name: string,
   column: Column,
   isRequired: boolean,
 ): FrictionlessField {
-  if (column.type === "string") {
-    if (column.format === "date") {
-      return convertToDateField(name, column, isRequired)
-    }
-    if (column.format === "time") {
-      return convertToTimeField(name, column, isRequired)
-    }
-    if (column.format === "date-time") {
-      return convertToDatetimeField(name, column, isRequired)
-    }
-    if (column.format === "duration") {
-      return convertToDurationField(name, column, isRequired)
-    }
-    if (column.format === "list") {
-      return convertToListField(name, column, isRequired)
-    }
-    return convertToStringField(name, column, isRequired)
+  switch (column.type) {
+    case "string":
+    case "base64":
+    case "hex":
+    case "email":
+    case "uuid":
+    case "url":
+    case "wkt":
+    case "wkb":
+      return convertToStringField(column, isRequired)
+    case "date":
+      return convertToDateField(column, isRequired)
+    case "time":
+      return convertToTimeField(column, isRequired)
+    case "datetime":
+      return convertToDatetimeField(column, isRequired)
+    case "duration":
+      return convertToDurationField(column, isRequired)
+    case "list":
+      return convertToListField(column, isRequired)
+    case "integer":
+      return convertToIntegerField(column, isRequired)
+    case "year":
+      return convertToYearField(column, isRequired)
+    case "number":
+      return convertToNumberField(column, isRequired)
+    case "boolean":
+      return convertToBooleanField(column, isRequired)
+    case "array":
+      return convertToArrayField(column, isRequired)
+    case "object":
+      return convertToObjectField(column, isRequired)
+    case "geojson":
+    case "topojson":
+      return convertToGeojsonField(column, isRequired)
   }
-
-  if (column.type === "integer") {
-    if (column.format === "year") {
-      return convertToYearField(name, column, isRequired)
-    }
-    return convertToIntegerField(name, column, isRequired)
-  }
-
-  if (column.type === "number") {
-    return convertToNumberField(name, column, isRequired)
-  }
-
-  if (column.type === "boolean") {
-    return convertToBooleanField(name, column, isRequired)
-  }
-
-  if (column.type === "array") {
-    return convertToArrayField(name, column, isRequired)
-  }
-
-  if (column.type === "object") {
-    if (column.format === "geojson" || column.format === "topojson") {
-      return convertToGeojsonField(name, column, isRequired)
-    }
-    return convertToObjectField(name, column, isRequired)
-  }
-
-  throw new Error(`Unsupported column type: ${(column as Column).type}`)
 }
 
 function convertToStringField(
-  name: string,
-  column: Column & { type: "string" },
+  column: Column & {
+    type: "string" | "base64" | "hex" | "email" | "uuid" | "url" | "wkt" | "wkb"
+  },
   isRequired: boolean,
 ): FrictionlessStringField {
   const field: FrictionlessStringField = {
-    name,
+    name: column.name,
     type: "string",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
   if (
-    column.format === "email" ||
-    column.format === "url" ||
-    column.format === "base64" ||
-    column.format === "uuid"
+    column.property.format === "email" ||
+    column.property.format === "url" ||
+    column.property.format === "base64" ||
+    column.property.format === "uuid"
   ) {
     field.format =
-      column.format === "url"
+      column.property.format === "url"
         ? "uri"
-        : column.format === "base64"
+        : column.property.format === "base64"
           ? "binary"
-          : column.format
+          : column.property.format
   }
 
-  if (column.enum) {
+  if (column.property.enum) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.enum = column.enum
+    field.constraints.enum = column.property.enum
   }
 
-  if (column.pattern) {
+  if (column.property.pattern) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.pattern = column.pattern
+    field.constraints.pattern = column.property.pattern
   }
 
-  if (column.minLength !== undefined) {
+  if (column.property.minLength !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.minLength = column.minLength
+    field.constraints.minLength = column.property.minLength
   }
 
-  if (column.maxLength !== undefined) {
+  if (column.property.maxLength !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.maxLength = column.maxLength
+    field.constraints.maxLength = column.property.maxLength
   }
 
-  if (column.categories && column.categories.length > 0) {
-    const firstItem = column.categories[0]
+  if (column.property.categories && column.property.categories.length > 0) {
+    const firstItem = column.property.categories[0]
     if (typeof firstItem === "string") {
-      const allStrings = column.categories.every(cat => typeof cat === "string")
+      const allStrings = column.property.categories.every(
+        cat => typeof cat === "string",
+      )
       if (allStrings) {
-        field.categories = column.categories as string[]
+        field.categories = column.property.categories as string[]
       }
     } else if (typeof firstItem === "object") {
-      const allObjects = column.categories.every(cat => typeof cat === "object")
+      const allObjects = column.property.categories.every(
+        cat => typeof cat === "object",
+      )
       if (allObjects) {
-        field.categories = column.categories as {
+        field.categories = column.property.categories as {
           value: string
           label: string
         }[]
@@ -218,35 +213,34 @@ function convertToStringField(
 }
 
 function convertToDateField(
-  name: string,
-  column: Column & { type: "string"; format: "date" },
+  column: Column & { type: "date" },
   isRequired: boolean,
 ): FrictionlessDateField {
   const field: FrictionlessDateField = {
-    name,
+    name: column.name,
     type: "date",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.temporalFormat) {
-    field.format = column.temporalFormat
+  if (column.property.temporalFormat) {
+    field.format = column.property.temporalFormat
   }
 
   if (isRequired) {
@@ -259,35 +253,34 @@ function convertToDateField(
 }
 
 function convertToTimeField(
-  name: string,
-  column: Column & { type: "string"; format: "time" },
+  column: Column & { type: "time" },
   isRequired: boolean,
 ): FrictionlessTimeField {
   const field: FrictionlessTimeField = {
-    name,
+    name: column.name,
     type: "time",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.temporalFormat) {
-    field.format = column.temporalFormat
+  if (column.property.temporalFormat) {
+    field.format = column.property.temporalFormat
   }
 
   if (isRequired) {
@@ -300,35 +293,34 @@ function convertToTimeField(
 }
 
 function convertToDatetimeField(
-  name: string,
-  column: Column & { type: "string"; format: "date-time" },
+  column: Column & { type: "datetime" },
   isRequired: boolean,
 ): FrictionlessDatetimeField {
   const field: FrictionlessDatetimeField = {
-    name,
+    name: column.name,
     type: "datetime",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.temporalFormat) {
-    field.format = column.temporalFormat
+  if (column.property.temporalFormat) {
+    field.format = column.property.temporalFormat
   }
 
   if (isRequired) {
@@ -341,29 +333,28 @@ function convertToDatetimeField(
 }
 
 function convertToDurationField(
-  name: string,
-  column: Column & { type: "string"; format: "duration" },
+  column: Column & { type: "duration" },
   isRequired: boolean,
 ): FrictionlessDurationField {
   const field: FrictionlessDurationField = {
-    name,
+    name: column.name,
     type: "duration",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
@@ -378,39 +369,38 @@ function convertToDurationField(
 }
 
 function convertToListField(
-  name: string,
-  column: Column & { type: "string"; format: "list" },
+  column: Column & { type: "list" },
   isRequired: boolean,
 ): FrictionlessListField {
   const field: FrictionlessListField = {
-    name,
+    name: column.name,
     type: "list",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.itemType) {
-    field.itemType = column.itemType
+  if (column.property.itemType) {
+    field.itemType = column.property.itemType
   }
 
-  if (column.delimiter) {
-    field.delimiter = column.delimiter
+  if (column.property.delimiter) {
+    field.delimiter = column.property.delimiter
   }
 
   if (isRequired) {
@@ -423,87 +413,90 @@ function convertToListField(
 }
 
 function convertToIntegerField(
-  name: string,
   column: Column & { type: "integer" },
   isRequired: boolean,
 ): FrictionlessIntegerField {
   const field: FrictionlessIntegerField = {
-    name,
+    name: column.name,
     type: "integer",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.enum) {
+  if (column.property.enum) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.enum = column.enum
+    field.constraints.enum = column.property.enum
   }
 
-  if (column.minimum !== undefined) {
+  if (column.property.minimum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.minimum = column.minimum
+    field.constraints.minimum = column.property.minimum
   }
 
-  if (column.maximum !== undefined) {
+  if (column.property.maximum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.maximum = column.maximum
+    field.constraints.maximum = column.property.maximum
   }
 
-  if (column.exclusiveMinimum !== undefined) {
+  if (column.property.exclusiveMinimum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.exclusiveMinimum = column.exclusiveMinimum
+    field.constraints.exclusiveMinimum = column.property.exclusiveMinimum
   }
 
-  if (column.exclusiveMaximum !== undefined) {
+  if (column.property.exclusiveMaximum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.exclusiveMaximum = column.exclusiveMaximum
+    field.constraints.exclusiveMaximum = column.property.exclusiveMaximum
   }
 
-  if (column.groupChar) {
-    field.groupChar = column.groupChar
+  if (column.property.groupChar) {
+    field.groupChar = column.property.groupChar
   }
 
-  if (column.withText !== undefined) {
-    field.bareNumber = !column.withText
+  if (column.property.withText !== undefined) {
+    field.bareNumber = !column.property.withText
   }
 
-  if (column.categories && column.categories.length > 0) {
-    const firstItem = column.categories[0]
+  if (column.property.categories && column.property.categories.length > 0) {
+    const firstItem = column.property.categories[0]
     if (typeof firstItem === "number") {
-      const allNumbers = column.categories.every(cat => typeof cat === "number")
+      const allNumbers = column.property.categories.every(
+        cat => typeof cat === "number",
+      )
       if (allNumbers) {
-        field.categories = column.categories as number[]
+        field.categories = column.property.categories as number[]
       }
     } else if (typeof firstItem === "object") {
-      const allObjects = column.categories.every(cat => typeof cat === "object")
+      const allObjects = column.property.categories.every(
+        cat => typeof cat === "object",
+      )
       if (allObjects) {
-        field.categories = column.categories as {
+        field.categories = column.property.categories as {
           value: number
           label: string
         }[]
@@ -522,66 +515,65 @@ function convertToIntegerField(
 }
 
 function convertToYearField(
-  name: string,
-  column: Column & { type: "integer"; format: "year" },
+  column: Column & { type: "year" },
   isRequired: boolean,
 ): FrictionlessYearField {
   const field: FrictionlessYearField = {
-    name,
+    name: column.name,
     type: "year",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.enum) {
+  if (column.property.enum) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.enum = column.enum
+    field.constraints.enum = column.property.enum
   }
 
-  if (column.minimum !== undefined) {
+  if (column.property.minimum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.minimum = column.minimum
+    field.constraints.minimum = column.property.minimum
   }
 
-  if (column.maximum !== undefined) {
+  if (column.property.maximum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.maximum = column.maximum
+    field.constraints.maximum = column.property.maximum
   }
 
-  if (column.exclusiveMinimum !== undefined) {
+  if (column.property.exclusiveMinimum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.exclusiveMinimum = column.exclusiveMinimum
+    field.constraints.exclusiveMinimum = column.property.exclusiveMinimum
   }
 
-  if (column.exclusiveMaximum !== undefined) {
+  if (column.property.exclusiveMaximum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.exclusiveMaximum = column.exclusiveMaximum
+    field.constraints.exclusiveMaximum = column.property.exclusiveMaximum
   }
 
   if (isRequired) {
@@ -595,66 +587,65 @@ function convertToYearField(
 }
 
 function convertToNumberField(
-  name: string,
   column: Column & { type: "number" },
   isRequired: boolean,
 ): FrictionlessNumberField {
   const field: FrictionlessNumberField = {
-    name,
+    name: column.name,
     type: "number",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.enum) {
+  if (column.property.enum) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.enum = column.enum
+    field.constraints.enum = column.property.enum
   }
 
-  if (column.minimum !== undefined) {
+  if (column.property.minimum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.minimum = column.minimum
+    field.constraints.minimum = column.property.minimum
   }
 
-  if (column.maximum !== undefined) {
+  if (column.property.maximum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.maximum = column.maximum
+    field.constraints.maximum = column.property.maximum
   }
 
-  if (column.exclusiveMinimum !== undefined) {
+  if (column.property.exclusiveMinimum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.exclusiveMinimum = column.exclusiveMinimum
+    field.constraints.exclusiveMinimum = column.property.exclusiveMinimum
   }
 
-  if (column.exclusiveMaximum !== undefined) {
+  if (column.property.exclusiveMaximum !== undefined) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.exclusiveMaximum = column.exclusiveMaximum
+    field.constraints.exclusiveMaximum = column.property.exclusiveMaximum
   }
 
   if (isRequired) {
@@ -668,46 +659,45 @@ function convertToNumberField(
 }
 
 function convertToBooleanField(
-  name: string,
   column: Column & { type: "boolean" },
   isRequired: boolean,
 ): FrictionlessBooleanField {
   const field: FrictionlessBooleanField = {
-    name,
+    name: column.name,
     type: "boolean",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.enum) {
+  if (column.property.enum) {
     if (!field.constraints) {
       field.constraints = {}
     }
-    field.constraints.enum = column.enum
+    field.constraints.enum = column.property.enum
   }
 
-  if (column.trueValues) {
-    field.trueValues = column.trueValues
+  if (column.property.trueValues) {
+    field.trueValues = column.property.trueValues
   }
 
-  if (column.falseValues) {
-    field.falseValues = column.falseValues
+  if (column.property.falseValues) {
+    field.falseValues = column.property.falseValues
   }
 
   if (isRequired) {
@@ -721,29 +711,28 @@ function convertToBooleanField(
 }
 
 function convertToArrayField(
-  name: string,
   column: Column & { type: "array" },
   isRequired: boolean,
 ): FrictionlessArrayField {
   const field: FrictionlessArrayField = {
-    name,
+    name: column.name,
     type: "array",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
@@ -758,29 +747,28 @@ function convertToArrayField(
 }
 
 function convertToObjectField(
-  name: string,
   column: Column & { type: "object" },
   isRequired: boolean,
 ): FrictionlessObjectField {
   const field: FrictionlessObjectField = {
-    name,
+    name: column.name,
     type: "object",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
@@ -795,34 +783,33 @@ function convertToObjectField(
 }
 
 function convertToGeojsonField(
-  name: string,
-  column: Column & { type: "object"; format: "geojson" | "topojson" },
+  column: Column & { type: "geojson" | "topojson" },
   isRequired: boolean,
 ): FrictionlessGeojsonField {
   const field: FrictionlessGeojsonField = {
-    name,
+    name: column.name,
     type: "geojson",
   }
 
-  if (column.title) {
-    field.title = column.title
+  if (column.property.title) {
+    field.title = column.property.title
   }
 
-  if (column.description) {
-    field.description = column.description
+  if (column.property.description) {
+    field.description = column.property.description
   }
 
-  if (column.rdfType) {
-    field.rdfType = column.rdfType
+  if (column.property.rdfType) {
+    field.rdfType = column.property.rdfType
   }
 
-  if (column.missingValues) {
-    field.missingValues = column.missingValues.map(v =>
+  if (column.property.missingValues) {
+    field.missingValues = column.property.missingValues.map(v =>
       typeof v === "string" ? v : String(v),
     )
   }
 
-  if (column.format === "topojson") {
+  if (column.type === "topojson") {
     field.format = "topojson"
   }
 

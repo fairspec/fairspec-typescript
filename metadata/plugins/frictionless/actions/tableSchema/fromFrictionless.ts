@@ -1,3 +1,4 @@
+import { getColumnProperties } from "../../../../actions/tableSchema/column.ts"
 import type { Column } from "../../../../models/column/column.ts"
 import type { TableSchema } from "../../../../models/tableSchema.ts"
 import type { FrictionlessField } from "../../models/field/field.ts"
@@ -6,9 +7,19 @@ import type { FrictionlessSchema } from "../../models/schema.ts"
 export function convertTableSchemaFromFrictionless(
   frictionlessSchema: FrictionlessSchema,
 ): TableSchema {
-  const properties: Record<string, Column> = {}
+  const columns: Column[] = []
   for (const field of frictionlessSchema.fields) {
-    properties[field.name] = convertColumn(field)
+    columns.push(convertFieldToColumn(field))
+  }
+
+  const properties: Record<string, Column["property"]> = {}
+  const columnProperties = getColumnProperties(columns)
+  for (let i = 0; i < columns.length; i++) {
+    const prop = columnProperties[i]
+    const col = columns[i]
+    if (prop && col) {
+      properties[col.name] = prop
+    }
   }
 
   const required = frictionlessSchema.fields
@@ -55,323 +66,345 @@ export function convertTableSchemaFromFrictionless(
   return tableSchema
 }
 
-function convertColumn(field: FrictionlessField): Column {
+function convertFieldToColumn(field: FrictionlessField): Column {
   switch (field.type) {
     case "string": {
       if (field.format === "email") {
-        const column: Column = { type: "string", format: "email" }
-        if (field.title) column.title = field.title
-        if (field.description) column.description = field.description
-        if (field.rdfType) column.rdfType = field.rdfType
-        if (field.constraints?.enum) column.enum = field.constraints.enum
+        const property: Column["property"] = { type: "string", format: "email" }
+        if (field.title) property.title = field.title
+        if (field.description) property.description = field.description
+        if (field.rdfType) property.rdfType = field.rdfType
+        if (field.constraints?.enum) property.enum = field.constraints.enum
         if (field.constraints?.pattern)
-          column.pattern = field.constraints.pattern
+          property.pattern = field.constraints.pattern
         if (field.constraints?.minLength)
-          column.minLength = field.constraints.minLength
+          property.minLength = field.constraints.minLength
         if (field.constraints?.maxLength)
-          column.maxLength = field.constraints.maxLength
-        if (field.categories) column.categories = field.categories
-        if (field.missingValues) column.missingValues = field.missingValues
-        return column
+          property.maxLength = field.constraints.maxLength
+        if (field.categories) property.categories = field.categories
+        if (field.missingValues) property.missingValues = field.missingValues
+        return { name: field.name, type: "email", property }
       }
       if (field.format === "uri") {
-        const column: Column = { type: "string", format: "url" }
-        if (field.title) column.title = field.title
-        if (field.description) column.description = field.description
-        if (field.rdfType) column.rdfType = field.rdfType
-        if (field.constraints?.enum) column.enum = field.constraints.enum
+        const property: Column["property"] = { type: "string", format: "url" }
+        if (field.title) property.title = field.title
+        if (field.description) property.description = field.description
+        if (field.rdfType) property.rdfType = field.rdfType
+        if (field.constraints?.enum) property.enum = field.constraints.enum
         if (field.constraints?.pattern)
-          column.pattern = field.constraints.pattern
+          property.pattern = field.constraints.pattern
         if (field.constraints?.minLength)
-          column.minLength = field.constraints.minLength
+          property.minLength = field.constraints.minLength
         if (field.constraints?.maxLength)
-          column.maxLength = field.constraints.maxLength
-        if (field.categories) column.categories = field.categories
-        if (field.missingValues) column.missingValues = field.missingValues
-        return column
+          property.maxLength = field.constraints.maxLength
+        if (field.categories) property.categories = field.categories
+        if (field.missingValues) property.missingValues = field.missingValues
+        return { name: field.name, type: "url", property }
       }
       if (field.format === "binary") {
-        const column: Column = { type: "string", format: "base64" }
-        if (field.title) column.title = field.title
-        if (field.description) column.description = field.description
-        if (field.rdfType) column.rdfType = field.rdfType
-        if (field.constraints?.enum) column.enum = field.constraints.enum
+        const property: Column["property"] = {
+          type: "string",
+          format: "base64",
+        }
+        if (field.title) property.title = field.title
+        if (field.description) property.description = field.description
+        if (field.rdfType) property.rdfType = field.rdfType
+        if (field.constraints?.enum) property.enum = field.constraints.enum
         if (field.constraints?.pattern)
-          column.pattern = field.constraints.pattern
+          property.pattern = field.constraints.pattern
         if (field.constraints?.minLength)
-          column.minLength = field.constraints.minLength
+          property.minLength = field.constraints.minLength
         if (field.constraints?.maxLength)
-          column.maxLength = field.constraints.maxLength
-        if (field.categories) column.categories = field.categories
-        if (field.missingValues) column.missingValues = field.missingValues
-        return column
+          property.maxLength = field.constraints.maxLength
+        if (field.categories) property.categories = field.categories
+        if (field.missingValues) property.missingValues = field.missingValues
+        return { name: field.name, type: "base64", property }
       }
       if (field.format === "uuid") {
-        const column: Column = { type: "string", format: "uuid" }
-        if (field.title) column.title = field.title
-        if (field.description) column.description = field.description
-        if (field.rdfType) column.rdfType = field.rdfType
-        if (field.constraints?.enum) column.enum = field.constraints.enum
+        const property: Column["property"] = { type: "string", format: "uuid" }
+        if (field.title) property.title = field.title
+        if (field.description) property.description = field.description
+        if (field.rdfType) property.rdfType = field.rdfType
+        if (field.constraints?.enum) property.enum = field.constraints.enum
         if (field.constraints?.pattern)
-          column.pattern = field.constraints.pattern
+          property.pattern = field.constraints.pattern
         if (field.constraints?.minLength)
-          column.minLength = field.constraints.minLength
+          property.minLength = field.constraints.minLength
         if (field.constraints?.maxLength)
-          column.maxLength = field.constraints.maxLength
-        if (field.categories) column.categories = field.categories
-        if (field.missingValues) column.missingValues = field.missingValues
-        return column
+          property.maxLength = field.constraints.maxLength
+        if (field.categories) property.categories = field.categories
+        if (field.missingValues) property.missingValues = field.missingValues
+        return { name: field.name, type: "uuid", property }
       }
-      const column: Column = { type: "string" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      if (field.constraints?.enum) column.enum = field.constraints.enum
-      if (field.constraints?.pattern) column.pattern = field.constraints.pattern
+      const property: Column["property"] = { type: "string" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      if (field.constraints?.enum) property.enum = field.constraints.enum
+      if (field.constraints?.pattern)
+        property.pattern = field.constraints.pattern
       if (field.constraints?.minLength)
-        column.minLength = field.constraints.minLength
+        property.minLength = field.constraints.minLength
       if (field.constraints?.maxLength)
-        column.maxLength = field.constraints.maxLength
-      if (field.categories) column.categories = field.categories
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+        property.maxLength = field.constraints.maxLength
+      if (field.categories) property.categories = field.categories
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "string", property }
     }
 
     case "number": {
-      const column: Column = { type: "number" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
+      const property: Column["property"] = { type: "number" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
       if (
         field.constraints?.enum &&
         Array.isArray(field.constraints.enum) &&
         typeof field.constraints.enum[0] === "number"
       ) {
-        column.enum = field.constraints.enum as number[]
+        property.enum = field.constraints.enum as number[]
       }
       if (typeof field.constraints?.minimum === "number") {
-        column.minimum = field.constraints.minimum
+        property.minimum = field.constraints.minimum
       }
       if (typeof field.constraints?.maximum === "number") {
-        column.maximum = field.constraints.maximum
+        property.maximum = field.constraints.maximum
       }
       if (typeof field.constraints?.exclusiveMinimum === "number") {
-        column.exclusiveMinimum = field.constraints.exclusiveMinimum
+        property.exclusiveMinimum = field.constraints.exclusiveMinimum
       }
       if (typeof field.constraints?.exclusiveMaximum === "number") {
-        column.exclusiveMaximum = field.constraints.exclusiveMaximum
+        property.exclusiveMaximum = field.constraints.exclusiveMaximum
       }
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "number", property }
     }
 
     case "integer": {
-      const column: Column = { type: "integer" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
+      const property: Column["property"] = { type: "integer" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
       if (
         field.constraints?.enum &&
         Array.isArray(field.constraints.enum) &&
         typeof field.constraints.enum[0] === "number"
       ) {
-        column.enum = field.constraints.enum as number[]
+        property.enum = field.constraints.enum as number[]
       }
       if (typeof field.constraints?.minimum === "number") {
-        column.minimum = field.constraints.minimum
+        property.minimum = field.constraints.minimum
       }
       if (typeof field.constraints?.maximum === "number") {
-        column.maximum = field.constraints.maximum
+        property.maximum = field.constraints.maximum
       }
       if (typeof field.constraints?.exclusiveMinimum === "number") {
-        column.exclusiveMinimum = field.constraints.exclusiveMinimum
+        property.exclusiveMinimum = field.constraints.exclusiveMinimum
       }
       if (typeof field.constraints?.exclusiveMaximum === "number") {
-        column.exclusiveMaximum = field.constraints.exclusiveMaximum
+        property.exclusiveMaximum = field.constraints.exclusiveMaximum
       }
-      if (field.groupChar) column.groupChar = field.groupChar
+      if (field.groupChar) property.groupChar = field.groupChar
       if (field.bareNumber !== undefined) {
-        column.withText = !field.bareNumber
+        property.withText = !field.bareNumber
       }
-      if (field.categories) column.categories = field.categories
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      if (field.categories) property.categories = field.categories
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "integer", property }
     }
 
     case "boolean": {
-      const column: Column = { type: "boolean" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
+      const property: Column["property"] = { type: "boolean" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
       if (
         field.constraints?.enum &&
         Array.isArray(field.constraints.enum) &&
         typeof field.constraints.enum[0] === "boolean"
       ) {
-        column.enum = field.constraints.enum as boolean[]
+        property.enum = field.constraints.enum as boolean[]
       }
-      if (field.trueValues) column.trueValues = field.trueValues
-      if (field.falseValues) column.falseValues = field.falseValues
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      if (field.trueValues) property.trueValues = field.trueValues
+      if (field.falseValues) property.falseValues = field.falseValues
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "boolean", property }
     }
 
     case "date": {
-      const column: Column = { type: "string", format: "date" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
+      const property: Column["property"] = { type: "string", format: "date" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
       if (
         field.format &&
         field.format !== "default" &&
         field.format !== "any"
       ) {
-        column.temporalFormat = field.format
+        property.temporalFormat = field.format
       }
-      if (field.constraints?.enum) column.enum = field.constraints.enum
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      if (field.constraints?.enum) property.enum = field.constraints.enum
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "date", property }
     }
 
     case "time": {
-      const column: Column = { type: "string", format: "time" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
+      const property: Column["property"] = { type: "string", format: "time" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
       if (
         field.format &&
         field.format !== "default" &&
         field.format !== "any"
       ) {
-        column.temporalFormat = field.format
+        property.temporalFormat = field.format
       }
-      if (field.constraints?.enum) column.enum = field.constraints.enum
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      if (field.constraints?.enum) property.enum = field.constraints.enum
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "time", property }
     }
 
     case "datetime": {
-      const column: Column = { type: "string", format: "date-time" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
+      const property: Column["property"] = {
+        type: "string",
+        format: "date-time",
+      }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
       if (
         field.format &&
         field.format !== "default" &&
         field.format !== "any"
       ) {
-        column.temporalFormat = field.format
+        property.temporalFormat = field.format
       }
-      if (field.constraints?.enum) column.enum = field.constraints.enum
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      if (field.constraints?.enum) property.enum = field.constraints.enum
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "datetime", property }
     }
 
     case "year": {
-      const column: Column = { type: "integer", format: "year" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
+      const property: Column["property"] = { type: "integer", format: "year" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
       if (
         field.constraints?.enum &&
         Array.isArray(field.constraints.enum) &&
         typeof field.constraints.enum[0] === "number"
       ) {
-        column.enum = field.constraints.enum as number[]
+        property.enum = field.constraints.enum as number[]
       }
       if (typeof field.constraints?.minimum === "number") {
-        column.minimum = field.constraints.minimum
+        property.minimum = field.constraints.minimum
       }
       if (typeof field.constraints?.maximum === "number") {
-        column.maximum = field.constraints.maximum
+        property.maximum = field.constraints.maximum
       }
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "year", property }
     }
 
     case "duration": {
-      const column: Column = { type: "string", format: "duration" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      if (field.constraints?.enum) column.enum = field.constraints.enum
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      const property: Column["property"] = {
+        type: "string",
+        format: "duration",
+      }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      if (field.constraints?.enum) property.enum = field.constraints.enum
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "duration", property }
     }
 
     case "array": {
-      const column: Column = { type: "array" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      const property: Column["property"] = { type: "array" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "array", property }
     }
 
     case "object": {
-      const column: Column = { type: "object" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      return column
+      const property: Column["property"] = { type: "object" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      return { name: field.name, type: "object", property }
     }
 
     case "list": {
-      const column: Column = { type: "string", format: "list" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      if (field.itemType) column.itemType = field.itemType
-      if (field.delimiter) column.delimiter = field.delimiter
+      const property: Column["property"] = { type: "string", format: "list" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      if (field.itemType) property.itemType = field.itemType
+      if (field.delimiter) property.delimiter = field.delimiter
       if (
         field.constraints?.enum &&
         Array.isArray(field.constraints.enum) &&
         typeof field.constraints.enum[0] === "string"
       ) {
-        column.enum = field.constraints.enum as string[]
+        property.enum = field.constraints.enum as string[]
       }
       if (field.constraints?.minLength)
-        column.minLength = field.constraints.minLength
+        property.minLength = field.constraints.minLength
       if (field.constraints?.maxLength)
-        column.maxLength = field.constraints.maxLength
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+        property.maxLength = field.constraints.maxLength
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "list", property }
     }
 
     case "geojson": {
-      const format = field.format === "topojson" ? "topojson" : "geojson"
-      const column: Column = { type: "object", format }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      return column
+      if (field.format === "topojson") {
+        const property: Column["property"] = {
+          type: "object",
+          format: "topojson",
+          ...(field.title && { title: field.title }),
+          ...(field.description && { description: field.description }),
+          ...(field.rdfType && { rdfType: field.rdfType }),
+        }
+        return { name: field.name, type: "topojson", property }
+      }
+      const property: Column["property"] = {
+        type: "object",
+        format: "geojson",
+        ...(field.title && { title: field.title }),
+        ...(field.description && { description: field.description }),
+        ...(field.rdfType && { rdfType: field.rdfType }),
+      }
+      return { name: field.name, type: "geojson", property }
     }
 
     case "geopoint": {
-      const column: Column = { type: "string" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      const property: Column["property"] = { type: "string" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "string", property }
     }
 
     case "yearmonth": {
-      const column: Column = { type: "string" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      const property: Column["property"] = { type: "string" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "string", property }
     }
 
     case "any": {
-      const column: Column = { type: "string" }
-      if (field.title) column.title = field.title
-      if (field.description) column.description = field.description
-      if (field.rdfType) column.rdfType = field.rdfType
-      if (field.missingValues) column.missingValues = field.missingValues
-      return column
+      const property: Column["property"] = { type: "string" }
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "string", property }
     }
 
     default: {

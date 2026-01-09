@@ -15,7 +15,9 @@ export const StringColumn = BaseColumn.extend({
     pattern: z
       .string()
       .optional()
-      .describe("An optional regular expression pattern that values must match"),
+      .describe(
+        "An optional regular expression pattern that values must match",
+      ),
 
     minLength: z
       .number()

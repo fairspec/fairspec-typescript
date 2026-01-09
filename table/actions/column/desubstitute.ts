@@ -5,7 +5,7 @@ const DEFAULT_MISSING_VALUE = ""
 
 export function desubstituteColumn(column: Column, columnExpr: pl.Expr) {
   const flattenMissingValues = column.property.missingValues?.map(it =>
-    typeof it === "string" ? it : it.value,
+    typeof it === "object" ? it.value : it,
   )
 
   const missingValue = flattenMissingValues?.[0] ?? DEFAULT_MISSING_VALUE

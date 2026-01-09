@@ -1,17 +1,17 @@
 import * as pl from "nodejs-polars"
-import type { FieldMapping } from "./Mapping.ts"
+import type { ColumnMapping } from "../../models/column.ts"
 
-export function narrowField(mapping: FieldMapping, fieldExpr: pl.Expr) {
+export function narrowColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
   const variant = mapping.source.type.variant
 
   if (mapping.target.type === "integer") {
     if (["Float32", "Float64"].includes(variant)) {
-      fieldExpr = pl
-        .when(fieldExpr.eq(fieldExpr.round(0)))
-        .then(fieldExpr.cast(pl.Int64))
+      columnExpr = pl
+        .when(columnExpr.eq(columnExpr.round(0)))
+        .then(columnExpr.cast(pl.Int64))
         .otherwise(pl.lit(null))
     }
   }
 
-  return fieldExpr
+  return columnExpr
 }

@@ -1,20 +1,20 @@
 import * as pl from "nodejs-polars"
-import type { FieldMapping } from "./Mapping.ts"
-import { narrowField } from "./narrow.ts"
-import { parseField } from "./parse.ts"
-import { substituteField } from "./substitute.ts"
+import type { ColumnMapping } from "../../models/column.ts"
+import { narrowColumn } from "./narrow.ts"
+import { parseColumn } from "./parse.ts"
+import { substituteColumn } from "./substitute.ts"
 
-export function normalizeField(
-  mapping: FieldMapping,
+export function normalizeColumn(
+  mapping: ColumnMapping,
   options?: { keepType?: boolean },
 ) {
-  let fieldExpr = pl.col(mapping.source.name)
-  fieldExpr = substituteField(mapping, fieldExpr)
+  let columnExpr = pl.col(mapping.source.name)
+  columnExpr = substituteColumn(mapping, columnExpr)
 
   if (!options?.keepType) {
-    fieldExpr = parseField(mapping, fieldExpr)
-    fieldExpr = narrowField(mapping, fieldExpr)
+    columnExpr = parseColumn(mapping, columnExpr)
+    columnExpr = narrowColumn(mapping, columnExpr)
   }
 
-  return fieldExpr.alias(mapping.target.name)
+  return columnExpr.alias(mapping.target.name)
 }

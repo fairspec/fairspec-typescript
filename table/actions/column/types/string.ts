@@ -37,10 +37,3 @@ export function parseStringColumn(
 
   return columnExpr
 }
-
-export function stringifyStringColumn(
-  _column: StringColumn,
-  columnExpr: pl.Expr,
-) {
-  return columnExpr
-}

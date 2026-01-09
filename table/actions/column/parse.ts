@@ -1,23 +1,25 @@
 import * as pl from "nodejs-polars"
 import type { ColumnMapping } from "../../models/column.ts"
+import { parseBase64Column } from "./types/base64.ts"
 import { parseBooleanColumn } from "./types/boolean.ts"
 import { parseDateColumn } from "./types/date.ts"
 import { parseDatetimeColumn } from "./types/datetime.ts"
 import { parseDurationColumn } from "./types/duration.ts"
-import { parseGeopointColumn } from "./types/geopoint.ts"
+import { parseEmailColumn } from "./types/email.ts"
+import { parseHexColumn } from "./types/hex.ts"
 import { parseIntegerColumn } from "./types/integer.ts"
 import { parseListColumn } from "./types/list.ts"
 import { parseNumberColumn } from "./types/number.ts"
-import { parseStringColumn } from "./types/string.ts"
 import { parseTimeColumn } from "./types/time.ts"
-import { parseYearColumn } from "./types/year.ts"
-import { parseYearmonthColumn } from "./types/yearmonth.ts"
+import { parseUrlColumn } from "./types/url.ts"
 
 export function parseColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
   if (!mapping.source.type.equals(pl.String)) return columnExpr
 
   const column = mapping.target
   switch (column.type) {
+    case "base64":
+      return parseBase64Column(column, columnExpr)
     case "boolean":
       return parseBooleanColumn(column, columnExpr)
     case "date":
@@ -26,22 +28,20 @@ export function parseColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
       return parseDatetimeColumn(column, columnExpr)
     case "duration":
       return parseDurationColumn(column, columnExpr)
-    case "geopoint":
-      return parseGeopointColumn(column, columnExpr)
+    case "email":
+      return parseEmailColumn(column, columnExpr)
+    case "hex":
+      return parseHexColumn(column, columnExpr)
     case "integer":
       return parseIntegerColumn(column, columnExpr)
     case "list":
       return parseListColumn(column, columnExpr)
     case "number":
       return parseNumberColumn(column, columnExpr)
-    case "string":
-      return parseStringColumn(column, columnExpr)
     case "time":
       return parseTimeColumn(column, columnExpr)
-    case "year":
-      return parseYearColumn(column, columnExpr)
-    case "yearmonth":
-      return parseYearmonthColumn(column, columnExpr)
+    case "url":
+      return parseUrlColumn(column, columnExpr)
     default:
       return columnExpr
   }

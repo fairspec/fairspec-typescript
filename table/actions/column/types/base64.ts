@@ -8,10 +8,3 @@ export function parseBase64Column(column: Base64Column, columnExpr: pl.Expr) {
     regex: z.regexes.base64,
   })
 }
-
-export function stringifyBase64Column(
-  _column: Base64Column,
-  columnExpr: pl.Expr,
-) {
-  return columnExpr
-}

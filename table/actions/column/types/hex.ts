@@ -8,7 +8,3 @@ export function parseHexColumn(column: HexColumn, columnExpr: pl.Expr) {
     regex: z.regexes.hex,
   })
 }
-
-export function stringifyHexColumn(_column: HexColumn, columnExpr: pl.Expr) {
-  return columnExpr
-}

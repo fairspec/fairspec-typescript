@@ -9,7 +9,3 @@ export function parseUrlColumn(column: UrlColumn, columnExpr: pl.Expr) {
     regex: /^https?:\/\/.+/,
   })
 }
-
-export function stringifyUrlColumn(_column: UrlColumn, columnExpr: pl.Expr) {
-  return columnExpr
-}

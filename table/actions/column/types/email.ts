@@ -8,10 +8,3 @@ export function parseEmailColumn(column: EmailColumn, columnExpr: pl.Expr) {
     regex: z.regexes.email,
   })
 }
-
-export function stringifyEmailColumn(
-  _column: EmailColumn,
-  columnExpr: pl.Expr,
-) {
-  return columnExpr
-}

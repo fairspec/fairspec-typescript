@@ -1,5 +1,5 @@
 import type * as pl from "nodejs-polars"
-import type { PolarsSchema } from "./Schema.ts"
+import type { PolarsSchema } from "../../models/schema.ts"
 
 export function getPolarsSchema(
   typeMapping: Record<string, pl.DataType>,

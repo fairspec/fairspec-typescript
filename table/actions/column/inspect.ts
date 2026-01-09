@@ -5,7 +5,8 @@ import type {
   TableError,
 } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import type { Table } from "../table/index.ts"
+import type { ColumnMapping } from "../../models/column.ts"
+import type { Table } from "../../models/table.ts"
 import { checkCellEnum } from "./checks/enum.ts"
 import { createCheckCellMaximum } from "./checks/maximum.ts"
 import { checkCellMaxLength } from "./checks/maxLength.ts"
@@ -13,7 +14,6 @@ import { createCheckCellMinimum } from "./checks/minimum.ts"
 import { checkCellMinLength } from "./checks/minLength.ts"
 import { checkCellPattern } from "./checks/pattern.ts"
 import { checkCellType } from "./checks/type.ts"
-import type { ColumnMapping } from "./Mapping.ts"
 import { normalizeColumn } from "./normalize.ts"
 import { inspectArrayColumn } from "./types/array.ts"
 import { inspectGeojsonColumn } from "./types/geojson.ts"
@@ -29,29 +29,12 @@ export async function inspectColumn(
   const { maxErrors } = options
   const errors: TableError[] = []
 
-  const nameErrors = inspectName(mapping)
-  errors.push(...nameErrors)
-
   const typeErrors = inspectType(mapping)
   errors.push(...typeErrors)
 
   if (!typeErrors.length) {
     const dataErorrs = await inspectCells(mapping, table, { maxErrors })
     errors.push(...dataErorrs)
-  }
-
-  return errors
-}
-
-function inspectName(mapping: ColumnMapping) {
-  const errors: ColumnError[] = []
-
-  if (mapping.source.name !== mapping.target.name) {
-    errors.push({
-      type: "column/name",
-      columnName: mapping.target.name,
-      actualColumnName: mapping.source.name,
-    })
   }
 
   return errors
@@ -75,13 +58,13 @@ function inspectType(mapping: ColumnMapping) {
     Int64: ["integer"],
     Int8: ["integer"],
     List: ["list"],
-    String: ["any"],
+    String: ["string"],
     Time: ["time"],
     UInt16: ["integer"],
     UInt32: ["integer"],
     UInt64: ["integer"],
     UInt8: ["integer"],
-    Utf8: ["any"],
+    Utf8: ["string"],
   }
 
   const compatTypes = compatMapping[variant] ?? []
@@ -93,8 +76,8 @@ function inspectType(mapping: ColumnMapping) {
     errors.push({
       type: "column/type",
       columnName: mapping.target.name,
-      columnType: mapping.target.type ?? "any",
-      actualColumnType: compatTypes[0] ?? "any",
+      expectedColumnType: mapping.target.type,
+      actualColumnType: compatTypes[0] ?? "string",
     })
   }
 

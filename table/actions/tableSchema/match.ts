@@ -1,17 +1,17 @@
-import type { Field } from "@fairspec/metadata"
-import type { SchemaMapping } from "./Mapping.ts"
+import type { Column } from "@fairspec/metadata"
+import type { SchemaMapping } from "../../models/schema.ts"
 
-export function matchSchemaField(
+export function matchSchemaColumn(
   mapping: SchemaMapping,
-  field: Field,
+  column: Column,
   index: number,
 ) {
-  const fieldsMatch = mapping.target.fieldsMatch ?? "exact"
+  const columnsMatch = mapping.target.columnsMatch ?? "exact"
 
-  const polarsField =
-    fieldsMatch !== "exact"
-      ? mapping.source.fields.find(it => it.name === field.name)
-      : mapping.source.fields[index]
+  const polarsColumn =
+    columnsMatch !== "exact"
+      ? mapping.source.columns.find(it => it.name === column.name)
+      : mapping.source.columns[index]
 
-  return polarsField ? { source: polarsField, target: field } : undefined
+  return polarsColumn ? { source: polarsColumn, target: column } : undefined
 }

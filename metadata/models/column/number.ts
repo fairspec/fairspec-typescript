@@ -55,6 +55,29 @@ export const NumberColumn = BaseColumn.extend({
       .describe(
         "An optional column-specific list of values that represent missing or null data",
       ),
+
+    decimalChar: z
+      .string()
+      .length(1)
+      .optional()
+      .describe(
+        "An optional single character used as the decimal separator in the data",
+      ),
+
+    groupChar: z
+      .string()
+      .length(1)
+      .optional()
+      .describe(
+        "An optional single character used as the thousands separator in the data",
+      ),
+
+    withText: z
+      .boolean()
+      .optional()
+      .describe(
+        "An optional boolean indicating whether numeric values may include non-numeric text that should be stripped during parsing",
+      ),
   }),
 })
 

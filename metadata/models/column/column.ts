@@ -19,7 +19,6 @@ import { UrlColumn } from "./url.ts"
 import { UuidColumn } from "./uuid.ts"
 import { WkbColumn } from "./wkb.ts"
 import { WktColumn } from "./wkt.ts"
-import { YearColumn } from "./year.ts"
 
 export const Column = z.discriminatedUnion("type", [
   ArrayColumn,
@@ -42,7 +41,6 @@ export const Column = z.discriminatedUnion("type", [
   UuidColumn,
   WkbColumn,
   WktColumn,
-  YearColumn,
 ])
 
 export const ColumnType = z.enum([
@@ -66,7 +64,6 @@ export const ColumnType = z.enum([
   "uuid",
   "wkb",
   "wkt",
-  "year",
 ])
 
 const StringColumnPropertyGroup = z.discriminatedUnion("format", [
@@ -86,7 +83,6 @@ const StringColumnPropertyGroup = z.discriminatedUnion("format", [
 ])
 
 const IntegerColumnPropertyGroup = z.discriminatedUnion("format", [
-  YearColumn.shape.property,
   IntegerColumn.shape.property,
 ])
 

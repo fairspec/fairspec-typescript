@@ -60,6 +60,7 @@ export { EmailColumn } from "./models/column/email.ts"
 export { GeojsonColumn } from "./models/column/geojson.ts"
 export { HexColumn } from "./models/column/hex.ts"
 export { IntegerColumn } from "./models/column/integer.ts"
+export { ListColumn } from "./models/column/list.ts"
 export { NumberColumn } from "./models/column/number.ts"
 export { ObjectColumn } from "./models/column/object.ts"
 export { StringColumn } from "./models/column/string.ts"
@@ -78,7 +79,7 @@ export {
   CellError,
   CellExclusiveMaximumError,
   CellExclusiveMinimumError,
-  CellJsonSchemaError,
+  CellJsonError,
   CellMaximumError,
   CellMaxLengthError,
   CellMinimumError,

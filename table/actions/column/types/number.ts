@@ -1,24 +1,13 @@
 import type { NumberColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
+// TODO: what about scientific notation? Infinity, -Infinity, NaN?
+
 export function parseNumberColumn(column: NumberColumn, columnExpr: pl.Expr) {
   // Extract the decimal and group characters
-  const decimalChar = column.decimalChar ?? "."
-  const groupChar = column.groupChar ?? ""
-  const bareNumber = column.bareNumber ?? true
-
-  // Handle non-bare numbers (with currency symbols, percent signs, etc.)
-  if (bareNumber === false) {
-    // Remove leading non-digit characters (except minus sign and allowed decimal points)
-    const allowedDecimalChars =
-      decimalChar === "." ? "\\." : `\\.${decimalChar}`
-    columnExpr = columnExpr.str.replaceAll(
-      `^[^\\d\\-${allowedDecimalChars}]+`,
-      "",
-    )
-    // Remove trailing non-digit characters
-    columnExpr = columnExpr.str.replaceAll(`[^\\d${allowedDecimalChars}]+$`, "")
-  }
+  const decimalChar = column.property.decimalChar ?? "."
+  const groupChar = column.property.groupChar ?? ""
+  const withText = column.property.withText
 
   // Special case handling for European number format where "." is group and "," is decimal
   if (groupChar === "." && decimalChar === ",") {
@@ -42,12 +31,21 @@ export function parseNumberColumn(column: NumberColumn, columnExpr: pl.Expr) {
     }
   }
 
+  // Handle numbers with text (with currency symbols, percent signs, etc.)
+  if (withText) {
+    // Allowing "e" for scientific notation
+    columnExpr = columnExpr.str.replaceAll("[^\\d\\-.e]", "")
+  }
+
   // Cast to float64
   columnExpr = columnExpr.cast(pl.Float64)
   return columnExpr
 }
 
-export function stringifyNumberColumn(_column: NumberColumn, columnExpr: pl.Expr) {
+export function stringifyNumberColumn(
+  _column: NumberColumn,
+  columnExpr: pl.Expr,
+) {
   // Convert to string
   columnExpr = columnExpr.cast(pl.String)
 

@@ -5,8 +5,8 @@ import * as pl from "nodejs-polars"
 // Add more validation:
 // - Return null instead of list if all array values are nulls?
 export function parseListColumn(column: ListColumn, columnExpr: pl.Expr) {
-  const delimiter = column.delimiter ?? ","
-  const itemType = column.itemType
+  const delimiter = column.property.delimiter ?? ","
+  const itemType = column.property.itemType
 
   let dtype: any = pl.String
   if (itemType === "integer") dtype = pl.Int64
@@ -22,7 +22,7 @@ export function parseListColumn(column: ListColumn, columnExpr: pl.Expr) {
 }
 
 export function stringifyListColumn(column: ListColumn, columnExpr: pl.Expr) {
-  const delimiter = column.delimiter ?? ","
+  const delimiter = column.property.delimiter ?? ","
 
   return columnExpr
     .cast(pl.List(pl.String))

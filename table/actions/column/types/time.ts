@@ -4,10 +4,7 @@ import * as pl from "nodejs-polars"
 const DEFAULT_FORMAT = "%H:%M:%S"
 
 export function parseTimeColumn(column: TimeColumn, columnExpr: pl.Expr) {
-  let format = DEFAULT_FORMAT
-  if (column.format && column.format !== "default" && column.format !== "any") {
-    format = column.format
-  }
+  const format = column.property.temporalFormat ?? DEFAULT_FORMAT
 
   return pl.pl
     .concatString([pl.pl.lit("1970-01-01T"), columnExpr], "")
@@ -17,7 +14,7 @@ export function parseTimeColumn(column: TimeColumn, columnExpr: pl.Expr) {
 }
 
 export function stringifyTimeColumn(column: TimeColumn, columnExpr: pl.Expr) {
-  const format = column.format ?? DEFAULT_FORMAT
+  const format = column.property.temporalFormat ?? DEFAULT_FORMAT
 
   return columnExpr.date.strftime(format)
 }

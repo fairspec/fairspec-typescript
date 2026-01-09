@@ -3,17 +3,18 @@ import type {
   CellError,
   GeojsonColumn,
   ObjectColumn,
+  TopojsonColumn,
 } from "@fairspec/metadata"
 import { inspectJsonValue } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { isObject } from "../../helpers.ts"
-import type { Table } from "../../table/index.ts"
+import { isObject } from "../../../helpers/general.ts"
+import type { Table } from "../../../models/table.ts"
 
 // TODO: Improve the implementation
 // Make unblocking / handle large data / process in parallel / move processing to Rust?
 
 export async function inspectJsonColumn(
-  column: ArrayColumn | GeojsonColumn | ObjectColumn,
+  column: ArrayColumn | ObjectColumn | GeojsonColumn | TopojsonColumn,
   table: Table,
   options?: {
     formatJsonSchema?: Record<string, any>
@@ -22,7 +23,7 @@ export async function inspectJsonColumn(
   const errors: CellError[] = []
 
   const formatJsonSchema = options?.formatJsonSchema
-  const constraintJsonSchema = column.constraints?.jsonSchema
+  const constraintJsonSchema = column.property
 
   const frame = await table
     .withRowCount()
@@ -48,7 +49,6 @@ export async function inspectJsonColumn(
         cell: String(row.source),
         columnName: column.name,
         columnType: column.type,
-        columnFormat: column.format,
         rowNumber: row.number,
       })
 
@@ -66,7 +66,6 @@ export async function inspectJsonColumn(
           cell: String(row.source),
           columnName: column.name,
           columnType: column.type,
-          columnFormat: column.format,
           rowNumber: row.number,
         })
       }
@@ -81,12 +80,12 @@ export async function inspectJsonColumn(
 
       for (const error of constraintErrors) {
         errors.push({
-          type: "cell/jsonSchema",
+          type: "cell/json",
           cell: String(row.source),
           columnName: column.name,
           rowNumber: row.number,
-          pointer: error.pointer,
           message: error.message,
+          jsonPointer: error.jsonPointer,
         })
       }
     }

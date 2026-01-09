@@ -5,8 +5,8 @@ const DEFAULT_TRUE_VALUES = ["true", "True", "TRUE", "1"]
 const DEFAULT_FALSE_VALUES = ["false", "False", "FALSE", "0"]
 
 export function parseBooleanColumn(column: BooleanColumn, columnExpr: pl.Expr) {
-  const trueValues = column.trueValues ?? DEFAULT_TRUE_VALUES
-  const falseValues = column.falseValues ?? DEFAULT_FALSE_VALUES
+  const trueValues = column.property.trueValues ?? DEFAULT_TRUE_VALUES
+  const falseValues = column.property.falseValues ?? DEFAULT_FALSE_VALUES
 
   for (const value of trueValues) columnExpr = columnExpr.replace(value, "1")
   for (const value of falseValues) columnExpr = columnExpr.replace(value, "0")
@@ -25,9 +25,12 @@ export function parseBooleanColumn(column: BooleanColumn, columnExpr: pl.Expr) {
 const DEFAULT_TRUE_VALUE = "true"
 const DEFAULT_FALSE_VALUE = "false"
 
-export function stringifyBooleanColumn(column: BooleanColumn, columnExpr: pl.Expr) {
-  const trueValue = column.trueValues?.[0] ?? DEFAULT_TRUE_VALUE
-  const falseValue = column.falseValues?.[0] ?? DEFAULT_FALSE_VALUE
+export function stringifyBooleanColumn(
+  column: BooleanColumn,
+  columnExpr: pl.Expr,
+) {
+  const trueValue = column.property.trueValues?.[0] ?? DEFAULT_TRUE_VALUE
+  const falseValue = column.property.falseValues?.[0] ?? DEFAULT_FALSE_VALUE
 
   return pl
     .when(columnExpr.eq(pl.lit(true)))

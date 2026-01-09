@@ -1,4 +1,4 @@
-import type { StringField } from "@fairspec/metadata"
+import type { StringColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
 const FORMAT_REGEX = {
@@ -10,32 +10,32 @@ const FORMAT_REGEX = {
 } as const
 
 // TODO: support categoriesOrder?
-export function parseStringField(field: StringField, fieldExpr: pl.Expr) {
-  const format = field.format
-  const flattenCategories = field.categories?.map(it =>
+export function parseStringColumn(column: StringColumn, columnExpr: pl.Expr) {
+  const format = column.format
+  const flattenCategories = column.categories?.map(it =>
     typeof it === "string" ? it : it.value,
   )
 
   if (flattenCategories) {
     return pl
-      .when(fieldExpr.isIn(flattenCategories))
-      .then(fieldExpr.cast(pl.Categorical))
+      .when(columnExpr.isIn(flattenCategories))
+      .then(columnExpr.cast(pl.Categorical))
       .otherwise(pl.lit(null))
-      .alias(field.name)
+      .alias(column.name)
   }
 
   if (format) {
     const regex = FORMAT_REGEX[format]
     return pl
-      .when(fieldExpr.str.contains(regex))
-      .then(fieldExpr)
+      .when(columnExpr.str.contains(regex))
+      .then(columnExpr)
       .otherwise(pl.lit(null))
-      .alias(field.name)
+      .alias(column.name)
   }
 
-  return fieldExpr
+  return columnExpr
 }
 
-export function stringifyStringField(_field: StringField, fieldExpr: pl.Expr) {
-  return fieldExpr
+export function stringifyStringColumn(_column: StringColumn, columnExpr: pl.Expr) {
+  return columnExpr
 }

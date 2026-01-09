@@ -12,7 +12,7 @@ describe("inspectTable (cell/pattern)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "email",
           type: "string",
@@ -42,7 +42,7 @@ describe("inspectTable (cell/pattern)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "email",
           type: "string",
@@ -57,14 +57,14 @@ describe("inspectTable (cell/pattern)", () => {
     expect(errors.filter(e => e.type === "cell/pattern")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/pattern",
-      fieldName: "email",
+      columnName: "email",
       pattern,
       rowNumber: 2,
       cell: "alice@domain",
     })
     expect(errors).toContainEqual({
       type: "cell/pattern",
-      fieldName: "email",
+      columnName: "email",
       pattern,
       rowNumber: 3,
       cell: "test.io",

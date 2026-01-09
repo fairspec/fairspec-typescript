@@ -2,7 +2,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { denormalizeTable, normalizeTable } from "../../table/index.ts"
 
-describe("parseBooleanField", () => {
+describe("parseBooleanColumn", () => {
   it.each([
     // Default true values
     ["true", true, {}],
@@ -48,7 +48,7 @@ describe("parseBooleanField", () => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "boolean" as const, ...options }],
+      columns: [{ name: "name", type: "boolean" as const, ...options }],
     }
 
     const result = await normalizeTable(table, schema)
@@ -58,7 +58,7 @@ describe("parseBooleanField", () => {
   })
 })
 
-describe("stringifyBooleanField", () => {
+describe("stringifyBooleanColumn", () => {
   it.each([
     // Default values
     [true, "true", {}],
@@ -79,7 +79,7 @@ describe("stringifyBooleanField", () => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Bool)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "boolean" as const, ...options }],
+      columns: [{ name: "name", type: "boolean" as const, ...options }],
     }
 
     const result = await denormalizeTable(table, schema)

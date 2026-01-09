@@ -1,37 +1,37 @@
-import type { BooleanField } from "@fairspec/metadata"
+import type { BooleanColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
 const DEFAULT_TRUE_VALUES = ["true", "True", "TRUE", "1"]
 const DEFAULT_FALSE_VALUES = ["false", "False", "FALSE", "0"]
 
-export function parseBooleanField(field: BooleanField, fieldExpr: pl.Expr) {
-  const trueValues = field.trueValues ?? DEFAULT_TRUE_VALUES
-  const falseValues = field.falseValues ?? DEFAULT_FALSE_VALUES
+export function parseBooleanColumn(column: BooleanColumn, columnExpr: pl.Expr) {
+  const trueValues = column.trueValues ?? DEFAULT_TRUE_VALUES
+  const falseValues = column.falseValues ?? DEFAULT_FALSE_VALUES
 
-  for (const value of trueValues) fieldExpr = fieldExpr.replace(value, "1")
-  for (const value of falseValues) fieldExpr = fieldExpr.replace(value, "0")
+  for (const value of trueValues) columnExpr = columnExpr.replace(value, "1")
+  for (const value of falseValues) columnExpr = columnExpr.replace(value, "0")
 
-  fieldExpr = fieldExpr.cast(pl.Int8)
+  columnExpr = columnExpr.cast(pl.Int8)
 
   return pl
-    .when(fieldExpr.eq(1))
+    .when(columnExpr.eq(1))
     .then(pl.lit(true))
-    .when(fieldExpr.eq(0))
+    .when(columnExpr.eq(0))
     .then(pl.lit(false))
     .otherwise(pl.lit(null))
-    .alias(field.name)
+    .alias(column.name)
 }
 
 const DEFAULT_TRUE_VALUE = "true"
 const DEFAULT_FALSE_VALUE = "false"
 
-export function stringifyBooleanField(field: BooleanField, fieldExpr: pl.Expr) {
-  const trueValue = field.trueValues?.[0] ?? DEFAULT_TRUE_VALUE
-  const falseValue = field.falseValues?.[0] ?? DEFAULT_FALSE_VALUE
+export function stringifyBooleanColumn(column: BooleanColumn, columnExpr: pl.Expr) {
+  const trueValue = column.trueValues?.[0] ?? DEFAULT_TRUE_VALUE
+  const falseValue = column.falseValues?.[0] ?? DEFAULT_FALSE_VALUE
 
   return pl
-    .when(fieldExpr.eq(pl.lit(true)))
+    .when(columnExpr.eq(pl.lit(true)))
     .then(pl.lit(trueValue))
     .otherwise(pl.lit(falseValue))
-    .alias(field.name)
+    .alias(column.name)
 }

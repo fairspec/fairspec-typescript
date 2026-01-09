@@ -1,23 +1,23 @@
-import type { DatetimeField } from "@fairspec/metadata"
+import type { DatetimeColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
 const DEFAULT_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 // TODO: Add support for timezone handling
-export function parseDatetimeField(field: DatetimeField, fieldExpr: pl.Expr) {
+export function parseDatetimeColumn(column: DatetimeColumn, columnExpr: pl.Expr) {
   let format = DEFAULT_FORMAT
-  if (field.format && field.format !== "default" && field.format !== "any") {
-    format = field.format
+  if (column.format && column.format !== "default" && column.format !== "any") {
+    format = column.format
   }
 
-  return fieldExpr.str.strptime(pl.Datetime, format)
+  return columnExpr.str.strptime(pl.Datetime, format)
 }
 
-export function stringifyDatetimeField(
-  field: DatetimeField,
-  fieldExpr: pl.Expr,
+export function stringifyDatetimeColumn(
+  column: DatetimeColumn,
+  columnExpr: pl.Expr,
 ) {
-  const format = field.format ?? DEFAULT_FORMAT
+  const format = column.format ?? DEFAULT_FORMAT
 
-  return fieldExpr.date.strftime(format)
+  return columnExpr.date.strftime(format)
 }

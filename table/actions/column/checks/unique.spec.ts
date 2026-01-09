@@ -13,7 +13,7 @@ describe("inspectTable (cell/unique)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "id",
           type: "number",
@@ -34,7 +34,7 @@ describe("inspectTable (cell/unique)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "id",
           type: "number",
@@ -48,7 +48,7 @@ describe("inspectTable (cell/unique)", () => {
     expect(errors.filter(e => e.type === "cell/unique")).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/unique",
-      fieldName: "id",
+      columnName: "id",
       rowNumber: 4,
       cell: "2",
     })
@@ -62,7 +62,7 @@ describe("inspectTable (cell/unique)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "code",
           type: "string",
@@ -75,13 +75,13 @@ describe("inspectTable (cell/unique)", () => {
     expect(errors.filter(e => e.type === "cell/unique")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/unique",
-      fieldName: "code",
+      columnName: "code",
       rowNumber: 3,
       cell: "A001",
     })
     expect(errors).toContainEqual({
       type: "cell/unique",
-      fieldName: "code",
+      columnName: "code",
       rowNumber: 5,
       cell: "B002",
     })
@@ -95,7 +95,7 @@ describe("inspectTable (cell/unique)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "id",
           type: "number",

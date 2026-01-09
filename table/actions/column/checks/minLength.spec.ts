@@ -12,7 +12,7 @@ describe("inspectTable (cell/minLength)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "code",
           type: "string",
@@ -33,7 +33,7 @@ describe("inspectTable (cell/minLength)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "username",
           type: "string",
@@ -46,14 +46,14 @@ describe("inspectTable (cell/minLength)", () => {
     expect(errors.filter(e => e.type === "cell/minLength")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/minLength",
-      fieldName: "username",
+      columnName: "username",
       minLength: 3,
       rowNumber: 2,
       cell: "a",
     })
     expect(errors).toContainEqual({
       type: "cell/minLength",
-      fieldName: "username",
+      columnName: "username",
       minLength: 3,
       rowNumber: 4,
       cell: "ab",

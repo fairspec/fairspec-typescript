@@ -12,7 +12,7 @@ describe("inspectTable (cell/required)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "id", type: "number", constraints: { required: true } }],
+      columns: [{ name: "id", type: "number", constraints: { required: true } }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -20,7 +20,7 @@ describe("inspectTable (cell/required)", () => {
     expect(errors).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/required",
-      fieldName: "id",
+      columnName: "id",
       rowNumber: 2,
       cell: "",
     })

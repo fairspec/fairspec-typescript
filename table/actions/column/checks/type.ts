@@ -1,14 +1,14 @@
-import type { CellTypeError, Field } from "@fairspec/metadata"
+import type { CellTypeError, Column } from "@fairspec/metadata"
 import type { CellMapping } from "../Mapping.ts"
 
-export function checkCellType(field: Field, mapping: CellMapping) {
+export function checkCellType(column: Column, mapping: CellMapping) {
   const isErrorExpr = mapping.source.isNotNull().and(mapping.target.isNull())
 
   const errorTemplate: CellTypeError = {
     type: "cell/type",
-    fieldName: field.name,
-    fieldType: field.type ?? "any",
-    fieldFormat: field.format,
+    columnName: column.name,
+    columnType: column.type ?? "any",
+    columnFormat: column.format,
     rowNumber: 0,
     cell: "",
   }

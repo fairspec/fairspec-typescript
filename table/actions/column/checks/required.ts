@@ -1,16 +1,16 @@
-import type { Field } from "@fairspec/metadata"
+import type { Column } from "@fairspec/metadata"
 import type { CellRequiredError } from "@fairspec/metadata"
 import type { CellMapping } from "../Mapping.ts"
 
-export function checkCellRequired(field: Field, mapping: CellMapping) {
-  const required = field.constraints?.required
+export function checkCellRequired(column: Column, mapping: CellMapping) {
+  const required = column.constraints?.required
   if (!required) return undefined
 
   const isErrorExpr = mapping.target.isNull()
 
   const errorTemplate: CellRequiredError = {
     type: "cell/required",
-    fieldName: field.name,
+    columnName: column.name,
     rowNumber: 0,
     cell: "",
   }

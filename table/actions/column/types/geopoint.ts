@@ -1,4 +1,4 @@
-import type { GeopointField } from "@fairspec/metadata"
+import type { GeopointColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
 // TODO:
@@ -7,42 +7,42 @@ import * as pl from "nodejs-polars"
 // - Check the values are within -180..180 and -90..90
 // - Return null instead of list if any of the values are out of range
 
-export function parseGeopointField(field: GeopointField, fieldExpr: pl.Expr) {
+export function parseGeopointColumn(column: GeopointColumn, columnExpr: pl.Expr) {
   // Default format is "lon,lat" string
-  const format = field.format ?? "default"
+  const format = column.format ?? "default"
 
   if (format === "default") {
-    fieldExpr = fieldExpr.str.split(",").cast(pl.List(pl.Float64))
+    columnExpr = columnExpr.str.split(",").cast(pl.List(pl.Float64))
   }
 
   if (format === "array") {
-    fieldExpr = fieldExpr.str
+    columnExpr = columnExpr.str
       .replaceAll("[\\[\\]\\s]", "")
       .str.split(",")
       .cast(pl.List(pl.Float64))
   }
 
   if (format === "object") {
-    fieldExpr = pl
+    columnExpr = pl
       .concatList([
-        fieldExpr.str.jsonPathMatch("$.lon").cast(pl.Float64),
-        fieldExpr.str.jsonPathMatch("$.lat").cast(pl.Float64),
+        columnExpr.str.jsonPathMatch("$.lon").cast(pl.Float64),
+        columnExpr.str.jsonPathMatch("$.lat").cast(pl.Float64),
       ])
-      .alias(field.name)
+      .alias(column.name)
   }
 
-  return fieldExpr
+  return columnExpr
 }
 
-export function stringifyGeopointField(
-  field: GeopointField,
-  fieldExpr: pl.Expr,
+export function stringifyGeopointColumn(
+  column: GeopointColumn,
+  columnExpr: pl.Expr,
 ) {
   // Default format is "lon,lat" string
-  const format = field.format ?? "default"
+  const format = column.format ?? "default"
 
   if (format === "default") {
-    return fieldExpr.cast(pl.List(pl.String)).lst.join(",")
+    return columnExpr.cast(pl.List(pl.String)).lst.join(",")
   }
 
   if (format === "array") {
@@ -50,14 +50,14 @@ export function stringifyGeopointField(
       .concatString(
         [
           pl.lit("["),
-          fieldExpr.lst.get(0).cast(pl.String),
+          columnExpr.lst.get(0).cast(pl.String),
           pl.lit(","),
-          fieldExpr.lst.get(1).cast(pl.String),
+          columnExpr.lst.get(1).cast(pl.String),
           pl.lit("]"),
         ],
         "",
       )
-      .alias(field.name) as pl.Expr
+      .alias(column.name) as pl.Expr
   }
 
   if (format === "object") {
@@ -65,15 +65,15 @@ export function stringifyGeopointField(
       .concatString(
         [
           pl.lit('{"lon":'),
-          fieldExpr.lst.get(0).cast(pl.String),
+          columnExpr.lst.get(0).cast(pl.String),
           pl.lit(',"lat":'),
-          fieldExpr.lst.get(1).cast(pl.String),
+          columnExpr.lst.get(1).cast(pl.String),
           pl.lit("}"),
         ],
         "",
       )
-      .alias(field.name) as pl.Expr
+      .alias(column.name) as pl.Expr
   }
 
-  return fieldExpr
+  return columnExpr
 }

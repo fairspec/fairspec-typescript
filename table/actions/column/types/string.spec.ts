@@ -4,7 +4,7 @@ import { normalizeTable } from "../../table/index.ts"
 
 // TODO: Implement proper tests
 // TODO: Currently, it fails on to JS conversion from Polars
-describe("parseStringField", () => {
+describe("parseStringColumn", () => {
   it.each([
     // Simplr string
     ["string", "string"],
@@ -15,7 +15,7 @@ describe("parseStringField", () => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "string" as const }],
+      columns: [{ name: "name", type: "string" as const }],
     }
 
     const result = await normalizeTable(table, schema)
@@ -48,7 +48,7 @@ describe("parseStringField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "string" as const, format: "email" as const },
         ],
       }
@@ -87,7 +87,7 @@ describe("parseStringField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "string" as const, format: "uri" as const },
         ],
       }
@@ -123,7 +123,7 @@ describe("parseStringField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "string" as const, format: "binary" as const },
         ],
       }
@@ -155,7 +155,7 @@ describe("parseStringField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "string" as const, format: "uuid" as const },
         ],
       }
@@ -182,7 +182,7 @@ describe("parseStringField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [{ name: "name", type: "string" as const, ...options }],
+        columns: [{ name: "name", type: "string" as const, ...options }],
       }
 
       const result = await normalizeTable(table, schema)

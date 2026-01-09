@@ -3,7 +3,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { normalizeTable } from "../table/index.ts"
 
-describe("parseField", () => {
+describe("parseColumn", () => {
   describe("missing values", () => {
     it.each([
       // Schema-level
@@ -12,21 +12,21 @@ describe("parseField", () => {
       ["-", null, { schemaLevel: ["-"] }],
       ["x", null, { schemaLevel: ["x"] }],
 
-      // Field-level
+      // Column-level
       ["", null, {}],
-      ["-", null, { fieldLevel: ["-"] }],
-      ["-", "-", { fieldLevel: [""] }],
-      ["n/a", null, { fieldLevel: ["n/a"] }],
+      ["-", null, { columnLevel: ["-"] }],
+      ["-", "-", { columnLevel: [""] }],
+      ["n/a", null, { columnLevel: ["n/a"] }],
 
-      // Schema-level and field-level
-      ["-", null, { schemaLevel: ["x"], fieldLevel: ["-"] }],
-      ["-", "-", { schemaLevel: ["-"], fieldLevel: ["x"] }],
+      // Schema-level and column-level
+      ["-", null, { schemaLevel: ["x"], columnLevel: ["-"] }],
+      ["-", "-", { schemaLevel: ["-"], columnLevel: ["x"] }],
       // @ts-expect-error
-    ])("$0 -> $1 $2", async (cell, value, { fieldLevel, schemaLevel }) => {
+    ])("$0 -> $1 $2", async (cell, value, { columnLevel, schemaLevel }) => {
       const table = pl.DataFrame({ name: [cell] }).lazy()
       const schema: Schema = {
         missingValues: schemaLevel,
-        fields: [{ name: "name", type: "string", missingValues: fieldLevel }],
+        columns: [{ name: "name", type: "string", missingValues: columnLevel }],
       }
 
       const result = await normalizeTable(table, schema)

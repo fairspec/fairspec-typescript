@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest"
 import { inspectTable } from "../table/inspect.ts"
 import { normalizeTable } from "../table/normalize.ts"
 
-describe("narrowField", () => {
+describe("narrowColumn", () => {
   it("should narrow float to integer", async () => {
     const table = pl
       .DataFrame({
@@ -14,7 +14,7 @@ describe("narrowField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         { name: "id", type: "integer" },
         { name: "name", type: "string" },
       ],
@@ -39,7 +39,7 @@ describe("narrowField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         { name: "id", type: "integer" },
         { name: "name", type: "string" },
       ],
@@ -50,8 +50,8 @@ describe("narrowField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "id",
-        fieldType: "integer",
+        columnName: "id",
+        columnType: "integer",
         rowNumber: 3,
         cell: "3.5",
       },

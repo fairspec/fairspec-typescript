@@ -2,7 +2,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { denormalizeTable, normalizeTable } from "../../table/index.ts"
 
-describe("parseNumberField", () => {
+describe("parseNumberColumn", () => {
   it.each([
     // Basic number parsing
     ["1", 1.0, {}],
@@ -66,7 +66,7 @@ describe("parseNumberField", () => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "number" as const, ...options }],
+      columns: [{ name: "name", type: "number" as const, ...options }],
     }
 
     const result = await normalizeTable(table, schema)
@@ -76,7 +76,7 @@ describe("parseNumberField", () => {
   })
 })
 
-describe("stringifyNumberField", () => {
+describe("stringifyNumberColumn", () => {
   it.each([
     // Basic number to string conversion
     [1.0, "1.0"],
@@ -106,7 +106,7 @@ describe("stringifyNumberField", () => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Float64)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "number" as const }],
+      columns: [{ name: "name", type: "number" as const }],
     }
 
     const result = await denormalizeTable(table, schema)

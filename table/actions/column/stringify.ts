@@ -1,45 +1,45 @@
-import type { Field } from "@fairspec/metadata"
+import type { Column } from "@fairspec/metadata"
 import type * as pl from "nodejs-polars"
-import { stringifyBooleanField } from "./types/boolean.ts"
-import { stringifyDateField } from "./types/date.ts"
-import { stringifyDatetimeField } from "./types/datetime.ts"
-import { stringifyDurationField } from "./types/duration.ts"
-import { stringifyGeopointField } from "./types/geopoint.ts"
-import { stringifyIntegerField } from "./types/integer.ts"
-import { stringifyListField } from "./types/list.ts"
-import { stringifyNumberField } from "./types/number.ts"
-import { stringifyStringField } from "./types/string.ts"
-import { stringifyTimeField } from "./types/time.ts"
-import { stringifyYearField } from "./types/year.ts"
-import { stringifyYearmonthField } from "./types/yearmonth.ts"
+import { stringifyBooleanColumn } from "./types/boolean.ts"
+import { stringifyDateColumn } from "./types/date.ts"
+import { stringifyDatetimeColumn } from "./types/datetime.ts"
+import { stringifyDurationColumn } from "./types/duration.ts"
+import { stringifyGeopointColumn } from "./types/geopoint.ts"
+import { stringifyIntegerColumn } from "./types/integer.ts"
+import { stringifyListColumn } from "./types/list.ts"
+import { stringifyNumberColumn } from "./types/number.ts"
+import { stringifyStringColumn } from "./types/string.ts"
+import { stringifyTimeColumn } from "./types/time.ts"
+import { stringifyYearColumn } from "./types/year.ts"
+import { stringifyYearmonthColumn } from "./types/yearmonth.ts"
 
-export function stringifyField(field: Field, fieldExpr: pl.Expr) {
-  switch (field.type) {
+export function stringifyColumn(column: Column, columnExpr: pl.Expr) {
+  switch (column.type) {
     case "boolean":
-      return stringifyBooleanField(field, fieldExpr)
+      return stringifyBooleanColumn(column, columnExpr)
     case "date":
-      return stringifyDateField(field, fieldExpr)
+      return stringifyDateColumn(column, columnExpr)
     case "datetime":
-      return stringifyDatetimeField(field, fieldExpr)
+      return stringifyDatetimeColumn(column, columnExpr)
     case "duration":
-      return stringifyDurationField(field, fieldExpr)
+      return stringifyDurationColumn(column, columnExpr)
     case "geopoint":
-      return stringifyGeopointField(field, fieldExpr)
+      return stringifyGeopointColumn(column, columnExpr)
     case "integer":
-      return stringifyIntegerField(field, fieldExpr)
+      return stringifyIntegerColumn(column, columnExpr)
     case "list":
-      return stringifyListField(field, fieldExpr)
+      return stringifyListColumn(column, columnExpr)
     case "number":
-      return stringifyNumberField(field, fieldExpr)
+      return stringifyNumberColumn(column, columnExpr)
     case "string":
-      return stringifyStringField(field, fieldExpr)
+      return stringifyStringColumn(column, columnExpr)
     case "time":
-      return stringifyTimeField(field, fieldExpr)
+      return stringifyTimeColumn(column, columnExpr)
     case "year":
-      return stringifyYearField(field, fieldExpr)
+      return stringifyYearColumn(column, columnExpr)
     case "yearmonth":
-      return stringifyYearmonthField(field, fieldExpr)
+      return stringifyYearmonthColumn(column, columnExpr)
     default:
-      return fieldExpr
+      return columnExpr
   }
 }

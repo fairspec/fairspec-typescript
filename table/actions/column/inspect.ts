@@ -1,7 +1,7 @@
 import type {
   CellError,
-  Field,
-  FieldError,
+  Column,
+  ColumnError,
   TableError,
 } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
@@ -15,14 +15,14 @@ import { checkCellPattern } from "./checks/pattern.ts"
 import { checkCellRequired } from "./checks/required.ts"
 import { checkCellType } from "./checks/type.ts"
 import { checkCellUnique } from "./checks/unique.ts"
-import type { FieldMapping } from "./Mapping.ts"
-import { normalizeField } from "./normalize.ts"
-import { inspectArrayField } from "./types/array.ts"
-import { inspectGeojsonField } from "./types/geojson.ts"
-import { inspectObjectField } from "./types/object.ts"
+import type { ColumnMapping } from "./Mapping.ts"
+import { normalizeColumn } from "./normalize.ts"
+import { inspectArrayColumn } from "./types/array.ts"
+import { inspectGeojsonColumn } from "./types/geojson.ts"
+import { inspectObjectColumn } from "./types/object.ts"
 
-export async function inspectField(
-  mapping: FieldMapping,
+export async function inspectColumn(
+  mapping: ColumnMapping,
   table: Table,
   options: {
     maxErrors: number
@@ -45,27 +45,27 @@ export async function inspectField(
   return errors
 }
 
-function inspectName(mapping: FieldMapping) {
-  const errors: FieldError[] = []
+function inspectName(mapping: ColumnMapping) {
+  const errors: ColumnError[] = []
 
   if (mapping.source.name !== mapping.target.name) {
     errors.push({
-      type: "field/name",
-      fieldName: mapping.target.name,
-      actualFieldName: mapping.source.name,
+      type: "column/name",
+      columnName: mapping.target.name,
+      actualColumnName: mapping.source.name,
     })
   }
 
   return errors
 }
 
-function inspectType(mapping: FieldMapping) {
-  const errors: FieldError[] = []
+function inspectType(mapping: ColumnMapping) {
+  const errors: ColumnError[] = []
   const variant = mapping.source.type.variant
 
   // TODO: Rebase on proper polars type definition when available
   // https://github.com/pola-rs/nodejs-polars/issues/372
-  const compatMapping: Record<string, Field["type"][]> = {
+  const compatMapping: Record<string, Column["type"][]> = {
     Bool: ["boolean"],
     Categorical: ["string"],
     Date: ["date"],
@@ -93,10 +93,10 @@ function inspectType(mapping: FieldMapping) {
 
   if (!isCompat) {
     errors.push({
-      type: "field/type",
-      fieldName: mapping.target.name,
-      fieldType: mapping.target.type ?? "any",
-      actualFieldType: compatTypes[0] ?? "any",
+      type: "column/type",
+      columnName: mapping.target.name,
+      columnType: mapping.target.type ?? "any",
+      actualColumnType: compatTypes[0] ?? "any",
     })
   }
 
@@ -104,7 +104,7 @@ function inspectType(mapping: FieldMapping) {
 }
 
 async function inspectCells(
-  mapping: FieldMapping,
+  mapping: ColumnMapping,
   table: Table,
   options: {
     maxErrors: number
@@ -116,19 +116,19 @@ async function inspectCells(
   // Types that require non-polars validation
   switch (mapping.target.type) {
     case "array":
-      return await inspectArrayField(mapping.target, table)
+      return await inspectArrayColumn(mapping.target, table)
     case "geojson":
-      return await inspectGeojsonField(mapping.target, table)
+      return await inspectGeojsonColumn(mapping.target, table)
     case "object":
-      return await inspectObjectField(mapping.target, table)
+      return await inspectObjectColumn(mapping.target, table)
   }
 
-  let fieldCheckTable = table
+  let columnCheckTable = table
     .withRowCount()
     .select(
       pl.col("row_nr").add(1).alias("number"),
-      normalizeField(mapping).alias("target"),
-      normalizeField(mapping, { keepType: true }).alias("source"),
+      normalizeColumn(mapping).alias("target"),
+      normalizeColumn(mapping, { keepType: true }).alias("source"),
       pl.lit(null).alias("error"),
     )
 
@@ -150,7 +150,7 @@ async function inspectCells(
     const check = checkCell(mapping.target, cellMapping)
     if (!check) continue
 
-    fieldCheckTable = fieldCheckTable.withColumn(
+    columnCheckTable = columnCheckTable.withColumn(
       pl
         .when(pl.col("error").isNotNull())
         .then(pl.col("error"))
@@ -161,13 +161,13 @@ async function inspectCells(
     )
   }
 
-  const fieldCheckFrame = await fieldCheckTable
+  const columnCheckFrame = await columnCheckTable
     .filter(pl.col("error").isNotNull())
     .drop(["target"])
     .head(maxErrors)
     .collect()
 
-  for (const row of fieldCheckFrame.toRecords() as any[]) {
+  for (const row of columnCheckFrame.toRecords() as any[]) {
     const errorTemplate = JSON.parse(row.error) as CellError
     errors.push({
       ...errorTemplate,

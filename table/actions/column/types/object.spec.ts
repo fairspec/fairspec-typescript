@@ -3,7 +3,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { inspectTable } from "../../table/index.ts"
 
-describe("validateObjectField", () => {
+describe("validateObjectColumn", () => {
   it("should not errors for valid JSON objects", async () => {
     const table = pl
       .DataFrame({
@@ -12,7 +12,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "metadata",
           type: "object",
@@ -32,7 +32,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "object",
@@ -44,15 +44,15 @@ describe("validateObjectField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "object",
+        columnName: "data",
+        columnType: "object",
         rowNumber: 1,
         cell: "[1,2,3]",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "object",
+        columnName: "data",
+        columnType: "object",
         rowNumber: 3,
         cell: '["a","b","c"]',
       },
@@ -67,7 +67,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "config",
           type: "object",
@@ -87,7 +87,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "object",
@@ -99,15 +99,15 @@ describe("validateObjectField", () => {
     expect(errors.filter(e => e.type === "cell/type")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "data",
-      fieldType: "object",
+      columnName: "data",
+      columnType: "object",
       rowNumber: 2,
       cell: "invalid json",
     })
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "data",
-      fieldType: "object",
+      columnName: "data",
+      columnType: "object",
       rowNumber: 4,
       cell: "{broken}",
     })
@@ -125,7 +125,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "complex",
           type: "object",
@@ -145,7 +145,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "object",
@@ -157,8 +157,8 @@ describe("validateObjectField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "object",
+        columnName: "data",
+        columnType: "object",
         rowNumber: 2,
         cell: "",
       },
@@ -173,7 +173,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "object",
@@ -185,36 +185,36 @@ describe("validateObjectField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "object",
+        columnName: "data",
+        columnType: "object",
         rowNumber: 1,
         cell: '"string"',
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "object",
+        columnName: "data",
+        columnType: "object",
         rowNumber: 2,
         cell: "123",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "object",
+        columnName: "data",
+        columnType: "object",
         rowNumber: 3,
         cell: "true",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "object",
+        columnName: "data",
+        columnType: "object",
         rowNumber: 4,
         cell: "false",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "object",
+        columnName: "data",
+        columnType: "object",
         rowNumber: 5,
         cell: "null",
       },
@@ -233,7 +233,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "user",
           type: "object",
@@ -277,7 +277,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "user",
           type: "object",
@@ -292,7 +292,7 @@ describe("validateObjectField", () => {
     expect(errors.filter(e => e.type === "cell/jsonSchema")).toEqual([
       {
         type: "cell/jsonSchema",
-        fieldName: "user",
+        columnName: "user",
         rowNumber: 2,
         cell: '{"name":"Jane"}',
         pointer: "",
@@ -300,7 +300,7 @@ describe("validateObjectField", () => {
       },
       {
         type: "cell/jsonSchema",
-        fieldName: "user",
+        columnName: "user",
         rowNumber: 3,
         cell: '{"age":25}',
         pointer: "",
@@ -308,7 +308,7 @@ describe("validateObjectField", () => {
       },
       {
         type: "cell/jsonSchema",
-        fieldName: "user",
+        columnName: "user",
         rowNumber: 4,
         cell: '{"name":"Bob","age":"invalid"}',
         pointer: "/age",
@@ -328,7 +328,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "config",
           type: "object",
@@ -363,7 +363,7 @@ describe("validateObjectField", () => {
     expect(errors).toEqual([
       {
         type: "cell/jsonSchema",
-        fieldName: "config",
+        columnName: "config",
         rowNumber: 2,
         cell: '{"database":{"host":"localhost","port":"invalid"},"cache":{"enabled":true}}',
         pointer: "/database/port",
@@ -383,7 +383,7 @@ describe("validateObjectField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "object",
@@ -408,7 +408,7 @@ describe("validateObjectField", () => {
     expect(errors.filter(e => e.type === "cell/jsonSchema")).toEqual([
       {
         type: "cell/jsonSchema",
-        fieldName: "data",
+        columnName: "data",
         rowNumber: 2,
         cell: '{"items":["not","numbers"],"name":"test"}',
         pointer: "/items/0",
@@ -416,7 +416,7 @@ describe("validateObjectField", () => {
       },
       {
         type: "cell/jsonSchema",
-        fieldName: "data",
+        columnName: "data",
         rowNumber: 2,
         cell: '{"items":["not","numbers"],"name":"test"}',
         pointer: "/items/1",

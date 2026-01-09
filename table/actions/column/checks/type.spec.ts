@@ -12,7 +12,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "id", type: "integer" }],
+      columns: [{ name: "id", type: "integer" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -21,15 +21,15 @@ describe("inspectTable", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "bad",
-      fieldName: "id",
-      fieldType: "integer",
+      columnName: "id",
+      columnType: "integer",
       rowNumber: 2,
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "4x",
-      fieldName: "id",
-      fieldType: "integer",
+      columnName: "id",
+      columnType: "integer",
       rowNumber: 4,
     })
   })
@@ -42,7 +42,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "price", type: "number" }],
+      columns: [{ name: "price", type: "number" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -51,15 +51,15 @@ describe("inspectTable", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "twenty",
-      fieldName: "price",
-      fieldType: "number",
+      columnName: "price",
+      columnType: "number",
       rowNumber: 2,
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "$40",
-      fieldName: "price",
-      fieldType: "number",
+      columnName: "price",
+      columnType: "number",
       rowNumber: 4,
     })
   })
@@ -72,7 +72,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "active", type: "boolean" }],
+      columns: [{ name: "active", type: "boolean" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -81,8 +81,8 @@ describe("inspectTable", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "yes",
-      fieldName: "active",
-      fieldType: "boolean",
+      columnName: "active",
+      columnType: "boolean",
       rowNumber: 2,
     })
   })
@@ -95,7 +95,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "created", type: "date" }],
+      columns: [{ name: "created", type: "date" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -104,22 +104,22 @@ describe("inspectTable", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "Jan 15, 2023",
-      fieldName: "created",
-      fieldType: "date",
+      columnName: "created",
+      columnType: "date",
       rowNumber: 2,
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "20230115",
-      fieldName: "created",
-      fieldType: "date",
+      columnName: "created",
+      columnType: "date",
       rowNumber: 3,
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "not-a-date",
-      fieldName: "created",
-      fieldType: "date",
+      columnName: "created",
+      columnType: "date",
       rowNumber: 4,
     })
   })
@@ -132,7 +132,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "time", type: "time" }],
+      columns: [{ name: "time", type: "time" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -141,22 +141,22 @@ describe("inspectTable", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "2:30pm",
-      fieldName: "time",
-      fieldType: "time",
+      columnName: "time",
+      columnType: "time",
       rowNumber: 2,
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "invalid",
-      fieldName: "time",
-      fieldType: "time",
+      columnName: "time",
+      columnType: "time",
       rowNumber: 3,
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "14h30",
-      fieldName: "time",
-      fieldType: "time",
+      columnName: "time",
+      columnType: "time",
       rowNumber: 4,
     })
   })
@@ -169,7 +169,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "time", type: "time", format: "%H:%M" }],
+      columns: [{ name: "time", type: "time", format: "%H:%M" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -180,9 +180,9 @@ describe("inspectTable", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "invalid",
-      fieldName: "time",
-      fieldType: "time",
-      fieldFormat: "%H:%M",
+      columnName: "time",
+      columnType: "time",
+      columnFormat: "%H:%M",
       rowNumber: 2,
     })
   })
@@ -195,7 +195,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "year", type: "year" }],
+      columns: [{ name: "year", type: "year" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -204,22 +204,22 @@ describe("inspectTable", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "23",
-      fieldName: "year",
-      fieldType: "year",
+      columnName: "year",
+      columnType: "year",
       rowNumber: 2,
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "MMXXIII",
-      fieldName: "year",
-      fieldType: "year",
+      columnName: "year",
+      columnType: "year",
       rowNumber: 3,
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "two-thousand-twenty-three",
-      fieldName: "year",
-      fieldType: "year",
+      columnName: "year",
+      columnType: "year",
       rowNumber: 4,
     })
   })
@@ -237,7 +237,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "datetime", type: "datetime" }],
+      columns: [{ name: "datetime", type: "datetime" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -249,16 +249,16 @@ describe("inspectTable", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "January 15, 2023 2:30 PM",
-      fieldName: "datetime",
-      fieldType: "datetime",
+      columnName: "datetime",
+      columnType: "datetime",
       rowNumber: 2,
     })
 
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "not-a-datetime",
-      fieldName: "datetime",
-      fieldType: "datetime",
+      columnName: "datetime",
+      columnType: "datetime",
       rowNumber: 4,
     })
   })
@@ -271,7 +271,7 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "id", type: "integer" }],
+      columns: [{ name: "id", type: "integer" }],
     }
 
     const errors = await inspectTable(table, { schema })
@@ -287,12 +287,12 @@ describe("inspectTable", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [{ name: "is_active", type: "boolean" }],
+      columns: [{ name: "is_active", type: "boolean" }],
     }
 
     const errors = await inspectTable(table, { schema })
 
-    // Since the column isn't string type, validateField will not normalize it
+    // Since the column isn't string type, validateColumn will not normalize it
     expect(errors).toHaveLength(0)
   })
 })

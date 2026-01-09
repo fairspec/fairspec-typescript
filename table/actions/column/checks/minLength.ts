@@ -1,17 +1,17 @@
-import type { CellMinLengthError, Field } from "@fairspec/metadata"
+import type { CellMinLengthError, Column } from "@fairspec/metadata"
 import type { CellMapping } from "../Mapping.ts"
 
-export function checkCellMinLength(field: Field, mapping: CellMapping) {
-  if (field.type !== "string") return undefined
+export function checkCellMinLength(column: Column, mapping: CellMapping) {
+  if (column.type !== "string") return undefined
 
-  const minLength = field.constraints?.minLength
+  const minLength = column.constraints?.minLength
   if (!minLength) return undefined
 
   const isErrorExpr = mapping.target.str.lengths().lt(minLength)
 
   const errorTemplate: CellMinLengthError = {
     type: "cell/minLength",
-    fieldName: field.name,
+    columnName: column.name,
     minLength: minLength,
     rowNumber: 0,
     cell: "",

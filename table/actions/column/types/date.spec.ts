@@ -2,7 +2,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { denormalizeTable, normalizeTable } from "../../table/index.ts"
 
-describe("parseDateField", () => {
+describe("parseDateColumn", () => {
   it.each([
     // Default format
     ["2019-01-01", new Date(Date.UTC(2019, 0, 1)), {}],
@@ -27,7 +27,7 @@ describe("parseDateField", () => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "date" as const, ...options }],
+      columns: [{ name: "name", type: "date" as const, ...options }],
     }
 
     const result = await normalizeTable(table, schema)
@@ -37,7 +37,7 @@ describe("parseDateField", () => {
   })
 })
 
-describe("stringifyDateField", () => {
+describe("stringifyDateColumn", () => {
   it.each([
     // Default format
     [new Date(Date.UTC(2019, 0, 1)), "2019-01-01", {}],
@@ -50,7 +50,7 @@ describe("stringifyDateField", () => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Date)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "date" as const, ...options }],
+      columns: [{ name: "name", type: "date" as const, ...options }],
     }
 
     const result = await denormalizeTable(table, schema)

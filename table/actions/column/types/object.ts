@@ -1,7 +1,7 @@
-import type { ObjectField } from "@fairspec/metadata"
+import type { ObjectColumn } from "@fairspec/metadata"
 import type { Table } from "../../table/index.ts"
-import { inspectJsonField } from "./json.ts"
+import { inspectJsonColumn } from "./json.ts"
 
-export async function inspectObjectField(field: ObjectField, table: Table) {
-  return inspectJsonField(field, table)
+export async function inspectObjectColumn(column: ObjectColumn, table: Table) {
+  return inspectJsonColumn(column, table)
 }

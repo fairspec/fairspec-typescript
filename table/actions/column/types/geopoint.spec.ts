@@ -2,7 +2,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { denormalizeTable, normalizeTable } from "../../table/index.ts"
 
-describe("parseGeopointField", () => {
+describe("parseGeopointColumn", () => {
   describe("default format", () => {
     it.each([
       // Valid geopoints in default format (lon,lat)
@@ -26,7 +26,7 @@ describe("parseGeopointField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [{ name: "name", type: "geopoint" as const }],
+        columns: [{ name: "name", type: "geopoint" as const }],
       }
 
       const result = await normalizeTable(table, schema)
@@ -59,7 +59,7 @@ describe("parseGeopointField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "geopoint" as const, format: "array" as const },
         ],
       }
@@ -94,7 +94,7 @@ describe("parseGeopointField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [
+        columns: [
           {
             name: "name",
             type: "geopoint" as const,
@@ -111,7 +111,7 @@ describe("parseGeopointField", () => {
   })
 })
 
-describe("stringifyGeopointField", () => {
+describe("stringifyGeopointColumn", () => {
   describe("default format", () => {
     it.each([
       // Coordinate arrays to default format (lon,lat)
@@ -132,7 +132,7 @@ describe("stringifyGeopointField", () => {
         .lazy()
 
       const schema = {
-        fields: [{ name: "name", type: "geopoint" as const }],
+        columns: [{ name: "name", type: "geopoint" as const }],
       }
 
       const result = await denormalizeTable(table, schema)
@@ -159,7 +159,7 @@ describe("stringifyGeopointField", () => {
         .lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "geopoint" as const, format: "array" as const },
         ],
       }
@@ -188,7 +188,7 @@ describe("stringifyGeopointField", () => {
         .lazy()
 
       const schema = {
-        fields: [
+        columns: [
           {
             name: "name",
             type: "geopoint" as const,

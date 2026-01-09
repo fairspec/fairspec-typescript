@@ -1,48 +1,48 @@
 import * as pl from "nodejs-polars"
-import type { FieldMapping } from "./Mapping.ts"
-import { parseBooleanField } from "./types/boolean.ts"
-import { parseDateField } from "./types/date.ts"
-import { parseDatetimeField } from "./types/datetime.ts"
-import { parseDurationField } from "./types/duration.ts"
-import { parseGeopointField } from "./types/geopoint.ts"
-import { parseIntegerField } from "./types/integer.ts"
-import { parseListField } from "./types/list.ts"
-import { parseNumberField } from "./types/number.ts"
-import { parseStringField } from "./types/string.ts"
-import { parseTimeField } from "./types/time.ts"
-import { parseYearField } from "./types/year.ts"
-import { parseYearmonthField } from "./types/yearmonth.ts"
+import type { ColumnMapping } from "../../models/column.ts"
+import { parseBooleanColumn } from "./types/boolean.ts"
+import { parseDateColumn } from "./types/date.ts"
+import { parseDatetimeColumn } from "./types/datetime.ts"
+import { parseDurationColumn } from "./types/duration.ts"
+import { parseGeopointColumn } from "./types/geopoint.ts"
+import { parseIntegerColumn } from "./types/integer.ts"
+import { parseListColumn } from "./types/list.ts"
+import { parseNumberColumn } from "./types/number.ts"
+import { parseStringColumn } from "./types/string.ts"
+import { parseTimeColumn } from "./types/time.ts"
+import { parseYearColumn } from "./types/year.ts"
+import { parseYearmonthColumn } from "./types/yearmonth.ts"
 
-export function parseField(mapping: FieldMapping, fieldExpr: pl.Expr) {
-  if (!mapping.source.type.equals(pl.String)) return fieldExpr
+export function parseColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
+  if (!mapping.source.type.equals(pl.String)) return columnExpr
 
-  const field = mapping.target
-  switch (field.type) {
+  const column = mapping.target
+  switch (column.type) {
     case "boolean":
-      return parseBooleanField(field, fieldExpr)
+      return parseBooleanColumn(column, columnExpr)
     case "date":
-      return parseDateField(field, fieldExpr)
+      return parseDateColumn(column, columnExpr)
     case "datetime":
-      return parseDatetimeField(field, fieldExpr)
+      return parseDatetimeColumn(column, columnExpr)
     case "duration":
-      return parseDurationField(field, fieldExpr)
+      return parseDurationColumn(column, columnExpr)
     case "geopoint":
-      return parseGeopointField(field, fieldExpr)
+      return parseGeopointColumn(column, columnExpr)
     case "integer":
-      return parseIntegerField(field, fieldExpr)
+      return parseIntegerColumn(column, columnExpr)
     case "list":
-      return parseListField(field, fieldExpr)
+      return parseListColumn(column, columnExpr)
     case "number":
-      return parseNumberField(field, fieldExpr)
+      return parseNumberColumn(column, columnExpr)
     case "string":
-      return parseStringField(field, fieldExpr)
+      return parseStringColumn(column, columnExpr)
     case "time":
-      return parseTimeField(field, fieldExpr)
+      return parseTimeColumn(column, columnExpr)
     case "year":
-      return parseYearField(field, fieldExpr)
+      return parseYearColumn(column, columnExpr)
     case "yearmonth":
-      return parseYearmonthField(field, fieldExpr)
+      return parseYearmonthColumn(column, columnExpr)
     default:
-      return fieldExpr
+      return columnExpr
   }
 }

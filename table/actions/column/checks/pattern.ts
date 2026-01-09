@@ -1,17 +1,17 @@
-import type { CellPatternError, Field } from "@fairspec/metadata"
+import type { CellPatternError, Column } from "@fairspec/metadata"
 import type { CellMapping } from "../Mapping.ts"
 
-export function checkCellPattern(field: Field, mapping: CellMapping) {
-  if (field.type !== "string") return undefined
+export function checkCellPattern(column: Column, mapping: CellMapping) {
+  if (column.type !== "string") return undefined
 
-  const pattern = field.constraints?.pattern
+  const pattern = column.constraints?.pattern
   if (!pattern) return undefined
 
   const isErrorExpr = mapping.target.str.contains(pattern).not()
 
   const errorTemplate: CellPatternError = {
     type: "cell/pattern",
-    fieldName: field.name,
+    columnName: column.name,
     pattern: pattern,
     rowNumber: 0,
     cell: "",

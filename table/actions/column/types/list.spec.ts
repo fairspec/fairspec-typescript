@@ -2,7 +2,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { denormalizeTable, normalizeTable } from "../../table/index.ts"
 
-describe("parseListField", () => {
+describe("parseListColumn", () => {
   describe("default settings (string items, comma delimiter)", () => {
     it.each([
       // Basic list parsing
@@ -31,7 +31,7 @@ describe("parseListField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [{ name: "name", type: "list" as const }],
+        columns: [{ name: "name", type: "list" as const }],
       }
 
       const result = await normalizeTable(table, schema)
@@ -69,7 +69,7 @@ describe("parseListField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "list" as const, itemType: "integer" as const },
         ],
       }
@@ -108,7 +108,7 @@ describe("parseListField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "list" as const, itemType: "number" as const },
         ],
       }
@@ -141,7 +141,7 @@ describe("parseListField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [{ name: "name", type: "list" as const, delimiter: ";" }],
+        columns: [{ name: "name", type: "list" as const, delimiter: ";" }],
       }
 
       const result = await normalizeTable(table, schema)
@@ -152,7 +152,7 @@ describe("parseListField", () => {
   })
 })
 
-describe("stringifyListField", () => {
+describe("stringifyListColumn", () => {
   describe("default settings (string items, comma delimiter)", () => {
     it.each([
       // Basic list stringifying
@@ -180,7 +180,7 @@ describe("stringifyListField", () => {
         .lazy()
 
       const schema = {
-        fields: [{ name: "name", type: "list" as const }],
+        columns: [{ name: "name", type: "list" as const }],
       }
 
       const result = await denormalizeTable(table, schema)
@@ -212,7 +212,7 @@ describe("stringifyListField", () => {
         .lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "list" as const, itemType: "integer" as const },
         ],
       }
@@ -246,7 +246,7 @@ describe("stringifyListField", () => {
         .lazy()
 
       const schema = {
-        fields: [
+        columns: [
           { name: "name", type: "list" as const, itemType: "number" as const },
         ],
       }
@@ -282,7 +282,7 @@ describe("stringifyListField", () => {
         .lazy()
 
       const schema = {
-        fields: [{ name: "name", type: "list" as const, delimiter: ";" }],
+        columns: [{ name: "name", type: "list" as const, delimiter: ";" }],
       }
 
       const result = await denormalizeTable(table, schema)

@@ -1,41 +1,41 @@
 import type {
   CellExclusiveMaximumError,
   CellMaximumError,
-  Field,
+  Column,
 } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { evaluateExpression } from "../../helpers.ts"
 import type { CellMapping } from "../Mapping.ts"
-import { parseDateField } from "../types/date.ts"
-import { parseDatetimeField } from "../types/datetime.ts"
-import { parseIntegerField } from "../types/integer.ts"
-import { parseNumberField } from "../types/number.ts"
-import { parseTimeField } from "../types/time.ts"
-import { parseYearField } from "../types/year.ts"
-import { parseYearmonthField } from "../types/yearmonth.ts"
+import { parseDateColumn } from "../types/date.ts"
+import { parseDatetimeColumn } from "../types/datetime.ts"
+import { parseIntegerColumn } from "../types/integer.ts"
+import { parseNumberColumn } from "../types/number.ts"
+import { parseTimeColumn } from "../types/time.ts"
+import { parseYearColumn } from "../types/year.ts"
+import { parseYearmonthColumn } from "../types/yearmonth.ts"
 
 export function createCheckCellMaximum(options?: { isExclusive?: boolean }) {
-  return (field: Field, mapping: CellMapping) => {
+  return (column: Column, mapping: CellMapping) => {
     if (
-      field.type !== "integer" &&
-      field.type !== "number" &&
-      field.type !== "date" &&
-      field.type !== "time" &&
-      field.type !== "datetime" &&
-      field.type !== "year" &&
-      field.type !== "yearmonth"
+      column.type !== "integer" &&
+      column.type !== "number" &&
+      column.type !== "date" &&
+      column.type !== "time" &&
+      column.type !== "datetime" &&
+      column.type !== "year" &&
+      column.type !== "yearmonth"
     ) {
       return undefined
     }
 
     const maximum = options?.isExclusive
-      ? field.constraints?.exclusiveMaximum
-      : field.constraints?.maximum
+      ? column.constraints?.exclusiveMaximum
+      : column.constraints?.maximum
     if (maximum === undefined) return undefined
 
     let isErrorExpr: pl.Expr
     try {
-      const parsedMaximum = parseConstraint(field, maximum)
+      const parsedMaximum = parseConstraint(column, maximum)
       isErrorExpr = options?.isExclusive
         ? mapping.target.gtEq(parsedMaximum)
         : mapping.target.gt(parsedMaximum)
@@ -45,7 +45,7 @@ export function createCheckCellMaximum(options?: { isExclusive?: boolean }) {
 
     const errorTemplate: CellMaximumError | CellExclusiveMaximumError = {
       type: options?.isExclusive ? "cell/exclusiveMaximum" : "cell/maximum",
-      fieldName: field.name,
+      columnName: column.name,
       maximum: String(maximum),
       rowNumber: 0,
       cell: "",
@@ -55,24 +55,24 @@ export function createCheckCellMaximum(options?: { isExclusive?: boolean }) {
   }
 }
 
-function parseConstraint(field: Field, value: number | string) {
+function parseConstraint(column: Column, value: number | string) {
   if (typeof value !== "string") return value
 
   let expr = pl.pl.lit(value)
-  if (field.type === "integer") {
-    expr = parseIntegerField(field, expr)
-  } else if (field.type === "number") {
-    expr = parseNumberField(field, expr)
-  } else if (field.type === "date") {
-    expr = parseDateField(field, expr)
-  } else if (field.type === "time") {
-    expr = parseTimeField(field, expr)
-  } else if (field.type === "datetime") {
-    expr = parseDatetimeField(field, expr)
-  } else if (field.type === "year") {
-    expr = parseYearField(field, expr)
-  } else if (field.type === "yearmonth") {
-    expr = parseYearmonthField(field, expr)
+  if (column.type === "integer") {
+    expr = parseIntegerColumn(column, expr)
+  } else if (column.type === "number") {
+    expr = parseNumberColumn(column, expr)
+  } else if (column.type === "date") {
+    expr = parseDateColumn(column, expr)
+  } else if (column.type === "time") {
+    expr = parseTimeColumn(column, expr)
+  } else if (column.type === "datetime") {
+    expr = parseDatetimeColumn(column, expr)
+  } else if (column.type === "year") {
+    expr = parseYearColumn(column, expr)
+  } else if (column.type === "yearmonth") {
+    expr = parseYearmonthColumn(column, expr)
   }
 
   return evaluateExpression(expr)

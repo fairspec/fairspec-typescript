@@ -12,7 +12,7 @@ describe("inspectTable (cell/maxLength)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "code",
           type: "string",
@@ -33,7 +33,7 @@ describe("inspectTable (cell/maxLength)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "username",
           type: "string",
@@ -46,7 +46,7 @@ describe("inspectTable (cell/maxLength)", () => {
     expect(errors.filter(e => e.type === "cell/maxLength")).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/maxLength",
-      fieldName: "username",
+      columnName: "username",
       maxLength: 8,
       rowNumber: 3,
       cell: "christopher",

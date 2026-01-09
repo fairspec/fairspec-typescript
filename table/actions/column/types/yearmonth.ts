@@ -1,26 +1,26 @@
-import type { YearmonthField } from "@fairspec/metadata"
+import type { YearmonthColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
-export function parseYearmonthField(
-  _field: YearmonthField,
-  fieldExpr: pl.Expr,
+export function parseYearmonthColumn(
+  _column: YearmonthColumn,
+  columnExpr: pl.Expr,
 ) {
-  fieldExpr = fieldExpr.str.split("-").cast(pl.List(pl.Int16))
+  columnExpr = columnExpr.str.split("-").cast(pl.List(pl.Int16))
 
-  return fieldExpr
+  return columnExpr
 }
 
-export function stringifyYearmonthField(
-  field: YearmonthField,
-  fieldExpr: pl.Expr,
+export function stringifyYearmonthColumn(
+  column: YearmonthColumn,
+  columnExpr: pl.Expr,
 ) {
   return pl
     .concatString(
       [
-        fieldExpr.lst.get(0).cast(pl.String).str.zFill(4),
-        fieldExpr.lst.get(1).cast(pl.String).str.zFill(2),
+        columnExpr.lst.get(0).cast(pl.String).str.zFill(4),
+        columnExpr.lst.get(1).cast(pl.String).str.zFill(2),
       ],
       "-",
     )
-    .alias(field.name) as pl.Expr
+    .alias(column.name) as pl.Expr
 }

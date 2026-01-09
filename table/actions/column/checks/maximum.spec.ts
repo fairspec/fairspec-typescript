@@ -12,7 +12,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -33,7 +33,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "temperature",
           type: "number",
@@ -46,7 +46,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors.filter(e => e.type === "cell/maximum")).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/maximum",
-      fieldName: "temperature",
+      columnName: "temperature",
       maximum: "40",
       rowNumber: 4,
       cell: "50.5",
@@ -61,7 +61,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "temperature",
           type: "number",
@@ -76,14 +76,14 @@ describe("inspectTable (cell/maximum)", () => {
     )
     expect(errors).toContainEqual({
       type: "cell/exclusiveMaximum",
-      fieldName: "temperature",
+      columnName: "temperature",
       maximum: "40",
       rowNumber: 3,
       cell: "40",
     })
     expect(errors).toContainEqual({
       type: "cell/exclusiveMaximum",
-      fieldName: "temperature",
+      columnName: "temperature",
       maximum: "40",
       rowNumber: 4,
       cell: "50.5",
@@ -98,7 +98,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -112,7 +112,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "price",
+        columnName: "price",
         maximum: "50",
         rowNumber: 3,
         cell: "55",
@@ -128,7 +128,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "temperature",
           type: "number",
@@ -142,14 +142,14 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/exclusiveMaximum",
-        fieldName: "temperature",
+        columnName: "temperature",
         maximum: "40",
         rowNumber: 2,
         cell: "40",
       },
       {
         type: "cell/exclusiveMaximum",
-        fieldName: "temperature",
+        columnName: "temperature",
         maximum: "40",
         rowNumber: 3,
         cell: "50.5",
@@ -165,7 +165,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "integer",
@@ -180,7 +180,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "price",
+        columnName: "price",
         maximum: "12,000",
         rowNumber: 3,
         cell: "15,000",
@@ -196,7 +196,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -211,7 +211,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "price",
+        columnName: "price",
         maximum: "12,0",
         rowNumber: 3,
         cell: "15,3",
@@ -227,7 +227,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -243,7 +243,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "price",
+        columnName: "price",
         maximum: "12.000,00",
         rowNumber: 3,
         cell: "15.000,30",
@@ -259,7 +259,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -274,7 +274,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "price",
+        columnName: "price",
         maximum: "$12.00",
         rowNumber: 3,
         cell: "$15.50",
@@ -282,7 +282,7 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it("should handle maximum for date fields", async () => {
+  it("should handle maximum for date columns", async () => {
     const table = pl
       .DataFrame({
         date: ["2024-01-15", "2024-02-20", "2024-03-25"],
@@ -290,7 +290,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "date",
           type: "date",
@@ -304,7 +304,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "date",
+        columnName: "date",
         maximum: "2024-02-28",
         rowNumber: 3,
         cell: "2024-03-25",
@@ -312,7 +312,7 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it.skip("should handle maximum for time fields", async () => {
+  it.skip("should handle maximum for time columns", async () => {
     const table = pl
       .DataFrame({
         time: ["14:30:00", "16:45:00", "18:00:00"],
@@ -320,7 +320,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "time",
           type: "time",
@@ -334,7 +334,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "time",
+        columnName: "time",
         maximum: "17:00:00",
         rowNumber: 3,
         cell: "18:00:00",
@@ -342,7 +342,7 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it("should handle maximum for datetime fields", async () => {
+  it("should handle maximum for datetime columns", async () => {
     const table = pl
       .DataFrame({
         timestamp: [
@@ -354,7 +354,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "timestamp",
           type: "datetime",
@@ -368,7 +368,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "timestamp",
+        columnName: "timestamp",
         maximum: "2024-02-28T23:59:59",
         rowNumber: 3,
         cell: "2024-03-25T10:00:00",
@@ -376,7 +376,7 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it("should handle maximum for date fields with custom format", async () => {
+  it("should handle maximum for date columns with custom format", async () => {
     const table = pl
       .DataFrame({
         date: ["15/01/2024", "20/02/2024", "25/03/2024"],
@@ -384,7 +384,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "date",
           type: "date",
@@ -399,7 +399,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "date",
+        columnName: "date",
         maximum: "28/02/2024",
         rowNumber: 3,
         cell: "25/03/2024",
@@ -407,7 +407,7 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it("should handle maximum for year fields", async () => {
+  it("should handle maximum for year columns", async () => {
     const table = pl
       .DataFrame({
         year: ["2020", "2021", "2023"],
@@ -415,7 +415,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "year",
           type: "year",
@@ -429,7 +429,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "year",
+        columnName: "year",
         maximum: "2022",
         rowNumber: 3,
         cell: "2023",
@@ -437,7 +437,7 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it("should handle exclusiveMaximum for year fields", async () => {
+  it("should handle exclusiveMaximum for year columns", async () => {
     const table = pl
       .DataFrame({
         year: ["2020", "2021", "2022", "2023"],
@@ -445,7 +445,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "year",
           type: "year",
@@ -459,14 +459,14 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/exclusiveMaximum",
-        fieldName: "year",
+        columnName: "year",
         maximum: "2022",
         rowNumber: 3,
         cell: "2022",
       },
       {
         type: "cell/exclusiveMaximum",
-        fieldName: "year",
+        columnName: "year",
         maximum: "2022",
         rowNumber: 4,
         cell: "2023",
@@ -474,7 +474,7 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it.skip("should handle maximum for yearmonth fields", async () => {
+  it.skip("should handle maximum for yearmonth columns", async () => {
     const table = pl
       .DataFrame({
         yearmonth: ["2024-01", "2024-03", "2024-06"],
@@ -482,7 +482,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "yearmonth",
           type: "yearmonth",
@@ -496,7 +496,7 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/maximum",
-        fieldName: "yearmonth",
+        columnName: "yearmonth",
         maximum: "2024-05",
         rowNumber: 3,
         cell: "2024-06",
@@ -504,7 +504,7 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it.skip("should handle exclusiveMaximum for yearmonth fields", async () => {
+  it.skip("should handle exclusiveMaximum for yearmonth columns", async () => {
     const table = pl
       .DataFrame({
         yearmonth: ["2024-01", "2024-03", "2024-05", "2024-06"],
@@ -512,7 +512,7 @@ describe("inspectTable (cell/maximum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "yearmonth",
           type: "yearmonth",
@@ -526,14 +526,14 @@ describe("inspectTable (cell/maximum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/exclusiveMaximum",
-        fieldName: "yearmonth",
+        columnName: "yearmonth",
         maximum: "2024-05",
         rowNumber: 3,
         cell: "2024-05",
       },
       {
         type: "cell/exclusiveMaximum",
-        fieldName: "yearmonth",
+        columnName: "yearmonth",
         maximum: "2024-05",
         rowNumber: 4,
         cell: "2024-06",

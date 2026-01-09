@@ -3,7 +3,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { inspectTable } from "../../table/index.ts"
 
-describe("validateGeojsonField", () => {
+describe("validateGeojsonColumn", () => {
   it("should not errors for valid GeoJSON Point", async () => {
     const table = pl
       .DataFrame({
@@ -16,7 +16,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "location",
           type: "geojson",
@@ -40,7 +40,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "geometry",
           type: "geojson",
@@ -64,7 +64,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "feature",
           type: "geojson",
@@ -87,7 +87,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "collection",
           type: "geojson",
@@ -111,7 +111,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "location",
           type: "geojson",
@@ -135,7 +135,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "geojson",
@@ -147,8 +147,8 @@ describe("validateGeojsonField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "geojson",
+        columnName: "data",
+        columnType: "geojson",
         rowNumber: 2,
         cell: "[[0,0],[1,1]]",
       },
@@ -167,7 +167,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "geojson",
@@ -179,15 +179,15 @@ describe("validateGeojsonField", () => {
     expect(errors.filter(e => e.type === "cell/type")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "data",
-      fieldType: "geojson",
+      columnName: "data",
+      columnType: "geojson",
       rowNumber: 2,
       cell: "invalid json",
     })
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "data",
-      fieldType: "geojson",
+      columnName: "data",
+      columnType: "geojson",
       rowNumber: 3,
       cell: "{broken}",
     })
@@ -205,7 +205,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "geojson",
@@ -217,8 +217,8 @@ describe("validateGeojsonField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "geojson",
+        columnName: "data",
+        columnType: "geojson",
         rowNumber: 2,
         cell: "",
       },
@@ -233,7 +233,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "geojson",
@@ -245,36 +245,36 @@ describe("validateGeojsonField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "geojson",
+        columnName: "data",
+        columnType: "geojson",
         rowNumber: 1,
         cell: '"string"',
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "geojson",
+        columnName: "data",
+        columnType: "geojson",
         rowNumber: 2,
         cell: "123",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "geojson",
+        columnName: "data",
+        columnType: "geojson",
         rowNumber: 3,
         cell: "true",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "geojson",
+        columnName: "data",
+        columnType: "geojson",
         rowNumber: 4,
         cell: "false",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "geojson",
+        columnName: "data",
+        columnType: "geojson",
         rowNumber: 5,
         cell: "null",
       },
@@ -293,7 +293,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "location",
           type: "geojson",
@@ -305,15 +305,15 @@ describe("validateGeojsonField", () => {
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "location",
-      fieldType: "geojson",
+      columnName: "location",
+      columnType: "geojson",
       rowNumber: 2,
       cell: '{"type":"Point","coordinates":[0]}',
     })
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "location",
-      fieldType: "geojson",
+      columnName: "location",
+      columnType: "geojson",
       rowNumber: 3,
       cell: '{"type":"Point","coordinates":[0,0,0,0]}',
     })
@@ -331,7 +331,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "line",
           type: "geojson",
@@ -343,15 +343,15 @@ describe("validateGeojsonField", () => {
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "line",
-      fieldType: "geojson",
+      columnName: "line",
+      columnType: "geojson",
       rowNumber: 2,
       cell: '{"type":"LineString","coordinates":[[0,0]]}',
     })
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "line",
-      fieldType: "geojson",
+      columnName: "line",
+      columnType: "geojson",
       rowNumber: 3,
       cell: '{"type":"LineString","coordinates":[0,0]}',
     })
@@ -369,7 +369,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "feature",
           type: "geojson",
@@ -381,15 +381,15 @@ describe("validateGeojsonField", () => {
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "feature",
-      fieldType: "geojson",
+      columnName: "feature",
+      columnType: "geojson",
       rowNumber: 2,
       cell: '{"type":"Feature","geometry":{"type":"Point","coordinates":[0,0]}}',
     })
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "feature",
-      fieldType: "geojson",
+      columnName: "feature",
+      columnType: "geojson",
       rowNumber: 3,
       cell: '{"type":"Feature","properties":{}}',
     })
@@ -406,7 +406,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "collection",
           type: "geojson",
@@ -418,15 +418,15 @@ describe("validateGeojsonField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "collection",
-        fieldType: "geojson",
+        columnName: "collection",
+        columnType: "geojson",
         rowNumber: 2,
         cell: '{"type":"FeatureCollection"}',
       },
     ])
   })
 
-  it("should not validate jsonSchema constraints for geojson fields", async () => {
+  it("should not validate jsonSchema constraints for geojson columns", async () => {
     const table = pl
       .DataFrame({
         location: [
@@ -437,7 +437,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "location",
           type: "geojson",
@@ -471,7 +471,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "topology",
           type: "geojson",
@@ -496,7 +496,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "topology",
           type: "geojson",
@@ -509,17 +509,17 @@ describe("validateGeojsonField", () => {
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "topology",
-      fieldType: "geojson",
-      fieldFormat: "topojson",
+      columnName: "topology",
+      columnType: "geojson",
+      columnFormat: "topojson",
       rowNumber: 2,
       cell: '{"type":"Topology","objects":{}}',
     })
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "topology",
-      fieldType: "geojson",
-      fieldFormat: "topojson",
+      columnName: "topology",
+      columnType: "geojson",
+      columnFormat: "topojson",
       rowNumber: 3,
       cell: '{"type":"Topology"}',
     })
@@ -537,7 +537,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "geometry",
           type: "geojson",
@@ -561,7 +561,7 @@ describe("validateGeojsonField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "topology",
           type: "geojson",

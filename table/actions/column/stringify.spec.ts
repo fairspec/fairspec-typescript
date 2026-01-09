@@ -3,7 +3,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { denormalizeTable } from "../table/index.ts"
 
-describe("stringifyField", () => {
+describe("stringifyColumn", () => {
   describe("missing values", () => {
     it.each([
       // Schema-level - null values should be converted to first missing value
@@ -16,29 +16,29 @@ describe("stringifyField", () => {
       ["hello", "hello", {}],
       ["world", "world", { schemaLevel: ["-"] }],
 
-      // Field-level missing values take precedence
-      [null, "", {}], // default field-level missing value
-      [null, "-", { fieldLevel: ["-"] }],
-      [null, "n/a", { fieldLevel: ["n/a"] }],
+      // Column-level missing values take precedence
+      [null, "", {}], // default column-level missing value
+      [null, "-", { columnLevel: ["-"] }],
+      [null, "n/a", { columnLevel: ["n/a"] }],
 
-      // Regular values with field-level settings
-      ["test", "test", { fieldLevel: ["-"] }],
-      ["value", "value", { fieldLevel: ["n/a"] }],
+      // Regular values with column-level settings
+      ["test", "test", { columnLevel: ["-"] }],
+      ["value", "value", { columnLevel: ["n/a"] }],
 
-      // Field-level overrides schema-level
-      [null, "-", { schemaLevel: ["x"], fieldLevel: ["-"] }],
-      [null, "x", { schemaLevel: ["-"], fieldLevel: ["x"] }],
+      // Column-level overrides schema-level
+      [null, "-", { schemaLevel: ["x"], columnLevel: ["-"] }],
+      [null, "x", { schemaLevel: ["-"], columnLevel: ["x"] }],
 
       // Multiple missing values - should use first one
-      [null, "-", { fieldLevel: ["-", "n/a", "null"] }],
+      [null, "-", { columnLevel: ["-", "n/a", "null"] }],
       [null, "n/a", { schemaLevel: ["n/a", "NULL", ""] }],
 
       // @ts-expect-error
-    ])("%s -> %s %s", async (value, expected, { fieldLevel, schemaLevel }) => {
+    ])("%s -> %s %s", async (value, expected, { columnLevel, schemaLevel }) => {
       const table = pl.DataFrame({ name: [value] }).lazy()
       const schema: Schema = {
         missingValues: schemaLevel,
-        fields: [{ name: "name", type: "string", missingValues: fieldLevel }],
+        columns: [{ name: "name", type: "string", missingValues: columnLevel }],
       }
 
       const result = await denormalizeTable(table, schema)

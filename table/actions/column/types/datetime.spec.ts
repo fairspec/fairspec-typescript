@@ -4,7 +4,7 @@ import { denormalizeTable, normalizeTable } from "../../table/index.ts"
 
 // TODO: Enable this test suite after this issue is fixed:
 // https://github.com/pola-rs/nodejs-polars/issues/365
-describe.skip("parseDatetimeField", () => {
+describe.skip("parseDatetimeColumn", () => {
   it.each([
     // Default format
     ["2014-01-01T06:00:00", new Date(Date.UTC(2014, 0, 1, 6, 0, 0)), {}],
@@ -29,7 +29,7 @@ describe.skip("parseDatetimeField", () => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "datetime" as const, ...options }],
+      columns: [{ name: "name", type: "datetime" as const, ...options }],
     }
 
     const result = await normalizeTable(table, schema)
@@ -39,7 +39,7 @@ describe.skip("parseDatetimeField", () => {
   })
 })
 
-describe("stringifyDatetimeField", () => {
+describe("stringifyDatetimeColumn", () => {
   it.each([
     // Default format
     [new Date(Date.UTC(2014, 0, 1, 6, 0, 0)), "2014-01-01T06:00:00", {}],
@@ -60,7 +60,7 @@ describe("stringifyDatetimeField", () => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Datetime)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "datetime" as const, ...options }],
+      columns: [{ name: "name", type: "datetime" as const, ...options }],
     }
 
     const result = await denormalizeTable(table, schema)

@@ -1,12 +1,12 @@
-import type { ListField } from "@fairspec/metadata"
+import type { ListColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
 // TODO:
 // Add more validation:
 // - Return null instead of list if all array values are nulls?
-export function parseListField(field: ListField, fieldExpr: pl.Expr) {
-  const delimiter = field.delimiter ?? ","
-  const itemType = field.itemType
+export function parseListColumn(column: ListColumn, columnExpr: pl.Expr) {
+  const delimiter = column.delimiter ?? ","
+  const itemType = column.itemType
 
   let dtype: any = pl.String
   if (itemType === "integer") dtype = pl.Int64
@@ -16,15 +16,15 @@ export function parseListField(field: ListField, fieldExpr: pl.Expr) {
   if (itemType === "date") dtype = pl.Date
   if (itemType === "time") dtype = pl.Time
 
-  fieldExpr = fieldExpr.str.split(delimiter).cast(pl.List(dtype))
+  columnExpr = columnExpr.str.split(delimiter).cast(pl.List(dtype))
 
-  return fieldExpr
+  return columnExpr
 }
 
-export function stringifyListField(field: ListField, fieldExpr: pl.Expr) {
-  const delimiter = field.delimiter ?? ","
+export function stringifyListColumn(column: ListColumn, columnExpr: pl.Expr) {
+  const delimiter = column.delimiter ?? ","
 
-  return fieldExpr
+  return columnExpr
     .cast(pl.List(pl.String))
     .lst.join({ separator: delimiter, ignoreNulls: true })
 }

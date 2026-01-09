@@ -3,7 +3,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { inspectTable } from "../../table/index.ts"
 
-describe("validateArrayField", () => {
+describe("validateArrayColumn", () => {
   it("should not errors for valid JSON arrays", async () => {
     const table = pl
       .DataFrame({
@@ -12,7 +12,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "tags",
           type: "array",
@@ -32,7 +32,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "items",
           type: "array",
@@ -52,7 +52,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "array",
@@ -72,7 +72,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "array",
@@ -84,8 +84,8 @@ describe("validateArrayField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "array",
+        columnName: "data",
+        columnType: "array",
         rowNumber: 2,
         cell: '{"key":"value"}',
       },
@@ -100,7 +100,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "array",
@@ -112,15 +112,15 @@ describe("validateArrayField", () => {
     expect(errors.filter(e => e.type === "cell/type")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "data",
-      fieldType: "array",
+      columnName: "data",
+      columnType: "array",
       rowNumber: 2,
       cell: "invalid json",
     })
     expect(errors).toContainEqual({
       type: "cell/type",
-      fieldName: "data",
-      fieldType: "array",
+      columnName: "data",
+      columnType: "array",
       rowNumber: 4,
       cell: "[broken",
     })
@@ -134,7 +134,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "matrix",
           type: "array",
@@ -154,7 +154,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "array",
@@ -166,8 +166,8 @@ describe("validateArrayField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "array",
+        columnName: "data",
+        columnType: "array",
         rowNumber: 2,
         cell: "",
       },
@@ -182,7 +182,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "data",
           type: "array",
@@ -194,36 +194,36 @@ describe("validateArrayField", () => {
     expect(errors).toEqual([
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "array",
+        columnName: "data",
+        columnType: "array",
         rowNumber: 1,
         cell: '"string"',
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "array",
+        columnName: "data",
+        columnType: "array",
         rowNumber: 2,
         cell: "123",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "array",
+        columnName: "data",
+        columnType: "array",
         rowNumber: 3,
         cell: "true",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "array",
+        columnName: "data",
+        columnType: "array",
         rowNumber: 4,
         cell: "false",
       },
       {
         type: "cell/type",
-        fieldName: "data",
-        fieldType: "array",
+        columnName: "data",
+        columnType: "array",
         rowNumber: 5,
         cell: "null",
       },
@@ -238,7 +238,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "scores",
           type: "array",
@@ -272,7 +272,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "numbers",
           type: "array",
@@ -287,7 +287,7 @@ describe("validateArrayField", () => {
     expect(errors.filter(e => e.type === "cell/jsonSchema")).toEqual([
       {
         type: "cell/jsonSchema",
-        fieldName: "numbers",
+        columnName: "numbers",
         rowNumber: 2,
         cell: '["not","numbers"]',
         pointer: "/0",
@@ -295,7 +295,7 @@ describe("validateArrayField", () => {
       },
       {
         type: "cell/jsonSchema",
-        fieldName: "numbers",
+        columnName: "numbers",
         rowNumber: 2,
         cell: '["not","numbers"]',
         pointer: "/1",
@@ -303,7 +303,7 @@ describe("validateArrayField", () => {
       },
       {
         type: "cell/jsonSchema",
-        fieldName: "numbers",
+        columnName: "numbers",
         rowNumber: 3,
         cell: "[1]",
         pointer: "",
@@ -323,7 +323,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "users",
           type: "array",
@@ -348,7 +348,7 @@ describe("validateArrayField", () => {
     expect(errors).toEqual([
       {
         type: "cell/jsonSchema",
-        fieldName: "users",
+        columnName: "users",
         rowNumber: 2,
         cell: '[{"name":"Bob","age":"invalid"}]',
         pointer: "/0/age",
@@ -365,7 +365,7 @@ describe("validateArrayField", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "tags",
           type: "array",
@@ -384,7 +384,7 @@ describe("validateArrayField", () => {
     expect(errors).toEqual([
       {
         type: "cell/jsonSchema",
-        fieldName: "tags",
+        columnName: "tags",
         rowNumber: 2,
         cell: '["duplicate","duplicate"]',
         pointer: "",

@@ -12,7 +12,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "status",
           type: "string",
@@ -37,7 +37,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "status",
           type: "string",
@@ -52,14 +52,14 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors.filter(e => e.type === "cell/enum")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/enum",
-      fieldName: "status",
+      columnName: "status",
       enum: allowedValues,
       rowNumber: 3,
       cell: "unknown",
     })
     expect(errors).toContainEqual({
       type: "cell/enum",
-      fieldName: "status",
+      columnName: "status",
       enum: allowedValues,
       rowNumber: 4,
       cell: "cancelled",
@@ -74,7 +74,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "status",
           type: "string",
@@ -99,7 +99,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "status",
           type: "string",
@@ -114,14 +114,14 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors.filter(e => e.type === "cell/enum")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/enum",
-      fieldName: "status",
+      columnName: "status",
       enum: allowedValues,
       rowNumber: 1,
       cell: "Pending",
     })
     expect(errors).toContainEqual({
       type: "cell/enum",
-      fieldName: "status",
+      columnName: "status",
       enum: allowedValues,
       rowNumber: 2,
       cell: "APPROVED",
@@ -138,7 +138,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "priority",
           type: "integer",
@@ -154,7 +154,7 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/enum",
-        fieldName: "priority",
+        columnName: "priority",
         enum: allowedValues,
         rowNumber: 3,
         cell: "5",
@@ -172,7 +172,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "rating",
           type: "number",
@@ -188,7 +188,7 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/enum",
-        fieldName: "rating",
+        columnName: "rating",
         enum: allowedValues,
         rowNumber: 3,
         cell: "4.5",
@@ -206,7 +206,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "date",
           type: "date",
@@ -222,7 +222,7 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/enum",
-        fieldName: "date",
+        columnName: "date",
         enum: allowedValues,
         rowNumber: 3,
         cell: "2024-05-01",
@@ -248,7 +248,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "timestamp",
           type: "datetime",
@@ -264,7 +264,7 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/enum",
-        fieldName: "timestamp",
+        columnName: "timestamp",
         enum: allowedValues,
         rowNumber: 3,
         cell: "2024-01-01T20:00:00",
@@ -282,7 +282,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "year",
           type: "year",
@@ -298,7 +298,7 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/enum",
-        fieldName: "year",
+        columnName: "year",
         enum: allowedValues,
         rowNumber: 3,
         cell: "2023",
@@ -316,7 +316,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "time",
           type: "time",
@@ -332,7 +332,7 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/enum",
-        fieldName: "time",
+        columnName: "time",
         enum: allowedValues,
         rowNumber: 3,
         cell: "20:00:00",
@@ -350,7 +350,7 @@ describe("inspectTable (cell/enum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "yearmonth",
           type: "yearmonth",
@@ -366,7 +366,7 @@ describe("inspectTable (cell/enum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/enum",
-        fieldName: "yearmonth",
+        columnName: "yearmonth",
         enum: allowedValues,
         rowNumber: 3,
         cell: "2024-05",

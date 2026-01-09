@@ -12,7 +12,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -33,7 +33,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "temperature",
           type: "number",
@@ -46,7 +46,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors.filter(e => e.type === "cell/minimum")).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/minimum",
-      fieldName: "temperature",
+      columnName: "temperature",
       minimum: "10",
       rowNumber: 4,
       cell: "3.5",
@@ -61,7 +61,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "temperature",
           type: "number",
@@ -76,14 +76,14 @@ describe("inspectTable (cell/minimum)", () => {
     )
     expect(errors).toContainEqual({
       type: "cell/exclusiveMinimum",
-      fieldName: "temperature",
+      columnName: "temperature",
       minimum: "10",
       rowNumber: 3,
       cell: "10",
     })
     expect(errors).toContainEqual({
       type: "cell/exclusiveMinimum",
-      fieldName: "temperature",
+      columnName: "temperature",
       minimum: "10",
       rowNumber: 4,
       cell: "5.5",
@@ -98,7 +98,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -112,7 +112,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "price",
+        columnName: "price",
         minimum: "5",
         rowNumber: 3,
         cell: "3",
@@ -128,7 +128,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "temperature",
           type: "number",
@@ -142,14 +142,14 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/exclusiveMinimum",
-        fieldName: "temperature",
+        columnName: "temperature",
         minimum: "10",
         rowNumber: 2,
         cell: "10",
       },
       {
         type: "cell/exclusiveMinimum",
-        fieldName: "temperature",
+        columnName: "temperature",
         minimum: "10",
         rowNumber: 3,
         cell: "5.5",
@@ -165,7 +165,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "integer",
@@ -180,7 +180,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "price",
+        columnName: "price",
         minimum: "3,000",
         rowNumber: 3,
         cell: "2,500",
@@ -196,7 +196,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -211,7 +211,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "price",
+        columnName: "price",
         minimum: "3,0",
         rowNumber: 3,
         cell: "2,3",
@@ -227,7 +227,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -243,7 +243,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "price",
+        columnName: "price",
         minimum: "3.000,00",
         rowNumber: 3,
         cell: "2.500,30",
@@ -259,7 +259,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "price",
           type: "number",
@@ -274,7 +274,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "price",
+        columnName: "price",
         minimum: "$3.00",
         rowNumber: 3,
         cell: "$2.50",
@@ -282,7 +282,7 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
-  it("should handle minimum for date fields", async () => {
+  it("should handle minimum for date columns", async () => {
     const table = pl
       .DataFrame({
         date: ["2024-01-15", "2024-02-20", "2024-01-05"],
@@ -290,7 +290,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "date",
           type: "date",
@@ -304,7 +304,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "date",
+        columnName: "date",
         minimum: "2024-01-10",
         rowNumber: 3,
         cell: "2024-01-05",
@@ -312,7 +312,7 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
-  it.skip("should handle minimum for time fields", async () => {
+  it.skip("should handle minimum for time columns", async () => {
     const table = pl
       .DataFrame({
         time: ["14:30:00", "16:45:00", "12:15:00"],
@@ -320,7 +320,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "time",
           type: "time",
@@ -334,7 +334,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "time",
+        columnName: "time",
         minimum: "13:00:00",
         rowNumber: 3,
         cell: "12:15:00",
@@ -342,7 +342,7 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
-  it("should handle minimum for datetime fields", async () => {
+  it("should handle minimum for datetime columns", async () => {
     const table = pl
       .DataFrame({
         timestamp: [
@@ -354,7 +354,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "timestamp",
           type: "datetime",
@@ -368,7 +368,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "timestamp",
+        columnName: "timestamp",
         minimum: "2024-01-15T00:00:00",
         rowNumber: 3,
         cell: "2024-01-10T10:00:00",
@@ -376,7 +376,7 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
-  it("should handle minimum for date fields with custom format", async () => {
+  it("should handle minimum for date columns with custom format", async () => {
     const table = pl
       .DataFrame({
         date: ["15/01/2024", "20/02/2024", "05/01/2024"],
@@ -384,7 +384,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "date",
           type: "date",
@@ -399,7 +399,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "date",
+        columnName: "date",
         minimum: "10/01/2024",
         rowNumber: 3,
         cell: "05/01/2024",
@@ -407,7 +407,7 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
-  it("should handle minimum for year fields", async () => {
+  it("should handle minimum for year columns", async () => {
     const table = pl
       .DataFrame({
         year: ["2020", "2021", "2018"],
@@ -415,7 +415,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "year",
           type: "year",
@@ -429,7 +429,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "year",
+        columnName: "year",
         minimum: "2019",
         rowNumber: 3,
         cell: "2018",
@@ -437,7 +437,7 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
-  it("should handle exclusiveMinimum for year fields", async () => {
+  it("should handle exclusiveMinimum for year columns", async () => {
     const table = pl
       .DataFrame({
         year: ["2020", "2021", "2019", "2018"],
@@ -445,7 +445,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "year",
           type: "year",
@@ -459,14 +459,14 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/exclusiveMinimum",
-        fieldName: "year",
+        columnName: "year",
         minimum: "2019",
         rowNumber: 3,
         cell: "2019",
       },
       {
         type: "cell/exclusiveMinimum",
-        fieldName: "year",
+        columnName: "year",
         minimum: "2019",
         rowNumber: 4,
         cell: "2018",
@@ -474,7 +474,7 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
-  it.skip("should handle minimum for yearmonth fields", async () => {
+  it.skip("should handle minimum for yearmonth columns", async () => {
     const table = pl
       .DataFrame({
         yearmonth: ["2024-03", "2024-05", "2024-01"],
@@ -482,7 +482,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "yearmonth",
           type: "yearmonth",
@@ -496,7 +496,7 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/minimum",
-        fieldName: "yearmonth",
+        columnName: "yearmonth",
         minimum: "2024-02",
         rowNumber: 3,
         cell: "2024-01",
@@ -504,7 +504,7 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
-  it.skip("should handle exclusiveMinimum for yearmonth fields", async () => {
+  it.skip("should handle exclusiveMinimum for yearmonth columns", async () => {
     const table = pl
       .DataFrame({
         yearmonth: ["2024-03", "2024-05", "2024-02", "2024-01"],
@@ -512,7 +512,7 @@ describe("inspectTable (cell/minimum)", () => {
       .lazy()
 
     const schema: Schema = {
-      fields: [
+      columns: [
         {
           name: "yearmonth",
           type: "yearmonth",
@@ -526,14 +526,14 @@ describe("inspectTable (cell/minimum)", () => {
     expect(errors).toEqual([
       {
         type: "cell/exclusiveMinimum",
-        fieldName: "yearmonth",
+        columnName: "yearmonth",
         minimum: "2024-02",
         rowNumber: 3,
         cell: "2024-02",
       },
       {
         type: "cell/exclusiveMinimum",
-        fieldName: "yearmonth",
+        columnName: "yearmonth",
         minimum: "2024-02",
         rowNumber: 4,
         cell: "2024-01",

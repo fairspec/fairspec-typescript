@@ -2,7 +2,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { denormalizeTable, normalizeTable } from "../../table/index.ts"
 
-describe("parseIntegerField", () => {
+describe("parseIntegerColumn", () => {
   it.each([
     // Basic integer parsing
     ["1", 1, {}],
@@ -54,7 +54,7 @@ describe("parseIntegerField", () => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "integer" as const, ...options }],
+      columns: [{ name: "name", type: "integer" as const, ...options }],
     }
 
     const result = await normalizeTable(table, schema)
@@ -78,7 +78,7 @@ describe("parseIntegerField", () => {
       const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
       const schema = {
-        fields: [{ name: "name", type: "integer" as const, ...options }],
+        columns: [{ name: "name", type: "integer" as const, ...options }],
       }
 
       const result = await normalizeTable(table, schema)
@@ -89,7 +89,7 @@ describe("parseIntegerField", () => {
   })
 })
 
-describe("stringifyIntegerField", () => {
+describe("stringifyIntegerColumn", () => {
   it.each([
     // Basic integer to string conversion
     [1, "1"],
@@ -110,7 +110,7 @@ describe("stringifyIntegerField", () => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Int64)]).lazy()
 
     const schema = {
-      fields: [{ name: "name", type: "integer" as const }],
+      columns: [{ name: "name", type: "integer" as const }],
     }
 
     const result = await denormalizeTable(table, schema)

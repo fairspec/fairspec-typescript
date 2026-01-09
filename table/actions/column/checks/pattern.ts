@@ -1,10 +1,10 @@
 import type { CellPatternError, Column } from "@fairspec/metadata"
-import type { CellMapping } from "../Mapping.ts"
+import type { CellMapping } from "../../../models/cell.ts"
 
 export function checkCellPattern(column: Column, mapping: CellMapping) {
-  if (column.type !== "string") return undefined
+  if (column.property.type !== "string") return undefined
 
-  const pattern = column.constraints?.pattern
+  const pattern = column.property.pattern
   if (!pattern) return undefined
 
   const isErrorExpr = mapping.target.str.contains(pattern).not()

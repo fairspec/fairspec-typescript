@@ -12,9 +12,7 @@ import { checkCellMaxLength } from "./checks/maxLength.ts"
 import { createCheckCellMinimum } from "./checks/minimum.ts"
 import { checkCellMinLength } from "./checks/minLength.ts"
 import { checkCellPattern } from "./checks/pattern.ts"
-import { checkCellRequired } from "./checks/required.ts"
 import { checkCellType } from "./checks/type.ts"
-import { checkCellUnique } from "./checks/unique.ts"
 import type { ColumnMapping } from "./Mapping.ts"
 import { normalizeColumn } from "./normalize.ts"
 import { inspectArrayColumn } from "./types/array.ts"
@@ -134,7 +132,6 @@ async function inspectCells(
 
   for (const checkCell of [
     checkCellType,
-    checkCellRequired,
     checkCellPattern,
     checkCellEnum,
     createCheckCellMinimum(),
@@ -143,7 +140,6 @@ async function inspectCells(
     createCheckCellMaximum({ isExclusive: true }),
     checkCellMinLength,
     checkCellMaxLength,
-    checkCellUnique,
   ]) {
     const cellMapping = { source: pl.col("source"), target: pl.col("target") }
 

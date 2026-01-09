@@ -7,11 +7,6 @@ export const BooleanColumn = BaseColumn.extend({
     type: z.literal("boolean"),
     format: z.undefined().optional(),
 
-    enum: z
-      .array(z.boolean())
-      .optional()
-      .describe("An optional array of allowed values for the column"),
-
     trueValues: z
       .array(z.string())
       .optional()

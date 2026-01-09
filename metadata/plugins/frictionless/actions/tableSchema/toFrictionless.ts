@@ -608,13 +608,6 @@ function convertToBooleanField(
     )
   }
 
-  if (column.property.enum) {
-    if (!field.constraints) {
-      field.constraints = {}
-    }
-    field.constraints.enum = column.property.enum
-  }
-
   if (column.property.trueValues) {
     field.trueValues = column.property.trueValues
   }

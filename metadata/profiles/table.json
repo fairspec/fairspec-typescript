@@ -251,7 +251,6 @@
       "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "const": "boolean" },
-        "enum": { "$ref": "#/$defs/BooleanEnum" },
         "trueValues": { "$ref": "#/$defs/TrueValues" },
         "falseValues": { "$ref": "#/$defs/FalseValues" },
         "missingValues": { "$ref": "#/$defs/BooleanMissingValues" },
@@ -445,6 +444,10 @@
         "time"
       ]
     },
+    "StringEnum": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
     "IntegerEnum": {
       "type": "array",
       "items": { "type": "integer" }
@@ -452,14 +455,6 @@
     "NumberEnum": {
       "type": "array",
       "items": { "type": "number" }
-    },
-    "BooleanEnum": {
-      "type": "array",
-      "items": { "type": "boolean" }
-    },
-    "StringEnum": {
-      "type": "array",
-      "items": { "type": "string" }
     },
     "PrimaryKey": {
       "type": "array",

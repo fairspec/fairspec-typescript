@@ -1,5 +1,5 @@
 import type { CellTypeError, Column } from "@fairspec/metadata"
-import type { CellMapping } from "../Mapping.ts"
+import type { CellMapping } from "../../../models/cell.ts"
 
 export function checkCellType(column: Column, mapping: CellMapping) {
   const isErrorExpr = mapping.source.isNotNull().and(mapping.target.isNull())
@@ -8,7 +8,6 @@ export function checkCellType(column: Column, mapping: CellMapping) {
     type: "cell/type",
     columnName: column.name,
     columnType: column.type ?? "any",
-    columnFormat: column.format,
     rowNumber: 0,
     cell: "",
   }

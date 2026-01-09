@@ -202,13 +202,6 @@ function convertFieldToColumn(field: FrictionlessField): Column {
       if (field.title) property.title = field.title
       if (field.description) property.description = field.description
       if (field.rdfType) property.rdfType = field.rdfType
-      if (
-        field.constraints?.enum &&
-        Array.isArray(field.constraints.enum) &&
-        typeof field.constraints.enum[0] === "boolean"
-      ) {
-        property.enum = field.constraints.enum as boolean[]
-      }
       if (field.trueValues) property.trueValues = field.trueValues
       if (field.falseValues) property.falseValues = field.falseValues
       if (field.missingValues) property.missingValues = field.missingValues

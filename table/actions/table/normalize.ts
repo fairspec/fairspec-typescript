@@ -1,36 +1,44 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
+import { getColumns } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { normalizeField } from "../field/index.ts"
-import type { SchemaMapping } from "../schema/index.ts"
-import { getPolarsSchema, matchSchemaField } from "../schema/index.ts"
-import type { Table } from "./Table.ts"
+import { normalizeColumn } from "../../actions/column/normalize.ts"
+import { getPolarsSchema } from "../../helpers/schema.ts"
+import type { SchemaMapping } from "../../models/schema.ts"
+import type { Table } from "../../models/table.ts"
 
 const HEAD_ROWS = 100
 
-export async function normalizeTable(table: Table, schema: Schema) {
+export async function normalizeTable(table: Table, tableSchema: TableSchema) {
   const head = await table.head(HEAD_ROWS).collect()
   const polarsSchema = getPolarsSchema(head.schema)
 
-  const mapping = { source: polarsSchema, target: schema }
-  return table.select(...Object.values(normalizeFields(mapping)))
+  const mapping = { source: polarsSchema, target: tableSchema }
+  return table.select(...Object.values(normalizeColumns(mapping)))
 }
 
-export function normalizeFields(mapping: SchemaMapping) {
+export function normalizeColumns(mapping: SchemaMapping) {
   const exprs: Record<string, pl.Expr> = {}
+  const columns = getColumns(mapping.target)
 
-  for (const [index, field] of mapping.target.fields.entries()) {
-    const fieldMapping = matchSchemaField(mapping, field, index)
-    let expr = pl.lit(null).alias(field.name)
+  for (const column of columns) {
+    let expr = pl.lit(null).alias(column.name)
 
-    if (fieldMapping) {
-      const missingValues = field.missingValues ?? mapping.target.missingValues
-      const mergedField = { ...field, missingValues }
+    const polarsColumn = mapping.source.columns.find(
+      polarsColumn => polarsColumn.name === column.name,
+    )
 
-      const column = { source: fieldMapping.source, target: mergedField }
-      expr = normalizeField(column)
+    if (polarsColumn) {
+      const missingValues =
+        column.property.missingValues ?? mapping.target.missingValues
+
+      // TODO: Is it ok to merge that way? Type mismatch?
+      const mergedColumn = { ...column, missingValues }
+
+      const columnMapping = { source: polarsColumn, target: mergedColumn }
+      expr = normalizeColumn(columnMapping)
     }
 
-    exprs[field.name] = expr
+    exprs[column.name] = expr
   }
 
   return exprs

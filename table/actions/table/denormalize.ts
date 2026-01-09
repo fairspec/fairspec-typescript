@@ -1,29 +1,36 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
+import { getColumns } from "@fairspec/metadata"
 import type * as pl from "nodejs-polars"
-import type { DenormalizeFieldOptions } from "../field/index.ts"
-import { denormalizeField } from "../field/index.ts"
-import type { Table } from "./Table.ts"
+import type { DenormalizeColumnOptions } from "../../actions/column/denormalize.ts"
+import { denormalizeColumn } from "../../actions/column/denormalize.ts"
+import type { Table } from "../../models/table.ts"
 
 export async function denormalizeTable(
   table: Table,
-  schema: Schema,
-  options?: DenormalizeFieldOptions,
+  tableSchema: TableSchema,
+  options?: DenormalizeColumnOptions,
 ) {
-  return table.select(...Object.values(denormalizeFields(schema, options)))
+  return table.select(
+    ...Object.values(denormalizeColumns(tableSchema, options)),
+  )
 }
 
-export function denormalizeFields(
-  schema: Schema,
-  options?: DenormalizeFieldOptions,
+export function denormalizeColumns(
+  tableSchema: TableSchema,
+  options?: DenormalizeColumnOptions,
 ) {
   const exprs: Record<string, pl.Expr> = {}
+  const columns = getColumns(tableSchema)
 
-  for (const field of schema.fields) {
-    const missingValues = field.missingValues ?? schema.missingValues
-    const mergedField = { ...field, missingValues }
+  for (const column of columns) {
+    const missingValues =
+      column.property.missingValues ?? tableSchema.missingValues
 
-    const expr = denormalizeField(mergedField, options)
-    exprs[field.name] = expr
+    // TODO: Is it ok to merge that way? Type mismatch?
+    const mergedColumn = { ...column, missingValues }
+
+    const expr = denormalizeColumn(mergedColumn, options)
+    exprs[column.name] = expr
   }
 
   return exprs

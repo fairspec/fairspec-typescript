@@ -1,28 +1,19 @@
-import type {
-  FieldType,
-  GeojsonField,
-  GeopointField,
-  ListField,
-  Schema,
-  StringField,
-} from "@fairspec/metadata"
-import type { PolarsField } from "../field/index.ts"
-import type { PolarsSchema } from "./Schema.ts"
+import type { Column, ListColumn, TableSchema } from "@fairspec/metadata"
+import type { PolarsColumn } from "./column.ts"
 
 export interface PolarsSchema {
-  fields: PolarsField[]
+  columns: PolarsColumn[]
 }
 
 export interface SchemaMapping {
   source: PolarsSchema
-  target: Schema
+  target: TableSchema
 }
 
 export interface SchemaOptions {
-  fieldNames?: string[]
-  fieldTypes?: Record<string, FieldType>
+  columnNames?: string[]
+  columnTypes?: Record<string, Column["type"]>
   missingValues?: string[]
-  stringFormat?: StringField["format"]
   decimalChar?: string
   groupChar?: string
   bareNumber?: boolean
@@ -33,7 +24,5 @@ export interface SchemaOptions {
   timeFormat?: string
   arrayType?: "array" | "list"
   listDelimiter?: string
-  listItemType?: ListField["itemType"]
-  geopointFormat?: GeopointField["format"]
-  geojsonFormat?: GeojsonField["format"]
+  listItemType?: ListColumn["property"]["itemType"]
 }

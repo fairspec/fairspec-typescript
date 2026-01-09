@@ -69,5 +69,52 @@ export const ColumnType = z.enum([
   "year",
 ])
 
+const StringColumnPropertyGroup = z.discriminatedUnion("format", [
+  ListColumn.shape.property,
+  Base64Column.shape.property,
+  HexColumn.shape.property,
+  EmailColumn.shape.property,
+  UuidColumn.shape.property,
+  UrlColumn.shape.property,
+  DatetimeColumn.shape.property,
+  DateColumn.shape.property,
+  TimeColumn.shape.property,
+  DurationColumn.shape.property,
+  WktColumn.shape.property,
+  WkbColumn.shape.property,
+  StringColumn.shape.property,
+])
+
+const IntegerColumnPropertyGroup = z.discriminatedUnion("format", [
+  YearColumn.shape.property,
+  IntegerColumn.shape.property,
+])
+
+const ObjectColumnPropertyGroup = z.discriminatedUnion("format", [
+  GeojsonColumn.shape.property,
+  TopojsonColumn.shape.property,
+  ObjectColumn.shape.property,
+])
+
+const NumberColumnPropertyGroup = z.discriminatedUnion("format", [
+  NumberColumn.shape.property,
+])
+const BooleanColumnPropertyGroup = z.discriminatedUnion("format", [
+  BooleanColumn.shape.property,
+])
+const ArrayColumnPropertyGroup = z.discriminatedUnion("format", [
+  ArrayColumn.shape.property,
+])
+
+export const ColumnProperty = z.discriminatedUnion("type", [
+  StringColumnPropertyGroup,
+  IntegerColumnPropertyGroup,
+  NumberColumnPropertyGroup,
+  BooleanColumnPropertyGroup,
+  ArrayColumnPropertyGroup,
+  ObjectColumnPropertyGroup,
+])
+
 export type Column = z.infer<typeof Column>
 export type ColumnType = z.infer<typeof ColumnType>
+export type ColumnProperty = z.infer<typeof ColumnProperty>

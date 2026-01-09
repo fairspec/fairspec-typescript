@@ -2,7 +2,11 @@ import { objectEntries } from "ts-extras"
 import type { Column } from "../../models/column/column.ts"
 import type { TableSchema } from "../../models/tableSchema.ts"
 
-export function getTableSchemaColumns(tableSchema: TableSchema) {
+export function getColumnProperties(columns: Column[]) {
+  return columns.map(column => column.property)
+}
+
+export function getColumns(tableSchema: TableSchema) {
   const columns: Column[] = []
 
   for (const [name, property] of objectEntries(tableSchema.properties ?? {})) {

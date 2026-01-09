@@ -39,6 +39,10 @@ export {
 export { inferResourceName } from "./actions/resource/infer.ts"
 export { normalizeResource } from "./actions/resource/normalize.ts"
 export { assertTableSchema } from "./actions/tableSchema/assert.ts"
+export {
+  getColumnProperties,
+  getColumns,
+} from "./actions/tableSchema/column.ts"
 export { loadTableSchema } from "./actions/tableSchema/load.ts"
 export { resolveTableSchema } from "./actions/tableSchema/resolve.ts"
 export { saveTableSchema } from "./actions/tableSchema/save.ts"

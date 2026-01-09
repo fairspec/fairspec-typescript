@@ -33,10 +33,10 @@
     "Properties": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "#/$defs/TableProperty"
+        "$ref": "#/$defs/ColumnProperty"
       }
     },
-    "TableProperty": {
+    "ColumnProperty": {
       "required": ["type"],
       "properties": {
         "type": {
@@ -46,31 +46,31 @@
       "allOf": [
         {
           "if": { "properties": { "type": { "const": "integer" } } },
-          "then": { "$ref": "#/$defs/IntegerTableProperty" }
+          "then": { "$ref": "#/$defs/IntegerColumnPropertyGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "number" } } },
-          "then": { "$ref": "#/$defs/NumberTableProperty" }
+          "then": { "$ref": "#/$defs/NumberColumnPropertyGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "boolean" } } },
-          "then": { "$ref": "#/$defs/BooleanTableProperty" }
+          "then": { "$ref": "#/$defs/BooleanColumnPropertyGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "string" } } },
-          "then": { "$ref": "#/$defs/StringTableProperty" }
+          "then": { "$ref": "#/$defs/StringColumnPropertyGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "array" } } },
-          "then": { "$ref": "#/$defs/ArrayTableProperty" }
+          "then": { "$ref": "#/$defs/ArrayColumnPropertyGroup" }
         },
         {
           "if": { "properties": { "type": { "const": "object" } } },
-          "then": { "$ref": "#/$defs/ObjectTableProperty" }
+          "then": { "$ref": "#/$defs/ObjectColumnPropertyGroup" }
         }
       ]
     },
-    "StringTableProperty": {
+    "StringColumnPropertyGroup": {
       "properties": {
         "format": {
           "enum": [
@@ -144,7 +144,7 @@
         }
       ]
     },
-    "IntegerTableProperty": {
+    "IntegerColumnPropertyGroup": {
       "properties": {
         "format": {
           "enum": ["year"]
@@ -161,7 +161,7 @@
         }
       ]
     },
-    "NumberTableProperty": {
+    "NumberColumnPropertyGroup": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
@@ -169,7 +169,7 @@
         }
       ]
     },
-    "BooleanTableProperty": {
+    "BooleanColumnPropertyGroup": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
@@ -177,7 +177,7 @@
         }
       ]
     },
-    "ArrayTableProperty": {
+    "ArrayColumnPropertyGroup": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
@@ -185,7 +185,7 @@
         }
       ]
     },
-    "ObjectTableProperty": {
+    "ObjectColumnPropertyGroup": {
       "properties": {
         "format": {
           "enum": ["geojson", "topojson"]

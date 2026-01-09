@@ -1,14 +1,14 @@
-import type { Field } from "@fairspec/metadata"
+import type { Column } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { desubstituteField } from "./desubstitute.ts"
 import { stringifyField } from "./stringify.ts"
 
 export type DenormalizeFieldOptions = {
-  nativeTypes?: Exclude<Field["type"], undefined>[]
+  nativeTypes?: Exclude<Column["type"], undefined>[]
 }
 
 export function denormalizeField(
-  field: Field,
+  field: Column,
   options?: DenormalizeFieldOptions,
 ) {
   let expr = pl.col(field.name)

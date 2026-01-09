@@ -1,8 +1,5 @@
 import type { Dialect } from "@fairspec/metadata"
 
-export type DataRow = unknown[]
-export type DataRecord = Record<string, unknown>
-
 export function getRecordsFromRows(rows: DataRow[], dialect?: Dialect) {
   const records: DataRecord[] = []
 

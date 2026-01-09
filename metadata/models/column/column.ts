@@ -87,5 +87,5 @@ export const ColumnType = z.enum([
   "year",
 ])
 
-export type ColumnType = z.infer<typeof ColumnType>
 export type Column = z.infer<typeof Column>
+export type ColumnType = z.infer<typeof ColumnType>

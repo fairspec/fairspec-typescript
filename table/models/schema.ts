@@ -3,8 +3,20 @@ import type {
   GeojsonField,
   GeopointField,
   ListField,
+  Schema,
   StringField,
 } from "@fairspec/metadata"
+import type { PolarsField } from "../field/index.ts"
+import type { PolarsSchema } from "./Schema.ts"
+
+export interface PolarsSchema {
+  fields: PolarsField[]
+}
+
+export interface SchemaMapping {
+  source: PolarsSchema
+  target: Schema
+}
 
 export interface SchemaOptions {
   fieldNames?: string[]

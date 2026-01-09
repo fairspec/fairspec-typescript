@@ -322,7 +322,7 @@ describe("convertTableSchemaToFrictionless", () => {
           type: "number",
         },
       },
-      missingValues: ["", "NA", 0, false],
+      missingValues: ["", "NA", 0],
     }
 
     const frictionlessSchema: FrictionlessSchema = {
@@ -332,7 +332,7 @@ describe("convertTableSchemaToFrictionless", () => {
           type: "number",
         },
       ],
-      missingValues: ["", "NA", "0", "false"],
+      missingValues: ["", "NA", "0"],
     }
 
     const result = convertTableSchemaToFrictionless(tableSchema)

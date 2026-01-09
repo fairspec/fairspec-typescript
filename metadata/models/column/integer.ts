@@ -8,36 +8,31 @@ export const IntegerColumn = BaseColumn.extend({
     format: z.undefined().optional(),
 
     enum: z
-      .array(z.number().int())
+      .array(z.int())
       .optional()
       .describe("An optional array of allowed values for the column"),
 
     minimum: z
-      .number()
       .int()
       .optional()
       .describe("An optional minimum value constraint (inclusive)"),
 
     maximum: z
-      .number()
       .int()
       .optional()
       .describe("An optional maximum value constraint (inclusive)"),
 
     exclusiveMinimum: z
-      .number()
       .int()
       .optional()
       .describe("An optional minimum value constraint (exclusive)"),
 
     exclusiveMaximum: z
-      .number()
       .int()
       .optional()
       .describe("An optional maximum value constraint (exclusive)"),
 
     multipleOf: z
-      .number()
       .int()
       .min(1)
       .optional()
@@ -48,9 +43,9 @@ export const IntegerColumn = BaseColumn.extend({
     categories: z
       .array(
         z.union([
-          z.number().int(),
+          z.int(),
           z.object({
-            value: z.number().int(),
+            value: z.int(),
             label: z.string(),
           }),
         ]),
@@ -62,9 +57,9 @@ export const IntegerColumn = BaseColumn.extend({
       .array(
         z.union([
           z.string(),
-          z.number().int(),
+          z.int(),
           z.object({
-            value: z.union([z.string(), z.number().int()]),
+            value: z.union([z.string(), z.int()]),
             label: z.string(),
           }),
         ]),

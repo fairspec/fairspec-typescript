@@ -35,10 +35,10 @@ export const TableSchema = z.object({
     .array(
       z.union([
         z.string(),
+        z.int(),
         z.number(),
-        z.boolean(),
         z.object({
-          value: z.union([z.string(), z.number(), z.boolean()]),
+          value: z.union([z.string(), z.int(), z.number()]),
           label: z.string(),
         }),
       ]),

@@ -13,9 +13,8 @@ export const ArrayColumn = BaseColumn.extend({
       .array(
         z.union([
           z.string(),
-          z.array(z.any()),
           z.object({
-            value: z.union([z.string(), z.array(z.any())]),
+            value: z.string(),
             label: z.string(),
           }),
         ]),

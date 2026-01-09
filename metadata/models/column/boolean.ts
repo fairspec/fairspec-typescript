@@ -30,9 +30,8 @@ export const BooleanColumn = BaseColumn.extend({
       .array(
         z.union([
           z.string(),
-          z.boolean(),
           z.object({
-            value: z.union([z.string(), z.boolean()]),
+            value: z.string(),
             label: z.string(),
           }),
         ]),

@@ -531,11 +531,11 @@
       "type": "array",
       "items": {
         "oneOf": [
-          { "type": ["string", "integer", "number", "boolean"] },
+          { "type": ["string", "number"] },
           {
             "type": "object",
             "properties": {
-              "value": { "type": ["string", "integer", "number", "boolean"] },
+              "value": { "type": ["string", "integer", "number"] },
               "label": { "type": "string" }
             }
           }
@@ -591,7 +591,7 @@
       "type": "array",
       "items": {
         "oneOf": [
-          { "type": ["string", "boolean"] },
+          { "type": "string" },
           {
             "type": "object",
             "properties": {
@@ -606,11 +606,11 @@
       "type": "array",
       "items": {
         "oneOf": [
-          { "type": ["string", "array"] },
+          { "type": "string" },
           {
             "type": "object",
             "properties": {
-              "value": { "type": ["string", "array"] },
+              "value": { "type": "string" },
               "label": { "type": "string" }
             }
           }
@@ -621,11 +621,11 @@
       "type": "array",
       "items": {
         "oneOf": [
-          { "type": ["string", "object"] },
+          { "type": "string" },
           {
             "type": "object",
             "properties": {
-              "value": { "type": ["string", "object"] },
+              "value": { "type": "string" },
               "label": { "type": "string" }
             }
           }

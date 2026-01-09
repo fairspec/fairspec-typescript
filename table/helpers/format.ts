@@ -1,16 +1,19 @@
-import type { Dialect } from "@fairspec/metadata"
+import type { Format } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import type { Table } from "../table/index.ts"
+import type { Table } from "../models/table.ts"
 
 export async function joinHeaderRows(
   table: Table,
-  options: { dialect: Dialect },
+  options: { format: Format },
 ) {
-  const { dialect } = options
+  const { format } = options
+  if (!("headerJoin" in format)) {
+    return table
+  }
 
-  const headerOffset = getHeaderOffset(dialect)
-  const headerRows = getHeaderRows(dialect)
-  const headerJoin = dialect?.headerJoin ?? " "
+  const headerOffset = getHeaderOffset(format)
+  const headerRows = getHeaderRows(format)
+  const headerJoin = format?.headerJoin ?? " "
   if (headerRows.length < 2) {
     return table
   }
@@ -40,25 +43,27 @@ export async function joinHeaderRows(
     .drop("row_nr")
 }
 
-export function skipCommentRows(table: Table, options: { dialect: Dialect }) {
-  const { dialect } = options
+export function skipCommentRows(table: Table, options: { format: Format }) {
+  const { format } = options
+  if (!("commentRows" in format)) {
+    return table
+  }
 
-  const commentOffset = getCommentOffset(dialect)
-  if (!dialect?.commentRows) {
+  const commentOffset = getCommentOffset(format)
+  if (!format?.commentRows) {
     return table
   }
 
   return table
     .withRowCount()
     .withColumn(pl.col("row_nr").add(1))
-    .filter(pl.col("row_nr").add(commentOffset).isIn(dialect.commentRows).not())
+    .filter(pl.col("row_nr").add(commentOffset).isIn(format.commentRows).not())
     .drop("row_nr")
 }
 
-export function stripInitialSpace(table: Table, options: { dialect: Dialect }) {
-  const { dialect } = options
-
-  if (!dialect?.skipInitialSpace) {
+export function stripInitialSpace(table: Table, options: { format: Format }) {
+  const { format } = options
+  if (!("skipInitialSpace" in format)) {
     return table
   }
 
@@ -69,16 +74,16 @@ export function stripInitialSpace(table: Table, options: { dialect: Dialect }) {
   )
 }
 
-function getHeaderOffset(dialect?: Dialect) {
-  const headerRows = getHeaderRows(dialect)
+function getHeaderOffset(format?: Format) {
+  const headerRows = getHeaderRows(format)
   return headerRows.at(0) ?? 0
 }
 
-function getHeaderRows(dialect?: Dialect) {
-  return dialect?.header !== false ? (dialect?.headerRows ?? [1]) : []
+function getHeaderRows(format?: Format) {
+  return format?.headerRows ? format.headerRows : []
 }
 
-function getCommentOffset(dialect?: Dialect) {
-  const headerRows = getHeaderRows(dialect)
+function getCommentOffset(format?: Format) {
+  const headerRows = getHeaderRows(format)
   return headerRows.at(-1) ?? 0
 }

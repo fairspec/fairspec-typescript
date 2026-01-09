@@ -14,7 +14,6 @@ import type { FrictionlessNumberField } from "../../models/field/number.ts"
 import type { FrictionlessObjectField } from "../../models/field/object.ts"
 import type { FrictionlessStringField } from "../../models/field/string.ts"
 import type { FrictionlessTimeField } from "../../models/field/time.ts"
-import type { FrictionlessYearField } from "../../models/field/year.ts"
 import type { FrictionlessSchema } from "../../models/schema.ts"
 
 export function convertTableSchemaToFrictionless(
@@ -76,7 +75,6 @@ function convertColumnToField(
     case "base64":
     case "hex":
     case "email":
-    case "uuid":
     case "url":
     case "wkt":
     case "wkb":
@@ -93,8 +91,6 @@ function convertColumnToField(
       return convertToListField(column, isRequired)
     case "integer":
       return convertToIntegerField(column, isRequired)
-    case "year":
-      return convertToYearField(column, isRequired)
     case "number":
       return convertToNumberField(column, isRequired)
     case "boolean":
@@ -141,8 +137,7 @@ function convertToStringField(
   if (
     column.property.format === "email" ||
     column.property.format === "url" ||
-    column.property.format === "base64" ||
-    column.property.format === "uuid"
+    column.property.format === "base64"
   ) {
     field.format =
       column.property.format === "url"
@@ -502,78 +497,6 @@ function convertToIntegerField(
         }[]
       }
     }
-  }
-
-  if (isRequired) {
-    if (!field.constraints) {
-      field.constraints = {}
-    }
-    field.constraints.required = true
-  }
-
-  return field
-}
-
-function convertToYearField(
-  column: Column & { type: "year" },
-  isRequired: boolean,
-): FrictionlessYearField {
-  const field: FrictionlessYearField = {
-    name: column.name,
-    type: "year",
-  }
-
-  if (column.property.title) {
-    field.title = column.property.title
-  }
-
-  if (column.property.description) {
-    field.description = column.property.description
-  }
-
-  if (column.property.rdfType) {
-    field.rdfType = column.property.rdfType
-  }
-
-  if (column.property.missingValues) {
-    field.missingValues = column.property.missingValues.map(v =>
-      typeof v === "string" ? v : String(v),
-    )
-  }
-
-  if (column.property.enum) {
-    if (!field.constraints) {
-      field.constraints = {}
-    }
-    field.constraints.enum = column.property.enum
-  }
-
-  if (column.property.minimum !== undefined) {
-    if (!field.constraints) {
-      field.constraints = {}
-    }
-    field.constraints.minimum = column.property.minimum
-  }
-
-  if (column.property.maximum !== undefined) {
-    if (!field.constraints) {
-      field.constraints = {}
-    }
-    field.constraints.maximum = column.property.maximum
-  }
-
-  if (column.property.exclusiveMinimum !== undefined) {
-    if (!field.constraints) {
-      field.constraints = {}
-    }
-    field.constraints.exclusiveMinimum = column.property.exclusiveMinimum
-  }
-
-  if (column.property.exclusiveMaximum !== undefined) {
-    if (!field.constraints) {
-      field.constraints = {}
-    }
-    field.constraints.exclusiveMaximum = column.property.exclusiveMaximum
   }
 
   if (isRequired) {

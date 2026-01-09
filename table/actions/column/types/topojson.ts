@@ -10,6 +10,6 @@ export async function inspectTopojsonColumn(
   table: Table,
 ) {
   return inspectJsonColumn(column, table, {
-    formatJsonSchema: topojsonProfile,
+    typeJsonSchema: topojsonProfile,
   })
 }

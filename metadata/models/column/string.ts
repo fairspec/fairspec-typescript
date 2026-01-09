@@ -33,6 +33,7 @@ export const StringColumn = BaseColumn.extend({
       .optional()
       .describe("An optional maximum length constraint for string values"),
 
+    // TODO: categories should not be avaialbe for string children like email, url, etc.?
     categories: z
       .array(
         z.union([

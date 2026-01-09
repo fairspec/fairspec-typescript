@@ -120,22 +120,6 @@ function convertFieldToColumn(field: FrictionlessField): Column {
         if (field.missingValues) property.missingValues = field.missingValues
         return { name: field.name, type: "base64", property }
       }
-      if (field.format === "uuid") {
-        const property: Column["property"] = { type: "string", format: "uuid" }
-        if (field.title) property.title = field.title
-        if (field.description) property.description = field.description
-        if (field.rdfType) property.rdfType = field.rdfType
-        if (field.constraints?.enum) property.enum = field.constraints.enum
-        if (field.constraints?.pattern)
-          property.pattern = field.constraints.pattern
-        if (field.constraints?.minLength)
-          property.minLength = field.constraints.minLength
-        if (field.constraints?.maxLength)
-          property.maxLength = field.constraints.maxLength
-        if (field.categories) property.categories = field.categories
-        if (field.missingValues) property.missingValues = field.missingValues
-        return { name: field.name, type: "uuid", property }
-      }
       const property: Column["property"] = { type: "string" }
       if (field.title) property.title = field.title
       if (field.description) property.description = field.description
@@ -286,7 +270,7 @@ function convertFieldToColumn(field: FrictionlessField): Column {
     }
 
     case "year": {
-      const property: Column["property"] = { type: "integer", format: "year" }
+      const property: Column["property"] = { type: "integer" }
       if (field.title) property.title = field.title
       if (field.description) property.description = field.description
       if (field.rdfType) property.rdfType = field.rdfType
@@ -304,7 +288,7 @@ function convertFieldToColumn(field: FrictionlessField): Column {
         property.maximum = field.constraints.maximum
       }
       if (field.missingValues) property.missingValues = field.missingValues
-      return { name: field.name, type: "year", property }
+      return { name: field.name, type: "integer", property }
     }
 
     case "duration": {

@@ -78,7 +78,6 @@
             "hex",
             "base64",
             "email",
-            "uuid",
             "url",
             "date-time",
             "date",
@@ -111,10 +110,6 @@
           "then": { "$ref": "#/$defs/EmailColumnProperty" }
         },
         {
-          "if": { "properties": { "format": { "const": "uuid" } } },
-          "then": { "$ref": "#/$defs/UuidColumnProperty" }
-        },
-        {
           "if": { "properties": { "format": { "const": "url" } } },
           "then": { "$ref": "#/$defs/UrlColumnProperty" }
         },
@@ -145,19 +140,10 @@
       ]
     },
     "IntegerColumnPropertyGroup": {
-      "properties": {
-        "format": {
-          "enum": ["year"]
-        }
-      },
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
           "then": { "$ref": "#/$defs/IntegerColumnProperty" }
-        },
-        {
-          "if": { "properties": { "format": { "const": "year" } } },
-          "then": { "$ref": "#/$defs/YearColumnProperty" }
         }
       ]
     },
@@ -320,12 +306,6 @@
         "format": { "const": "email" }
       }
     },
-    "UuidColumnProperty": {
-      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
-      "properties": {
-        "format": { "const": "uuid" }
-      }
-    },
     "UrlColumnProperty": {
       "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
@@ -369,12 +349,6 @@
       "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "wkb" }
-      }
-    },
-    "YearColumnProperty": {
-      "allOf": [{ "$ref": "#/$defs/IntegerColumnProperty" }],
-      "properties": {
-        "format": { "const": "year" }
       }
     },
     "GeojsonColumnProperty": {

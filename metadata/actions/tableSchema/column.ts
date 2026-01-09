@@ -25,9 +25,6 @@ export function getColumns(tableSchema: TableSchema) {
           case "email":
             columns.push({ name, type: "email", property })
             break
-          case "uuid":
-            columns.push({ name, type: "uuid", property })
-            break
           case "url":
             columns.push({ name, type: "url", property })
             break
@@ -56,9 +53,6 @@ export function getColumns(tableSchema: TableSchema) {
         break
       case "integer":
         switch (property.format) {
-          case "year":
-            columns.push({ name, type: "year", property })
-            break
           case undefined:
             columns.push({ name, type: "integer", property })
             break

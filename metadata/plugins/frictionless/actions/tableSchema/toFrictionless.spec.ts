@@ -186,7 +186,6 @@ describe("convertTableSchemaToFrictionless", () => {
       properties: {
         year: {
           type: "integer",
-          format: "year",
         },
         duration: {
           type: "string",
@@ -199,7 +198,7 @@ describe("convertTableSchemaToFrictionless", () => {
       fields: [
         {
           name: "year",
-          type: "year",
+          type: "integer",
         },
         {
           name: "duration",

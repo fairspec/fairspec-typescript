@@ -10,6 +10,6 @@ export async function inspectGeojsonColumn(
   table: Table,
 ) {
   return inspectJsonColumn(column, table, {
-    formatJsonSchema: geojsonProfile,
+    typeJsonSchema: geojsonProfile,
   })
 }

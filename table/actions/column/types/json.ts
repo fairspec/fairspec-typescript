@@ -17,12 +17,12 @@ export async function inspectJsonColumn(
   column: ArrayColumn | ObjectColumn | GeojsonColumn | TopojsonColumn,
   table: Table,
   options?: {
-    formatJsonSchema?: Record<string, any>
+    typeJsonSchema?: Record<string, any>
   },
 ) {
   const errors: CellError[] = []
 
-  const formatJsonSchema = options?.formatJsonSchema
+  const typeJsonSchema = options?.typeJsonSchema
   const constraintJsonSchema = column.property
 
   const frame = await table
@@ -55,9 +55,9 @@ export async function inspectJsonColumn(
       continue
     }
 
-    if (formatJsonSchema) {
+    if (typeJsonSchema) {
       const formatErrors = await inspectJsonValue(target, {
-        jsonSchema: formatJsonSchema,
+        jsonSchema: typeJsonSchema,
       })
 
       if (formatErrors.length) {

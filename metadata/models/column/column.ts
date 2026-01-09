@@ -16,7 +16,6 @@ import { StringColumn } from "./string.ts"
 import { TimeColumn } from "./time.ts"
 import { TopojsonColumn } from "./topojson.ts"
 import { UrlColumn } from "./url.ts"
-import { UuidColumn } from "./uuid.ts"
 import { WkbColumn } from "./wkb.ts"
 import { WktColumn } from "./wkt.ts"
 
@@ -38,7 +37,6 @@ export const Column = z.discriminatedUnion("type", [
   TimeColumn,
   TopojsonColumn,
   UrlColumn,
-  UuidColumn,
   WkbColumn,
   WktColumn,
 ])
@@ -61,7 +59,6 @@ export const ColumnType = z.enum([
   "time",
   "topojson",
   "url",
-  "uuid",
   "wkb",
   "wkt",
 ])
@@ -71,7 +68,6 @@ const StringColumnPropertyGroup = z.discriminatedUnion("format", [
   Base64Column.shape.property,
   HexColumn.shape.property,
   EmailColumn.shape.property,
-  UuidColumn.shape.property,
   UrlColumn.shape.property,
   DatetimeColumn.shape.property,
   DateColumn.shape.property,

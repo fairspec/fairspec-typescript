@@ -3,89 +3,92 @@ import { BaseColumn } from "./base.ts"
 
 export const IntegerColumn = BaseColumn.extend({
   type: z.literal("integer"),
-  format: z.undefined().optional(),
+  property: BaseColumn.shape.property.extend({
+    type: z.literal("integer"),
+    format: z.undefined().optional(),
 
-  enum: z
-    .array(z.number().int())
-    .optional()
-    .describe("An optional array of allowed values for the column"),
+    enum: z
+      .array(z.number().int())
+      .optional()
+      .describe("An optional array of allowed values for the column"),
 
-  minimum: z
-    .number()
-    .int()
-    .optional()
-    .describe("An optional minimum value constraint (inclusive)"),
+    minimum: z
+      .number()
+      .int()
+      .optional()
+      .describe("An optional minimum value constraint (inclusive)"),
 
-  maximum: z
-    .number()
-    .int()
-    .optional()
-    .describe("An optional maximum value constraint (inclusive)"),
+    maximum: z
+      .number()
+      .int()
+      .optional()
+      .describe("An optional maximum value constraint (inclusive)"),
 
-  exclusiveMinimum: z
-    .number()
-    .int()
-    .optional()
-    .describe("An optional minimum value constraint (exclusive)"),
+    exclusiveMinimum: z
+      .number()
+      .int()
+      .optional()
+      .describe("An optional minimum value constraint (exclusive)"),
 
-  exclusiveMaximum: z
-    .number()
-    .int()
-    .optional()
-    .describe("An optional maximum value constraint (exclusive)"),
+    exclusiveMaximum: z
+      .number()
+      .int()
+      .optional()
+      .describe("An optional maximum value constraint (exclusive)"),
 
-  multipleOf: z
-    .number()
-    .int()
-    .min(1)
-    .optional()
-    .describe(
-      "An optional constraint that values must be a multiple of this number",
-    ),
+    multipleOf: z
+      .number()
+      .int()
+      .min(1)
+      .optional()
+      .describe(
+        "An optional constraint that values must be a multiple of this number",
+      ),
 
-  categories: z
-    .array(
-      z.union([
-        z.number().int(),
-        z.object({
-          value: z.number().int(),
-          label: z.string(),
-        }),
-      ]),
-    )
-    .optional()
-    .describe("An optional array of categorical values with optional labels"),
+    categories: z
+      .array(
+        z.union([
+          z.number().int(),
+          z.object({
+            value: z.number().int(),
+            label: z.string(),
+          }),
+        ]),
+      )
+      .optional()
+      .describe("An optional array of categorical values with optional labels"),
 
-  missingValues: z
-    .array(
-      z.union([
-        z.string(),
-        z.number().int(),
-        z.object({
-          value: z.union([z.string(), z.number().int()]),
-          label: z.string(),
-        }),
-      ]),
-    )
-    .optional()
-    .describe(
-      "An optional column-specific list of values that represent missing or null data",
-    ),
+    missingValues: z
+      .array(
+        z.union([
+          z.string(),
+          z.number().int(),
+          z.object({
+            value: z.union([z.string(), z.number().int()]),
+            label: z.string(),
+          }),
+        ]),
+      )
+      .optional()
+      .describe(
+        "An optional column-specific list of values that represent missing or null data",
+      ),
 
-  groupChar: z
-    .string()
-    .length(1)
-    .optional()
-    .describe(
-      "An optional single character used as the thousands separator in the data",
-    ),
+    groupChar: z
+      .string()
+      .length(1)
+      .optional()
+      .describe(
+        "An optional single character used as the thousands separator in the data",
+      ),
 
-  withText: z
-    .boolean()
-    .optional()
-    .describe(
-      "An optional boolean indicating whether numeric values may include non-numeric text that should be stripped during parsing",
-    ),
+    withText: z
+      .boolean()
+      .optional()
+      .describe(
+        "An optional boolean indicating whether numeric values may include non-numeric text that should be stripped during parsing",
+      ),
+  }),
 })
 
 export type IntegerColumn = z.infer<typeof IntegerColumn>

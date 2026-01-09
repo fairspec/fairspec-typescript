@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { Column } from "./column/column.ts"
 import { ForeignKey } from "./foreignKey.ts"
+import { TableProperty } from "./tableProperty.ts"
 import { UniqueKey } from "./uniqueKey.ts"
 
 export const TableSchema = z.object({
@@ -25,7 +25,8 @@ export const TableSchema = z.object({
     .describe("An optional list of column names that must be present"),
 
   properties: z
-    .record(z.string(), Column)
+    .record(z.string(), TableProperty)
+    .optional()
     .describe(
       "An object defining the schema for table columns, where each key is a column name",
     ),

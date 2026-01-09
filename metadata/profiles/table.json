@@ -33,10 +33,10 @@
     "Properties": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "#/$defs/Column"
+        "$ref": "#/$defs/TableProperty"
       }
     },
-    "Column": {
+    "TableProperty": {
       "required": ["type"],
       "properties": {
         "type": {
@@ -46,31 +46,31 @@
       "allOf": [
         {
           "if": { "properties": { "type": { "const": "integer" } } },
-          "then": { "$ref": "#/$defs/IntegerColumnGroup" }
+          "then": { "$ref": "#/$defs/IntegerTableProperty" }
         },
         {
           "if": { "properties": { "type": { "const": "number" } } },
-          "then": { "$ref": "#/$defs/NumberColumnGroup" }
+          "then": { "$ref": "#/$defs/NumberTableProperty" }
         },
         {
           "if": { "properties": { "type": { "const": "boolean" } } },
-          "then": { "$ref": "#/$defs/BooleanColumnGroup" }
+          "then": { "$ref": "#/$defs/BooleanTableProperty" }
         },
         {
           "if": { "properties": { "type": { "const": "string" } } },
-          "then": { "$ref": "#/$defs/StringColumnGroup" }
+          "then": { "$ref": "#/$defs/StringTableProperty" }
         },
         {
           "if": { "properties": { "type": { "const": "array" } } },
-          "then": { "$ref": "#/$defs/ArrayColumnGroup" }
+          "then": { "$ref": "#/$defs/ArrayTableProperty" }
         },
         {
           "if": { "properties": { "type": { "const": "object" } } },
-          "then": { "$ref": "#/$defs/ObjectColumnGroup" }
+          "then": { "$ref": "#/$defs/ObjectTableProperty" }
         }
       ]
     },
-    "StringColumnGroup": {
+    "StringTableProperty": {
       "properties": {
         "format": {
           "enum": [
@@ -92,59 +92,59 @@
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/StringColumn" }
+          "then": { "$ref": "#/$defs/StringColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "list" } } },
-          "then": { "$ref": "#/$defs/ListColumn" }
+          "then": { "$ref": "#/$defs/ListColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "hex" } } },
-          "then": { "$ref": "#/$defs/HexColumn" }
+          "then": { "$ref": "#/$defs/HexColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "base64" } } },
-          "then": { "$ref": "#/$defs/Base64Column" }
+          "then": { "$ref": "#/$defs/Base64ColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "email" } } },
-          "then": { "$ref": "#/$defs/EmailColumn" }
+          "then": { "$ref": "#/$defs/EmailColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "uuid" } } },
-          "then": { "$ref": "#/$defs/UuidColumn" }
+          "then": { "$ref": "#/$defs/UuidColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "url" } } },
-          "then": { "$ref": "#/$defs/UrlColumn" }
+          "then": { "$ref": "#/$defs/UrlColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "date-time" } } },
-          "then": { "$ref": "#/$defs/DatetimeColumn" }
+          "then": { "$ref": "#/$defs/DatetimeColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "date" } } },
-          "then": { "$ref": "#/$defs/DateColumn" }
+          "then": { "$ref": "#/$defs/DateColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "time" } } },
-          "then": { "$ref": "#/$defs/TimeColumn" }
+          "then": { "$ref": "#/$defs/TimeColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "duration" } } },
-          "then": { "$ref": "#/$defs/DurationColumn" }
+          "then": { "$ref": "#/$defs/DurationColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "wkt" } } },
-          "then": { "$ref": "#/$defs/WktColumn" }
+          "then": { "$ref": "#/$defs/WktColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "wkb" } } },
-          "then": { "$ref": "#/$defs/WkbColumn" }
+          "then": { "$ref": "#/$defs/WkbColumnProperty" }
         }
       ]
     },
-    "IntegerColumnGroup": {
+    "IntegerTableProperty": {
       "properties": {
         "format": {
           "enum": ["year"]
@@ -153,39 +153,39 @@
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/IntegerColumn" }
+          "then": { "$ref": "#/$defs/IntegerColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "year" } } },
-          "then": { "$ref": "#/$defs/YearColumn" }
+          "then": { "$ref": "#/$defs/YearColumnProperty" }
         }
       ]
     },
-    "NumberColumnGroup": {
+    "NumberTableProperty": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/NumberColumn" }
+          "then": { "$ref": "#/$defs/NumberColumnProperty" }
         }
       ]
     },
-    "BooleanColumnGroup": {
+    "BooleanTableProperty": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/BooleanColumn" }
+          "then": { "$ref": "#/$defs/BooleanColumnProperty" }
         }
       ]
     },
-    "ArrayColumnGroup": {
+    "ArrayTableProperty": {
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/ArrayColumn" }
+          "then": { "$ref": "#/$defs/ArrayColumnProperty" }
         }
       ]
     },
-    "ObjectColumnGroup": {
+    "ObjectTableProperty": {
       "properties": {
         "format": {
           "enum": ["geojson", "topojson"]
@@ -194,19 +194,19 @@
       "allOf": [
         {
           "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/ObjectColumn" }
+          "then": { "$ref": "#/$defs/ObjectColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "geojson" } } },
-          "then": { "$ref": "#/$defs/GeojsonColumn" }
+          "then": { "$ref": "#/$defs/GeojsonColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "topojson" } } },
-          "then": { "$ref": "#/$defs/TopojsonColumn" }
+          "then": { "$ref": "#/$defs/TopojsonColumnProperty" }
         }
       ]
     },
-    "BaseColumn": {
+    "BaseColumnProperty": {
       "type": "object",
       "properties": {
         "title": { "$ref": "#/$defs/Title" },
@@ -214,8 +214,8 @@
         "rdfType": { "$ref": "#/$defs/RdfType" }
       }
     },
-    "StringColumn": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumn" }],
+    "StringColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "const": "string" },
         "enum": { "$ref": "#/$defs/StringEnum" },
@@ -227,8 +227,8 @@
         "maxLength": { "$ref": "#/$defs/MaxLength" }
       }
     },
-    "IntegerColumn": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumn" }],
+    "IntegerColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "const": "integer" },
         "enum": { "$ref": "#/$defs/IntegerEnum" },
@@ -244,8 +244,8 @@
         "withText": { "type": "boolean" }
       }
     },
-    "NumberColumn": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumn" }],
+    "NumberColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "const": "number" },
         "enum": { "$ref": "#/$defs/NumberEnum" },
@@ -261,8 +261,8 @@
         "withText": { "type": "boolean" }
       }
     },
-    "BooleanColumn": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumn" }],
+    "BooleanColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "const": "boolean" },
         "enum": { "$ref": "#/$defs/BooleanEnum" },
@@ -272,9 +272,9 @@
         "examples": { "$ref": "#/$defs/BooleanExamples" }
       }
     },
-    "ObjectColumn": {
+    "ObjectColumnProperty": {
       "allOf": [
-        { "$ref": "#/$defs/BaseColumn" },
+        { "$ref": "#/$defs/BaseColumnProperty" },
         { "$ref": "https://json-schema.org/draft/2020-12/schema" }
       ],
       "type": "object",
@@ -283,9 +283,9 @@
         "examples": { "$ref": "#/$defs/ObjectExamples" }
       }
     },
-    "ArrayColumn": {
+    "ArrayColumnProperty": {
       "allOf": [
-        { "$ref": "#/$defs/BaseColumn" },
+        { "$ref": "#/$defs/BaseColumnProperty" },
         { "$ref": "https://json-schema.org/draft/2020-12/schema" }
       ],
       "type": "array",
@@ -294,97 +294,97 @@
         "examples": { "$ref": "#/$defs/ArrayExamples" }
       }
     },
-    "ListColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "ListColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "list" },
         "itemType": { "$ref": "#/$defs/ListItemType" },
         "delimiter": { "$ref": "#/$defs/ListDelimiter" }
       }
     },
-    "Base64Column": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "Base64ColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "base64" }
       }
     },
-    "HexColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "HexColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "hex" }
       }
     },
-    "EmailColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "EmailColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "email" }
       }
     },
-    "UuidColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "UuidColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "uuid" }
       }
     },
-    "UrlColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "UrlColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "url" }
       }
     },
-    "DatetimeColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "DatetimeColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "date-time" },
         "temporalFormat": { "$ref": "#/$defs/TemporalFormat" }
       }
     },
-    "DateColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "DateColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "date" },
         "temporalFormat": { "$ref": "#/$defs/TemporalFormat" }
       }
     },
-    "TimeColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "TimeColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "time" },
         "temporalFormat": { "$ref": "#/$defs/TemporalFormat" }
       }
     },
-    "DurationColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "DurationColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "duration" }
       }
     },
-    "WktColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "WktColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "wkt" }
       }
     },
-    "WkbColumn": {
-      "allOf": [{ "$ref": "#/$defs/StringColumn" }],
+    "WkbColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/StringColumnProperty" }],
       "properties": {
         "format": { "const": "wkb" }
       }
     },
-    "YearColumn": {
-      "allOf": [{ "$ref": "#/$defs/IntegerColumn" }],
+    "YearColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/IntegerColumnProperty" }],
       "properties": {
         "format": { "const": "year" }
       }
     },
-    "GeojsonColumn": {
-      "allOf": [{ "$ref": "#/$defs/ObjectColumn" }],
+    "GeojsonColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/ObjectColumnProperty" }],
       "properties": {
         "format": { "const": "geojson" }
       }
     },
-    "TopojsonColumn": {
-      "allOf": [{ "$ref": "#/$defs/ObjectColumn" }],
+    "TopojsonColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/ObjectColumnProperty" }],
       "properties": {
         "format": { "const": "topojson" }
       }

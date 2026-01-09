@@ -21,46 +21,28 @@ import { WkbColumn } from "./wkb.ts"
 import { WktColumn } from "./wkt.ts"
 import { YearColumn } from "./year.ts"
 
-const StringColumnGroup = z.discriminatedUnion("format", [
-  ListColumn,
-  Base64Column,
-  HexColumn,
-  EmailColumn,
-  UuidColumn,
-  UrlColumn,
-  DatetimeColumn,
-  DateColumn,
-  TimeColumn,
-  DurationColumn,
-  WktColumn,
-  WkbColumn,
-  StringColumn,
-])
-
-const IntegerColumnGroup = z.discriminatedUnion("format", [
-  YearColumn,
-  IntegerColumn,
-])
-
-const ColumnTypeObject = z.discriminatedUnion("format", [
-  GeojsonColumn,
-  TopojsonColumn,
-  ObjectColumn,
-])
-
-const NumberColumnGroup = z.discriminatedUnion("format", [NumberColumn])
-
-const BooleanColumnGroup = z.discriminatedUnion("format", [BooleanColumn])
-
-const ArrayColumnGroup = z.discriminatedUnion("format", [ArrayColumn])
-
 export const Column = z.discriminatedUnion("type", [
-  StringColumnGroup,
-  IntegerColumnGroup,
-  NumberColumnGroup,
-  BooleanColumnGroup,
-  ArrayColumnGroup,
-  ColumnTypeObject,
+  ArrayColumn,
+  Base64Column,
+  BooleanColumn,
+  DateColumn,
+  DatetimeColumn,
+  DurationColumn,
+  EmailColumn,
+  GeojsonColumn,
+  HexColumn,
+  IntegerColumn,
+  ListColumn,
+  NumberColumn,
+  ObjectColumn,
+  StringColumn,
+  TimeColumn,
+  TopojsonColumn,
+  UrlColumn,
+  UuidColumn,
+  WkbColumn,
+  WktColumn,
+  YearColumn,
 ])
 
 export const ColumnType = z.enum([

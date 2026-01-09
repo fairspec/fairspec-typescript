@@ -2,15 +2,15 @@ import { z } from "zod"
 import { ColumnType } from "../column/column.ts"
 
 const BaseCellError = z.object({
-  fieldName: z.string().describe("The name of the field/column"),
+  columnName: z.string().describe("The name of the column"),
   rowNumber: z.number().describe("The row number where the error occurred"),
   cell: z.string().describe("The cell value that caused the error"),
 })
 
 export const CellTypeError = BaseCellError.extend({
   type: z.literal("cell/type").describe("Error type identifier"),
-  fieldType: ColumnType.describe("The expected column type"),
-  fieldFormat: z.string().optional().describe("The expected field format"),
+  columnType: ColumnType.describe("The expected column type"),
+  columnFormat: z.string().optional().describe("The expected column format"),
 })
 
 export const CellRequiredError = BaseCellError.extend({

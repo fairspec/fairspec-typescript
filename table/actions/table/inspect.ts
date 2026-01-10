@@ -1,35 +1,37 @@
 import os from "node:os"
-import type { Field, RowError, Schema, TableError } from "@fairspec/metadata"
+import type {
+  Column,
+  RowError,
+  TableError,
+  TableSchema,
+} from "@fairspec/metadata"
+import { getColumns } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import pAll from "p-all"
-import { inspectField } from "../field/index.ts"
-import { arrayDiff } from "../helpers.ts"
-import type { SchemaMapping } from "../schema/index.ts"
-import { getPolarsSchema, matchSchemaField } from "../schema/index.ts"
+import { inspectColumn } from "../../actions/column/inspect.ts"
+import { getPolarsSchema } from "../../helpers/schema.ts"
+import type { SchemaMapping } from "../../models/schema.ts"
+import type { Table } from "../../models/table.ts"
 import { createChecksRowUnique } from "./checks/unique.ts"
-import type { Table } from "./Table.ts"
 
 export async function inspectTable(
   table: Table,
   options?: {
-    schema?: Schema
+    tableSchema?: TableSchema
     sampleRows?: number
     maxErrors?: number
   },
 ) {
-  const { schema, sampleRows = 100, maxErrors = 1000 } = options ?? {}
+  const { tableSchema, sampleRows = 100, maxErrors = 1000 } = options ?? {}
   const errors: TableError[] = []
 
-  if (schema) {
+  if (tableSchema) {
     const sample = await table.head(sampleRows).collect()
     const polarsSchema = getPolarsSchema(sample.schema)
-    const mapping = { source: polarsSchema, target: schema }
+    const mapping = { source: polarsSchema, target: tableSchema }
 
-    const matchErrors = inspectFieldsMatch(mapping)
-    errors.push(...matchErrors)
-
-    const fieldErrors = await inspectFields(mapping, table, { maxErrors })
-    errors.push(...fieldErrors)
+    const columnErrors = await inspectColumns(mapping, table, { maxErrors })
+    errors.push(...columnErrors)
 
     const rowErrors = await inspectRows(mapping, table, { maxErrors })
     errors.push(...rowErrors)
@@ -38,90 +40,7 @@ export async function inspectTable(
   return errors.slice(0, maxErrors)
 }
 
-function inspectFieldsMatch(mapping: SchemaMapping) {
-  const errors: TableError[] = []
-  const fieldsMatch = mapping.target.fieldsMatch ?? "exact"
-
-  const fields = mapping.target.fields
-  const polarsFields = mapping.source.fields
-
-  const names = fields.map(field => field.name)
-  const polarsNames = polarsFields.map(field => field.name)
-
-  const requiredNames = fields
-    .filter(field => field.constraints?.required)
-    .map(field => field.name)
-
-  const extraFields = polarsFields.length - fields.length
-  const missingFields = fields.length - polarsFields.length
-
-  const extraNames = arrayDiff(polarsNames, names)
-  const missingNames = arrayDiff(names, polarsNames)
-  const missingRequiredNames = arrayDiff(requiredNames, polarsNames)
-
-  if (fieldsMatch === "exact") {
-    if (extraFields > 0) {
-      errors.push({
-        type: "fields/extra",
-        fieldNames: extraNames,
-      })
-    }
-
-    if (missingFields > 0) {
-      errors.push({
-        type: "fields/missing",
-        fieldNames: missingNames,
-      })
-    }
-  }
-
-  if (fieldsMatch === "equal") {
-    if (extraNames.length > 0) {
-      errors.push({
-        type: "fields/extra",
-        fieldNames: extraNames,
-      })
-    }
-
-    if (missingRequiredNames.length > 0) {
-      errors.push({
-        type: "fields/missing",
-        fieldNames: missingRequiredNames,
-      })
-    }
-  }
-
-  if (fieldsMatch === "subset") {
-    if (missingRequiredNames.length > 0) {
-      errors.push({
-        type: "fields/missing",
-        fieldNames: missingRequiredNames,
-      })
-    }
-  }
-
-  if (fieldsMatch === "superset") {
-    if (extraNames.length > 0) {
-      errors.push({
-        type: "fields/extra",
-        fieldNames: extraNames,
-      })
-    }
-  }
-
-  if (fieldsMatch === "partial") {
-    if (missingNames.length === fields.length) {
-      errors.push({
-        type: "fields/missing",
-        fieldNames: missingNames,
-      })
-    }
-  }
-
-  return errors
-}
-
-async function inspectFields(
+async function inspectColumns(
   mapping: SchemaMapping,
   table: Table,
   options: {
@@ -130,17 +49,27 @@ async function inspectFields(
 ) {
   const { maxErrors } = options
   const errors: TableError[] = []
-  const fields = mapping.target.fields
+  const columns = getColumns(mapping.target)
   const concurrency = os.cpus().length
   const abortController = new AbortController()
-  const maxFieldErrors = Math.ceil(maxErrors / fields.length)
+  const maxColumnErrors = Math.ceil(maxErrors / columns.length)
 
-  const collectFieldErrors = async (index: number, field: Field) => {
-    const fieldMapping = matchSchemaField(mapping, field, index)
-    if (!fieldMapping) return
+  const collectColumnErrors = async (column: Column) => {
+    const polarsColumn = mapping.source.columns.find(
+      polarsColumn => polarsColumn.name === column.name,
+    )
 
-    const fieldErrors = await inspectField(fieldMapping, table, {
-      maxErrors: maxFieldErrors,
+    if (!polarsColumn) {
+      errors.push({
+        type: "column/missing",
+        columnName: column.name,
+      })
+      return
+    }
+
+    const columnMapping = { source: polarsColumn, target: column }
+    const fieldErrors = await inspectColumn(columnMapping, table, {
+      maxErrors: maxColumnErrors,
     })
 
     errors.push(...fieldErrors)
@@ -151,7 +80,7 @@ async function inspectFields(
 
   try {
     await pAll(
-      fields.map((field, index) => () => collectFieldErrors(index, field)),
+      columns.map(column => () => collectColumnErrors(column)),
       { concurrency },
     )
   } catch (error) {
@@ -169,10 +98,10 @@ async function inspectRows(
 ) {
   const { maxErrors } = options
   const errors: TableError[] = []
-  const fields = mapping.target.fields
+  const columns = getColumns(mapping.target)
   const concurrency = os.cpus().length - 1
   const abortController = new AbortController()
-  const maxRowErrors = Math.ceil(maxErrors / fields.length)
+  const maxRowErrors = Math.ceil(maxErrors / columns.length)
 
   const collectRowErrors = async (check: any) => {
     const rowCheckTable = table

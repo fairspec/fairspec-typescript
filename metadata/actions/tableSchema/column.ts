@@ -6,13 +6,33 @@ export function getColumnProperties(columns: Column[]) {
   return columns.map(column => column.property)
 }
 
+// TODO: It should type error if not all columns have its case covered
 export function getColumns(tableSchema: TableSchema) {
   const columns: Column[] = []
 
   for (const [name, property] of objectEntries(tableSchema.properties ?? {})) {
     switch (property.type) {
+      case "boolean":
+        columns.push({ name, type: "boolean", property })
+        break
+      case "integer":
+        switch (property.format) {
+          case "categorical":
+            columns.push({ name, type: "categorical", property })
+            break
+          case undefined:
+            columns.push({ name, type: "integer", property })
+            break
+        }
+        break
+      case "number":
+        columns.push({ name, type: "number", property })
+        break
       case "string":
         switch (property.format) {
+          case "categorical":
+            columns.push({ name, type: "categorical", property })
+            break
           case "list":
             columns.push({ name, type: "list", property })
             break
@@ -50,19 +70,6 @@ export function getColumns(tableSchema: TableSchema) {
             columns.push({ name, type: "string", property })
             break
         }
-        break
-      case "integer":
-        switch (property.format) {
-          case undefined:
-            columns.push({ name, type: "integer", property })
-            break
-        }
-        break
-      case "number":
-        columns.push({ name, type: "number", property })
-        break
-      case "boolean":
-        columns.push({ name, type: "boolean", property })
         break
       case "array":
         columns.push({ name, type: "array", property })

@@ -9,14 +9,14 @@ export function mergeMissingValues(column: Column, tableSchema: TableSchema) {
   const mergedColumn = copyDescriptor(column)
   mergedColumn.property.missingValues = column.property.missingValues ?? []
 
-  // We ensure that numeric missing values don't sneak in string columns
-  // TODO: Why types don't catch missmatch?
+  // We ensure that integer missing values don't sneak in string columns
   for (const item of tableSchema.missingValues) {
     if (mergedColumn.property.type === "string") {
       const value = typeof item === "object" ? item.value : item
       if (typeof value !== "string") continue
     }
 
+    // TODO: Why types don't catch missmatch?
     mergedColumn.property.missingValues.push(item)
   }
 

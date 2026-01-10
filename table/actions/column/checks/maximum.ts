@@ -7,7 +7,10 @@ import type { CellMapping } from "../../../models/cell.ts"
 
 export function createCheckCellMaximum(options?: { isExclusive?: boolean }) {
   return (column: Column, mapping: CellMapping) => {
-    if (column.type !== "integer" && column.type !== "number") {
+    if (
+      column.property.type !== "integer" &&
+      column.property.type !== "number"
+    ) {
       return undefined
     }
 

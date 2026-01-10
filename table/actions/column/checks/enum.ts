@@ -2,18 +2,14 @@ import type { CellEnumError, Column } from "@fairspec/metadata"
 import type { CellMapping } from "../../../models/cell.ts"
 
 export function checkCellEnum(column: Column, mapping: CellMapping) {
-  if (
-    column.property.type !== "string" &&
-    column.property.type !== "integer" &&
-    column.property.type !== "number"
-  ) {
-    return undefined
-  }
-
   const enumConstraint = column.property.enum
   if (!enumConstraint) return undefined
 
-  const isErrorExpr = mapping.target.isIn(enumConstraint).not()
+  const primitiveEnumConstraint = enumConstraint.map(item =>
+    typeof item === "object" ? JSON.stringify(item) : item,
+  )
+
+  const isErrorExpr = mapping.target.isIn(primitiveEnumConstraint).not()
 
   const errorTemplate: CellEnumError = {
     type: "cell/enum",

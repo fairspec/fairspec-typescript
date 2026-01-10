@@ -2,7 +2,7 @@ import type { CellMaxLengthError, Column } from "@fairspec/metadata"
 import type { CellMapping } from "../../../models/cell.ts"
 
 export function checkCellMaxLength(column: Column, mapping: CellMapping) {
-  if (column.type !== "string") return undefined
+  if (column.property.type !== "string") return undefined
 
   const maxLength = column.property.maxLength
   if (!maxLength) return undefined

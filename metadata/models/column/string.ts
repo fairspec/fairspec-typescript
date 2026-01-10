@@ -1,22 +1,34 @@
 import { z } from "zod"
 import { BaseColumn } from "./base.ts"
 
-export const StringColumn = BaseColumn.extend({
+export const BaseStringColumn = BaseColumn.extend({
   type: z.literal("string"),
   property: BaseColumn.shape.property.extend({
     type: z.literal("string"),
-    format: z.undefined().optional(),
 
     enum: z
       .array(z.string())
       .optional()
       .describe("An optional array of allowed values for the column"),
 
-    pattern: z
-      .string()
+    examples: z
+      .array(z.string())
+      .optional()
+      .describe("An optional array of examples for the column"),
+
+    missingValues: z
+      .array(
+        z.union([
+          z.string(),
+          z.object({
+            value: z.string(),
+            label: z.string(),
+          }),
+        ]),
+      )
       .optional()
       .describe(
-        "An optional regular expression pattern that values must match",
+        "An optional column-specific list of values that represent missing or null data",
       ),
 
     minLength: z
@@ -33,7 +45,20 @@ export const StringColumn = BaseColumn.extend({
       .optional()
       .describe("An optional maximum length constraint for string values"),
 
-    // TODO: categories should not be avaialbe for string children like email, url, etc.?
+    pattern: z
+      .string()
+      .optional()
+      .describe(
+        "An optional regular expression pattern that values must match",
+      ),
+  }),
+})
+
+export const StringColumn = BaseStringColumn.extend({
+  type: z.literal("string"),
+  property: BaseStringColumn.shape.property.extend({
+    format: z.undefined().optional(),
+
     categories: z
       .array(
         z.union([
@@ -47,19 +72,11 @@ export const StringColumn = BaseColumn.extend({
       .optional()
       .describe("An optional array of categorical values with optional labels"),
 
-    missingValues: z
-      .array(
-        z.union([
-          z.string(),
-          z.object({
-            value: z.string(),
-            label: z.string(),
-          }),
-        ]),
-      )
+    categoriesOrdered: z
+      .boolean()
       .optional()
       .describe(
-        "An optional column-specific list of values that represent missing or null data",
+        "An optional boolean indicating whether the categories are ordered",
       ),
   }),
 })

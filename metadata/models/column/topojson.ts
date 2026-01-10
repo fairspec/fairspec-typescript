@@ -1,10 +1,9 @@
 import { z } from "zod"
-import { BaseColumn } from "./base.ts"
-import { ObjectColumn } from "./object.ts"
+import { BaseObjectColumn } from "./object.ts"
 
-export const TopojsonColumn = BaseColumn.extend({
+export const TopojsonColumn = BaseObjectColumn.extend({
   type: z.literal("topojson"),
-  property: ObjectColumn.shape.property.extend({
+  property: BaseObjectColumn.shape.property.extend({
     format: z.literal("topojson"),
   }),
 })

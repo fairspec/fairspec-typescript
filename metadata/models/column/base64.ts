@@ -1,10 +1,9 @@
 import { z } from "zod"
-import { BaseColumn } from "./base.ts"
-import { StringColumn } from "./string.ts"
+import { BaseStringColumn } from "./string.ts"
 
-export const Base64Column = BaseColumn.extend({
+export const Base64Column = BaseStringColumn.extend({
   type: z.literal("base64"),
-  property: StringColumn.shape.property.extend({
+  property: BaseStringColumn.shape.property.extend({
     format: z.literal("base64"),
   }),
 })

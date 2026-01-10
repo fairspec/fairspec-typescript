@@ -1,10 +1,9 @@
 import { z } from "zod"
-import { BaseColumn } from "./base.ts"
-import { StringColumn } from "./string.ts"
+import { BaseStringColumn } from "./string.ts"
 
-export const HexColumn = BaseColumn.extend({
+export const HexColumn = BaseStringColumn.extend({
   type: z.literal("hex"),
-  property: StringColumn.shape.property.extend({
+  property: BaseStringColumn.shape.property.extend({
     format: z.literal("hex"),
   }),
 })

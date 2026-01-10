@@ -1,10 +1,9 @@
 import { z } from "zod"
-import { BaseColumn } from "./base.ts"
-import { ObjectColumn } from "./object.ts"
+import { BaseObjectColumn } from "./object.ts"
 
-export const GeojsonColumn = BaseColumn.extend({
+export const GeojsonColumn = BaseObjectColumn.extend({
   type: z.literal("geojson"),
-  property: ObjectColumn.shape.property.extend({
+  property: BaseObjectColumn.shape.property.extend({
     format: z.literal("geojson"),
   }),
 })

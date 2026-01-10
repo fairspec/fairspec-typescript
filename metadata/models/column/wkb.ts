@@ -1,10 +1,9 @@
 import { z } from "zod"
-import { BaseColumn } from "./base.ts"
-import { StringColumn } from "./string.ts"
+import { BaseStringColumn } from "./string.ts"
 
-export const WkbColumn = BaseColumn.extend({
+export const WkbColumn = BaseStringColumn.extend({
   type: z.literal("wkb"),
-  property: StringColumn.shape.property.extend({
+  property: BaseStringColumn.shape.property.extend({
     format: z.literal("wkb"),
   }),
 })

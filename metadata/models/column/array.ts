@@ -9,6 +9,16 @@ export const ArrayColumn = BaseColumn.extend({
     type: z.literal("array"),
     format: z.undefined().optional(),
 
+    enum: z
+      .array(z.array(z.unknown()))
+      .optional()
+      .describe("An optional array of allowed values for the column"),
+
+    examples: z
+      .array(z.array(z.unknown()))
+      .optional()
+      .describe("An optional array of examples for the column"),
+
     missingValues: z
       .array(
         z.union([

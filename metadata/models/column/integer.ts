@@ -12,6 +12,27 @@ export const IntegerColumn = BaseColumn.extend({
       .optional()
       .describe("An optional array of allowed values for the column"),
 
+    examples: z
+      .array(z.int())
+      .optional()
+      .describe("An optional array of examples for the column"),
+
+    missingValues: z
+      .array(
+        z.union([
+          z.string(),
+          z.int(),
+          z.object({
+            value: z.union([z.string(), z.int()]),
+            label: z.string(),
+          }),
+        ]),
+      )
+      .optional()
+      .describe(
+        "An optional column-specific list of values that represent missing or null data",
+      ),
+
     minimum: z
       .int()
       .optional()
@@ -52,22 +73,6 @@ export const IntegerColumn = BaseColumn.extend({
       )
       .optional()
       .describe("An optional array of categorical values with optional labels"),
-
-    missingValues: z
-      .array(
-        z.union([
-          z.string(),
-          z.int(),
-          z.object({
-            value: z.union([z.string(), z.int()]),
-            label: z.string(),
-          }),
-        ]),
-      )
-      .optional()
-      .describe(
-        "An optional column-specific list of values that represent missing or null data",
-      ),
 
     groupChar: z
       .string()

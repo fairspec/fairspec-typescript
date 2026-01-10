@@ -12,6 +12,27 @@ export const NumberColumn = BaseColumn.extend({
       .optional()
       .describe("An optional array of allowed values for the column"),
 
+    examples: z
+      .array(z.number())
+      .optional()
+      .describe("An optional array of examples for the column"),
+
+    missingValues: z
+      .array(
+        z.union([
+          z.string(),
+          z.number(),
+          z.object({
+            value: z.union([z.string(), z.number()]),
+            label: z.string(),
+          }),
+        ]),
+      )
+      .optional()
+      .describe(
+        "An optional column-specific list of values that represent missing or null data",
+      ),
+
     minimum: z
       .number()
       .optional()
@@ -38,22 +59,6 @@ export const NumberColumn = BaseColumn.extend({
       .optional()
       .describe(
         "An optional constraint that values must be a multiple of this number",
-      ),
-
-    missingValues: z
-      .array(
-        z.union([
-          z.string(),
-          z.number(),
-          z.object({
-            value: z.union([z.string(), z.number()]),
-            label: z.string(),
-          }),
-        ]),
-      )
-      .optional()
-      .describe(
-        "An optional column-specific list of values that represent missing or null data",
       ),
 
     decimalChar: z

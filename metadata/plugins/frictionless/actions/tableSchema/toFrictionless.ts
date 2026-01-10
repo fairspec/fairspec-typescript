@@ -175,24 +175,26 @@ function convertToStringField(
     field.constraints.maxLength = column.property.maxLength
   }
 
-  if (column.property.categories && column.property.categories.length > 0) {
-    const firstItem = column.property.categories[0]
-    if (typeof firstItem === "string") {
-      const allStrings = column.property.categories.every(
-        cat => typeof cat === "string",
-      )
-      if (allStrings) {
-        field.categories = column.property.categories as string[]
-      }
-    } else if (typeof firstItem === "object") {
-      const allObjects = column.property.categories.every(
-        cat => typeof cat === "object",
-      )
-      if (allObjects) {
-        field.categories = column.property.categories as {
-          value: string
-          label: string
-        }[]
+  if (column.type === "string") {
+    if (column.property.categories && column.property.categories.length > 0) {
+      const firstItem = column.property.categories[0]
+      if (typeof firstItem === "string") {
+        const allStrings = column.property.categories.every(
+          cat => typeof cat === "string",
+        )
+        if (allStrings) {
+          field.categories = column.property.categories as string[]
+        }
+      } else if (typeof firstItem === "object") {
+        const allObjects = column.property.categories.every(
+          cat => typeof cat === "object",
+        )
+        if (allObjects) {
+          field.categories = column.property.categories as {
+            value: string
+            label: string
+          }[]
+        }
       }
     }
   }

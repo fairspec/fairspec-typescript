@@ -7,19 +7,15 @@ export const BooleanColumn = BaseColumn.extend({
     type: z.literal("boolean"),
     format: z.undefined().optional(),
 
-    trueValues: z
-      .array(z.string())
+    enum: z
+      .array(z.boolean())
       .optional()
-      .describe(
-        "An optional array of string values that should be interpreted as true when parsing data",
-      ),
+      .describe("An optional array of allowed values for the column"),
 
-    falseValues: z
-      .array(z.string())
+    examples: z
+      .array(z.boolean())
       .optional()
-      .describe(
-        "An optional array of string values that should be interpreted as false when parsing data",
-      ),
+      .describe("An optional array of examples for the column"),
 
     missingValues: z
       .array(
@@ -34,6 +30,20 @@ export const BooleanColumn = BaseColumn.extend({
       .optional()
       .describe(
         "An optional column-specific list of values that represent missing or null data",
+      ),
+
+    trueValues: z
+      .array(z.string())
+      .optional()
+      .describe(
+        "An optional array of string values that should be interpreted as true when parsing data",
+      ),
+
+    falseValues: z
+      .array(z.string())
+      .optional()
+      .describe(
+        "An optional array of string values that should be interpreted as false when parsing data",
       ),
   }),
 })

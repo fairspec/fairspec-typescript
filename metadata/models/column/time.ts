@@ -1,10 +1,9 @@
 import { z } from "zod"
-import { BaseColumn } from "./base.ts"
-import { StringColumn } from "./string.ts"
+import { BaseStringColumn } from "./string.ts"
 
-export const TimeColumn = BaseColumn.extend({
+export const TimeColumn = BaseStringColumn.extend({
   type: z.literal("time"),
-  property: StringColumn.shape.property.extend({
+  property: BaseStringColumn.shape.property.extend({
     format: z.literal("time"),
 
     temporalFormat: z

@@ -81,7 +81,6 @@ function convertFieldToColumn(field: FrictionlessField): Column {
           property.minLength = field.constraints.minLength
         if (field.constraints?.maxLength)
           property.maxLength = field.constraints.maxLength
-        if (field.categories) property.categories = field.categories
         if (field.missingValues) property.missingValues = field.missingValues
         return { name: field.name, type: "email", property }
       }
@@ -97,7 +96,6 @@ function convertFieldToColumn(field: FrictionlessField): Column {
           property.minLength = field.constraints.minLength
         if (field.constraints?.maxLength)
           property.maxLength = field.constraints.maxLength
-        if (field.categories) property.categories = field.categories
         if (field.missingValues) property.missingValues = field.missingValues
         return { name: field.name, type: "url", property }
       }
@@ -116,7 +114,6 @@ function convertFieldToColumn(field: FrictionlessField): Column {
           property.minLength = field.constraints.minLength
         if (field.constraints?.maxLength)
           property.maxLength = field.constraints.maxLength
-        if (field.categories) property.categories = field.categories
         if (field.missingValues) property.missingValues = field.missingValues
         return { name: field.name, type: "base64", property }
       }

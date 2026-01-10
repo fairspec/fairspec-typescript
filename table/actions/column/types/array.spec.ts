@@ -1,26 +1,26 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inspectTable } from "../../table/index.ts"
+import { inspectTable } from "../../../actions/table/inspect.ts"
 
 describe("validateArrayColumn", () => {
-  it("should not errors for valid JSON arrays", async () => {
+  it("should not error for valid JSON arrays", async () => {
     const table = pl
       .DataFrame({
         tags: ['["tag1","tag2"]', "[1,2,3]", '["a","b","c"]'],
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "tags",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        tags: {
           type: "array",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -31,16 +31,16 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "items",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        items: {
           type: "array",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -51,16 +51,16 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "data",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        data: {
           type: "array",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -71,16 +71,16 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "data",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        data: {
           type: "array",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toEqual([
       {
         type: "cell/type",
@@ -99,16 +99,16 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "data",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        data: {
           type: "array",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors.filter(e => e.type === "cell/type")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/type",
@@ -133,16 +133,16 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "matrix",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        matrix: {
           type: "array",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -153,16 +153,16 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "data",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        data: {
           type: "array",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toEqual([
       {
         type: "cell/type",
@@ -181,16 +181,16 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "data",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        data: {
           type: "array",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toEqual([
       {
         type: "cell/type",
@@ -237,77 +237,67 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "scores",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        scores: {
           type: "array",
-          constraints: {
-            jsonSchema: {
-              type: "array",
-              items: { type: "number" },
-              minItems: 3,
-              maxItems: 3,
-            },
-          },
+          // @ts-expect-error
+          items: { type: "number" },
+          minItems: 3,
+          maxItems: 3,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
   it("should errors for arrays not matching jsonSchema", async () => {
-    const jsonSchema = {
-      type: "array",
-      items: { type: "number" },
-      minItems: 2,
-    }
-
     const table = pl
       .DataFrame({
         numbers: ["[1,2,3]", '["not","numbers"]', "[1]", "[4,5,6]"],
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "numbers",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        numbers: {
           type: "array",
-          constraints: {
-            jsonSchema,
-          },
+          // @ts-expect-error
+          items: { type: "number" },
+          minItems: 2,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "cell/jsonSchema")).toEqual([
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors.filter(e => e.type === "cell/json")).toEqual([
       {
-        type: "cell/jsonSchema",
+        type: "cell/json",
         columnName: "numbers",
         rowNumber: 2,
         cell: '["not","numbers"]',
-        pointer: "/0",
         message: "must be number",
+        jsonPointer: "/0",
       },
       {
-        type: "cell/jsonSchema",
+        type: "cell/json",
         columnName: "numbers",
         rowNumber: 2,
         cell: '["not","numbers"]',
-        pointer: "/1",
         message: "must be number",
+        jsonPointer: "/1",
       },
       {
-        type: "cell/jsonSchema",
+        type: "cell/json",
         columnName: "numbers",
         rowNumber: 3,
         cell: "[1]",
-        pointer: "",
         message: "must NOT have fewer than 2 items",
+        jsonPointer: "",
       },
     ])
   })
@@ -322,37 +312,33 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "users",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        users: {
           type: "array",
-          constraints: {
-            jsonSchema: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  name: { type: "string" },
-                  age: { type: "number" },
-                },
-                required: ["name", "age"],
-              },
+          // @ts-expect-error
+          items: {
+            type: "object",
+            properties: {
+              name: { type: "string" },
+              age: { type: "number" },
             },
+            required: ["name", "age"],
           },
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toEqual([
       {
-        type: "cell/jsonSchema",
+        type: "cell/json",
         columnName: "users",
         rowNumber: 2,
         cell: '[{"name":"Bob","age":"invalid"}]',
-        pointer: "/0/age",
         message: "must be number",
+        jsonPointer: "/0/age",
       },
     ])
   })
@@ -364,32 +350,28 @@ describe("validateArrayColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "tags",
+    const tableSchema: TableSchema = {
+      $schema: "https://fairspec.org/profiles/latest/table.json",
+      properties: {
+        tags: {
           type: "array",
-          constraints: {
-            jsonSchema: {
-              type: "array",
-              items: { type: "string" },
-              uniqueItems: true,
-            },
-          },
+          // @ts-expect-error
+          items: { type: "string" },
+          uniqueItems: true,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toEqual([
       {
-        type: "cell/jsonSchema",
+        type: "cell/json",
         columnName: "tags",
         rowNumber: 2,
         cell: '["duplicate","duplicate"]',
-        pointer: "",
         message:
           "must NOT have duplicate items (items ## 1 and 0 are identical)",
+        jsonPointer: "",
       },
     ])
   })

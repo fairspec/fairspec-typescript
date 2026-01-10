@@ -5,7 +5,7 @@ export function getPolarsSchema(
   typeMapping: Record<string, pl.DataType>,
 ): PolarsSchema {
   const entries = Object.entries(typeMapping)
-  const fields = entries.map(([name, type]) => ({ name, type }))
+  const columns = entries.map(([name, type]) => ({ name, type }))
 
-  return { fields }
+  return { columns }
 }

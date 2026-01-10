@@ -49,7 +49,7 @@
         "format": { "$ref": "#/$defs/Format" },
         "textual": { "$ref": "#/$defs/Textual" },
         "integrity": { "$ref": "#/$defs/Integrity" },
-        "jsonSchema": { "$ref": "#/$defs/JsonSchema" },
+        "dataSchema": { "$ref": "#/$defs/DataSchema" },
         "tableSchema": { "$ref": "#/$defs/TableSchema" },
         "doi": { "$ref": "#/$defs/Doi" },
         "prefix": { "$ref": "#/$defs/DoiPrefix" },
@@ -91,7 +91,7 @@
         "hash": { "type": "string" }
       }
     },
-    "JsonSchema": {
+    "DataSchema": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
         { "$ref": "https://json-schema.org/draft/2020-12/schema" }

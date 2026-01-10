@@ -1,13 +1,13 @@
 import { z } from "zod"
+import { DataError } from "./data.ts"
 import { FileError } from "./file.ts"
-import { JsonError } from "./json.ts"
 import { MetadataError } from "./metadata.ts"
 import { TableError } from "./table.ts"
 
 export const GeneralError = z.union([
   MetadataError,
   TableError,
-  JsonError,
+  DataError,
   FileError,
 ])
 

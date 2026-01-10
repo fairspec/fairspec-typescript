@@ -1,6 +1,8 @@
 import { z } from "zod"
 import {
   ColumnNames,
+  CommentChar,
+  CommentRows,
   HeaderJoin,
   HeaderRows,
   JsonPointer,
@@ -13,6 +15,8 @@ export const JsonFormat = z.object({
   rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),
+  commentRows: CommentRows.optional(),
+  commentChar: CommentChar.optional(),
   columnNames: ColumnNames.optional(),
 })
 

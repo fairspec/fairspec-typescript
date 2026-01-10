@@ -1,14 +1,11 @@
 import * as pl from "nodejs-polars"
 import { getHeaderRows } from "../../helpers/format.ts"
-import type {
-  FormatWithCommentRows,
-  FormatWithHeaderRows,
-} from "../../models/format.ts"
+import type { FormatWithHeaderAndCommentRows } from "../../models/format.ts"
 import type { Table } from "../../models/table.ts"
 
 export async function joinHeaderRows(
   table: Table,
-  format: FormatWithHeaderRows,
+  format: FormatWithHeaderAndCommentRows,
 ) {
   const headerRows = getHeaderRows(format)
   const headerOffset = headerRows.at(0) ?? 0
@@ -42,7 +39,10 @@ export async function joinHeaderRows(
     .drop("row_nr")
 }
 
-export function skipCommentRows(table: Table, format: FormatWithCommentRows) {
+export function skipCommentRows(
+  table: Table,
+  format: FormatWithHeaderAndCommentRows,
+) {
   const headerRows = getHeaderRows(format)
   const commentOffset = headerRows.at(-1) ?? 0
   if (!format?.commentRows) {

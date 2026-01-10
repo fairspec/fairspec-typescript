@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { getRecordsFromRows } from "./record.ts"
+import { getRecordsFromRows } from "./format.ts"
 
 describe("getRecordsFromRows", () => {
   it("should convert rows to records with default header", () => {
@@ -39,7 +39,10 @@ describe("getRecordsFromRows", () => {
       ["Bob", 25, "LA"],
     ]
 
-    const result = getRecordsFromRows(rows, { header: false })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      headerRows: false,
+    })
 
     expect(result).toEqual([
       { field1: "Alice", field2: 30, field3: "NYC" },
@@ -55,7 +58,10 @@ describe("getRecordsFromRows", () => {
       ["Bob", 25, "LA"],
     ]
 
-    const result = getRecordsFromRows(rows, { headerRows: [2] })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      headerRows: [2],
+    })
 
     expect(result).toEqual([
       { name: "Alice", age: 30, city: "NYC" },
@@ -71,7 +77,10 @@ describe("getRecordsFromRows", () => {
       ["Bob", "Jones", "bob@example.com"],
     ]
 
-    const result = getRecordsFromRows(rows, { headerRows: [1, 2] })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      headerRows: [1, 2],
+    })
 
     expect(result).toEqual([
       {
@@ -96,6 +105,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
+      name: "json",
       headerRows: [1, 2],
       headerJoin: "_",
     })
@@ -114,7 +124,10 @@ describe("getRecordsFromRows", () => {
       ["Bob", 25, "LA"],
     ]
 
-    const result = getRecordsFromRows(rows, { commentRows: [3] })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      commentRows: [3],
+    })
 
     expect(result).toEqual([
       { name: "Alice", age: 30, city: "NYC" },
@@ -131,7 +144,10 @@ describe("getRecordsFromRows", () => {
       ["Regular row", "data", "value"],
     ]
 
-    const result = getRecordsFromRows(rows, { commentChar: "#" })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      commentChar: "#",
+    })
 
     expect(result).toEqual([
       { name: "Alice", age: 30, city: "NYC" },
@@ -149,7 +165,10 @@ describe("getRecordsFromRows", () => {
       ["## Comment 2", "ignored", "data"],
     ]
 
-    const result = getRecordsFromRows(rows, { commentChar: "#" })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      commentChar: "#",
+    })
 
     expect(result).toEqual([
       { name: "Alice", age: 30, city: "NYC" },
@@ -165,7 +184,10 @@ describe("getRecordsFromRows", () => {
       ["Bob", 25, "LA"],
     ]
 
-    const result = getRecordsFromRows(rows, { commentChar: "#" })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      commentChar: "#",
+    })
 
     expect(result).toEqual([
       { name: "Alice", age: 30, city: "NYC" },
@@ -263,7 +285,10 @@ describe("getRecordsFromRows", () => {
       ["Alice", "Smith", "NYC"],
     ]
 
-    const result = getRecordsFromRows(rows, { headerRows: [1, 2] })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      headerRows: [1, 2],
+    })
 
     expect(result).toEqual([
       { "person first": "Alice", last: "Smith", "location city": "NYC" },
@@ -280,6 +305,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
+      name: "json",
       headerRows: [2],
       commentRows: [3],
     })
@@ -300,6 +326,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
+      name: "json",
       commentRows: [4],
       commentChar: "#",
     })
@@ -317,7 +344,10 @@ describe("getRecordsFromRows", () => {
       ["Charlie", 35, "SF"],
     ]
 
-    const result = getRecordsFromRows(rows, { header: false })
+    const result = getRecordsFromRows(rows, {
+      name: "json",
+      headerRows: false,
+    })
 
     expect(result).toEqual([
       { field1: "Alice", field2: 30, field3: undefined, field4: undefined },

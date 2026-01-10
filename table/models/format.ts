@@ -1,13 +1,13 @@
 import type { Format } from "@fairspec/metadata"
 
-export type FormatWithHeaderRows = Extract<
+export type FormatWithHeaderAndCommentRows = Extract<
   Format,
-  { headerRows?: any; headerJoin?: any }
->
-
-export type FormatWithCommentRows = Extract<
-  Format,
-  { commentRows?: any; commentChar?: any }
+  {
+    headerRows?: any
+    headerJoin?: any
+    commentRows?: any
+    commentChar?: any
+  }
 >
 
 // TODO: Implement

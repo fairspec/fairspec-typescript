@@ -1,18 +1,17 @@
-import type { Format } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import type { Table } from "../models/table.ts"
+import { getHeaderRows } from "../../helpers/format.ts"
+import type {
+  FormatWithCommentRows,
+  FormatWithHeaderRows,
+} from "../../models/format.ts"
+import type { Table } from "../../models/table.ts"
 
 export async function joinHeaderRows(
   table: Table,
-  options: { format: Format },
+  format: FormatWithHeaderRows,
 ) {
-  const { format } = options
-  if (!("headerJoin" in format)) {
-    return table
-  }
-
-  const headerOffset = getHeaderOffset(format)
   const headerRows = getHeaderRows(format)
+  const headerOffset = headerRows.at(0) ?? 0
   const headerJoin = format?.headerJoin ?? " "
   if (headerRows.length < 2) {
     return table
@@ -43,13 +42,9 @@ export async function joinHeaderRows(
     .drop("row_nr")
 }
 
-export function skipCommentRows(table: Table, options: { format: Format }) {
-  const { format } = options
-  if (!("commentRows" in format)) {
-    return table
-  }
-
-  const commentOffset = getCommentOffset(format)
+export function skipCommentRows(table: Table, format: FormatWithCommentRows) {
+  const headerRows = getHeaderRows(format)
+  const commentOffset = headerRows.at(-1) ?? 0
   if (!format?.commentRows) {
     return table
   }
@@ -59,31 +54,4 @@ export function skipCommentRows(table: Table, options: { format: Format }) {
     .withColumn(pl.col("row_nr").add(1))
     .filter(pl.col("row_nr").add(commentOffset).isIn(format.commentRows).not())
     .drop("row_nr")
-}
-
-export function stripInitialSpace(table: Table, options: { format: Format }) {
-  const { format } = options
-  if (!("skipInitialSpace" in format)) {
-    return table
-  }
-
-  return table.select(
-    // TODO: rebase on stripCharsStart when it's fixed in polars
-    // https://github.com/pola-rs/nodejs-polars/issues/336
-    table.columns.map(name => pl.col(name).str.strip().as(name)),
-  )
-}
-
-function getHeaderOffset(format?: Format) {
-  const headerRows = getHeaderRows(format)
-  return headerRows.at(0) ?? 0
-}
-
-function getHeaderRows(format?: Format) {
-  return format?.headerRows ? format.headerRows : []
-}
-
-function getCommentOffset(format?: Format) {
-  const headerRows = getHeaderRows(format)
-  return headerRows.at(-1) ?? 0
 }

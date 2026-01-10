@@ -1,6 +1,13 @@
-import type { Dialect } from "@fairspec/metadata"
+import type { DataRecord, DataRow } from "../../models/data.ts"
+import type {
+  FormatWithCommentRows,
+  FormatWithHeaderRows,
+} from "../../models/format.ts"
 
-export function getRecordsFromRows(rows: DataRow[], dialect?: Dialect) {
+export function getRecordsFromRows(
+  rows: DataRow[],
+  format: FormatWithHeaderRows,
+) {
   const records: DataRecord[] = []
 
   const header = getHeaderFromRows(rows, dialect)
@@ -25,7 +32,7 @@ export function getRecordsFromRows(rows: DataRow[], dialect?: Dialect) {
   return records
 }
 
-function getHeaderFromRows(rows: DataRow[], dialect?: Dialect) {
+function getHeaderFromRows(rows: DataRow[], format: FormatWithHeaderRows) {
   const hasHeader = dialect?.header !== false
   const headerRows = dialect?.headerRows ?? [1]
 

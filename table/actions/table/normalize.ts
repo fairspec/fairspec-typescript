@@ -1,5 +1,5 @@
 import type { TableSchema } from "@fairspec/metadata"
-import { getColumns } from "@fairspec/metadata"
+import { getColumns, mergeMissingValues } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { normalizeColumn } from "../../actions/column/normalize.ts"
 import { getPolarsSchema } from "../../helpers/schema.ts"
@@ -28,12 +28,7 @@ export function normalizeColumns(mapping: SchemaMapping) {
     )
 
     if (polarsColumn) {
-      const missingValues =
-        column.property.missingValues ?? mapping.target.missingValues
-
-      // TODO: Is it ok to merge that way? Type mismatch?
-      const mergedColumn = { ...column, missingValues }
-
+      const mergedColumn = mergeMissingValues(column, mapping.target)
       const columnMapping = { source: polarsColumn, target: mergedColumn }
       expr = normalizeColumn(columnMapping)
     }

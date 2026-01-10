@@ -4,6 +4,7 @@ import type * as pl from "nodejs-polars"
 import type { DenormalizeColumnOptions } from "../../actions/column/denormalize.ts"
 import { denormalizeColumn } from "../../actions/column/denormalize.ts"
 import type { Table } from "../../models/table.ts"
+import { mergeMissingValues } from "./helpers.ts"
 
 export async function denormalizeTable(
   table: Table,
@@ -23,12 +24,7 @@ export function denormalizeColumns(
   const columns = getColumns(tableSchema)
 
   for (const column of columns) {
-    const missingValues =
-      column.property.missingValues ?? tableSchema.missingValues
-
-    // TODO: Is it ok to merge that way? Type mismatch?
-    const mergedColumn = { ...column, missingValues }
-
+    const mergedColumn = mergeMissingValues(column, tableSchema)
     const expr = denormalizeColumn(mergedColumn, options)
     exprs[column.name] = expr
   }

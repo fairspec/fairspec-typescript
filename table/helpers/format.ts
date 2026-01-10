@@ -1,5 +1,5 @@
-import type { FormatWithHeaderRows } from "../models/format.ts"
+import type { FormatWithHeaderAndCommentRows } from "../models/format.ts"
 
-export function getHeaderRows(format: FormatWithHeaderRows) {
+export function getHeaderRows(format: FormatWithHeaderAndCommentRows) {
   return format.headerRows !== false ? (format.headerRows ?? [1]) : []
 }

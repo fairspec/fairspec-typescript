@@ -74,11 +74,11 @@ export { Datacite } from "./models/datacite/datacite.ts"
 export { Dataset } from "./models/dataset.ts"
 export { Descriptor } from "./models/descriptor.ts"
 export {
+  CellDataError,
   CellEnumError,
   CellError,
   CellExclusiveMaximumError,
   CellExclusiveMinimumError,
-  CellJsonError,
   CellMaximumError,
   CellMaxLengthError,
   CellMinimumError,

@@ -1,15 +1,15 @@
 import type { GeojsonColumn } from "@fairspec/metadata"
 import type { Table } from "../../../models/table.ts"
-import geojsonProfile from "../../../profiles/geojson.json" with {
+import geojsonJsonSchema from "../../../schemas/geojson.json" with {
   type: "json",
 }
-import { inspectJsonColumn } from "./json.ts"
+import { inspectDataColumn } from "./data.ts"
 
 export async function inspectGeojsonColumn(
   column: GeojsonColumn,
   table: Table,
 ) {
-  return inspectJsonColumn(column, table, {
-    typeJsonSchema: geojsonProfile,
+  return inspectDataColumn(column, table, {
+    typeJsonSchema: geojsonJsonSchema,
   })
 }

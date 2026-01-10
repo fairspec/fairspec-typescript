@@ -60,8 +60,8 @@ export const CellEnumError = BaseCellError.extend({
   enum: z.array(z.string()).describe("The allowed enumeration values"),
 })
 
-export const CellJsonError = BaseCellError.extend({
-  type: z.literal("cell/json").describe("Error type identifier"),
+export const CellDataError = BaseCellError.extend({
+  type: z.literal("cell/data").describe("Error type identifier"),
   message: z.string().describe("The JSON schema validation error message"),
   jsonPointer: z
     .string()
@@ -80,7 +80,7 @@ export const CellError = z.discriminatedUnion("type", [
   CellPatternError,
   CellUniqueError,
   CellEnumError,
-  CellJsonError,
+  CellDataError,
 ])
 
 export type CellTypeError = z.infer<typeof CellTypeError>
@@ -98,5 +98,5 @@ export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>
 export type CellPatternError = z.infer<typeof CellPatternError>
 export type CellUniqueError = z.infer<typeof CellUniqueError>
 export type CellEnumError = z.infer<typeof CellEnumError>
-export type CellJsonSchemaError = z.infer<typeof CellJsonError>
+export type CellDataError = z.infer<typeof CellDataError>
 export type CellError = z.infer<typeof CellError>

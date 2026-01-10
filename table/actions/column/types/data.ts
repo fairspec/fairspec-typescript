@@ -13,7 +13,7 @@ import type { Table } from "../../../models/table.ts"
 // TODO: Improve the implementation
 // Make unblocking / handle large data / process in parallel / move processing to Rust?
 
-export async function inspectJsonColumn(
+export async function inspectDataColumn(
   column: ArrayColumn | ObjectColumn | GeojsonColumn | TopojsonColumn,
   table: Table,
   options?: {
@@ -80,7 +80,7 @@ export async function inspectJsonColumn(
 
       for (const error of constraintErrors) {
         errors.push({
-          type: "cell/json",
+          type: "cell/data",
           cell: String(row.source),
           columnName: column.name,
           rowNumber: row.number,

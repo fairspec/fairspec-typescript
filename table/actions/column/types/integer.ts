@@ -4,9 +4,6 @@ import * as pl from "nodejs-polars"
 export function parseIntegerColumn(column: IntegerColumn, columnExpr: pl.Expr) {
   const groupChar = column.property.groupChar
   const withText = column.property.withText
-  const flattenCategories = column.property.categories?.map(it =>
-    typeof it === "number" ? it : it.value,
-  )
 
   // Handle non-bare numbers (with currency symbols, percent signs, etc.)
   if (withText) {
@@ -24,16 +21,6 @@ export function parseIntegerColumn(column: IntegerColumn, columnExpr: pl.Expr) {
 
   // Cast to int64 (will handle values up to 2^63-1)
   columnExpr = columnExpr.cast(pl.Int64)
-
-  // Currently, only string categories are supported
-  if (flattenCategories) {
-    return pl
-      .when(columnExpr.isIn(flattenCategories))
-      .then(columnExpr)
-      .otherwise(pl.lit(null))
-      .alias(column.name)
-  }
-
   return columnExpr
 }
 

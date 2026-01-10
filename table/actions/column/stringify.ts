@@ -1,6 +1,7 @@
 import type { Column } from "@fairspec/metadata"
 import type * as pl from "nodejs-polars"
 import { stringifyBooleanColumn } from "./types/boolean.ts"
+import { stringifyCategoricalColumn } from "./types/categorical.ts"
 import { stringifyDateColumn } from "./types/date.ts"
 import { stringifyDatetimeColumn } from "./types/datetime.ts"
 import { stringifyDurationColumn } from "./types/duration.ts"
@@ -13,6 +14,8 @@ export function stringifyColumn(column: Column, columnExpr: pl.Expr) {
   switch (column.type) {
     case "boolean":
       return stringifyBooleanColumn(column, columnExpr)
+    case "categorical":
+      return stringifyCategoricalColumn(column, columnExpr)
     case "date":
       return stringifyDateColumn(column, columnExpr)
     case "datetime":

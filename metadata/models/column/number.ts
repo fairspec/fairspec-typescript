@@ -21,9 +21,9 @@ export const NumberColumn = BaseColumn.extend({
       .array(
         z.union([
           z.string(),
-          z.number(),
+          z.int(),
           z.object({
-            value: z.union([z.string(), z.number()]),
+            value: z.union([z.string(), z.int()]),
             label: z.string(),
           }),
         ]),

@@ -1,17 +1,15 @@
 import type { IntegerColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
-// TODO: support categories
-// TODO: support categoriesOrder
 export function parseIntegerColumn(column: IntegerColumn, columnExpr: pl.Expr) {
-  const groupChar = column.groupChar
-  const bareNumber = column.bareNumber
-  const flattenCategories = column.categories?.map(it =>
+  const groupChar = column.property.groupChar
+  const withText = column.property.withText
+  const flattenCategories = column.property.categories?.map(it =>
     typeof it === "number" ? it : it.value,
   )
 
   // Handle non-bare numbers (with currency symbols, percent signs, etc.)
-  if (bareNumber === false) {
+  if (withText) {
     // Preserve the minus sign when removing leading characters
     columnExpr = columnExpr.str.replaceAll("^[^\\d\\-]+", "")
     columnExpr = columnExpr.str.replaceAll("[^\\d\\-]+$", "")

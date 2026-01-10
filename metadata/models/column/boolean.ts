@@ -21,8 +21,9 @@ export const BooleanColumn = BaseColumn.extend({
       .array(
         z.union([
           z.string(),
+          z.int(),
           z.object({
-            value: z.string(),
+            value: z.union([z.string(), z.int()]),
             label: z.string(),
           }),
         ]),

@@ -61,19 +61,6 @@ export const IntegerColumn = BaseColumn.extend({
         "An optional constraint that values must be a multiple of this number",
       ),
 
-    categories: z
-      .array(
-        z.union([
-          z.int(),
-          z.object({
-            value: z.int(),
-            label: z.string(),
-          }),
-        ]),
-      )
-      .optional()
-      .describe("An optional array of categorical values with optional labels"),
-
     groupChar: z
       .string()
       .length(1)
@@ -87,6 +74,26 @@ export const IntegerColumn = BaseColumn.extend({
       .optional()
       .describe(
         "An optional boolean indicating whether numeric values may include non-numeric text that should be stripped during parsing",
+      ),
+
+    categories: z
+      .array(
+        z.union([
+          z.int(),
+          z.object({
+            value: z.int(),
+            label: z.string(),
+          }),
+        ]),
+      )
+      .optional()
+      .describe("An optional array of categorical values with optional labels"),
+
+    categoriesOrdered: z
+      .boolean()
+      .optional()
+      .describe(
+        "An optional boolean indicating whether the categories are ordered",
       ),
   }),
 })

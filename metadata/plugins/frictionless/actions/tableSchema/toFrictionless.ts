@@ -102,6 +102,8 @@ function convertColumnToField(
     case "geojson":
     case "topojson":
       return convertToGeojsonField(column, isRequired)
+    default:
+      throw new Error(`Unsupported column type: ${(column as any).type}`)
   }
 }
 
@@ -173,30 +175,6 @@ function convertToStringField(
       field.constraints = {}
     }
     field.constraints.maxLength = column.property.maxLength
-  }
-
-  if (column.type === "string") {
-    if (column.property.categories && column.property.categories.length > 0) {
-      const firstItem = column.property.categories[0]
-      if (typeof firstItem === "string") {
-        const allStrings = column.property.categories.every(
-          cat => typeof cat === "string",
-        )
-        if (allStrings) {
-          field.categories = column.property.categories as string[]
-        }
-      } else if (typeof firstItem === "object") {
-        const allObjects = column.property.categories.every(
-          cat => typeof cat === "object",
-        )
-        if (allObjects) {
-          field.categories = column.property.categories as {
-            value: string
-            label: string
-          }[]
-        }
-      }
-    }
   }
 
   if (isRequired) {
@@ -477,28 +455,6 @@ function convertToIntegerField(
 
   if (column.property.withText !== undefined) {
     field.bareNumber = !column.property.withText
-  }
-
-  if (column.property.categories && column.property.categories.length > 0) {
-    const firstItem = column.property.categories[0]
-    if (typeof firstItem === "number") {
-      const allNumbers = column.property.categories.every(
-        cat => typeof cat === "number",
-      )
-      if (allNumbers) {
-        field.categories = column.property.categories as number[]
-      }
-    } else if (typeof firstItem === "object") {
-      const allObjects = column.property.categories.every(
-        cat => typeof cat === "object",
-      )
-      if (allObjects) {
-        field.categories = column.property.categories as {
-          value: number
-          label: string
-        }[]
-      }
-    }
   }
 
   if (isRequired) {

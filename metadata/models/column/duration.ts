@@ -1,11 +1,14 @@
 import { z } from "zod"
-import { BaseStringColumn } from "./string.ts"
+import { BaseColumn } from "./base.ts"
+import { BaseStringColumnProperty } from "./string.ts"
 
-export const DurationColumn = BaseStringColumn.extend({
+export const DurationColumnProperty = BaseStringColumnProperty.extend({
+  format: z.literal("duration"),
+})
+
+export const DurationColumn = BaseColumn.extend({
   type: z.literal("duration"),
-  property: BaseStringColumn.shape.property.extend({
-    format: z.literal("duration"),
-  }),
+  property: DurationColumnProperty,
 })
 
 export type DurationColumn = z.infer<typeof DurationColumn>

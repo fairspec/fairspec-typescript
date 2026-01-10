@@ -1,28 +1,34 @@
 import { z } from "zod"
-import { ArrayColumn } from "./array.ts"
-import { Base64Column } from "./base64.ts"
-import { BooleanColumn } from "./boolean.ts"
-import { DateColumn } from "./date.ts"
-import { DatetimeColumn } from "./datetime.ts"
-import { DurationColumn } from "./duration.ts"
-import { EmailColumn } from "./email.ts"
-import { GeojsonColumn } from "./geojson.ts"
-import { HexColumn } from "./hex.ts"
-import { IntegerColumn } from "./integer.ts"
-import { ListColumn } from "./list.ts"
-import { NumberColumn } from "./number.ts"
-import { ObjectColumn } from "./object.ts"
-import { StringColumn } from "./string.ts"
-import { TimeColumn } from "./time.ts"
-import { TopojsonColumn } from "./topojson.ts"
-import { UrlColumn } from "./url.ts"
-import { WkbColumn } from "./wkb.ts"
-import { WktColumn } from "./wkt.ts"
+import { ArrayColumn, ArrayColumnProperty } from "./array.ts"
+import { Base64Column, Base64ColumnProperty } from "./base64.ts"
+import { BooleanColumn, BooleanColumnProperty } from "./boolean.ts"
+import {
+  CategoricalColumn,
+  IntegerCategoricalColumnProperty,
+  StringCategoricalColumnProperty,
+} from "./categorical.ts"
+import { DateColumn, DateColumnProperty } from "./date.ts"
+import { DatetimeColumn, DatetimeColumnProperty } from "./datetime.ts"
+import { DurationColumn, DurationColumnProperty } from "./duration.ts"
+import { EmailColumn, EmailColumnProperty } from "./email.ts"
+import { GeojsonColumn, GeojsonColumnProperty } from "./geojson.ts"
+import { HexColumn, HexColumnProperty } from "./hex.ts"
+import { IntegerColumn, IntegerColumnProperty } from "./integer.ts"
+import { ListColumn, ListColumnProperty } from "./list.ts"
+import { NumberColumn, NumberColumnProperty } from "./number.ts"
+import { ObjectColumn, ObjectColumnProperty } from "./object.ts"
+import { StringColumn, StringColumnProperty } from "./string.ts"
+import { TimeColumn, TimeColumnProperty } from "./time.ts"
+import { TopojsonColumn, TopojsonColumnProperty } from "./topojson.ts"
+import { UrlColumn, UrlColumnProperty } from "./url.ts"
+import { WkbColumn, WkbColumnProperty } from "./wkb.ts"
+import { WktColumn, WktColumnProperty } from "./wkt.ts"
 
 export const Column = z.discriminatedUnion("type", [
   ArrayColumn,
   Base64Column,
   BooleanColumn,
+  CategoricalColumn,
   DateColumn,
   DatetimeColumn,
   DurationColumn,
@@ -45,6 +51,7 @@ export const ColumnType = z.enum([
   "array",
   "base64",
   "boolean",
+  "categorical",
   "date",
   "datetime",
   "duration",
@@ -64,38 +71,40 @@ export const ColumnType = z.enum([
 ])
 
 const StringColumnPropertyGroup = z.discriminatedUnion("format", [
-  ListColumn.shape.property,
-  Base64Column.shape.property,
-  HexColumn.shape.property,
-  EmailColumn.shape.property,
-  UrlColumn.shape.property,
-  DatetimeColumn.shape.property,
-  DateColumn.shape.property,
-  TimeColumn.shape.property,
-  DurationColumn.shape.property,
-  WktColumn.shape.property,
-  WkbColumn.shape.property,
-  StringColumn.shape.property,
+  ListColumnProperty,
+  Base64ColumnProperty,
+  HexColumnProperty,
+  EmailColumnProperty,
+  UrlColumnProperty,
+  DatetimeColumnProperty,
+  DateColumnProperty,
+  TimeColumnProperty,
+  DurationColumnProperty,
+  WktColumnProperty,
+  WkbColumnProperty,
+  StringColumnProperty,
+  StringCategoricalColumnProperty,
 ])
 
 const IntegerColumnPropertyGroup = z.discriminatedUnion("format", [
-  IntegerColumn.shape.property,
+  IntegerColumnProperty,
+  IntegerCategoricalColumnProperty,
 ])
 
 const ObjectColumnPropertyGroup = z.discriminatedUnion("format", [
-  GeojsonColumn.shape.property,
-  TopojsonColumn.shape.property,
-  ObjectColumn.shape.property,
+  GeojsonColumnProperty,
+  TopojsonColumnProperty,
+  ObjectColumnProperty,
 ])
 
 const NumberColumnPropertyGroup = z.discriminatedUnion("format", [
-  NumberColumn.shape.property,
+  NumberColumnProperty,
 ])
 const BooleanColumnPropertyGroup = z.discriminatedUnion("format", [
-  BooleanColumn.shape.property,
+  BooleanColumnProperty,
 ])
 const ArrayColumnPropertyGroup = z.discriminatedUnion("format", [
-  ArrayColumn.shape.property,
+  ArrayColumnProperty,
 ])
 
 export const ColumnProperty = z.discriminatedUnion("type", [

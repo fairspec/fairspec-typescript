@@ -1,11 +1,14 @@
 import { z } from "zod"
-import { BaseStringColumn } from "./string.ts"
+import { BaseColumn } from "./base.ts"
+import { BaseStringColumnProperty } from "./string.ts"
 
-export const WktColumn = BaseStringColumn.extend({
+export const WktColumnProperty = BaseStringColumnProperty.extend({
+  format: z.literal("wkt"),
+})
+
+export const WktColumn = BaseColumn.extend({
   type: z.literal("wkt"),
-  property: BaseStringColumn.shape.property.extend({
-    format: z.literal("wkt"),
-  }),
+  property: WktColumnProperty,
 })
 
 export type WktColumn = z.infer<typeof WktColumn>

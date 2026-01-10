@@ -128,7 +128,6 @@ function convertFieldToColumn(field: FrictionlessField): Column {
         property.minLength = field.constraints.minLength
       if (field.constraints?.maxLength)
         property.maxLength = field.constraints.maxLength
-      if (field.categories) property.categories = field.categories
       if (field.missingValues) property.missingValues = field.missingValues
       return { name: field.name, type: "string", property }
     }
@@ -189,7 +188,6 @@ function convertFieldToColumn(field: FrictionlessField): Column {
       if (field.bareNumber !== undefined) {
         property.withText = !field.bareNumber
       }
-      if (field.categories) property.categories = field.categories
       if (field.missingValues) property.missingValues = field.missingValues
       return { name: field.name, type: "integer", property }
     }

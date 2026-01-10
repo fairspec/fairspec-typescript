@@ -1,11 +1,14 @@
 import { z } from "zod"
-import { BaseStringColumn } from "./string.ts"
+import { BaseColumn } from "./base.ts"
+import { BaseStringColumnProperty } from "./string.ts"
 
-export const EmailColumn = BaseStringColumn.extend({
+export const EmailColumnProperty = BaseStringColumnProperty.extend({
+  format: z.literal("email"),
+})
+
+export const EmailColumn = BaseColumn.extend({
   type: z.literal("email"),
-  property: BaseStringColumn.shape.property.extend({
-    format: z.literal("email"),
-  }),
+  property: EmailColumnProperty,
 })
 
 export type EmailColumn = z.infer<typeof EmailColumn>

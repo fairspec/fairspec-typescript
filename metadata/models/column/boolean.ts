@@ -1,52 +1,54 @@
 import { z } from "zod"
-import { BaseColumn } from "./base.ts"
+import { BaseColumn, BaseColumnProperty } from "./base.ts"
+
+export const BooleanColumnProperty = BaseColumnProperty.extend({
+  type: z.literal("boolean"),
+  format: z.undefined().optional(),
+
+  enum: z
+    .array(z.boolean())
+    .optional()
+    .describe("An optional array of allowed values for the column"),
+
+  examples: z
+    .array(z.boolean())
+    .optional()
+    .describe("An optional array of examples for the column"),
+
+  missingValues: z
+    .array(
+      z.union([
+        z.string(),
+        z.int(),
+        z.object({
+          value: z.union([z.string(), z.int()]),
+          label: z.string(),
+        }),
+      ]),
+    )
+    .optional()
+    .describe(
+      "An optional column-specific list of values that represent missing or null data",
+    ),
+
+  trueValues: z
+    .array(z.string())
+    .optional()
+    .describe(
+      "An optional array of string values that should be interpreted as true when parsing data",
+    ),
+
+  falseValues: z
+    .array(z.string())
+    .optional()
+    .describe(
+      "An optional array of string values that should be interpreted as false when parsing data",
+    ),
+})
 
 export const BooleanColumn = BaseColumn.extend({
   type: z.literal("boolean"),
-  property: BaseColumn.shape.property.extend({
-    type: z.literal("boolean"),
-    format: z.undefined().optional(),
-
-    enum: z
-      .array(z.boolean())
-      .optional()
-      .describe("An optional array of allowed values for the column"),
-
-    examples: z
-      .array(z.boolean())
-      .optional()
-      .describe("An optional array of examples for the column"),
-
-    missingValues: z
-      .array(
-        z.union([
-          z.string(),
-          z.int(),
-          z.object({
-            value: z.union([z.string(), z.int()]),
-            label: z.string(),
-          }),
-        ]),
-      )
-      .optional()
-      .describe(
-        "An optional column-specific list of values that represent missing or null data",
-      ),
-
-    trueValues: z
-      .array(z.string())
-      .optional()
-      .describe(
-        "An optional array of string values that should be interpreted as true when parsing data",
-      ),
-
-    falseValues: z
-      .array(z.string())
-      .optional()
-      .describe(
-        "An optional array of string values that should be interpreted as false when parsing data",
-      ),
-  }),
+  property: BooleanColumnProperty,
 })
 
 export type BooleanColumn = z.infer<typeof BooleanColumn>

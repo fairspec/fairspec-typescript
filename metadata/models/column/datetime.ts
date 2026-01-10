@@ -1,18 +1,21 @@
 import { z } from "zod"
-import { BaseStringColumn } from "./string.ts"
+import { BaseColumn } from "./base.ts"
+import { BaseStringColumnProperty } from "./string.ts"
 
-export const DatetimeColumn = BaseStringColumn.extend({
+export const DatetimeColumnProperty = BaseStringColumnProperty.extend({
+  format: z.literal("date-time"),
+
+  temporalFormat: z
+    .string()
+    .optional()
+    .describe(
+      "An optional string specifying the datetime format pattern as per the Strftime specification",
+    ),
+})
+
+export const DatetimeColumn = BaseColumn.extend({
   type: z.literal("datetime"),
-  property: BaseStringColumn.shape.property.extend({
-    format: z.literal("date-time"),
-
-    temporalFormat: z
-      .string()
-      .optional()
-      .describe(
-        "An optional string specifying the datetime format pattern as per the Strftime specification",
-      ),
-  }),
+  property: DatetimeColumnProperty,
 })
 
 export type DatetimeColumn = z.infer<typeof DatetimeColumn>

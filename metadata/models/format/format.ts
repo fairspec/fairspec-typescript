@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { ArrowFormat } from "./arrow.ts"
 import { CsvFormat } from "./csv.ts"
+import { CustomFormat } from "./custom.ts"
 import { JsonFormat } from "./json.ts"
 import { JsonlFormat } from "./jsonl.ts"
 import { OdsFormat } from "./ods.ts"
@@ -19,6 +20,7 @@ export const Format = z.discriminatedUnion("type", [
   SqliteFormat,
   ParquetFormat,
   ArrowFormat,
+  CustomFormat,
 ])
 
 export type Format = z.infer<typeof Format>

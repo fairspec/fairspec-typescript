@@ -1,6 +1,7 @@
 import { z } from "zod"
+import { BaseFormat } from "./base.ts"
 
-export const ArrowFormat = z.object({
+export const ArrowFormat = BaseFormat.extend({
   type: z.literal("arrow"),
 })
 

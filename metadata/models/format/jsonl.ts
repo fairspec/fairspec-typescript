@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
   CommentChar,
@@ -8,7 +9,7 @@ import {
   RowType,
 } from "./common.ts"
 
-export const JsonlFormat = z.object({
+export const JsonlFormat = BaseFormat.extend({
   type: z.literal("jsonl"),
   rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),

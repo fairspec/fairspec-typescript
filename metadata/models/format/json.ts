@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
   CommentChar,
@@ -9,7 +10,7 @@ import {
   RowType,
 } from "./common.ts"
 
-export const JsonFormat = z.object({
+export const JsonFormat = BaseFormat.extend({
   type: z.literal("json"),
   jsonPointer: JsonPointer.optional(),
   rowType: RowType.optional(),

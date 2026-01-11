@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
   CommentChar,
@@ -9,7 +10,7 @@ import {
   SheetNumber,
 } from "./common.ts"
 
-export const XlsxFormat = z.object({
+export const XlsxFormat = BaseFormat.extend({
   type: z.literal("xlsx"),
   sheetName: SheetName.optional(),
   sheetNumber: SheetNumber.optional(),

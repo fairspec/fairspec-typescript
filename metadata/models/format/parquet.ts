@@ -1,6 +1,7 @@
 import { z } from "zod"
+import { BaseFormat } from "./base.ts"
 
-export const ParquetFormat = z.object({
+export const ParquetFormat = BaseFormat.extend({
   type: z.literal("parquet"),
 })
 

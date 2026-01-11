@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
   CommentChar,
@@ -9,7 +10,7 @@ import {
   NullSequence,
 } from "./common.ts"
 
-export const TsvFormat = z.object({
+export const TsvFormat = BaseFormat.extend({
   type: z.literal("tsv"),
   lineTerminator: LineTerminator.optional(),
   nullSequence: NullSequence.optional(),

@@ -7,7 +7,7 @@ export function checkCellType(column: Column, mapping: CellMapping) {
   const errorTemplate: CellTypeError = {
     type: "cell/type",
     columnName: column.name,
-    columnType: column.type ?? "any",
+    columnType: column.type,
     rowNumber: 0,
     cell: "",
   }

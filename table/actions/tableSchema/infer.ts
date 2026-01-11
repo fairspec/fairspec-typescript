@@ -57,7 +57,7 @@ export function inferSchemaFromSample(
       variant = variant.slice(0, -1)
     }
 
-    const type = fieldTypes?.[name] ?? typeMapping[variant] ?? "any"
+    const type = fieldTypes?.[name] ?? typeMapping[variant] ?? "unknown"
     let field = { name, type }
 
     if (!fieldTypes?.[name]) {

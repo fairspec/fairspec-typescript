@@ -379,7 +379,12 @@ function convertFieldToColumn(field: FrictionlessField): Column {
     }
 
     default: {
-      throw new Error(`Unsupported field type: ${(field as any).type}`)
+      const property: Column["property"] = {}
+      if (field.title) property.title = field.title
+      if (field.description) property.description = field.description
+      if (field.rdfType) property.rdfType = field.rdfType
+      if (field.missingValues) property.missingValues = field.missingValues
+      return { name: field.name, type: "unknown", property }
     }
   }
 }

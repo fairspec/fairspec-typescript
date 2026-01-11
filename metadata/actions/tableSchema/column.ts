@@ -87,6 +87,9 @@ export function getColumns(tableSchema: TableSchema) {
             break
         }
         break
+      default:
+        columns.push({ name, type: "unknown", property })
+        break
     }
   }
 

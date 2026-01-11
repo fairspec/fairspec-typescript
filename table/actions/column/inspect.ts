@@ -58,18 +58,18 @@ function inspectType(mapping: ColumnMapping) {
     Int64: ["integer"],
     Int8: ["integer"],
     List: ["list"],
-    String: ["string"],
+    String: ["unknown"],
     Time: ["time"],
     UInt16: ["integer"],
     UInt32: ["integer"],
     UInt64: ["integer"],
     UInt8: ["integer"],
-    Utf8: ["string"],
+    Utf8: ["unknown"],
   }
 
   const compatTypes = compatMapping[variant] ?? []
   const isCompat = !!new Set(compatTypes).intersection(
-    new Set([mapping.target.type, "any"]),
+    new Set([mapping.target.type, "unknown"]),
   ).size
 
   if (!isCompat) {
@@ -77,7 +77,7 @@ function inspectType(mapping: ColumnMapping) {
       type: "column/type",
       columnName: mapping.target.name,
       expectedColumnType: mapping.target.type,
-      actualColumnType: compatTypes[0] ?? "string",
+      actualColumnType: compatTypes[0] ?? "unknown",
     })
   }
 

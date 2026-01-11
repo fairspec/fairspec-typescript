@@ -103,7 +103,8 @@ function convertColumnToField(
     case "topojson":
       return convertToGeojsonField(column, isRequired)
     default:
-      throw new Error(`Unsupported column type: ${(column as any).type}`)
+      // TODO: Improve
+      return { name: column.name, type: "any" }
   }
 }
 

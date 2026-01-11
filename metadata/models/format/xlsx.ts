@@ -10,7 +10,7 @@ import {
 } from "./common.ts"
 
 export const XlsxFormat = z.object({
-  name: z.literal("xlsx"),
+  type: z.literal("xlsx"),
   sheetName: SheetName.optional(),
   sheetNumber: SheetNumber.optional(),
   headerRows: HeaderRows.optional(),

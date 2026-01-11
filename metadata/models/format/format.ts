@@ -9,7 +9,7 @@ import { SqliteFormat } from "./sqlite.ts"
 import { TsvFormat } from "./tsv.ts"
 import { XlsxFormat } from "./xlsx.ts"
 
-export const Format = z.discriminatedUnion("name", [
+export const Format = z.discriminatedUnion("type", [
   CsvFormat,
   TsvFormat,
   JsonFormat,

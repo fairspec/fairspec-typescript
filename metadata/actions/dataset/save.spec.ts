@@ -110,7 +110,7 @@ describe("saveDatasetDescriptor", () => {
         {
           name: "resource2",
           data: path.join(testDir, "data2.json"),
-          format: { name: "json" },
+          format: { type: "json" },
         },
       ],
     }
@@ -161,7 +161,7 @@ describe("saveDatasetDescriptor", () => {
           name: "test-resource",
           data: path.join(testDir, "data.csv"),
           format: {
-            name: "csv",
+            type: "csv",
             delimiter: ";",
             lineTerminator: "\n",
           },

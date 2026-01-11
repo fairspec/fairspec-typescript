@@ -5,7 +5,7 @@
     "TableSchema": {
       "type": "object",
       "properties": {
-        "$schema": { "$ref": "#/$defs/MetaSchema" },
+        "$schema": { "$ref": "#/$defs/Profile" },
         "title": { "$ref": "#/$defs/Title" },
         "description": { "$ref": "#/$defs/Description" },
         "required": { "$ref": "#/$defs/Required" },
@@ -16,9 +16,8 @@
         "foreignKeys": { "$ref": "#/$defs/ForeignKeys" }
       }
     },
-    "MetaSchema": {
-      "type": "string",
-      "pattern": "table.json$"
+    "Profile": {
+      "$ref": "#/$defs/ExternalPath"
     },
     "Title": {
       "type": "string"
@@ -37,16 +36,23 @@
       }
     },
     "ColumnProperty": {
-      "required": ["type"],
       "properties": {
         "type": {
-          "enum": ["string", "integer", "number", "boolean", "array", "object"]
+          "enum": [
+            "null",
+            "boolean",
+            "integer",
+            "number",
+            "string",
+            "array",
+            "object"
+          ]
         }
       },
       "allOf": [
         {
           "if": { "properties": { "type": { "const": "boolean" } } },
-          "then": { "$ref": "#/$defs/BooleanColumnPropertyGroup" }
+          "then": { "$ref": "#/$defs/BooleanColumnProperty" }
         },
         {
           "if": { "properties": { "type": { "const": "integer" } } },
@@ -54,7 +60,7 @@
         },
         {
           "if": { "properties": { "type": { "const": "number" } } },
-          "then": { "$ref": "#/$defs/NumberColumnPropertyGroup" }
+          "then": { "$ref": "#/$defs/NumberColumnProperty" }
         },
         {
           "if": { "properties": { "type": { "const": "string" } } },
@@ -62,19 +68,19 @@
         },
         {
           "if": { "properties": { "type": { "const": "array" } } },
-          "then": { "$ref": "#/$defs/ArrayColumnPropertyGroup" }
+          "then": { "$ref": "#/$defs/ArrayColumnProperty" }
         },
         {
           "if": { "properties": { "type": { "const": "object" } } },
           "then": { "$ref": "#/$defs/ObjectColumnPropertyGroup" }
-        }
-      ]
-    },
-    "BooleanColumnPropertyGroup": {
-      "allOf": [
+        },
         {
-          "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/BooleanColumnProperty" }
+          "if": { "properties": { "type": { "const": "null" } } },
+          "then": { "$ref": "#/$defs/UnknownColumnProperty" }
+        },
+        {
+          "if": { "not": { "required": ["type"] } },
+          "then": { "$ref": "#/$defs/UnknownColumnProperty" }
         }
       ]
     },
@@ -87,14 +93,6 @@
         {
           "if": { "properties": { "format": { "const": "categorical" } } },
           "then": { "$ref": "#/$defs/IntegerCategoricalColumnProperty" }
-        }
-      ]
-    },
-    "NumberColumnPropertyGroup": {
-      "allOf": [
-        {
-          "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/NumberColumnProperty" }
         }
       ]
     },
@@ -171,14 +169,6 @@
         }
       ]
     },
-    "ArrayColumnPropertyGroup": {
-      "allOf": [
-        {
-          "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/ArrayColumnProperty" }
-        }
-      ]
-    },
     "ObjectColumnPropertyGroup": {
       "properties": {
         "format": {
@@ -213,6 +203,7 @@
       "properties": {
         "type": { "const": "boolean" },
         "enum": { "$ref": "#/$defs/BooleanEnum" },
+        "const": { "$ref": "#/$defs/BooleanConst" },
         "examples": { "$ref": "#/$defs/BooleanExamples" },
         "missingValues": { "$ref": "#/$defs/MissingValues" },
         "trueValues": { "$ref": "#/$defs/TrueValues" },
@@ -224,8 +215,9 @@
       "properties": {
         "type": { "const": "integer" },
         "enum": { "$ref": "#/$defs/IntegerEnum" },
+        "const": { "$ref": "#/$defs/IntegerConst" },
         "examples": { "$ref": "#/$defs/IntegerExamples" },
-        "missingValues": { "$ref": "#/$defs/IntegerMissingValues" },
+        "missingValues": { "$ref": "#/$defs/MissingValues" },
         "minimum": { "$ref": "#/$defs/IntegerMinimum" },
         "maximum": { "$ref": "#/$defs/IntegerMaximum" },
         "exclusiveMinimum": { "$ref": "#/$defs/IntegerExclusiveMinimum" },
@@ -253,6 +245,7 @@
       "properties": {
         "type": { "const": "number" },
         "enum": { "$ref": "#/$defs/NumberEnum" },
+        "const": { "$ref": "#/$defs/NumberConst" },
         "examples": { "$ref": "#/$defs/NumberExamples" },
         "missingValues": { "$ref": "#/$defs/MissingValues" },
         "minimum": { "$ref": "#/$defs/NumberMinimum" },
@@ -270,6 +263,7 @@
       "properties": {
         "type": { "const": "string" },
         "enum": { "$ref": "#/$defs/StringEnum" },
+        "const": { "$ref": "#/$defs/StringConst" },
         "examples": { "$ref": "#/$defs/StringExamples" },
         "missingValues": { "$ref": "#/$defs/StringMissingValues" },
         "minLength": { "$ref": "#/$defs/MinLength" },
@@ -371,6 +365,7 @@
       "type": "array",
       "properties": {
         "enum": { "$ref": "#/$defs/ArrayEnum" },
+        "const": { "$ref": "#/$defs/ArrayConst" },
         "examples": { "$ref": "#/$defs/ArrayExamples" },
         "missingValues": { "$ref": "#/$defs/StringMissingValues" }
       }
@@ -380,6 +375,7 @@
       "type": "object",
       "properties": {
         "enum": { "$ref": "#/$defs/ObjectEnum" },
+        "const": { "$ref": "#/$defs/ObjectConst" },
         "examples": { "$ref": "#/$defs/ObjectExamples" },
         "missingValues": { "$ref": "#/$defs/StringMissingValues" }
       }
@@ -401,6 +397,20 @@
       "properties": {
         "format": { "const": "topojson" }
       }
+    },
+    "UnknownColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
+      "properties": {
+        "type": { "const": "null" },
+        "enum": { "$ref": "#/$defs/UnknownEnum" },
+        "const": { "$ref": "#/$defs/UnknownConst" },
+        "examples": { "$ref": "#/$defs/UnknownExamples" },
+        "missingValues": { "$ref": "#/$defs/MissingValues" }
+      }
+    },
+    "ExternalPath": {
+      "type": "string",
+      "pattern": "^https?://"
     },
     "RdfType": {
       "type": "string",
@@ -578,6 +588,9 @@
       "type": "array",
       "items": { "type": "object" }
     },
+    "UnknownExamples": {
+      "type": "array"
+    },
     "BooleanEnum": {
       "type": "array",
       "items": { "type": "boolean" }
@@ -602,6 +615,28 @@
       "type": "array",
       "items": { "type": "object" }
     },
+    "UnknownEnum": {
+      "type": "array"
+    },
+    "BooleanConst": {
+      "type": "boolean"
+    },
+    "IntegerConst": {
+      "type": "integer"
+    },
+    "NumberConst": {
+      "type": "number"
+    },
+    "StringConst": {
+      "type": "string"
+    },
+    "ArrayConst": {
+      "type": "array"
+    },
+    "ObjectConst": {
+      "type": "object"
+    },
+    "UnknownConst": {},
     "IntegerCategories": {
       "type": "array",
       "items": {

@@ -10,7 +10,7 @@ import {
 } from "./common.ts"
 
 export const TsvFormat = z.object({
-  name: z.literal("tsv"),
+  type: z.literal("tsv"),
   lineTerminator: LineTerminator.optional(),
   nullSequence: NullSequence.optional(),
   headerRows: HeaderRows.optional(),

@@ -10,7 +10,7 @@ import {
 } from "./common.ts"
 
 export const OdsFormat = z.object({
-  name: z.literal("ods"),
+  type: z.literal("ods"),
   sheetName: SheetName.optional(),
   sheetNumber: SheetNumber.optional(),
   headerRows: HeaderRows.optional(),

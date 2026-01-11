@@ -10,7 +10,7 @@ import {
 } from "./common.ts"
 
 export const JsonFormat = z.object({
-  name: z.literal("json"),
+  type: z.literal("json"),
   jsonPointer: JsonPointer.optional(),
   rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),

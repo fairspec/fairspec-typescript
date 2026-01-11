@@ -12,7 +12,7 @@ import {
 } from "./common.ts"
 
 export const CsvFormat = z.object({
-  name: z.literal("csv"),
+  type: z.literal("csv"),
   delimiter: Delimiter.optional(),
   lineTerminator: LineTerminator.optional(),
   quoteChar: QuoteChar.optional(),

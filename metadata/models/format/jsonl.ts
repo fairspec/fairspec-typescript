@@ -9,7 +9,7 @@ import {
 } from "./common.ts"
 
 export const JsonlFormat = z.object({
-  name: z.literal("jsonl"),
+  type: z.literal("jsonl"),
   rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),

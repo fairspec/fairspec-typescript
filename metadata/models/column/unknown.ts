@@ -1,0 +1,39 @@
+import { z } from "zod"
+import { BaseColumn, BaseColumnProperty } from "./base.ts"
+
+export const UnknownColumnProperty = BaseColumnProperty.extend({
+  type: z.literal("null").optional(),
+  format: z.undefined().optional(),
+
+  enum: z
+    .array(z.unknown())
+    .optional()
+    .describe("An optional array of allowed values for the column"),
+
+  examples: z
+    .array(z.unknown())
+    .optional()
+    .describe("An optional array of examples for the column"),
+
+  missingValues: z
+    .array(
+      z.union([
+        z.string(),
+        z.object({
+          value: z.string(),
+          label: z.string(),
+        }),
+      ]),
+    )
+    .optional()
+    .describe(
+      "An optional column-specific list of values that represent missing or null data",
+    ),
+})
+
+export const UnknownColumn = BaseColumn.extend({
+  type: z.literal("unknown"),
+  property: UnknownColumnProperty,
+})
+
+export type UnknownColumn = z.infer<typeof UnknownColumn>

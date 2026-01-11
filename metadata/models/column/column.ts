@@ -20,6 +20,7 @@ import { ObjectColumn, ObjectColumnProperty } from "./object.ts"
 import { StringColumn, StringColumnProperty } from "./string.ts"
 import { TimeColumn, TimeColumnProperty } from "./time.ts"
 import { TopojsonColumn, TopojsonColumnProperty } from "./topojson.ts"
+import { UnknownColumn, UnknownColumnProperty } from "./unknown.ts"
 import { UrlColumn, UrlColumnProperty } from "./url.ts"
 import { WkbColumn, WkbColumnProperty } from "./wkb.ts"
 import { WktColumn, WktColumnProperty } from "./wkt.ts"
@@ -42,6 +43,7 @@ export const Column = z.discriminatedUnion("type", [
   StringColumn,
   TimeColumn,
   TopojsonColumn,
+  UnknownColumn,
   UrlColumn,
   WkbColumn,
   WktColumn,
@@ -65,6 +67,7 @@ export const ColumnType = z.enum([
   "string",
   "time",
   "topojson",
+  "unknown",
   "url",
   "wkb",
   "wkt",
@@ -104,6 +107,7 @@ export const ColumnProperty = z.discriminatedUnion("type", [
   StringColumnPropertyGroup,
   ArrayColumnProperty,
   ObjectColumnPropertyGroup,
+  UnknownColumnProperty,
 ])
 
 export type Column = z.infer<typeof Column>

@@ -7,6 +7,7 @@ import type {
 import * as pl from "nodejs-polars"
 import type { ColumnMapping } from "../../models/column.ts"
 import type { Table } from "../../models/table.ts"
+import { checkCellConst } from "./checks/const.ts"
 import { checkCellEnum } from "./checks/enum.ts"
 import { createCheckCellMaximum } from "./checks/maximum.ts"
 import { checkCellMaxLength } from "./checks/maxLength.ts"
@@ -115,14 +116,15 @@ async function inspectCells(
 
   for (const checkCell of [
     checkCellType,
-    checkCellPattern,
     checkCellEnum,
+    checkCellConst,
     createCheckCellMinimum(),
     createCheckCellMaximum(),
     createCheckCellMinimum({ isExclusive: true }),
     createCheckCellMaximum({ isExclusive: true }),
     checkCellMinLength,
     checkCellMaxLength,
+    checkCellPattern,
   ]) {
     const cellMapping = { source: pl.col("source"), target: pl.col("target") }
 

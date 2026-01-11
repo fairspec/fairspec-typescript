@@ -55,6 +55,11 @@ export const CellUniqueError = BaseCellError.extend({
   type: z.literal("cell/unique").describe("Error type identifier"),
 })
 
+export const CellConstError = BaseCellError.extend({
+  type: z.literal("cell/const").describe("Error type identifier"),
+  const: z.string().describe("The allowed value"),
+})
+
 export const CellEnumError = BaseCellError.extend({
   type: z.literal("cell/enum").describe("Error type identifier"),
   enum: z.array(z.string()).describe("The allowed enumeration values"),
@@ -79,6 +84,7 @@ export const CellError = z.discriminatedUnion("type", [
   CellMaxLengthError,
   CellPatternError,
   CellUniqueError,
+  CellConstError,
   CellEnumError,
   CellDataError,
 ])
@@ -97,6 +103,7 @@ export type CellMinLengthError = z.infer<typeof CellMinLengthError>
 export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>
 export type CellPatternError = z.infer<typeof CellPatternError>
 export type CellUniqueError = z.infer<typeof CellUniqueError>
+export type CellConstError = z.infer<typeof CellConstError>
 export type CellEnumError = z.infer<typeof CellEnumError>
 export type CellDataError = z.infer<typeof CellDataError>
 export type CellError = z.infer<typeof CellError>

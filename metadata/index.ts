@@ -74,6 +74,7 @@ export { Datacite } from "./models/datacite/datacite.ts"
 export { Dataset } from "./models/dataset.ts"
 export { Descriptor } from "./models/descriptor.ts"
 export {
+  CellConstError,
   CellDataError,
   CellEnumError,
   CellError,

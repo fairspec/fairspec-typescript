@@ -9,6 +9,11 @@ export const BaseStringColumnProperty = BaseColumnProperty.extend({
     .optional()
     .describe("An optional array of allowed values for the column"),
 
+  const: z
+    .array(z.string())
+    .optional()
+    .describe("An optional const that all values must match"),
+
   examples: z
     .array(z.string())
     .optional()

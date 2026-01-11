@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { inspectValue } from "./inspect.ts"
+import { inspectJson } from "./inspect.ts"
 
-describe("inspectValue", () => {
+describe("inspectJson", () => {
   it("returns empty array for valid value", async () => {
     const value = {
       name: "test-package",
@@ -19,7 +19,7 @@ describe("inspectValue", () => {
       },
     }
 
-    const errors = await inspectValue(value, { jsonSchema })
+    const errors = await inspectJson(value, { jsonSchema })
 
     expect(errors).toEqual([])
   })
@@ -38,7 +38,7 @@ describe("inspectValue", () => {
       version: 123,
     }
 
-    const errors = await inspectValue(value, { jsonSchema })
+    const errors = await inspectJson(value, { jsonSchema })
 
     expect(errors.length).toBeGreaterThan(0)
     expect(errors[0]?.message).toContain("string")
@@ -61,7 +61,7 @@ describe("inspectValue", () => {
       version: "1.0.0",
     }
 
-    const errors = await inspectValue(value, { jsonSchema })
+    const errors = await inspectJson(value, { jsonSchema })
 
     expect(errors.length).toBeGreaterThan(0)
     expect(errors[0]?.message).toContain("required_field")
@@ -96,7 +96,7 @@ describe("inspectValue", () => {
       },
     }
 
-    const errors = await inspectValue(value, { jsonSchema })
+    const errors = await inspectJson(value, { jsonSchema })
 
     expect(errors.length).toBeGreaterThan(0)
     expect(
@@ -133,7 +133,7 @@ describe("inspectValue", () => {
       extra_field: "should not be here",
     }
 
-    const errors = await inspectValue(value, { jsonSchema })
+    const errors = await inspectJson(value, { jsonSchema })
 
     expect(errors.length).toBeGreaterThan(3)
 

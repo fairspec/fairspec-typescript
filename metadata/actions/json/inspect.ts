@@ -6,7 +6,7 @@ import type { JsonSchema } from "../../models/jsonSchema.ts"
  * Validate a value against a JSON Schema
  * It uses Ajv for JSON Schema validation under the hood
  */
-export async function inspectValue(
+export async function inspectJson(
   value: unknown,
   options: {
     jsonSchema: JsonSchema | string

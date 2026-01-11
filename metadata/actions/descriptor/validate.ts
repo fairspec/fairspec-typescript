@@ -1,5 +1,5 @@
+import { inspectJson } from "../../actions/json/inspect.ts"
 import { createReport } from "../../actions/report/create.ts"
-import { inspectValue } from "../../actions/value/inspect.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
 import type { Profile } from "../../models/profile.ts"
 
@@ -10,7 +10,7 @@ export async function validateDescriptor(
     rootJsonPointer?: string
   },
 ) {
-  const errors = await inspectValue(descriptor, {
+  const errors = await inspectJson(descriptor, {
     jsonSchema: options.profile,
     rootJsonPointer: options.rootJsonPointer,
   })

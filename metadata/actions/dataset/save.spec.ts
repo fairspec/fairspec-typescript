@@ -3,6 +3,7 @@ import * as path from "node:path"
 import { temporaryDirectory } from "tempy"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import type { Dataset } from "../../models/dataset.ts"
+import * as settings from "../../settings.ts"
 import { saveDatasetDescriptor } from "./save.ts"
 
 describe("saveDatasetDescriptor", () => {
@@ -14,7 +15,6 @@ describe("saveDatasetDescriptor", () => {
     testDir = temporaryDirectory()
     testPath = path.join(testDir, "dataset.json")
     testDataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       creators: [
         {
           name: "Test Creator",
@@ -70,7 +70,7 @@ describe("saveDatasetDescriptor", () => {
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
     expect(parsedContent.$schema).toBe(
-      "https://fairspec.org/profiles/latest/dataset.json",
+      `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/dataset.json`,
     )
   })
 
@@ -134,7 +134,6 @@ describe("saveDatasetDescriptor", () => {
           name: "test-resource",
           data: path.join(testDir, "data.csv"),
           tableSchema: {
-            $schema: "https://fairspec.org/profiles/latest/table.json",
             properties: {
               id: { type: "integer" },
               name: { type: "string" },
@@ -224,7 +223,6 @@ describe("saveDatasetDescriptor", () => {
 
   it("should overwrite existing file when overwrite is true", async () => {
     const initialDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       creators: [{ name: "Initial Creator" }],
       titles: [{ title: "Initial Dataset" }],
       resources: [
@@ -236,7 +234,6 @@ describe("saveDatasetDescriptor", () => {
     }
 
     const updatedDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       creators: [{ name: "Updated Creator" }],
       titles: [{ title: "Updated Dataset" }],
       resources: [
@@ -272,7 +269,6 @@ describe("saveDatasetDescriptor", () => {
 
   it("should save dataset with all DataCite metadata fields", async () => {
     const fullDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       creators: [{ name: "Full Creator" }],
       titles: [{ title: "Full Dataset" }],
       publisher: { name: "Example Publisher" },

@@ -26,7 +26,6 @@ describe("convertTableSchemaFromFrictionless", () => {
     }
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "string",
@@ -69,7 +68,6 @@ describe("convertTableSchemaFromFrictionless", () => {
     }
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         age: {
           type: "integer",
@@ -113,7 +111,6 @@ describe("convertTableSchemaFromFrictionless", () => {
     }
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "string",

@@ -14,7 +14,6 @@ export function convertDatasetFromFrictionless(
   )
 
   const dataset: Dataset = {
-    $schema: "https://fairspec.org/profiles/latest/dataset.json",
     resources,
   }
 

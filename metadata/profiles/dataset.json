@@ -4,7 +4,6 @@
   "$defs": {
     "Dataset": {
       "type": "object",
-      "required": ["$schema"],
       "properties": {
         "$schema": { "$ref": "#/$defs/Profile" },
         "resources": { "$ref": "#/$defs/Resources" },
@@ -41,7 +40,6 @@
     },
     "Resource": {
       "type": "object",
-      "required": ["data"],
       "properties": {
         "name": { "$ref": "#/$defs/Name" },
         "data": { "$ref": "#/$defs/Data" },

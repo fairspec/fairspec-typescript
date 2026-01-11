@@ -4,7 +4,6 @@ import { validateTableSchema } from "./validate.ts"
 describe("validateTableSchema", () => {
   it("returns no errors for valid schema", async () => {
     const descriptor = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "integer",
@@ -25,7 +24,6 @@ describe("validateTableSchema", () => {
 
   it("returns validation errors for invalid schema", async () => {
     const descriptor = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: 123,
@@ -41,7 +39,7 @@ describe("validateTableSchema", () => {
     expect(report.errors.length).toBeGreaterThan(0)
   })
 
-  it("returns error for missing $schema", async () => {
+  it("returns valid if missing $schema", async () => {
     const descriptor = {
       properties: {
         id: {
@@ -51,9 +49,7 @@ describe("validateTableSchema", () => {
     }
 
     const report = await validateTableSchema(descriptor)
-
-    expect(report.valid).toBe(false)
-    expect(report.errors.length).toBeGreaterThan(0)
+    expect(report.valid).toBe(true)
   })
 
   it("throws error for invalid $schema URL", async () => {

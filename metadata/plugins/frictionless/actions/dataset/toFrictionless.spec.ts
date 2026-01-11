@@ -6,7 +6,6 @@ import { convertDatasetToFrictionless } from "./toFrictionless.ts"
 describe("convertDatasetToFrictionless", () => {
   it("should convert dataset with basic metadata", () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           data: "data.csv",
@@ -43,7 +42,6 @@ describe("convertDatasetToFrictionless", () => {
 
   it("should convert dataset with creators and contributors", () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           data: "data.csv",
@@ -106,7 +104,6 @@ describe("convertDatasetToFrictionless", () => {
 
   it("should convert dataset with dates and homepage", () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           data: "data.csv",
@@ -145,7 +142,6 @@ describe("convertDatasetToFrictionless", () => {
 
   it("should handle empty resources array", () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Empty Dataset" }],
     }
 
@@ -160,7 +156,6 @@ describe("convertDatasetToFrictionless", () => {
 
   it("should convert all contributor types correctly", () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [],
       contributors: [
         { name: "Person 1", contributorType: "ContactPerson" },

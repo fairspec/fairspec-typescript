@@ -6,7 +6,6 @@ import { convertTableSchemaToFrictionless } from "./toFrictionless.ts"
 describe("convertTableSchemaToFrictionless", () => {
   it("should convert basic string columns to fields", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "string",
@@ -48,7 +47,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should convert numeric columns with constraints", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         age: {
           type: "integer",
@@ -90,7 +88,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should convert foreign keys and primary keys", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "string",
@@ -140,7 +137,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should convert temporal fields", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         created_date: {
           type: "string",
@@ -182,7 +178,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should convert year and duration fields", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         year: {
           type: "integer",
@@ -213,7 +208,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should convert list and array fields", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         tags: {
           type: "string",
@@ -248,7 +242,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should convert object and geojson fields", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         metadata: {
           type: "object",
@@ -288,7 +281,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should convert boolean fields with true/false values", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         active: {
           type: "boolean",
@@ -315,7 +307,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should convert missingValues from mixed types to strings", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         value: {
           type: "number",
@@ -340,7 +331,6 @@ describe("convertTableSchemaToFrictionless", () => {
 
   it("should preserve title and description at schema level", () => {
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       title: "User Table",
       description: "Table containing user information",
       properties: {

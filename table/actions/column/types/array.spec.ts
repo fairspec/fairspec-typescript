@@ -12,7 +12,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         tags: {
           type: "array",
@@ -32,7 +31,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         items: {
           type: "array",
@@ -52,7 +50,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         data: {
           type: "array",
@@ -72,7 +69,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         data: {
           type: "array",
@@ -100,7 +96,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         data: {
           type: "array",
@@ -134,7 +129,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         matrix: {
           type: "array",
@@ -154,7 +148,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         data: {
           type: "array",
@@ -182,7 +175,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         data: {
           type: "array",
@@ -238,7 +230,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         scores: {
           type: "array",
@@ -262,7 +253,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         numbers: {
           type: "array",
@@ -313,7 +303,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         users: {
           type: "array",
@@ -351,7 +340,6 @@ describe("validateArrayColumn", () => {
       .lazy()
 
     const tableSchema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         tags: {
           type: "array",

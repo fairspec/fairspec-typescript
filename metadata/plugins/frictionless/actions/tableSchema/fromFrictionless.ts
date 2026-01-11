@@ -37,7 +37,6 @@ export function convertTableSchemaFromFrictionless(
   const uniqueKeys = frictionlessSchema.uniqueKeys
 
   const tableSchema: TableSchema = {
-    $schema: "https://fairspec.org/profiles/latest/table.json",
     properties,
   }
 

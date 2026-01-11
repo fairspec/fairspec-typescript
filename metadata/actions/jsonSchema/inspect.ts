@@ -1,5 +1,5 @@
-import type { Descriptor } from "../../../models/descriptor.ts"
-import { ajv } from "../ajv.ts"
+import type { Descriptor } from "../../models/descriptor.ts"
+import { ajv } from "./ajv.ts"
 
 export async function inspectJsonSchema(descriptor: Descriptor) {
   const errors: { message: string }[] = []

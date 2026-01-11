@@ -4,10 +4,7 @@ import { ForeignKey } from "./foreignKey.ts"
 import { UniqueKey } from "./uniqueKey.ts"
 
 export const TableSchema = z.object({
-  $schema: z
-    .string()
-    .regex(/table\.json$/)
-    .describe("URI to one of the officially published Fairspec Table profiles"),
+  $schema: z.httpUrl().optional().describe("Fairspec Table profile url."),
 
   title: z
     .string()

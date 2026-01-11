@@ -19,7 +19,6 @@ describe("convertDatasetFromFrictionless", () => {
     }
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           data: "data.csv",
@@ -71,7 +70,6 @@ describe("convertDatasetFromFrictionless", () => {
     }
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           data: "data.csv",
@@ -117,7 +115,6 @@ describe("convertDatasetFromFrictionless", () => {
     }
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           data: "data.csv",

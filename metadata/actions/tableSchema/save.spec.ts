@@ -3,11 +3,11 @@ import * as path from "node:path"
 import { temporaryDirectory } from "tempy"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import type { TableSchema } from "../../models/tableSchema.ts"
+import * as settings from "../../settings.ts"
 import { saveTableSchema } from "./save.ts"
 
 describe("saveTableSchema", () => {
   const testSchema: TableSchema = {
-    $schema: "https://fairspec.org/profiles/latest/table.json",
     properties: {
       id: {
         type: "integer",
@@ -49,12 +49,9 @@ describe("saveTableSchema", () => {
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
 
-    expect(parsedContent).toEqual(testSchema)
-    expect(parsedContent.$schema).toBe(
-      "https://fairspec.org/profiles/latest/table.json",
-    )
-
-    const expectedFormat = JSON.stringify(testSchema, null, 2)
-    expect(content).toEqual(expectedFormat)
+    expect(parsedContent).toEqual({
+      ...testSchema,
+      $schema: `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/table.json`,
+    })
   })
 })

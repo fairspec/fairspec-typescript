@@ -230,6 +230,9 @@ importers:
       '@fairspec/metadata':
         specifier: workspace:*
         version: link:../metadata
+      betterknown:
+        specifier: ^1.2.0
+        version: 1.2.0
       csv-sniffer:
         specifier: ^0.1.1
         version: 0.1.1
@@ -1151,6 +1154,9 @@ packages:
   '@types/fontkit@2.0.8':
     resolution: {integrity: sha512-wN+8bYxIpJf+5oZdrdtaX04qUuWHcKxcDEgRS9Qm9ZClSHjzEn13SxUC+5eRM+4yXIeTYk8mTzLAWGF64847ew==}
 
+  '@types/geojson@7946.0.16':
+    resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
+
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
 
@@ -1387,6 +1393,9 @@ packages:
 
   before-after-hook@4.0.0:
     resolution: {integrity: sha512-q6tR3RPqIB1pMiTRMFcZwuG5T8vwp+vUvEG0vuI6B+Rikh5BfPp2fQ82c925FOs+b0lcFQ8CFrL+KbilfZFhOQ==}
+
+  betterknown@1.2.0:
+    resolution: {integrity: sha512-9kuLOeVkgAXnKsMn9WAHLLJ45Wn51jPuZlS1XPkia7NoBpqM9EbVvr+A2Wr0g1WAEL5rX7/oM428Akd3wCL3vA==}
 
   blob-to-buffer@1.2.9:
     resolution: {integrity: sha512-BF033y5fN6OCofD3vgHmNtwZWRcq9NLyyxyILx9hfMy1sXYy4ojFl765hJ2lP0YaN2fuxPaLO2Vzzoxy0FLFFA==}
@@ -5184,6 +5193,8 @@ snapshots:
     dependencies:
       '@types/node': 24.2.0
 
+  '@types/geojson@7946.0.16': {}
+
   '@types/hast@3.0.4':
     dependencies:
       '@types/unist': 3.0.3
@@ -5524,6 +5535,10 @@ snapshots:
       is-decimal: 2.0.1
 
   before-after-hook@4.0.0: {}
+
+  betterknown@1.2.0:
+    dependencies:
+      '@types/geojson': 7946.0.16
 
   blob-to-buffer@1.2.9: {}
 

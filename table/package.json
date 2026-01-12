@@ -37,6 +37,7 @@
   "dependencies": {
     "@fairspec/dataset": "workspace:*",
     "@fairspec/metadata": "workspace:*",
+    "betterknown": "^1.2.0",
     "csv-sniffer": "^0.1.1",
     "nodejs-polars": "^0.23.5",
     "p-all": "^5.0.1",

@@ -26,11 +26,8 @@ export async function inspectJsonColumn(
   const constraintJsonSchema = column.property
 
   const frame = await table
-    .withRowCount()
-    .select(
-      pl.pl.col("row_nr").add(1).alias("number"),
-      pl.pl.col(column.name).alias("source"),
-    )
+    .withRowIndex("number", 1)
+    .select(pl.pl.col(column.name).alias("source"))
     .collect()
 
   for (const row of frame.toRecords() as any[]) {

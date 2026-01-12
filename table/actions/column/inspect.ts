@@ -106,9 +106,8 @@ async function inspectCells(
   }
 
   let columnCheckTable = table
-    .withRowCount()
+    .withRowIndex("number", 1)
     .select(
-      pl.col("row_nr").add(1).alias("number"),
       normalizeColumn(mapping).alias("target"),
       normalizeColumn(mapping, { keepType: true }).alias("source"),
       pl.lit(null).alias("error"),

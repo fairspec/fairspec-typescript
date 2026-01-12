@@ -105,8 +105,7 @@ async function inspectRows(
 
   const collectRowErrors = async (check: any) => {
     const rowCheckTable = table
-      .withRowCount()
-      .withColumn(pl.col("row_nr").add(1))
+      .withRowIndex("number", 1)
       .rename({ row_nr: "fairspec:number" })
       .withColumn(
         pl

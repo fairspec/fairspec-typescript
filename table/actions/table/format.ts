@@ -15,8 +15,7 @@ export async function joinHeaderRows(
   }
 
   const extraLabelsFrame = await table
-    .withRowCount()
-    .withColumn(pl.col("row_nr").add(1))
+    .withRowIndex("number", 1)
     .filter(pl.col("row_nr").add(headerOffset).isIn(headerRows))
     .select(...table.columns.map(name => pl.col(name).str.concat(headerJoin)))
     .collect()
@@ -32,8 +31,7 @@ export async function joinHeaderRows(
   )
 
   return table
-    .withRowCount()
-    .withColumn(pl.col("row_nr").add(1))
+    .withRowIndex("number", 1)
     .filter(pl.col("row_nr").add(headerOffset).isIn(headerRows).not())
     .rename(mapping)
     .drop("row_nr")
@@ -50,8 +48,7 @@ export function skipCommentRows(
   }
 
   return table
-    .withRowCount()
-    .withColumn(pl.col("row_nr").add(1))
+    .withRowIndex("number", 1)
     .filter(pl.col("row_nr").add(commentOffset).isIn(format.commentRows).not())
     .drop("row_nr")
 }

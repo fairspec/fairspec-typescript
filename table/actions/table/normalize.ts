@@ -1,10 +1,11 @@
 import type { TableSchema } from "@fairspec/metadata"
-import { getColumns, mergeMissingValues } from "@fairspec/metadata"
+import { getColumns } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { normalizeColumn } from "../../actions/column/normalize.ts"
 import { getPolarsSchema } from "../../helpers/schema.ts"
 import type { SchemaMapping } from "../../models/schema.ts"
 import type { Table } from "../../models/table.ts"
+import { mergeMissingValues } from "./helpers.ts"
 
 const HEAD_ROWS = 100
 

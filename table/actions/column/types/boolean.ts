@@ -14,9 +14,9 @@ export function parseBooleanColumn(column: BooleanColumn, columnExpr: pl.Expr) {
   columnExpr = columnExpr.cast(pl.Int8)
 
   return pl
-    .when(columnExpr.eq("1"))
+    .when(columnExpr.eq(1))
     .then(pl.lit(true))
-    .when(columnExpr.eq("0"))
+    .when(columnExpr.eq(0))
     .then(pl.lit(false))
     .otherwise(pl.lit(null))
     .alias(column.name)

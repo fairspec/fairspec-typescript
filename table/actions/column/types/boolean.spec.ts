@@ -1,6 +1,8 @@
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { denormalizeTable, normalizeTable } from "../../table/index.ts"
+import { denormalizeTable } from "../../../actions/table/denormalize.ts"
+import { normalizeTable } from "../../../actions/table/normalize.ts"
 
 describe("parseBooleanColumn", () => {
   it.each([
@@ -47,11 +49,16 @@ describe("parseBooleanColumn", () => {
   ])("%s -> %s %o", async (cell, value, options) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
-    const schema = {
-      columns: [{ name: "name", type: "boolean" as const, ...options }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "boolean",
+          ...options,
+        },
+      },
     }
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
 
     expect(frame.toRecords()[0]?.name).toEqual(value)
@@ -78,11 +85,16 @@ describe("stringifyBooleanColumn", () => {
   ])("%s -> %s %o", async (value, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Bool)]).lazy()
 
-    const schema = {
-      columns: [{ name: "name", type: "boolean" as const, ...options }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "boolean",
+          ...options,
+        },
+      },
     }
 
-    const result = await denormalizeTable(table, schema)
+    const result = await denormalizeTable(table, tableSchema)
     const frame = await result.collect()
 
     expect(frame.toRecords()[0]?.name).toEqual(expected)

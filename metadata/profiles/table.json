@@ -371,7 +371,10 @@
       }
     },
     "BaseObjectColumnProperty": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
+      "allOf": [
+        { "$ref": "#/$defs/BaseColumnProperty" },
+        { "$ref": "https://json-schema.org/draft/2020-12/schema" }
+      ],
       "type": "object",
       "properties": {
         "enum": { "$ref": "#/$defs/ObjectEnum" },
@@ -381,10 +384,7 @@
       }
     },
     "ObjectColumnProperty": {
-      "allOf": [
-        { "$ref": "#/$defs/BaseObjectColumnProperty" },
-        { "$ref": "https://json-schema.org/draft/2020-12/schema" }
-      ]
+      "allOf": [{ "$ref": "#/$defs/BaseObjectColumnProperty" }]
     },
     "GeojsonColumnProperty": {
       "allOf": [{ "$ref": "#/$defs/BaseObjectColumnProperty" }],

@@ -15,6 +15,8 @@ export const BaseColumnProperty = z.object({
     .string()
     .optional()
     .describe("An optional URI for semantic type (RDF)"),
+
+  default: z.unknown().optional(),
 })
 
 export const BaseColumn = z.object({

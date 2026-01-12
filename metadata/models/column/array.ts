@@ -36,6 +36,25 @@ export const ArrayColumnProperty = BaseColumnProperty.extend({
     .describe(
       "An optional column-specific list of values that represent missing or null data",
     ),
+
+  // JSON Schema properties
+
+  allOf: z.unknown().optional(),
+  anyOf: z.unknown().optional(),
+  oneOf: z.unknown().optional(),
+  not: z.unknown().optional(),
+  if: z.unknown().optional(),
+  then: z.unknown().optional(),
+  else: z.unknown().optional(),
+  items: z.unknown().optional(),
+  prefixItems: z.unknown().optional(),
+  additionalItems: z.unknown().optional(),
+  contains: z.unknown().optional(),
+  minContains: z.number().optional(),
+  maxContains: z.number().optional(),
+  maxItems: z.number().optional(),
+  minItems: z.number().optional(),
+  uniqueItems: z.boolean().optional(),
 })
 
 export const ArrayColumn = BaseColumn.extend({

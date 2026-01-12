@@ -12,7 +12,9 @@ describe("inspectTable (cell/required)", () => {
       .lazy()
 
     const schema: Schema = {
-      columns: [{ name: "id", type: "number", constraints: { required: true } }],
+      columns: [
+        { name: "id", type: "number", constraints: { required: true } },
+      ],
     }
 
     const errors = await inspectTable(table, { schema })

@@ -104,16 +104,13 @@ async function inspectRows(
   const maxRowErrors = Math.ceil(maxErrors / columns.length)
 
   const collectRowErrors = async (check: any) => {
-    const rowCheckTable = table
-      .withRowIndex("number", 1)
-      .rename({ row_nr: "fairspec:number" })
-      .withColumn(
-        pl
-          .when(check.isErrorExpr)
-          .then(pl.lit(JSON.stringify(check.errorTemplate)))
-          .otherwise(pl.lit(null))
-          .alias("fairspec:error"),
-      )
+    const rowCheckTable = table.withRowIndex("fairspec:number", 1).withColumn(
+      pl
+        .when(check.isErrorExpr)
+        .then(pl.lit(JSON.stringify(check.errorTemplate)))
+        .otherwise(pl.lit(null))
+        .alias("fairspec:error"),
+    )
 
     const rowCheckFrame = await rowCheckTable
       .filter(pl.col("fairspec:error").isNotNull())

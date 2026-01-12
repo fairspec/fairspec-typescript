@@ -19,6 +19,7 @@ import { normalizeColumn } from "./normalize.ts"
 import { inspectArrayColumn } from "./types/array.ts"
 import { inspectGeojsonColumn } from "./types/geojson.ts"
 import { inspectObjectColumn } from "./types/object.ts"
+import { inspectTopojsonColumn } from "./types/topojson.ts"
 
 export async function inspectColumn(
   mapping: ColumnMapping,
@@ -92,22 +93,34 @@ async function inspectCells(
     maxErrors: number
   },
 ) {
-  const { maxErrors } = options
-  const errors: CellError[] = []
-
   // Types that require non-polars validation
   switch (mapping.target.type) {
     case "array":
       return await inspectArrayColumn(mapping.target, table)
-    case "geojson":
-      return await inspectGeojsonColumn(mapping.target, table)
     case "object":
       return await inspectObjectColumn(mapping.target, table)
+    case "geojson":
+      return await inspectGeojsonColumn(mapping.target, table)
+    case "topojson":
+      return await inspectTopojsonColumn(mapping.target, table)
+    default:
+      return await inspectCellsNatively(mapping, table, options)
   }
+}
 
+async function inspectCellsNatively(
+  mapping: ColumnMapping,
+  table: Table,
+  options: {
+    maxErrors: number
+  },
+) {
+  const { maxErrors } = options
+  const errors: CellError[] = []
   let columnCheckTable = table
     .withRowIndex("number", 1)
     .select(
+      pl.col("number"),
       normalizeColumn(mapping).alias("target"),
       normalizeColumn(mapping, { keepType: true }).alias("source"),
       pl.lit(null).alias("error"),

@@ -27,7 +27,7 @@ export async function inspectJsonColumn(
 
   const frame = await table
     .withRowIndex("number", 1)
-    .select(pl.pl.col(column.name).alias("source"))
+    .select(pl.col("number"), pl.col(column.name).alias("source"))
     .collect()
 
   for (const row of frame.toRecords() as any[]) {

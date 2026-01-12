@@ -3,7 +3,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { inspectTable } from "../../../actions/table/inspect.ts"
 
-describe.skip("validateObjectColumn", () => {
+describe("validateObjectColumn", () => {
   it("should not errors for valid JSON objects", async () => {
     const table = pl
       .DataFrame({

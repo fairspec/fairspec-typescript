@@ -20,6 +20,7 @@ import { inspectArrayColumn } from "./types/array.ts"
 import { inspectGeojsonColumn } from "./types/geojson.ts"
 import { inspectObjectColumn } from "./types/object.ts"
 import { inspectTopojsonColumn } from "./types/topojson.ts"
+import { inspectWktColumn } from "./types/wkt.ts"
 
 export async function inspectColumn(
   mapping: ColumnMapping,
@@ -95,6 +96,8 @@ async function inspectCells(
 ) {
   // Types that require non-polars validation
   switch (mapping.target.type) {
+    case "wkt":
+      return await inspectWktColumn(mapping.target, table)
     case "array":
       return await inspectArrayColumn(mapping.target, table)
     case "object":

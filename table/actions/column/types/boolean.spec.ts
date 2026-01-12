@@ -48,7 +48,6 @@ describe("parseBooleanColumn", () => {
     ["no", false, { trueValues: ["oui", "si"], falseValues: ["non", "no"] }],
   ])("%s -> %s %o", async (cell, value, options) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
     const tableSchema: TableSchema = {
       properties: {
         name: {
@@ -85,7 +84,6 @@ describe("stringifyBooleanColumn", () => {
     [false, "non", { trueValues: ["oui", "si"], falseValues: ["non", "no"] }],
   ])("%s -> %s %o", async (value, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Bool)]).lazy()
-
     const tableSchema: TableSchema = {
       properties: {
         name: {

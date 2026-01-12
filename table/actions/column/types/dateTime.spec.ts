@@ -27,7 +27,6 @@ describe.skip("parseDatetimeColumn", () => {
     ["21/11/06 16:30", null, { temporalFormat: "invalid" }],
   ])("%s -> %s %o", async (cell, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
     const tableSchema: TableSchema = {
       properties: {
         name: {
@@ -65,7 +64,6 @@ describe("stringifyDatetimeColumn", () => {
     ],
   ])("%s -> %s %o", async (value, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Datetime)]).lazy()
-
     const tableSchema: TableSchema = {
       properties: {
         name: {

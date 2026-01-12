@@ -49,8 +49,16 @@ describe("stringifyTimeColumn", () => {
     [new Date(Date.UTC(2014, 0, 1, 16, 30, 0)), "16:30:00", {}],
 
     // Custom format
-    [new Date(Date.UTC(2014, 0, 1, 6, 0, 0)), "06:00", { temporalFormat: "%H:%M" }],
-    [new Date(Date.UTC(2014, 0, 1, 16, 30, 0)), "16:30", { temporalFormat: "%H:%M" }],
+    [
+      new Date(Date.UTC(2014, 0, 1, 6, 0, 0)),
+      "06:00",
+      { temporalFormat: "%H:%M" },
+    ],
+    [
+      new Date(Date.UTC(2014, 0, 1, 16, 30, 0)),
+      "16:30",
+      { temporalFormat: "%H:%M" },
+    ],
   ])("%s -> %s %o", async (value, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Time)]).lazy()
 

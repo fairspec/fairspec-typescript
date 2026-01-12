@@ -41,7 +41,6 @@ describe("parseCategoricalColumn", () => {
     ],
   ])("%s -> %s", async (cell, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
     const tableSchema: TableSchema = {
       properties: {
         name: {

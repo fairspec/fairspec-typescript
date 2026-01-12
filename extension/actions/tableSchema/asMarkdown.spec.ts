@@ -1,8 +1,8 @@
 import type { TableSchema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { convertTableSchemaToMarkdown } from "./toMarkdown.ts"
+import { renderTableSchemaAsMarkdown } from "./asMarkdown.ts"
 
-describe("convertTableSchemaToMarkdown", () => {
+describe("renderTableSchemaAsMarkdown", () => {
   it("converts a simple schema to markdown table", () => {
     const schema: TableSchema = {
       $schema: "https://fairspec.org/profiles/latest/table.json",
@@ -20,7 +20,7 @@ describe("convertTableSchemaToMarkdown", () => {
       },
     }
 
-    const result = convertTableSchemaToMarkdown(schema)
+    const result = renderTableSchemaAsMarkdown(schema)
 
     expect(result).toContain(
       "| Name | Type | Title | Description | Constraints |",
@@ -48,7 +48,7 @@ describe("convertTableSchemaToMarkdown", () => {
       required: ["age", "email"],
     }
 
-    const result = convertTableSchemaToMarkdown(schema)
+    const result = renderTableSchemaAsMarkdown(schema)
 
     expect(result).toContain("required")
     expect(result).toContain("min: 0")
@@ -62,7 +62,7 @@ describe("convertTableSchemaToMarkdown", () => {
       properties: {},
     }
 
-    const result = convertTableSchemaToMarkdown(schema)
+    const result = renderTableSchemaAsMarkdown(schema)
 
     expect(result).toContain(
       "| Name | Type | Title | Description | Constraints |",
@@ -80,7 +80,7 @@ describe("convertTableSchemaToMarkdown", () => {
       },
     }
 
-    const result = convertTableSchemaToMarkdown(schema)
+    const result = renderTableSchemaAsMarkdown(schema)
 
     expect(result).toContain("Description with pipe character")
   })
@@ -96,7 +96,7 @@ describe("convertTableSchemaToMarkdown", () => {
       },
     }
 
-    const result = convertTableSchemaToMarkdown(schema)
+    const result = renderTableSchemaAsMarkdown(schema)
 
     expect(result).toContain("enum: active, inactive, pending")
   })
@@ -111,7 +111,7 @@ describe("convertTableSchemaToMarkdown", () => {
       },
     }
 
-    const result = convertTableSchemaToMarkdown(schema, { frontmatter: true })
+    const result = renderTableSchemaAsMarkdown(schema, { frontmatter: true })
 
     expect(result).toContain("---")
     expect(result).toContain("title: Table Schema")
@@ -127,7 +127,7 @@ describe("convertTableSchemaToMarkdown", () => {
       },
     }
 
-    const result = convertTableSchemaToMarkdown(schema, { frontmatter: false })
+    const result = renderTableSchemaAsMarkdown(schema, { frontmatter: false })
 
     expect(result).not.toContain("title: Table Schema")
     expect(result.startsWith("\n## Columns")).toBe(true)
@@ -147,7 +147,7 @@ describe("convertTableSchemaToMarkdown", () => {
       required: ["username"],
     }
 
-    const result = convertTableSchemaToMarkdown(schema)
+    const result = renderTableSchemaAsMarkdown(schema)
 
     expect(result).toContain("required")
     expect(result).toContain("minLength: 3")
@@ -166,7 +166,7 @@ describe("convertTableSchemaToMarkdown", () => {
       },
     }
 
-    const result = convertTableSchemaToMarkdown(schema)
+    const result = renderTableSchemaAsMarkdown(schema)
 
     expect(result).toContain("Description with newline")
     expect(result).not.toContain("Description with\nnewline")

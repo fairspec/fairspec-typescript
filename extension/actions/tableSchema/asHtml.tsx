@@ -1,8 +1,9 @@
 import type { Column, TableSchema } from "@fairspec/metadata"
+import { getColumns } from "@fairspec/metadata"
 import { prettify } from "htmlfy"
 import { renderToStaticMarkup } from "react-dom/server"
 
-export function convertTableSchemaToHtml(
+export function renderTableSchemaAsHtml(
   schema: TableSchema,
   options?: { frontmatter?: boolean },
 ): string {
@@ -24,17 +25,15 @@ function SchemaTable(props: { schema: TableSchema }) {
       {schema.foreignKeys && schema.foreignKeys.length > 0 && (
         <ForeignKeys foreignKeys={schema.foreignKeys} />
       )}
-      <FieldsTable properties={schema.properties} required={schema.required} />
+      <FieldsTable schema={schema} />
     </>
   )
 }
 
-function FieldsTable(props: {
-  properties: Record<string, Column>
-  required?: string[]
-}) {
-  const { properties, required } = props
-  const columns = Object.entries(properties)
+function FieldsTable(props: { schema: TableSchema }) {
+  const { schema } = props
+  const columns = getColumns(schema)
+  const required = schema.required ?? []
 
   return (
     <>
@@ -53,12 +52,11 @@ function FieldsTable(props: {
           </tr>
         </thead>
         <tbody>
-          {columns.map(([name, column]) => (
+          {columns.map(column => (
             <FieldRow
-              key={name}
-              name={name}
+              key={column.name}
               column={column}
-              isRequired={required?.includes(name) ?? false}
+              isRequired={required.includes(column.name)}
             />
           ))}
         </tbody>
@@ -67,16 +65,12 @@ function FieldsTable(props: {
   )
 }
 
-function FieldRow(props: {
-  name: string
-  column: Column
-  isRequired: boolean
-}) {
-  const { name, column, isRequired } = props
-  const columnType = column.type || "any"
-  const columnDescription = column.description || ""
+function FieldRow(props: { column: Column; isRequired: boolean }) {
+  const { column, isRequired } = props
+  const { name, type, property } = column
+  const columnDescription = property.description ?? ""
 
-  const constraints = extractConstraints(column)
+  const constraints = extractConstraints(property)
 
   return (
     <tr>
@@ -93,14 +87,12 @@ function FieldRow(props: {
         {constraints.length > 0 && (
           <ConstraintsList constraints={constraints} />
         )}
-        {(column.type === "string" || column.type === "integer") &&
-          "categories" in column &&
-          column.categories !== undefined && (
-            <CategoriesList categories={column.categories} />
-          )}
+        {"categories" in property && property.categories !== undefined && (
+          <CategoriesList categories={property.categories} />
+        )}
       </td>
       <td>
-        <code>{columnType}</code>
+        <code>{type}</code>
       </td>
     </tr>
   )
@@ -144,26 +136,26 @@ function CategoriesList(props: { categories: any[] }) {
   )
 }
 
-function extractConstraints(column: Column): Constraint[] {
+function extractConstraints(property: Column["property"]): Constraint[] {
   const constraints: Constraint[] = []
 
-  if ("minimum" in column && column.minimum !== undefined) {
-    constraints.push({ name: "minimum", value: String(column.minimum) })
+  if ("minimum" in property && property.minimum !== undefined) {
+    constraints.push({ name: "minimum", value: String(property.minimum) })
   }
-  if ("maximum" in column && column.maximum !== undefined) {
-    constraints.push({ name: "maximum", value: String(column.maximum) })
+  if ("maximum" in property && property.maximum !== undefined) {
+    constraints.push({ name: "maximum", value: String(property.maximum) })
   }
-  if ("minLength" in column && column.minLength !== undefined) {
-    constraints.push({ name: "minLength", value: String(column.minLength) })
+  if ("minLength" in property && property.minLength !== undefined) {
+    constraints.push({ name: "minLength", value: String(property.minLength) })
   }
-  if ("maxLength" in column && column.maxLength !== undefined) {
-    constraints.push({ name: "maxLength", value: String(column.maxLength) })
+  if ("maxLength" in property && property.maxLength !== undefined) {
+    constraints.push({ name: "maxLength", value: String(property.maxLength) })
   }
-  if ("pattern" in column && column.pattern) {
-    constraints.push({ name: "pattern", value: column.pattern })
+  if ("pattern" in property && property.pattern) {
+    constraints.push({ name: "pattern", value: property.pattern })
   }
-  if ("enum" in column && column.enum) {
-    const enumValues = column.enum.map((v: any) => String(v)).join(", ")
+  if ("enum" in property && property.enum) {
+    const enumValues = property.enum.map(v => String(v)).join(", ")
     constraints.push({ name: "enum", value: enumValues })
   }
 

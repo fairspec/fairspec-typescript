@@ -37,10 +37,10 @@
   "dependencies": {
     "@fairspec/dataset": "workspace:*",
     "@fairspec/metadata": "workspace:*",
-    "betterknown": "^1.2.0",
     "csv-sniffer": "^0.1.1",
     "nodejs-polars": "^0.23.5",
     "p-all": "^5.0.1",
+    "temporal-polyfill": "^0.3.0",
     "wkx-ts": "^1.0.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^4.2.1"

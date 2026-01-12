@@ -3,7 +3,7 @@ import type { Table } from "../../../models/table.ts"
 import topojsonJsonSchema from "../../../schemas/topojson.json" with {
   type: "json",
 }
-import { inspectJsonColumn } from "./json.ts"
+import { inspectJsonColumn } from "../helpers.ts"
 
 export async function inspectTopojsonColumn(
   column: TopojsonColumn,

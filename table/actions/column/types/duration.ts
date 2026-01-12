@@ -1,20 +1,14 @@
 import type { DurationColumn } from "@fairspec/metadata"
-import type * as pl from "nodejs-polars"
+import { Temporal } from "temporal-polyfill"
+import type { Table } from "../../../models/table.ts"
+import { inspectTextColumn } from "../helpers.ts"
 
-// TODO: Implement inspectDurationColumn
-
-// TODO: raise an issue on nodejs-polars repo as this is not supported yet
-// So we do nothing on this column type for now
-export function parseDurationColumn(
-  _column: DurationColumn,
-  columnExpr: pl.Expr,
+export async function inspectDurationColumn(
+  column: DurationColumn,
+  table: Table,
 ) {
-  return columnExpr
-}
-
-export function stringifyDurationColumn(
-  _column: DurationColumn,
-  columnExpr: pl.Expr,
-) {
-  return columnExpr
+  return inspectTextColumn(column, table, {
+    // TODO: Fix this hack
+    parse: source => Temporal.Duration.from(source),
+  })
 }

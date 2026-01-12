@@ -17,6 +17,7 @@ import { checkCellPattern } from "./checks/pattern.ts"
 import { checkCellType } from "./checks/type.ts"
 import { normalizeColumn } from "./normalize.ts"
 import { inspectArrayColumn } from "./types/array.ts"
+import { inspectDurationColumn } from "./types/duration.ts"
 import { inspectGeojsonColumn } from "./types/geojson.ts"
 import { inspectObjectColumn } from "./types/object.ts"
 import { inspectTopojsonColumn } from "./types/topojson.ts"
@@ -95,8 +96,13 @@ async function inspectCells(
     maxErrors: number
   },
 ) {
+  // TODO: Improve the implementation
+  // Make unblocking / handle large data / process in parallel / move processing to Rust?
+
   // Types that require non-polars validation
   switch (mapping.target.type) {
+    case "duration":
+      return await inspectDurationColumn(mapping.target, table)
     case "wkb":
       return await inspectWkbColumn(mapping.target, table)
     case "wkt":

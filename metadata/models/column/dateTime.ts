@@ -2,7 +2,7 @@ import { z } from "zod"
 import { BaseColumn } from "./base.ts"
 import { BaseStringColumnProperty } from "./string.ts"
 
-export const DatetimeColumnProperty = BaseStringColumnProperty.extend({
+export const DateTimeColumnProperty = BaseStringColumnProperty.extend({
   format: z.literal("date-time"),
 
   temporalFormat: z
@@ -13,9 +13,9 @@ export const DatetimeColumnProperty = BaseStringColumnProperty.extend({
     ),
 })
 
-export const DatetimeColumn = BaseColumn.extend({
-  type: z.literal("datetime"),
-  property: DatetimeColumnProperty,
+export const DateTimeColumn = BaseColumn.extend({
+  type: z.literal("date-time"),
+  property: DateTimeColumnProperty,
 })
 
-export type DatetimeColumn = z.infer<typeof DatetimeColumn>
+export type DateTimeColumn = z.infer<typeof DateTimeColumn>

@@ -50,7 +50,7 @@ function convertType(column: Column): string {
       return "date"
     case "time":
       return "time"
-    case "datetime":
+    case "date-time":
       return "timestamp"
     case "object":
       return "json"

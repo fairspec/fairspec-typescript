@@ -1,6 +1,7 @@
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { denormalizeTable, normalizeTable } from "../../table/index.ts"
+import { denormalizeTable } from "../../../actions/table/denormalize.ts"
+import { normalizeTable } from "../../../actions/table/normalize.ts"
 
 // TODO: Enable this test suite after this issue is fixed:
 // https://github.com/pola-rs/nodejs-polars/issues/365

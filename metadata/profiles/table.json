@@ -145,7 +145,7 @@
         },
         {
           "if": { "properties": { "format": { "const": "date-time" } } },
-          "then": { "$ref": "#/$defs/DatetimeColumnProperty" }
+          "then": { "$ref": "#/$defs/DateTimeColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "date" } } },
@@ -318,7 +318,7 @@
         "format": { "const": "url" }
       }
     },
-    "DatetimeColumnProperty": {
+    "DateTimeColumnProperty": {
       "allOf": [{ "$ref": "#/$defs/BaseStringColumnProperty" }],
       "properties": {
         "format": { "const": "date-time" },
@@ -489,7 +489,7 @@
         "integer",
         "number",
         "boolean",
-        "datetime",
+        "date-time",
         "date",
         "time"
       ]

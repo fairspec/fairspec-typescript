@@ -75,7 +75,7 @@ function convertColumn(ckanField: CkanField): Column {
     case "datetime":
       return {
         name: ckanField.id,
-        type: "datetime",
+        type: "date-time",
         property: { ...baseProperty, type: "string", format: "date-time" },
       }
     case "json":

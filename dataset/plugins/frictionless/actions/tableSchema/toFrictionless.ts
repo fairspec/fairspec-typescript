@@ -82,7 +82,7 @@ function convertColumnToField(
       return convertToDateField(column, isRequired)
     case "time":
       return convertToTimeField(column, isRequired)
-    case "datetime":
+    case "date-time":
       return convertToDatetimeField(column, isRequired)
     case "duration":
       return convertToDurationField(column, isRequired)
@@ -268,7 +268,7 @@ function convertToTimeField(
 }
 
 function convertToDatetimeField(
-  column: Column & { type: "datetime" },
+  column: Column & { type: "date-time" },
   isRequired: boolean,
 ): FrictionlessDatetimeField {
   const field: FrictionlessDatetimeField = {
@@ -371,7 +371,10 @@ function convertToListField(
   }
 
   if (column.property.itemType) {
-    field.itemType = column.property.itemType
+    field.itemType =
+      column.property.itemType === "date-time"
+        ? "datetime"
+        : column.property.itemType
   }
 
   if (column.property.delimiter) {

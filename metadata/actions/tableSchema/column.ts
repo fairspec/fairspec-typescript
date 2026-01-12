@@ -3,7 +3,9 @@ import type { Column } from "../../models/column/column.ts"
 import type { TableSchema } from "../../models/tableSchema.ts"
 
 export function getColumnProperties(columns: Column[]) {
-  return Object.fromEntries(columns.map(column => [column.name, column.property]))
+  return Object.fromEntries(
+    columns.map(column => [column.name, column.property]),
+  )
 }
 
 // TODO: It should type error if not all columns have its case covered
@@ -49,7 +51,7 @@ export function getColumns(tableSchema: TableSchema) {
             columns.push({ name, type: "url", property })
             break
           case "date-time":
-            columns.push({ name, type: "datetime", property })
+            columns.push({ name, type: "date-time", property })
             break
           case "date":
             columns.push({ name, type: "date", property })

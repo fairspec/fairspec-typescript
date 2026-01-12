@@ -11,7 +11,7 @@ export const ListColumnProperty = BaseStringColumnProperty.extend({
       "integer",
       "number",
       "boolean",
-      "datetime",
+      "date-time",
       "date",
       "time",
     ])

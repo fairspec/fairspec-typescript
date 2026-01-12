@@ -244,7 +244,7 @@ function convertFieldToColumn(field: FrictionlessField): Column {
       }
       if (field.constraints?.enum) property.enum = field.constraints.enum
       if (field.missingValues) property.missingValues = field.missingValues
-      return { name: field.name, type: "datetime", property }
+      return { name: field.name, type: "date-time", property }
     }
 
     case "year": {
@@ -304,7 +304,9 @@ function convertFieldToColumn(field: FrictionlessField): Column {
       if (field.title) property.title = field.title
       if (field.description) property.description = field.description
       if (field.rdfType) property.rdfType = field.rdfType
-      if (field.itemType) property.itemType = field.itemType
+      if (field.itemType)
+        property.itemType =
+          field.itemType === "datetime" ? "date-time" : field.itemType
       if (field.delimiter) property.delimiter = field.delimiter
       if (
         field.constraints?.enum &&

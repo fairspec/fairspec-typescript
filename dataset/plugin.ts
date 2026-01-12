@@ -1,11 +1,11 @@
-import type { Dataset } from "@fairspec/metadata"
+import type { Dataset, MetadataPlugin } from "@fairspec/metadata"
 
 export type SaveDatasetOptions = {
   target: string
   withRemote?: boolean
 }
 
-export interface DatasetPlugin {
+export interface DatasetPlugin extends MetadataPlugin {
   loadDataset?(source: string): Promise<Dataset | undefined>
 
   saveDataset?(

@@ -16,7 +16,7 @@ export interface MetadataPlugin {
   convertTableSchemaTo?(
     tableSchema: TableSchema,
     options: { format: string },
-  ): Descriptor
+  ): Descriptor | undefined
   convertTableSchemaFrom?(
     descriptor: Descriptor,
     options: { format: string },

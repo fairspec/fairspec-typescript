@@ -1,7 +1,7 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inspectTable } from "../../table/index.ts"
+import { inspectTable } from "../../../actions/table/inspect.ts"
 
 describe("inspectTable (cell/enum)", () => {
   it("should not errors for string values that are in the enum", async () => {
@@ -11,19 +11,16 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "status",
+    const tableSchema: TableSchema = {
+      properties: {
+        status: {
           type: "string",
-          constraints: {
-            enum: ["pending", "approved", "rejected"],
-          },
+          enum: ["pending", "approved", "rejected"],
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -36,20 +33,17 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "status",
+    const tableSchema: TableSchema = {
+      properties: {
+        status: {
           type: "string",
-          constraints: {
-            enum: allowedValues,
-          },
+          enum: allowedValues,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "cell/enum")).toHaveLength(2)
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/enum",
       columnName: "status",
@@ -73,20 +67,17 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "status",
+    const tableSchema: TableSchema = {
+      properties: {
+        status: {
           type: "string",
-          constraints: {
-            enum: ["pending", "approved", "rejected"],
-          },
+          enum: ["pending", "approved", "rejected"],
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "cell/enum")).toHaveLength(0)
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(0)
   })
 
   it("should handle case sensitivity correctly", async () => {
@@ -98,20 +89,17 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "status",
+    const tableSchema: TableSchema = {
+      properties: {
+        status: {
           type: "string",
-          constraints: {
-            enum: allowedValues,
-          },
+          enum: allowedValues,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "cell/enum")).toHaveLength(2)
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/enum",
       columnName: "status",
@@ -128,8 +116,8 @@ describe("inspectTable (cell/enum)", () => {
     })
   })
 
-  it("should handle integer enum with string values", async () => {
-    const allowedValues = ["1", "2", "3"]
+  it("should handle integer enum with number values", async () => {
+    const allowedValues = [1, 2, 3]
 
     const table = pl
       .DataFrame({
@@ -137,33 +125,30 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "priority",
+    const tableSchema: TableSchema = {
+      properties: {
+        priority: {
           type: "integer",
-          constraints: {
-            enum: allowedValues,
-          },
+          enum: allowedValues,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
         type: "cell/enum",
         columnName: "priority",
-        enum: allowedValues,
+        enum: ["1", "2", "3"],
         rowNumber: 3,
         cell: "5",
       },
     ])
   })
 
-  it("should handle number enum with string values", async () => {
-    const allowedValues = ["1.5", "2.5", "3.5"]
+  it("should handle number enum with number values", async () => {
+    const allowedValues = [1.5, 2.5, 3.5]
 
     const table = pl
       .DataFrame({
@@ -171,25 +156,22 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "rating",
+    const tableSchema: TableSchema = {
+      properties: {
+        rating: {
           type: "number",
-          constraints: {
-            enum: allowedValues,
-          },
+          enum: allowedValues,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
         type: "cell/enum",
         columnName: "rating",
-        enum: allowedValues,
+        enum: ["1.5", "2.5", "3.5"],
         rowNumber: 3,
         cell: "4.5",
       },
@@ -205,19 +187,17 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "date",
-          type: "date",
-          constraints: {
-            enum: allowedValues,
-          },
+    const tableSchema: TableSchema = {
+      properties: {
+        date: {
+          type: "string",
+          format: "date",
+          enum: allowedValues,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
@@ -247,19 +227,17 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "timestamp",
-          type: "datetime",
-          constraints: {
-            enum: allowedValues,
-          },
+    const tableSchema: TableSchema = {
+      properties: {
+        timestamp: {
+          type: "string",
+          format: "date-time",
+          enum: allowedValues,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
@@ -268,40 +246,6 @@ describe("inspectTable (cell/enum)", () => {
         enum: allowedValues,
         rowNumber: 3,
         cell: "2024-01-01T20:00:00",
-      },
-    ])
-  })
-
-  it("should handle year enum with string values", async () => {
-    const allowedValues = ["2020", "2021", "2022"]
-
-    const table = pl
-      .DataFrame({
-        year: ["2020", "2021", "2023"],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [
-        {
-          name: "year",
-          type: "year",
-          constraints: {
-            enum: allowedValues,
-          },
-        },
-      ],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toEqual([
-      {
-        type: "cell/enum",
-        columnName: "year",
-        enum: allowedValues,
-        rowNumber: 3,
-        cell: "2023",
       },
     ])
   })
@@ -315,19 +259,17 @@ describe("inspectTable (cell/enum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "time",
-          type: "time",
-          constraints: {
-            enum: allowedValues,
-          },
+    const tableSchema: TableSchema = {
+      properties: {
+        time: {
+          type: "string",
+          format: "time",
+          enum: allowedValues,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
@@ -336,40 +278,6 @@ describe("inspectTable (cell/enum)", () => {
         enum: allowedValues,
         rowNumber: 3,
         cell: "20:00:00",
-      },
-    ])
-  })
-
-  it.skip("should handle yearmonth enum with string values", async () => {
-    const allowedValues = ["2024-01", "2024-02", "2024-03"]
-
-    const table = pl
-      .DataFrame({
-        yearmonth: ["2024-01", "2024-02", "2024-05"],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [
-        {
-          name: "yearmonth",
-          type: "yearmonth",
-          constraints: {
-            enum: allowedValues,
-          },
-        },
-      ],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toEqual([
-      {
-        type: "cell/enum",
-        columnName: "yearmonth",
-        enum: allowedValues,
-        rowNumber: 3,
-        cell: "2024-05",
       },
     ])
   })

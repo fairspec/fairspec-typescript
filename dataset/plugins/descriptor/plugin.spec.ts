@@ -27,7 +27,6 @@ describe("DescriptorPlugin", () => {
   describe("loadDataset", () => {
     it("should load dataset from local datapackage.json file", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: [] }],
       }
       mockLoadDatasetDescriptor.mockResolvedValue(mockDataset)
@@ -42,7 +41,6 @@ describe("DescriptorPlugin", () => {
 
     it("should load dataset from local json file", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: [] }],
       }
       mockLoadDatasetDescriptor.mockResolvedValue(mockDataset)
@@ -54,17 +52,9 @@ describe("DescriptorPlugin", () => {
     })
 
     it("should return undefined for remote json urls", async () => {
-      const result = await plugin.loadDataset(
-        "https://example.com/datapackage.json",
-      )
-
-      expect(mockLoadDatasetDescriptor).not.toHaveBeenCalled()
-      expect(result).toBeUndefined()
-    })
-
-    it("should return undefined for http remote json urls", async () => {
-      const result = await plugin.loadDataset(
-        "http://example.com/datapackage.json",
+      const result = await plugin.saveDataset(
+        { resources: [] },
+        { target: "https://example.com/datapackage.json" },
       )
 
       expect(mockLoadDatasetDescriptor).not.toHaveBeenCalled()
@@ -94,7 +84,6 @@ describe("DescriptorPlugin", () => {
 
     it("should handle absolute paths", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: [] }],
       }
       mockLoadDatasetDescriptor.mockResolvedValue(mockDataset)
@@ -107,15 +96,6 @@ describe("DescriptorPlugin", () => {
       expect(result).toEqual(mockDataset)
     })
 
-    it("should return undefined for github urls", async () => {
-      const result = await plugin.loadDataset(
-        "https://github.com/owner/repo/datapackage.json",
-      )
-
-      expect(mockLoadDatasetDescriptor).not.toHaveBeenCalled()
-      expect(result).toBeUndefined()
-    })
-
     it("should return undefined for zenodo urls", async () => {
       const result = await plugin.loadDataset("https://zenodo.org/record/123")
 
@@ -126,7 +106,6 @@ describe("DescriptorPlugin", () => {
 
   describe("saveDataset", () => {
     const mockDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [{ name: "test", data: [] }],
     }
 

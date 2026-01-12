@@ -37,19 +37,6 @@ function convertColumn(column: Column): CkanField {
 }
 
 function convertType(column: Column): string {
-  if (column.type === "string" && "format" in column) {
-    switch (column.format) {
-      case "date":
-        return "date"
-      case "time":
-        return "time"
-      case "date-time":
-        return "timestamp"
-      default:
-        return "text"
-    }
-  }
-
   switch (column.type) {
     case "string":
       return "text"
@@ -59,6 +46,12 @@ function convertType(column: Column): string {
       return "numeric"
     case "boolean":
       return "bool"
+    case "date":
+      return "date"
+    case "time":
+      return "time"
+    case "datetime":
+      return "timestamp"
     case "object":
       return "json"
     case "array":

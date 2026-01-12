@@ -11,10 +11,6 @@ describe("convertDatasetFromCkan", () => {
 
     const result = convertDatasetFromCkan(ckanDataset)
 
-    expect(result.$schema).toEqual(
-      "https://fairspec.org/profiles/latest/dataset.json",
-    )
-
     expect(result.titles).toHaveLength(1)
     expect(result.titles?.[0]?.title).toEqual(ckanDataset.title)
 
@@ -96,9 +92,6 @@ describe("convertDatasetFromCkan", () => {
 
     const result = convertDatasetFromCkan(ckanDataset as CkanDataset)
 
-    expect(result.$schema).toEqual(
-      "https://fairspec.org/profiles/latest/dataset.json",
-    )
     expect(result.titles).toBeUndefined()
     expect(result.descriptions).toBeUndefined()
     expect(result.version).toBeUndefined()

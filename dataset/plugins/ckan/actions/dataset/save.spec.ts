@@ -9,7 +9,6 @@ describe("saveDatasetToCkan", () => {
     relative(process.cwd(), `${import.meta.dirname}/fixtures/${name}`)
 
   const mockDataset: Dataset = {
-    $schema: "https://fairspec.org/profiles/latest/dataset.json",
     titles: [{ title: "Test Package" }],
     descriptions: [
       {

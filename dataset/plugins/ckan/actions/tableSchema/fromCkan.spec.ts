@@ -11,9 +11,6 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(result.$schema).toEqual(
-      "https://fairspec.org/profiles/latest/table.json",
-    )
     expect(Object.keys(result.properties ?? {})).toHaveLength(
       ckanSchema.fields.length,
     )

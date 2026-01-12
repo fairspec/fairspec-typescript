@@ -10,7 +10,6 @@ import { convertTableSchemaToCkan } from "./toCkan.ts"
 describe("convertTableSchemaToCkan", () => {
   it("converts a Fairspec table schema to a CKAN schema", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "integer",
@@ -62,7 +61,9 @@ describe("convertTableSchemaToCkan", () => {
 
     const result = convertTableSchemaToCkan(schema)
 
-    expect(result.fields).toHaveLength(Object.keys(schema.properties ?? {}).length)
+    expect(result.fields).toHaveLength(
+      Object.keys(schema.properties ?? {}).length,
+    )
 
     const idField = result.fields.find(f => f.id === "id")
     expect(idField).toBeDefined()
@@ -157,7 +158,6 @@ describe("convertTableSchemaToCkan", () => {
 
   it("handles columns with only title", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field1: {
           type: "string",
@@ -183,7 +183,6 @@ describe("convertTableSchemaToCkan", () => {
 
   it("handles columns with only description", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field1: {
           type: "string",
@@ -209,7 +208,6 @@ describe("convertTableSchemaToCkan", () => {
 
   it("handles columns without title or description", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         simple_field: {
           type: "string",
@@ -231,7 +229,6 @@ describe("convertTableSchemaToCkan", () => {
 
   it("handles empty properties object", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {},
     }
 
@@ -242,7 +239,6 @@ describe("convertTableSchemaToCkan", () => {
 
   it("converts unknown column types to 'text'", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         unknown_field: {
           type: "unknown" as any,

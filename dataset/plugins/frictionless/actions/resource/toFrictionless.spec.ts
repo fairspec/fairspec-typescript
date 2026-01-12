@@ -106,7 +106,6 @@ describe("convertResourceToFrictionless", () => {
       data: "users.csv",
       name: "users",
       tableSchema: {
-        $schema: "https://fairspec.org/profiles/latest/table.json",
         properties: {
           id: {
             type: "string",

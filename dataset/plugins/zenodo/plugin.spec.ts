@@ -20,7 +20,6 @@ describe("ZenodoPlugin", () => {
   describe("loadDataset", () => {
     it("should load dataset from zenodo.org url", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
       mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
@@ -56,7 +55,6 @@ describe("ZenodoPlugin", () => {
 
     it("should handle sandbox.zenodo.org urls", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
       mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
@@ -73,7 +71,6 @@ describe("ZenodoPlugin", () => {
 
     it("should handle zenodo urls with paths", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
       mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
@@ -90,7 +87,6 @@ describe("ZenodoPlugin", () => {
 
     it("should handle zenodo urls with query parameters", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
       mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)

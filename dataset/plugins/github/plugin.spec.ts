@@ -20,7 +20,6 @@ describe("GithubPlugin", () => {
   describe("loadDataset", () => {
     it("should load dataset from github.com url", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ data: [] }],
       }
       mockLoadDatasetFromGithub.mockResolvedValue(mockDataset)
@@ -58,7 +57,6 @@ describe("GithubPlugin", () => {
 
     it("should handle github urls with paths", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ data: [] }],
       }
       mockLoadDatasetFromGithub.mockResolvedValue(mockDataset)
@@ -75,7 +73,6 @@ describe("GithubPlugin", () => {
 
     it("should handle github urls with query parameters", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ data: [] }],
       }
       mockLoadDatasetFromGithub.mockResolvedValue(mockDataset)

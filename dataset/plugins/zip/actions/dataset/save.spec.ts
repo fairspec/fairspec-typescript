@@ -17,7 +17,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save a basic dataset to zip", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -34,7 +33,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save dataset with metadata", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -56,7 +54,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save dataset with inline data resources", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -79,7 +76,6 @@ describe("saveDatasetToZip", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -100,7 +96,6 @@ describe("saveDatasetToZip", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "resource_1",
@@ -122,13 +117,11 @@ describe("saveDatasetToZip", () => {
 
   it("should save dataset with tableSchema", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: [{ id: 1, name: "alice" }],
           tableSchema: {
-            $schema: "https://fairspec.org/profiles/latest/table.json",
             properties: {
               id: { type: "integer" },
               name: { type: "string" },
@@ -149,7 +142,6 @@ describe("saveDatasetToZip", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -167,7 +159,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save and reload dataset with same structure", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -194,7 +185,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save and reload dataset preserving metadata", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -222,13 +212,11 @@ describe("saveDatasetToZip", () => {
 
   it("should save and reload dataset with tableSchema", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: [{ id: 1, name: "alice" }],
           tableSchema: {
-            $schema: "https://fairspec.org/profiles/latest/table.json",
             properties: {
               id: { type: "integer" },
               name: { type: "string" },
@@ -259,7 +247,6 @@ describe("saveDatasetToZip", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -279,7 +266,6 @@ describe("saveDatasetToZip", () => {
 
   it("should throw error when saving to existing file", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -298,7 +284,6 @@ describe("saveDatasetToZip", () => {
 
   it("should create valid zip file structure", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -326,7 +311,6 @@ describe("saveDatasetToZip", () => {
     const csv2Path = await writeTempFile(csv2Content)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "resource_1",

@@ -27,7 +27,6 @@ describe("ZipPlugin", () => {
   describe("loadDataset", () => {
     it("should load dataset from zip file", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test-resource", data: [] }],
       }
       mockLoadDatasetFromZip.mockResolvedValue(mockDataset)
@@ -47,7 +46,6 @@ describe("ZipPlugin", () => {
 
     it("should recognize .zip extension case-insensitively", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
       mockLoadDatasetFromZip.mockResolvedValue(mockDataset)
@@ -59,7 +57,6 @@ describe("ZipPlugin", () => {
 
     it("should handle paths with directories", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
       mockLoadDatasetFromZip.mockResolvedValue(mockDataset)
@@ -81,7 +78,6 @@ describe("ZipPlugin", () => {
   describe("saveDataset", () => {
     it("should save dataset to zip file", async () => {
       const dataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test-resource", data: [] }],
       }
       mockSaveDatasetToZip.mockResolvedValue(undefined)
@@ -99,7 +95,6 @@ describe("ZipPlugin", () => {
 
     it("should return undefined for non-zip targets", async () => {
       const dataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
 
@@ -113,7 +108,6 @@ describe("ZipPlugin", () => {
 
     it("should pass withRemote option", async () => {
       const dataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
       mockSaveDatasetToZip.mockResolvedValue(undefined)
@@ -131,7 +125,6 @@ describe("ZipPlugin", () => {
 
     it("should handle withRemote as false when not provided", async () => {
       const dataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
       mockSaveDatasetToZip.mockResolvedValue(undefined)
@@ -148,7 +141,6 @@ describe("ZipPlugin", () => {
 
     it("should handle paths with directories", async () => {
       const dataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
       mockSaveDatasetToZip.mockResolvedValue(undefined)
@@ -165,7 +157,6 @@ describe("ZipPlugin", () => {
 
     it("should save dataset with metadata", async () => {
       const dataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         titles: [{ title: "Test Dataset" }],
         descriptions: [
           { description: "A test dataset", descriptionType: "Abstract" },
@@ -186,7 +177,6 @@ describe("ZipPlugin", () => {
 
     it("should return undefined for files without extension", async () => {
       const dataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [],
       }
 

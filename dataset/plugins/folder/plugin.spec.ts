@@ -34,7 +34,6 @@ describe("FolderPlugin", () => {
   describe("loadDataset", () => {
     it("should load dataset from local directory", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: [] }],
       }
       mockStat.mockResolvedValue({ isDirectory: () => true } as any)
@@ -87,7 +86,6 @@ describe("FolderPlugin", () => {
   describe("saveDataset", () => {
     it("should save dataset to local directory", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: [] }],
       }
       mockStat.mockResolvedValue({ isDirectory: () => true } as any)
@@ -105,7 +103,6 @@ describe("FolderPlugin", () => {
 
     it("should save dataset with withRemote option", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: [] }],
       }
       mockStat.mockResolvedValue({ isDirectory: () => true } as any)
@@ -124,7 +121,6 @@ describe("FolderPlugin", () => {
 
     it("should return undefined for remote paths", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: [] }],
       }
 
@@ -138,7 +134,6 @@ describe("FolderPlugin", () => {
 
     it("should return undefined for https paths", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: [] }],
       }
 

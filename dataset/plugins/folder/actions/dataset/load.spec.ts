@@ -23,9 +23,6 @@ describe("loadDatasetFromFolder", () => {
     const loadedDataset = await loadDatasetFromFolder(tempFolderPath)
 
     expect(loadedDataset).toBeDefined()
-    expect(loadedDataset.$schema).toBe(
-      "https://fairspec.org/profiles/latest/dataset.json",
-    )
     expect(loadedDataset.resources).toHaveLength(1)
   })
 
@@ -42,9 +39,6 @@ describe("loadDatasetFromFolder", () => {
     await saveDatasetToFolder(originalDataset, { folderPath: tempFolderPath })
     const loadedDataset = await loadDatasetFromFolder(tempFolderPath)
 
-    expect(loadedDataset.$schema).toBe(
-      "https://fairspec.org/profiles/latest/dataset.json",
-    )
     expect(loadedDataset.titles?.[0]?.title).toBe("Test Dataset")
     expect(loadedDataset.descriptions?.[0]?.description).toBe("A test dataset")
     expect(loadedDataset.version).toBe("1.0.0")
@@ -107,7 +101,6 @@ describe("loadDatasetFromFolder", () => {
           name: "test_resource",
           data: [{ id: 1, name: "alice" }],
           tableSchema: {
-            $schema: "https://fairspec.org/profiles/latest/table.json",
             properties: {
               id: { type: "integer" },
               name: { type: "string" },
@@ -151,9 +144,6 @@ describe("loadDatasetFromFolder", () => {
     const loadedDataset = await loadDatasetFromFolder(tempFolderPath)
 
     expect(loadedDataset).toBeDefined()
-    expect(loadedDataset.$schema).toBe(
-      "https://fairspec.org/profiles/latest/dataset.json",
-    )
     expect.assert(loadedDataset.resources)
     expect(loadedDataset.resources).toHaveLength(2)
     expect(loadedDataset.resources[0]?.name).toBe("resource1")

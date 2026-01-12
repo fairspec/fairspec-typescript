@@ -11,15 +11,7 @@ export function convertTableSchemaFromFrictionless(
     columns.push(convertFieldToColumn(field))
   }
 
-  const properties: Record<string, Column["property"]> = {}
-  const columnProperties = getColumnProperties(columns)
-  for (let i = 0; i < columns.length; i++) {
-    const prop = columnProperties[i]
-    const col = columns[i]
-    if (prop && col) {
-      properties[col.name] = prop
-    }
-  }
+  const properties = getColumnProperties(columns)
 
   const required = frictionlessSchema.fields
     .filter(f => f.constraints?.required === true)

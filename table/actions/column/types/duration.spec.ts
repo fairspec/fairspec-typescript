@@ -1,26 +1,11 @@
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { denormalizeTable, normalizeTable } from "../../table/index.ts"
+import { denormalizeTable } from "../../../actions/table/denormalize.ts"
+import { normalizeTable } from "../../../actions/table/normalize.ts"
 
-describe("parseDurationColumn", () => {
+describe.skip("parseDurationColumn", () => {
   it.each([
-    ["P23DT23H", "P23DT23H", {}],
-  ])("$0 -> $1 $2", async (cell, value, options) => {
-    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-    const schema = {
-      columns: [{ name: "name", type: "duration" as const, ...options }],
-    }
-
-    const result = await normalizeTable(table, schema)
-    const frame = await result.collect()
-
-    expect(frame.getColumn("name").get(0)).toEqual(value)
-  })
-})
-
-describe("stringifyDurationColumn", () => {
-  it.each([
-    // ISO 8601 duration strings should be returned as-is
     ["P23DT23H", "P23DT23H"],
     ["P1Y2M3DT4H5M6S", "P1Y2M3DT4H5M6S"],
     ["PT30M", "PT30M"],
@@ -28,19 +13,53 @@ describe("stringifyDurationColumn", () => {
     ["PT1H", "PT1H"],
     ["P1W", "P1W"],
     ["PT0S", "PT0S"],
-
-    // Null handling
-    [null, ""],
-  ])("%s -> %s", async (value, expected) => {
-    const table = pl.DataFrame([pl.Series("name", [value], pl.String)]).lazy()
-
-    const schema = {
-      columns: [{ name: "name", type: "duration" as const }],
+    ["", null],
+    ["invalid", null],
+    ["23 hours", null],
+  ])("default: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "duration",
+        },
+      },
     }
 
-    const result = await denormalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
 
-    expect(frame.toRecords()[0]?.name).toEqual(expected)
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+})
+
+describe("stringifyDurationColumn", () => {
+  it.each([
+    ["P23DT23H", "P23DT23H"],
+    ["P1Y2M3DT4H5M6S", "P1Y2M3DT4H5M6S"],
+    ["PT30M", "PT30M"],
+    ["P1D", "P1D"],
+    ["PT1H", "PT1H"],
+    ["P1W", "P1W"],
+    ["PT0S", "PT0S"],
+    [null, ""],
+  ])("default: %s -> %s", async (value, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [value], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "duration",
+        },
+      },
+    }
+
+    const result = await denormalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 })

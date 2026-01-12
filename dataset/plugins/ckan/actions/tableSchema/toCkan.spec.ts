@@ -62,7 +62,7 @@ describe("convertTableSchemaToCkan", () => {
 
     const result = convertTableSchemaToCkan(schema)
 
-    expect(result.fields).toHaveLength(Object.keys(schema.properties).length)
+    expect(result.fields).toHaveLength(Object.keys(schema.properties ?? {}).length)
 
     const idField = result.fields.find(f => f.id === "id")
     expect(idField).toBeDefined()

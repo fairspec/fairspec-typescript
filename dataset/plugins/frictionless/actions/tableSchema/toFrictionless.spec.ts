@@ -1,5 +1,5 @@
+import type { TableSchema } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import type { TableSchema } from "../../../../models/tableSchema.ts"
 import type { FrictionlessSchema } from "../../models/schema.ts"
 import { convertTableSchemaToFrictionless } from "./toFrictionless.ts"
 

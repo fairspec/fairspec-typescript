@@ -14,11 +14,11 @@ describe("convertTableSchemaFromCkan", () => {
     expect(result.$schema).toEqual(
       "https://fairspec.org/profiles/latest/table.json",
     )
-    expect(Object.keys(result.properties)).toHaveLength(
+    expect(Object.keys(result.properties ?? {})).toHaveLength(
       ckanSchema.fields.length,
     )
 
-    const idColumn = result.properties.id
+    const idColumn = result.properties?.id
     expect(idColumn).toBeDefined()
     if (idColumn) {
       expect(idColumn.type).toEqual("integer")
@@ -26,7 +26,7 @@ describe("convertTableSchemaFromCkan", () => {
       expect(idColumn.description).toEqual("Unique identifier")
     }
 
-    const nameColumn = result.properties.name
+    const nameColumn = result.properties?.name
     expect(nameColumn).toBeDefined()
     if (nameColumn) {
       expect(nameColumn.type).toEqual("string")
@@ -34,7 +34,7 @@ describe("convertTableSchemaFromCkan", () => {
       expect(nameColumn.description).toEqual("Person's full name")
     }
 
-    const ageColumn = result.properties.age
+    const ageColumn = result.properties?.age
     expect(ageColumn).toBeDefined()
     if (ageColumn) {
       expect(ageColumn.type).toEqual("integer")
@@ -42,7 +42,7 @@ describe("convertTableSchemaFromCkan", () => {
       expect(ageColumn.description).toBeUndefined()
     }
 
-    const scoreColumn = result.properties.score
+    const scoreColumn = result.properties?.score
     expect(scoreColumn).toBeDefined()
     if (scoreColumn) {
       expect(scoreColumn.type).toEqual("number")
@@ -50,13 +50,13 @@ describe("convertTableSchemaFromCkan", () => {
       expect(scoreColumn.description).toEqual("Test score")
     }
 
-    const isActiveColumn = result.properties.is_active
+    const isActiveColumn = result.properties?.is_active
     expect(isActiveColumn).toBeDefined()
     if (isActiveColumn) {
       expect(isActiveColumn.type).toEqual("boolean")
     }
 
-    const birthDateColumn = result.properties.birth_date
+    const birthDateColumn = result.properties?.birth_date
     expect(birthDateColumn).toBeDefined()
     if (birthDateColumn) {
       expect(birthDateColumn.type).toEqual("string")
@@ -65,14 +65,14 @@ describe("convertTableSchemaFromCkan", () => {
       expect(birthDateColumn.description).toEqual("Date of birth")
     }
 
-    const startTimeColumn = result.properties.start_time
+    const startTimeColumn = result.properties?.start_time
     expect(startTimeColumn).toBeDefined()
     if (startTimeColumn) {
       expect(startTimeColumn.type).toEqual("string")
       expect(startTimeColumn.format).toEqual("time")
     }
 
-    const createdAtColumn = result.properties.created_at
+    const createdAtColumn = result.properties?.created_at
     expect(createdAtColumn).toBeDefined()
     if (createdAtColumn) {
       expect(createdAtColumn.type).toEqual("string")
@@ -83,13 +83,13 @@ describe("convertTableSchemaFromCkan", () => {
       )
     }
 
-    const metadataColumn = result.properties.metadata
+    const metadataColumn = result.properties?.metadata
     expect(metadataColumn).toBeDefined()
     if (metadataColumn) {
       expect(metadataColumn.type).toEqual("object")
     }
 
-    const tagsColumn = result.properties.tags
+    const tagsColumn = result.properties?.tags
     expect(tagsColumn).toBeDefined()
     if (tagsColumn) {
       expect(tagsColumn.type).toEqual("array")
@@ -103,26 +103,26 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    const stringColumn = result.properties.string_field
+    const stringColumn = result.properties?.string_field
     expect(stringColumn?.type).toEqual("string")
 
-    const integerColumn = result.properties.integer_field
+    const integerColumn = result.properties?.integer_field
     expect(integerColumn?.type).toEqual("integer")
 
-    const numberColumn = result.properties.number_field
+    const numberColumn = result.properties?.number_field
     expect(numberColumn?.type).toEqual("number")
 
-    const floatColumn = result.properties.float_field
+    const floatColumn = result.properties?.float_field
     expect(floatColumn?.type).toEqual("number")
 
-    const booleanColumn = result.properties.boolean_field
+    const booleanColumn = result.properties?.boolean_field
     expect(booleanColumn?.type).toEqual("boolean")
 
-    const datetimeColumn = result.properties.datetime_field
+    const datetimeColumn = result.properties?.datetime_field
     expect(datetimeColumn?.type).toEqual("string")
     expect(datetimeColumn?.format).toEqual("date-time")
 
-    const objectColumn = result.properties.object_field
+    const objectColumn = result.properties?.object_field
     expect(objectColumn?.type).toEqual("object")
   })
 
@@ -131,7 +131,7 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    const unknownColumn = result.properties.unknown_field
+    const unknownColumn = result.properties?.unknown_field
     expect(unknownColumn).toBeDefined()
     if (unknownColumn) {
       expect(unknownColumn.type).toEqual("string")
@@ -143,7 +143,7 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    const overrideColumn = result.properties.override_field
+    const overrideColumn = result.properties?.override_field
     expect(overrideColumn).toBeDefined()
     if (overrideColumn) {
       expect(overrideColumn.type).toEqual("integer")
@@ -159,7 +159,7 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(Object.keys(result.properties)).toHaveLength(0)
+    expect(Object.keys(result.properties ?? {})).toHaveLength(0)
   })
 
   it("handles fields without info object", () => {
@@ -174,8 +174,8 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(Object.keys(result.properties)).toHaveLength(1)
-    const column = result.properties.simple_field
+    expect(Object.keys(result.properties ?? {})).toHaveLength(1)
+    const column = result.properties?.simple_field
     expect(column).toBeDefined()
     if (column) {
       expect(column.type).toEqual("string")
@@ -196,10 +196,10 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(result.properties.field1?.type).toEqual("string")
-    expect(result.properties.field2?.type).toEqual("integer")
-    expect(result.properties.field3?.type).toEqual("boolean")
-    expect(result.properties.field4?.type).toEqual("string")
-    expect(result.properties.field4?.format).toEqual("date-time")
+    expect(result.properties?.field1?.type).toEqual("string")
+    expect(result.properties?.field2?.type).toEqual("integer")
+    expect(result.properties?.field3?.type).toEqual("boolean")
+    expect(result.properties?.field4?.type).toEqual("string")
+    expect(result.properties?.field4?.format).toEqual("date-time")
   })
 })

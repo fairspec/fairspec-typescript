@@ -1,4 +1,4 @@
-import type { Resource } from "../../../../models/resource.ts"
+import type { Resource } from "@fairspec/metadata"
 import type { FrictionlessResource } from "../../models/resource.ts"
 import { convertTableSchemaToFrictionless } from "../tableSchema/toFrictionless.ts"
 

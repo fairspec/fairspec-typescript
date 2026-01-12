@@ -1,22 +1,24 @@
 import type { Column, TableSchema } from "@fairspec/metadata"
+import { getColumns } from "@fairspec/metadata"
 import type { CkanField, CkanFieldInfo } from "../../models/field.ts"
 import type { CkanSchema } from "../../models/schema.ts"
 
 export function convertTableSchemaToCkan(tableSchema: TableSchema): CkanSchema {
   const fields: CkanField[] = []
 
-  for (const [columnName, column] of Object.entries(tableSchema.properties)) {
-    fields.push(convertColumn(columnName, column))
+  const columns = getColumns(tableSchema)
+  for (const column of columns) {
+    fields.push(convertColumn(column))
   }
 
   return { fields }
 }
 
-function convertColumn(columnName: string, column: Column): CkanField {
-  const { title, description } = column
+function convertColumn(column: Column): CkanField {
+  const { title, description } = column.property
 
   const ckanField: CkanField = {
-    id: columnName,
+    id: column.name,
     type: convertType(column),
   }
 

@@ -1,5 +1,5 @@
+import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import type { Resource } from "../../../../models/resource.ts"
 import type { FrictionlessResource } from "../../models/resource.ts"
 import { convertResourceFromFrictionless } from "./fromFrictionless.ts"
 

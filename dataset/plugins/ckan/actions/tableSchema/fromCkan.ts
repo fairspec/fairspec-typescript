@@ -1,79 +1,101 @@
-import type {
-  ArrayColumn,
-  BooleanColumn,
-  Column,
-  DateColumn,
-  DatetimeColumn,
-  IntegerColumn,
-  NumberColumn,
-  ObjectColumn,
-  StringColumn,
-  TableSchema,
-  TimeColumn,
-} from "@fairspec/metadata"
+import type { Column, TableSchema } from "@fairspec/metadata"
+import { getColumnProperties } from "@fairspec/metadata"
 import type { CkanField } from "../../models/field.ts"
 import type { CkanSchema } from "../../models/schema.ts"
 
 export function convertTableSchemaFromCkan(
   ckanSchema: CkanSchema,
 ): TableSchema {
-  const properties: Record<string, Column> = {}
+  const columns: Column[] = []
 
   for (const ckanField of ckanSchema.fields) {
-    properties[ckanField.id] = convertColumn(ckanField)
+    columns.push(convertColumn(ckanField))
   }
 
-  return {
-    $schema: "https://fairspec.org/profiles/latest/table.json",
-    properties,
-  }
+  return { properties: getColumnProperties(columns) }
 }
 
 function convertColumn(ckanField: CkanField): Column {
   const { info } = ckanField
 
-  const baseColumn: {
+  const baseProperty: {
     title?: string
     description?: string
   } = {}
 
   if (info) {
-    if (info.label) baseColumn.title = info.label
-    if (info.notes) baseColumn.description = info.notes
+    if (info.label) baseProperty.title = info.label
+    if (info.notes) baseProperty.description = info.notes
   }
 
   const columnType = (info?.type_override || ckanField.type).toLowerCase()
   switch (columnType) {
     case "text":
     case "string":
-      return { ...baseColumn, type: "string" } as StringColumn
+      return {
+        name: ckanField.id,
+        type: "string",
+        property: { ...baseProperty, type: "string" },
+      }
     case "int":
     case "integer":
-      return { ...baseColumn, type: "integer" } as IntegerColumn
+      return {
+        name: ckanField.id,
+        type: "integer",
+        property: { ...baseProperty, type: "integer" },
+      }
     case "numeric":
     case "number":
     case "float":
-      return { ...baseColumn, type: "number" } as NumberColumn
+      return {
+        name: ckanField.id,
+        type: "number",
+        property: { ...baseProperty, type: "number" },
+      }
     case "bool":
     case "boolean":
-      return { ...baseColumn, type: "boolean" } as BooleanColumn
+      return {
+        name: ckanField.id,
+        type: "boolean",
+        property: { ...baseProperty, type: "boolean" },
+      }
     case "date":
-      return { ...baseColumn, type: "string", format: "date" } as DateColumn
+      return {
+        name: ckanField.id,
+        type: "date",
+        property: { ...baseProperty, type: "string", format: "date" },
+      }
     case "time":
-      return { ...baseColumn, type: "string", format: "time" } as TimeColumn
+      return {
+        name: ckanField.id,
+        type: "time",
+        property: { ...baseProperty, type: "string", format: "time" },
+      }
     case "timestamp":
     case "datetime":
       return {
-        ...baseColumn,
-        type: "string",
-        format: "date-time",
-      } as DatetimeColumn
+        name: ckanField.id,
+        type: "datetime",
+        property: { ...baseProperty, type: "string", format: "date-time" },
+      }
     case "json":
     case "object":
-      return { ...baseColumn, type: "object" } as ObjectColumn
+      return {
+        name: ckanField.id,
+        type: "object",
+        property: { ...baseProperty, type: "object" },
+      }
     case "array":
-      return { ...baseColumn, type: "array" } as ArrayColumn
+      return {
+        name: ckanField.id,
+        type: "array",
+        property: { ...baseProperty, type: "array" },
+      }
     default:
-      return { ...baseColumn, type: "string" } as StringColumn
+      return {
+        name: ckanField.id,
+        type: "string",
+        property: { ...baseProperty, type: "string" },
+      }
   }
 }

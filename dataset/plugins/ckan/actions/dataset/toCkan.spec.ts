@@ -58,7 +58,7 @@ describe("convertDatasetToCkan", () => {
         {
           name: "test-resource",
           data: "https://example.com/data.csv",
-          format: { name: "csv" },
+          format: { type: "csv" },
           descriptions: [
             {
               description: "Test resource",
@@ -144,7 +144,7 @@ describe("convertDatasetToCkan", () => {
           firstResource.descriptions?.[0]?.description,
         )
         expect(firstCkanResource.format).toEqual(
-          firstResource.format?.name.toUpperCase(),
+          firstResource.format?.type?.toUpperCase(),
         )
         expect(firstCkanResource.hash).toEqual(firstResource.integrity?.hash)
       }

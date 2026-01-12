@@ -84,7 +84,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -105,7 +105,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "resource_1",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource_2",
@@ -154,7 +154,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv", delimiter: ";" },
+          format: { type: "csv", delimiter: ";" },
         },
       ],
     }
@@ -247,7 +247,7 @@ describe("saveDatasetToZip", () => {
       true,
     )
     if (typeof tableSchema === "object" && "properties" in tableSchema) {
-      const properties = Object.entries(tableSchema.properties)
+      const properties = Object.entries(tableSchema.properties ?? {})
       expect(properties).toHaveLength(2)
       expect(properties[0]?.[0]).toBe("id")
       expect(properties[1]?.[0]).toBe("name")
@@ -264,7 +264,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -274,7 +274,7 @@ describe("saveDatasetToZip", () => {
 
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
-    expect(reloadedDataset.resources?.[0]?.format?.name).toBe("csv")
+    expect(reloadedDataset.resources?.[0]?.format?.type).toBe("csv")
   })
 
   it("should throw error when saving to existing file", async () => {
@@ -331,12 +331,12 @@ describe("saveDatasetToZip", () => {
         {
           name: "resource_1",
           data: csv1Path,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource_2",
           data: csv2Path,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }

@@ -95,7 +95,7 @@ describe("loadDatasetFromZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -107,7 +107,7 @@ describe("loadDatasetFromZip", () => {
     expect.assert(loadedDataset.resources)
     expect(loadedDataset.resources).toHaveLength(1)
     expect(loadedDataset.resources[0]?.name).toBe("test_resource")
-    expect(loadedDataset.resources[0]?.format?.name).toBe("csv")
+    expect(loadedDataset.resources[0]?.format?.type).toBe("csv")
   })
 
   it("should load dataset with tableSchema", async () => {
@@ -138,7 +138,7 @@ describe("loadDatasetFromZip", () => {
       true,
     )
     if (typeof tableSchema === "object" && "properties" in tableSchema) {
-      expect(Object.keys(tableSchema.properties)).toHaveLength(2)
+      expect(Object.keys(tableSchema.properties ?? {})).toHaveLength(2)
     }
   })
 
@@ -152,7 +152,7 @@ describe("loadDatasetFromZip", () => {
         {
           name: "resource_1",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource_2",

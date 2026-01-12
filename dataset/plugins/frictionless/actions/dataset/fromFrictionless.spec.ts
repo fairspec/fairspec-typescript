@@ -1,5 +1,5 @@
+import type { Dataset } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import type { Dataset } from "../../../../models/dataset.ts"
 import type { FrictionlessPackage } from "../../models/package.ts"
 import { convertDatasetFromFrictionless } from "./fromFrictionless.ts"
 

@@ -85,7 +85,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test-resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -106,7 +106,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "resource-1",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource-2",
@@ -155,7 +155,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test-resource",
           data: csvPath,
-          format: { name: "csv", delimiter: ";" },
+          format: { type: "csv", delimiter: ";" },
         },
       ],
     }
@@ -241,9 +241,9 @@ describe("saveDatasetToFolder", () => {
     expect(schema).toBeDefined()
     expect(typeof schema === "object" && "properties" in schema).toBe(true)
     if (typeof schema === "object" && "properties" in schema) {
-      expect(Object.keys(schema.properties)).toHaveLength(2)
-      expect(schema.properties.id).toBeDefined()
-      expect(schema.properties.name).toBeDefined()
+      expect(Object.keys(schema.properties ?? {})).toHaveLength(2)
+      expect(schema.properties?.id).toBeDefined()
+      expect(schema.properties?.name).toBeDefined()
     }
   })
 
@@ -257,7 +257,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -267,7 +267,7 @@ describe("saveDatasetToFolder", () => {
 
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
-    expect(reloadedDataset.resources?.[0]?.format?.name).toBe("csv")
+    expect(reloadedDataset.resources?.[0]?.format?.type).toBe("csv")
   })
 
   it("should throw error when saving to existing folder", async () => {
@@ -323,12 +323,12 @@ describe("saveDatasetToFolder", () => {
         {
           name: "resource1",
           data: csv1Path,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource2",
           data: csv2Path,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -374,7 +374,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }

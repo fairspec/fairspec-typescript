@@ -1,6 +1,5 @@
-import { getColumnProperties } from "../../../../actions/tableSchema/column.ts"
-import type { Column } from "../../../../models/column/column.ts"
-import type { TableSchema } from "../../../../models/tableSchema.ts"
+import type { Column, TableSchema } from "@fairspec/metadata"
+import { getColumnProperties } from "@fairspec/metadata"
 import type { FrictionlessField } from "../../models/field/field.ts"
 import type { FrictionlessSchema } from "../../models/schema.ts"
 

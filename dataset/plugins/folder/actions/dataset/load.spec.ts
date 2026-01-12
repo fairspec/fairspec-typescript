@@ -16,7 +16,6 @@ describe("loadDatasetFromFolder", () => {
 
   it("should load a basic dataset from folder", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [{ data: { key: "value" } }],
     }
 
@@ -32,7 +31,6 @@ describe("loadDatasetFromFolder", () => {
 
   it("should load dataset with metadata", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -54,7 +52,6 @@ describe("loadDatasetFromFolder", () => {
 
   it("should load dataset with inline data resources", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -84,12 +81,11 @@ describe("loadDatasetFromFolder", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -101,12 +97,11 @@ describe("loadDatasetFromFolder", () => {
     expect.assert(loadedDataset.resources)
     expect(loadedDataset.resources).toHaveLength(1)
     expect(loadedDataset.resources[0]?.name).toBe("test_resource")
-    expect(loadedDataset.resources[0]?.format?.name).toBe("csv")
+    expect(loadedDataset.resources[0]?.format?.type).toBe("csv")
   })
 
   it("should load dataset with tableSchema", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -130,7 +125,7 @@ describe("loadDatasetFromFolder", () => {
     const schema = loadedDataset.resources[0]?.tableSchema
     expect(typeof schema === "object" && "properties" in schema).toBe(true)
     if (typeof schema === "object" && "properties" in schema) {
-      expect(Object.keys(schema.properties)).toHaveLength(2)
+      expect(Object.keys(schema.properties ?? {})).toHaveLength(2)
     }
   })
 
@@ -139,12 +134,11 @@ describe("loadDatasetFromFolder", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "resource1",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource2",
@@ -171,12 +165,11 @@ describe("loadDatasetFromFolder", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv", delimiter: ";" },
+          format: { type: "csv", delimiter: ";" },
         },
       ],
     }

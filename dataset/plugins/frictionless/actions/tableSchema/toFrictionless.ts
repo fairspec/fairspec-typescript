@@ -1,6 +1,5 @@
-import { getColumns } from "../../../../actions/tableSchema/column.ts"
-import type { Column } from "../../../../models/column/column.ts"
-import type { TableSchema } from "../../../../models/tableSchema.ts"
+import type { Column, TableSchema } from "@fairspec/metadata"
+import { getColumns } from "@fairspec/metadata"
 import type { FrictionlessArrayField } from "../../models/field/array.ts"
 import type { FrictionlessBooleanField } from "../../models/field/boolean.ts"
 import type { FrictionlessDateField } from "../../models/field/date.ts"

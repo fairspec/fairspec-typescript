@@ -1,10 +1,10 @@
-import type { ContributorType } from "../../../../models/datacite/common.ts"
-import type { Contributor } from "../../../../models/datacite/contributor.ts"
-import type { Creator } from "../../../../models/datacite/creator.ts"
-import type { Dataset } from "../../../../models/dataset.ts"
+import type { Dataset } from "@fairspec/metadata"
 import type { FrictionlessContributor } from "../../models/contributor.ts"
 import type { FrictionlessPackage } from "../../models/package.ts"
 import { convertResourceFromFrictionless } from "../resource/fromFrictionless.ts"
+
+type Creator = NonNullable<Dataset["creators"]>[number]
+type Contributor = NonNullable<Dataset["contributors"]>[number]
 
 export function convertDatasetFromFrictionless(
   frictionlessPackage: FrictionlessPackage,
@@ -129,7 +129,7 @@ function convertContributor(contributor: FrictionlessContributor): Contributor {
   }
 }
 
-function convertContributorType(role: string): ContributorType {
+function convertContributorType(role: string): Contributor["contributorType"] {
   const lowerRole = role.toLowerCase()
   switch (lowerRole) {
     case "contact":

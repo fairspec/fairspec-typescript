@@ -3,7 +3,7 @@ import type { Column } from "../../models/column/column.ts"
 import type { TableSchema } from "../../models/tableSchema.ts"
 
 export function getColumnProperties(columns: Column[]) {
-  return columns.map(column => column.property)
+  return Object.fromEntries(columns.map(column => [column.name, column.property]))
 }
 
 // TODO: It should type error if not all columns have its case covered

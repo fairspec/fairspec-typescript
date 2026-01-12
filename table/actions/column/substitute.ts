@@ -3,6 +3,7 @@ import type { ColumnMapping } from "../../models/column.ts"
 
 const DEFAULT_MISSING_VALUES = [""]
 
+// TODO: Support numeric missing values
 export function substituteColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
   if (!mapping.source.type.equals(pl.String)) return columnExpr
 

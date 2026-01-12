@@ -51,7 +51,7 @@ function inspectType(mapping: ColumnMapping) {
     Bool: ["boolean"],
     Categorical: ["string"],
     Date: ["date"],
-    Datetime: ["datetime"],
+    Datetime: ["date-time"],
     Float32: ["number", "integer"],
     Float64: ["number", "integer"],
     Int16: ["integer"],

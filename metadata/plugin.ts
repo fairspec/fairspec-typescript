@@ -3,7 +3,10 @@ import type { Descriptor } from "./models/descriptor.ts"
 import type { TableSchema } from "./models/tableSchema.ts"
 
 export interface MetadataPlugin {
-  convertDatasetTo?(dataset: Dataset, options: { format: string }): Descriptor
+  convertDatasetTo?(
+    dataset: Dataset,
+    options: { format: string },
+  ): Descriptor | undefined
 
   convertDatasetFrom?(
     descriptor: Descriptor,

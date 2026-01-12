@@ -45,6 +45,7 @@ describe("parseCategoricalColumn", () => {
       properties: {
         name: {
           type: "string",
+          format: "categorical",
           ...options,
         },
       },
@@ -91,6 +92,7 @@ describe("stringifyCategoricalColumn", () => {
       properties: {
         name: {
           type: "string",
+          format: "categorical",
           ...options,
         },
       },

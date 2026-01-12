@@ -12,7 +12,7 @@ export function parseListColumn(column: ListColumn, columnExpr: pl.Expr) {
   if (itemType === "integer") dtype = pl.Int64
   if (itemType === "number") dtype = pl.Float64
   if (itemType === "boolean") dtype = pl.Bool
-  if (itemType === "datetime") dtype = pl.Datetime
+  if (itemType === "date-time") dtype = pl.Datetime
   if (itemType === "date") dtype = pl.Date
   if (itemType === "time") dtype = pl.Time
 

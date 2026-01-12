@@ -5,16 +5,16 @@
   "type": "object",
   "required": ["type"],
   "properties": {
-    "crs": { "$ref": "#/definitions/crs" },
-    "bbox": { "$ref": "#/definitions/bbox" }
+    "crs": { "$ref": "#/$defs/crs" },
+    "bbox": { "$ref": "#/$defs/bbox" }
   },
   "oneOf": [
-    { "$ref": "#/definitions/geometry" },
-    { "$ref": "#/definitions/geometryCollection" },
-    { "$ref": "#/definitions/feature" },
-    { "$ref": "#/definitions/featureCollection" }
+    { "$ref": "#/$defs/geometry" },
+    { "$ref": "#/$defs/geometryCollection" },
+    { "$ref": "#/$defs/feature" },
+    { "$ref": "#/$defs/featureCollection" }
   ],
-  "definitions": {
+  "$defs": {
     "geometryCollection": {
       "title": "GeometryCollection",
       "description": "A collection of geometry objects",
@@ -23,7 +23,7 @@
         "type": { "enum": ["GeometryCollection"] },
         "geometries": {
           "type": "array",
-          "items": { "$ref": "#/definitions/geometry" }
+          "items": { "$ref": "#/$defs/geometry" }
         }
       }
     },
@@ -34,7 +34,7 @@
       "properties": {
         "type": { "enum": ["Feature"] },
         "geometry": {
-          "oneOf": [{ "type": "null" }, { "$ref": "#/definitions/geometry" }]
+          "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/geometry" }]
         },
         "properties": { "type": ["object", "null"] },
         "id": { "FIXME": "may be there, type not known (string? number?)" }
@@ -48,7 +48,7 @@
         "type": { "enum": ["FeatureCollection"] },
         "features": {
           "type": "array",
-          "items": { "$ref": "#/definitions/feature" }
+          "items": { "$ref": "#/$defs/feature" }
         }
       }
     },
@@ -63,7 +63,7 @@
           "properties": {
             "type": { "enum": ["Point"] },
             "coordinates": {
-              "$ref": "#/definitions/geometry/definitions/position"
+              "$ref": "#/$defs/geometry/$defs/position"
             }
           }
         },
@@ -72,7 +72,7 @@
           "properties": {
             "type": { "enum": ["MultiPoint"] },
             "coordinates": {
-              "$ref": "#/definitions/geometry/definitions/positionArray"
+              "$ref": "#/$defs/geometry/$defs/positionArray"
             }
           }
         },
@@ -81,7 +81,7 @@
           "properties": {
             "type": { "enum": ["LineString"] },
             "coordinates": {
-              "$ref": "#/definitions/geometry/definitions/lineString"
+              "$ref": "#/$defs/geometry/$defs/lineString"
             }
           }
         },
@@ -92,7 +92,7 @@
             "coordinates": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/geometry/definitions/lineString"
+                "$ref": "#/$defs/geometry/$defs/lineString"
               }
             }
           }
@@ -102,7 +102,7 @@
           "properties": {
             "type": { "enum": ["Polygon"] },
             "coordinates": {
-              "$ref": "#/definitions/geometry/definitions/polygon"
+              "$ref": "#/$defs/geometry/$defs/polygon"
             }
           }
         },
@@ -112,42 +112,42 @@
             "type": { "enum": ["MultiPolygon"] },
             "coordinates": {
               "type": "array",
-              "items": { "$ref": "#/definitions/geometry/definitions/polygon" }
+              "items": { "$ref": "#/$defs/geometry/$defs/polygon" }
             }
           }
         }
       ],
-      "definitions": {
+      "$defs": {
         "position": {
           "description": "A single position",
           "type": "array",
           "minItems": 2,
-          "items": [{ "type": "number" }, { "type": "number" }],
-          "additionalItems": false
+          "maxItems": 2,
+          "prefixItems": [{ "type": "number" }, { "type": "number" }]
         },
         "positionArray": {
           "description": "An array of positions",
           "type": "array",
-          "items": { "$ref": "#/definitions/geometry/definitions/position" }
+          "items": { "$ref": "#/$defs/geometry/$defs/position" }
         },
         "lineString": {
           "description": "An array of two or more positions",
           "allOf": [
-            { "$ref": "#/definitions/geometry/definitions/positionArray" },
+            { "$ref": "#/$defs/geometry/$defs/positionArray" },
             { "minItems": 2 }
           ]
         },
         "linearRing": {
           "description": "An array of four positions where the first equals the last",
           "allOf": [
-            { "$ref": "#/definitions/geometry/definitions/positionArray" },
+            { "$ref": "#/$defs/geometry/$defs/positionArray" },
             { "minItems": 4 }
           ]
         },
         "polygon": {
           "description": "An array of linear rings",
           "type": "array",
-          "items": { "$ref": "#/definitions/geometry/definitions/linearRing" }
+          "items": { "$ref": "#/$defs/geometry/$defs/linearRing" }
         }
       }
     },
@@ -162,10 +162,10 @@
       },
       "additionalProperties": false,
       "oneOf": [
-        { "$ref": "#/definitions/crs/definitions/namedCrs" },
-        { "$ref": "#/definitions/crs/definitions/linkedCrs" }
+        { "$ref": "#/$defs/crs/$defs/namedCrs" },
+        { "$ref": "#/$defs/crs/$defs/linkedCrs" }
       ],
-      "definitions": {
+      "$defs": {
         "namedCrs": {
           "properties": {
             "type": { "enum": ["name"] },
@@ -200,7 +200,7 @@
           "properties": {
             "type": { "enum": ["link"] },
             "properties": {
-              "$ref": "#/definitions/crs/definitions/linkedObject"
+              "$ref": "#/$defs/crs/$defs/linkedObject"
             }
           }
         }

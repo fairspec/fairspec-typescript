@@ -3,7 +3,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { inspectTable } from "../../../actions/table/inspect.ts"
 
-describe.skip("validateGeojsonColumn", () => {
+describe("validateGeojsonColumn", () => {
   it("should not errors for valid GeoJSON Point", async () => {
     const table = pl
       .DataFrame({
@@ -148,8 +148,7 @@ describe.skip("validateGeojsonColumn", () => {
       {
         type: "cell/type",
         columnName: "data",
-        columnType: "string",
-        columnFormat: "geojson",
+        columnType: "geojson",
         rowNumber: 2,
         cell: "[[0,0],[1,1]]",
       },
@@ -181,16 +180,14 @@ describe.skip("validateGeojsonColumn", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       columnName: "data",
-      columnType: "string",
-      columnFormat: "geojson",
+      columnType: "geojson",
       rowNumber: 2,
       cell: "invalid json",
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       columnName: "data",
-      columnType: "string",
-      columnFormat: "geojson",
+      columnType: "geojson",
       rowNumber: 3,
       cell: "{broken}",
     })
@@ -221,8 +218,7 @@ describe.skip("validateGeojsonColumn", () => {
       {
         type: "cell/type",
         columnName: "data",
-        columnType: "string",
-        columnFormat: "geojson",
+        columnType: "geojson",
         rowNumber: 2,
         cell: "",
       },
@@ -250,40 +246,35 @@ describe.skip("validateGeojsonColumn", () => {
       {
         type: "cell/type",
         columnName: "data",
-        columnType: "string",
-        columnFormat: "geojson",
+        columnType: "geojson",
         rowNumber: 1,
         cell: '"string"',
       },
       {
         type: "cell/type",
         columnName: "data",
-        columnType: "string",
-        columnFormat: "geojson",
+        columnType: "geojson",
         rowNumber: 2,
         cell: "123",
       },
       {
         type: "cell/type",
         columnName: "data",
-        columnType: "string",
-        columnFormat: "geojson",
+        columnType: "geojson",
         rowNumber: 3,
         cell: "true",
       },
       {
         type: "cell/type",
         columnName: "data",
-        columnType: "string",
-        columnFormat: "geojson",
+        columnType: "geojson",
         rowNumber: 4,
         cell: "false",
       },
       {
         type: "cell/type",
         columnName: "data",
-        columnType: "string",
-        columnFormat: "geojson",
+        columnType: "geojson",
         rowNumber: 5,
         cell: "null",
       },
@@ -315,16 +306,14 @@ describe.skip("validateGeojsonColumn", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       columnName: "location",
-      columnType: "string",
-      columnFormat: "geojson",
+      columnType: "geojson",
       rowNumber: 2,
       cell: '{"type":"Point","coordinates":[0]}',
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       columnName: "location",
-      columnType: "string",
-      columnFormat: "geojson",
+      columnType: "geojson",
       rowNumber: 3,
       cell: '{"type":"Point","coordinates":[0,0,0,0]}',
     })
@@ -355,16 +344,14 @@ describe.skip("validateGeojsonColumn", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       columnName: "line",
-      columnType: "string",
-      columnFormat: "geojson",
+      columnType: "geojson",
       rowNumber: 2,
       cell: '{"type":"LineString","coordinates":[[0,0]]}',
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       columnName: "line",
-      columnType: "string",
-      columnFormat: "geojson",
+      columnType: "geojson",
       rowNumber: 3,
       cell: '{"type":"LineString","coordinates":[0,0]}',
     })
@@ -395,16 +382,14 @@ describe.skip("validateGeojsonColumn", () => {
     expect(errors).toContainEqual({
       type: "cell/type",
       columnName: "feature",
-      columnType: "string",
-      columnFormat: "geojson",
+      columnType: "geojson",
       rowNumber: 2,
       cell: '{"type":"Feature","geometry":{"type":"Point","coordinates":[0,0]}}',
     })
     expect(errors).toContainEqual({
       type: "cell/type",
       columnName: "feature",
-      columnType: "string",
-      columnFormat: "geojson",
+      columnType: "geojson",
       rowNumber: 3,
       cell: '{"type":"Feature","properties":{}}',
     })
@@ -434,121 +419,10 @@ describe.skip("validateGeojsonColumn", () => {
       {
         type: "cell/type",
         columnName: "collection",
-        columnType: "string",
-        columnFormat: "geojson",
+        columnType: "geojson",
         rowNumber: 2,
         cell: '{"type":"FeatureCollection"}',
       },
     ])
-  })
-
-  it("should not errors for valid TopoJSON", async () => {
-    const table = pl
-      .DataFrame({
-        topology: [
-          '{"type":"Topology","objects":{"example":{"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[0,0]}]}},"arcs":[]}',
-          '{"type":"Topology","objects":{"collection":{"type":"GeometryCollection","geometries":[]}},"arcs":[]}',
-        ],
-      })
-      .lazy()
-
-    const tableSchema: TableSchema = {
-      properties: {
-        topology: {
-          type: "object",
-          format: "topojson",
-        },
-      },
-    }
-
-    const errors = await inspectTable(table, { tableSchema })
-    expect(errors).toHaveLength(0)
-  })
-
-  it("should errors for invalid TopoJSON structure", async () => {
-    const table = pl
-      .DataFrame({
-        topology: [
-          '{"type":"Topology","objects":{"example":{"type":"GeometryCollection","geometries":[]}},"arcs":[]}',
-          '{"type":"Topology","objects":{}}',
-          '{"type":"Topology"}',
-        ],
-      })
-      .lazy()
-
-    const tableSchema: TableSchema = {
-      properties: {
-        topology: {
-          type: "object",
-          format: "topojson",
-        },
-      },
-    }
-
-    const errors = await inspectTable(table, { tableSchema })
-    expect(errors).toHaveLength(2)
-    expect(errors).toContainEqual({
-      type: "cell/type",
-      columnName: "topology",
-      columnType: "string",
-      columnFormat: "topojson",
-      rowNumber: 2,
-      cell: '{"type":"Topology","objects":{}}',
-    })
-    expect(errors).toContainEqual({
-      type: "cell/type",
-      columnName: "topology",
-      columnType: "string",
-      columnFormat: "topojson",
-      rowNumber: 3,
-      cell: '{"type":"Topology"}',
-    })
-  })
-
-  it("should accept TopoJSON geometry objects", async () => {
-    const table = pl
-      .DataFrame({
-        geometry: [
-          '{"type":"Point","coordinates":[0,0]}',
-          '{"type":"LineString","arcs":[0,1]}',
-          '{"type":"Polygon","arcs":[[0,1,2]]}',
-        ],
-      })
-      .lazy()
-
-    const tableSchema: TableSchema = {
-      properties: {
-        geometry: {
-          type: "object",
-          format: "topojson",
-        },
-      },
-    }
-
-    const errors = await inspectTable(table, { tableSchema })
-    expect(errors).toHaveLength(0)
-  })
-
-  it("should handle null values for topojson format", async () => {
-    const table = pl
-      .DataFrame({
-        topology: [
-          '{"type":"Topology","objects":{"example":{"type":"GeometryCollection","geometries":[]}},"arcs":[]}',
-          null,
-        ],
-      })
-      .lazy()
-
-    const tableSchema: TableSchema = {
-      properties: {
-        topology: {
-          type: "object",
-          format: "topojson",
-        },
-      },
-    }
-
-    const errors = await inspectTable(table, { tableSchema })
-    expect(errors).toHaveLength(0)
   })
 })

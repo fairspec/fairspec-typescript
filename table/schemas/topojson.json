@@ -6,28 +6,28 @@
   "required": ["type"],
   "properties": {
     "bbox": {
-      "$ref": "#/definitions/bbox"
+      "$ref": "#/$defs/bbox"
     }
   },
   "oneOf": [
     {
-      "$ref": "#/definitions/topology"
+      "$ref": "#/$defs/topology"
     },
     {
-      "$ref": "#/definitions/geometry"
+      "$ref": "#/$defs/geometry"
     }
   ],
-  "definitions": {
+  "$defs": {
     "bbox": {
       "title": "TopoJSON bounding box",
       "description": "A bounding box as defined by TopoJSON",
       "type": "array",
       "items": {
-        "$ref": "#/definitions/bbox/definitions/dimension"
+        "$ref": "#/$defs/bbox/$defs/dimension"
       },
       "minItems": 2,
       "maxItems": 2,
-      "definitions": {
+      "$defs": {
         "dimension": {
           "type": "array",
           "description": "This array should have an entry per dimension in the geometries",
@@ -60,7 +60,7 @@
               "enum": ["Point"]
             },
             "coordinates": {
-              "$ref": "#/definitions/geometry/definitions/position"
+              "$ref": "#/$defs/geometry/$defs/position"
             }
           }
         },
@@ -75,7 +75,7 @@
             "coordinates": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/geometry/definitions/position"
+                "$ref": "#/$defs/geometry/$defs/position"
               }
             }
           }
@@ -167,13 +167,13 @@
             "geometries": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/geometry"
+                "$ref": "#/$defs/geometry"
               }
             }
           }
         }
       ],
-      "definitions": {
+      "$defs": {
         "position": {
           "type": "array",
           "items": {
@@ -195,20 +195,20 @@
         "objects": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/geometry"
+            "$ref": "#/$defs/geometry"
           }
         },
         "arcs": {
-          "$ref": "#/definitions/topology/definitions/arcs"
+          "$ref": "#/$defs/topology/$defs/arcs"
         },
         "transform": {
-          "$ref": "#/definitions/topology/definitions/transform"
+          "$ref": "#/$defs/topology/$defs/transform"
         },
         "bbox": {
-          "$ref": "#/definitions/bbox"
+          "$ref": "#/$defs/bbox"
         }
       },
-      "definitions": {
+      "$defs": {
         "transform": {
           "type": "object",
           "required": ["scale", "translate"],
@@ -236,7 +236,7 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/definitions/topology/definitions/position"
+                  "$ref": "#/$defs/topology/$defs/position"
                 },
                 {
                   "type": "null"

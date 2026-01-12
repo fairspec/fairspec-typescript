@@ -15,6 +15,11 @@ export const UnknownColumnProperty = BaseColumnProperty.extend({
     .optional()
     .describe("An optional const that all values must match"),
 
+  default: z
+    .array(z.unknown())
+    .optional()
+    .describe("An optional default value for the column"),
+
   examples: z
     .array(z.array(z.unknown()))
     .optional()

@@ -25,6 +25,20 @@ export const ListColumnProperty = BaseStringColumnProperty.extend({
     .describe(
       "An optional single character used to delimit items in a list column",
     ),
+
+  minItems: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("An optional minimum length constraint for list values"),
+
+  maxItems: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("An optional maximum length constraint for list values"),
 })
 
 export const ListColumn = BaseColumn.extend({

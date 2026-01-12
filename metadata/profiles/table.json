@@ -204,6 +204,7 @@
         "type": { "const": "boolean" },
         "enum": { "$ref": "#/$defs/BooleanEnum" },
         "const": { "$ref": "#/$defs/BooleanConst" },
+        "default": { "$ref": "#/$defs/BooleanDefault" },
         "examples": { "$ref": "#/$defs/BooleanExamples" },
         "missingValues": { "$ref": "#/$defs/MissingValues" },
         "trueValues": { "$ref": "#/$defs/TrueValues" },
@@ -216,6 +217,7 @@
         "type": { "const": "integer" },
         "enum": { "$ref": "#/$defs/IntegerEnum" },
         "const": { "$ref": "#/$defs/IntegerConst" },
+        "default": { "$ref": "#/$defs/IntegerDefault" },
         "examples": { "$ref": "#/$defs/IntegerExamples" },
         "missingValues": { "$ref": "#/$defs/MissingValues" },
         "minimum": { "$ref": "#/$defs/IntegerMinimum" },
@@ -246,6 +248,7 @@
         "type": { "const": "number" },
         "enum": { "$ref": "#/$defs/NumberEnum" },
         "const": { "$ref": "#/$defs/NumberConst" },
+        "default": { "$ref": "#/$defs/NumberDefault" },
         "examples": { "$ref": "#/$defs/NumberExamples" },
         "missingValues": { "$ref": "#/$defs/MissingValues" },
         "minimum": { "$ref": "#/$defs/NumberMinimum" },
@@ -264,6 +267,7 @@
         "type": { "const": "string" },
         "enum": { "$ref": "#/$defs/StringEnum" },
         "const": { "$ref": "#/$defs/StringConst" },
+        "default": { "$ref": "#/$defs/StringDefault" },
         "examples": { "$ref": "#/$defs/StringExamples" },
         "missingValues": { "$ref": "#/$defs/StringMissingValues" },
         "minLength": { "$ref": "#/$defs/MinLength" },
@@ -291,7 +295,9 @@
       "properties": {
         "format": { "const": "list" },
         "itemType": { "$ref": "#/$defs/ListItemType" },
-        "delimiter": { "$ref": "#/$defs/ListDelimiter" }
+        "delimiter": { "$ref": "#/$defs/ListDelimiter" },
+        "minItems": { "$ref": "#/$defs/MinItems" },
+        "maxItems": { "$ref": "#/$defs/MaxItems" }
       }
     },
     "Base64ColumnProperty": {
@@ -366,6 +372,7 @@
       "properties": {
         "enum": { "$ref": "#/$defs/ArrayEnum" },
         "const": { "$ref": "#/$defs/ArrayConst" },
+        "default": { "$ref": "#/$defs/ArrayDefault" },
         "examples": { "$ref": "#/$defs/ArrayExamples" },
         "missingValues": { "$ref": "#/$defs/StringMissingValues" }
       }
@@ -379,6 +386,7 @@
       "properties": {
         "enum": { "$ref": "#/$defs/ObjectEnum" },
         "const": { "$ref": "#/$defs/ObjectConst" },
+        "default": { "$ref": "#/$defs/ObjectDefault" },
         "examples": { "$ref": "#/$defs/ObjectExamples" },
         "missingValues": { "$ref": "#/$defs/StringMissingValues" }
       }
@@ -425,6 +433,14 @@
       "minimum": 0
     },
     "MaxLength": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "MinItems": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "MaxItems": {
       "type": "integer",
       "minimum": 0
     },
@@ -637,6 +653,25 @@
       "type": "object"
     },
     "UnknownConst": {},
+    "BooleanDefault": {
+      "type": "boolean"
+    },
+    "IntegerDefault": {
+      "type": "integer"
+    },
+    "NumberDefault": {
+      "type": "number"
+    },
+    "StringDefault": {
+      "type": "string"
+    },
+    "ArrayDefault": {
+      "type": "array"
+    },
+    "ObjectDefault": {
+      "type": "object"
+    },
+    "UnknownDefault": {},
     "IntegerCategories": {
       "type": "array",
       "items": {

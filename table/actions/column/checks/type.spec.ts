@@ -1,7 +1,7 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inspectTable } from "../../table/index.ts"
+import { inspectTable } from "../../../actions/table/inspect.ts"
 
 describe("inspectTable", () => {
   it("should validate string to integer convertions errors", async () => {
@@ -11,11 +11,13 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "id", type: "integer" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
@@ -41,11 +43,13 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "price", type: "number" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        price: { type: "number" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
@@ -71,11 +75,13 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "active", type: "boolean" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        active: { type: "boolean" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toHaveLength(1)
     expect(errors).toContainEqual({
@@ -94,11 +100,13 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "created", type: "date" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        created: { type: "string", format: "date" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toHaveLength(3)
     expect(errors).toContainEqual({
@@ -131,11 +139,13 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "time", type: "time" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        time: { type: "string", format: "time" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toHaveLength(3)
     expect(errors).toContainEqual({
@@ -168,11 +178,13 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "time", type: "time", format: "%H:%M" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        time: { type: "string", format: "time", temporalFormat: "%H:%M" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     console.log(errors)
 
@@ -182,45 +194,7 @@ describe("inspectTable", () => {
       cell: "invalid",
       columnName: "time",
       columnType: "time",
-      columnFormat: "%H:%M",
       rowNumber: 2,
-    })
-  })
-
-  it("should validate string to year convertions errors", async () => {
-    const table = pl
-      .DataFrame({
-        year: ["2023", "23", "MMXXIII", "two-thousand-twenty-three"],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [{ name: "year", type: "year" }],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toHaveLength(3)
-    expect(errors).toContainEqual({
-      type: "cell/type",
-      cell: "23",
-      columnName: "year",
-      columnType: "year",
-      rowNumber: 2,
-    })
-    expect(errors).toContainEqual({
-      type: "cell/type",
-      cell: "MMXXIII",
-      columnName: "year",
-      columnType: "year",
-      rowNumber: 3,
-    })
-    expect(errors).toContainEqual({
-      type: "cell/type",
-      cell: "two-thousand-twenty-three",
-      columnName: "year",
-      columnType: "year",
-      rowNumber: 4,
     })
   })
 
@@ -236,29 +210,29 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "datetime", type: "datetime" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        timestamp: { type: "string", format: "date-time" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
-    // Adjust the expectations to match actual behavior
     expect(errors.length).toBeGreaterThan(0)
 
-    // Check for specific invalid values we expect to fail
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "January 15, 2023 2:30 PM",
-      columnName: "datetime",
-      columnType: "datetime",
+      columnName: "timestamp",
+      columnType: "date-time",
       rowNumber: 2,
     })
 
     expect(errors).toContainEqual({
       type: "cell/type",
       cell: "not-a-datetime",
-      columnName: "datetime",
-      columnType: "datetime",
+      columnName: "timestamp",
+      columnType: "date-time",
       rowNumber: 4,
     })
   })
@@ -270,11 +244,13 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "id", type: "integer" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toHaveLength(0)
   })
@@ -286,13 +262,14 @@ describe("inspectTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [{ name: "is_active", type: "boolean" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        is_active: { type: "boolean" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
-    // Since the column isn't string type, validateColumn will not normalize it
     expect(errors).toHaveLength(0)
   })
 })

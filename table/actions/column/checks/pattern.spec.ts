@@ -1,7 +1,7 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inspectTable } from "../../table/index.ts"
+import { inspectTable } from "../../../actions/table/inspect.ts"
 
 describe("inspectTable (cell/pattern)", () => {
   it("should not errors for string values that match the pattern", async () => {
@@ -11,19 +11,16 @@ describe("inspectTable (cell/pattern)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "email",
+    const tableSchema: TableSchema = {
+      properties: {
+        email: {
           type: "string",
-          constraints: {
-            pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-          },
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -41,20 +38,17 @@ describe("inspectTable (cell/pattern)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "email",
+    const tableSchema: TableSchema = {
+      properties: {
+        email: {
           type: "string",
-          constraints: {
-            pattern,
-          },
+          pattern,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "cell/pattern")).toHaveLength(2)
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors.filter((e: { type: string }) => e.type === "cell/pattern")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/pattern",
       columnName: "email",

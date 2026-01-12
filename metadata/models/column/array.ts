@@ -8,7 +8,7 @@ export const ArrayColumnProperty = BaseColumnProperty.extend({
   format: z.undefined().optional(),
 
   enum: z
-    .array(z.array(z.unknown()))
+    .array(z.unknown())
     .optional()
     .describe("An optional array of allowed values for the column"),
 

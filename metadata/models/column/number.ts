@@ -11,7 +11,7 @@ export const BaseNumberColumnProperty = BaseColumnProperty.extend({
     .describe("An optional array of allowed values for the column"),
 
   const: z
-    .array(z.number())
+    .number()
     .optional()
     .describe("An optional const that all values must match"),
 

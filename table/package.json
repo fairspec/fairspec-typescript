@@ -32,7 +32,8 @@
     "xlsx"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fairspec/dataset": "workspace:*",

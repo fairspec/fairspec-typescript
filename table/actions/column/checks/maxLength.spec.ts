@@ -1,7 +1,7 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inspectTable } from "../../table/index.ts"
+import { inspectTable } from "../../../actions/table/inspect.ts"
 
 describe("inspectTable (cell/maxLength)", () => {
   it("should not errors for string values that meet the maxLength constraint", async () => {
@@ -11,17 +11,16 @@ describe("inspectTable (cell/maxLength)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "code",
+    const tableSchema: TableSchema = {
+      properties: {
+        code: {
           type: "string",
-          constraints: { maxLength: 4 },
+          maxLength: 4,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -32,18 +31,17 @@ describe("inspectTable (cell/maxLength)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "username",
+    const tableSchema: TableSchema = {
+      properties: {
+        username: {
           type: "string",
-          constraints: { maxLength: 8 },
+          maxLength: 8,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "cell/maxLength")).toHaveLength(1)
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors.filter((e: { type: string }) => e.type === "cell/maxLength")).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/maxLength",
       columnName: "username",

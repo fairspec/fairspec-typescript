@@ -1,7 +1,7 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inspectTable } from "../../table/index.ts"
+import { inspectTable } from "../../../actions/table/inspect.ts"
 
 describe("inspectTable (cell/maximum)", () => {
   it("should not errors for valid values", async () => {
@@ -11,17 +11,16 @@ describe("inspectTable (cell/maximum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "price",
+    const tableSchema: TableSchema = {
+      properties: {
+        price: {
           type: "number",
-          constraints: { maximum: 50 },
+          maximum: 50,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -32,18 +31,17 @@ describe("inspectTable (cell/maximum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "temperature",
+    const tableSchema: TableSchema = {
+      properties: {
+        temperature: {
           type: "number",
-          constraints: { maximum: 40 },
+          maximum: 40,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "cell/maximum")).toHaveLength(1)
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors.filter((e: { type: string }) => e.type === "cell/maximum")).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/maximum",
       columnName: "temperature",
@@ -60,18 +58,17 @@ describe("inspectTable (cell/maximum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "temperature",
+    const tableSchema: TableSchema = {
+      properties: {
+        temperature: {
           type: "number",
-          constraints: { exclusiveMaximum: 40 },
+          exclusiveMaximum: 40,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "cell/exclusiveMaximum")).toHaveLength(
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors.filter((e: { type: string }) => e.type === "cell/exclusiveMaximum")).toHaveLength(
       2,
     )
     expect(errors).toContainEqual({
@@ -97,17 +94,16 @@ describe("inspectTable (cell/maximum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "price",
+    const tableSchema: TableSchema = {
+      properties: {
+        price: {
           type: "number",
-          constraints: { maximum: "50" },
+          maximum: 50,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
@@ -127,17 +123,16 @@ describe("inspectTable (cell/maximum)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "temperature",
+    const tableSchema: TableSchema = {
+      properties: {
+        temperature: {
           type: "number",
-          constraints: { exclusiveMaximum: "40" },
+          exclusiveMaximum: 40,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
@@ -157,274 +152,144 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it("should handle maximum as string with groupChar", async () => {
+  it("should handle maximum with groupChar", async () => {
     const table = pl
       .DataFrame({
         price: ["5,000", "10,500", "15,000"],
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "price",
+    const tableSchema: TableSchema = {
+      properties: {
+        price: {
           type: "integer",
           groupChar: ",",
-          constraints: { maximum: "12,000" },
+          maximum: 12000,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
         type: "cell/maximum",
         columnName: "price",
-        maximum: "12,000",
+        maximum: "12000",
         rowNumber: 3,
         cell: "15,000",
       },
     ])
   })
 
-  it("should handle maximum as string with decimalChar", async () => {
+  it("should handle maximum with decimalChar", async () => {
     const table = pl
       .DataFrame({
         price: ["5,5", "10,75", "15,3"],
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "price",
+    const tableSchema: TableSchema = {
+      properties: {
+        price: {
           type: "number",
           decimalChar: ",",
-          constraints: { maximum: "12,0" },
+          maximum: 12,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
         type: "cell/maximum",
         columnName: "price",
-        maximum: "12,0",
+        maximum: "12",
         rowNumber: 3,
         cell: "15,3",
       },
     ])
   })
 
-  it("should handle maximum as string with groupChar and decimalChar", async () => {
+  it("should handle maximum with groupChar and decimalChar", async () => {
     const table = pl
       .DataFrame({
         price: ["5.000,50", "10.500,75", "15.000,30"],
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "price",
+    const tableSchema: TableSchema = {
+      properties: {
+        price: {
           type: "number",
           groupChar: ".",
           decimalChar: ",",
-          constraints: { maximum: "12.000,00" },
+          maximum: 12000,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
         type: "cell/maximum",
         columnName: "price",
-        maximum: "12.000,00",
+        maximum: "12000",
         rowNumber: 3,
         cell: "15.000,30",
       },
     ])
   })
 
-  it("should handle maximum as string with bareNumber false", async () => {
+  it("should handle maximum with withText", async () => {
     const table = pl
       .DataFrame({
         price: ["$5.00", "$10.50", "$15.50"],
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "price",
+    const tableSchema: TableSchema = {
+      properties: {
+        price: {
           type: "number",
-          bareNumber: false,
-          constraints: { maximum: "$12.00" },
+          withText: true,
+          maximum: 12,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
         type: "cell/maximum",
         columnName: "price",
-        maximum: "$12.00",
+        maximum: "12",
         rowNumber: 3,
         cell: "$15.50",
       },
     ])
   })
 
-  it("should handle maximum for date columns", async () => {
-    const table = pl
-      .DataFrame({
-        date: ["2024-01-15", "2024-02-20", "2024-03-25"],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [
-        {
-          name: "date",
-          type: "date",
-          constraints: { maximum: "2024-02-28" },
-        },
-      ],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toEqual([
-      {
-        type: "cell/maximum",
-        columnName: "date",
-        maximum: "2024-02-28",
-        rowNumber: 3,
-        cell: "2024-03-25",
-      },
-    ])
-  })
-
-  it.skip("should handle maximum for time columns", async () => {
-    const table = pl
-      .DataFrame({
-        time: ["14:30:00", "16:45:00", "18:00:00"],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [
-        {
-          name: "time",
-          type: "time",
-          constraints: { maximum: "17:00:00" },
-        },
-      ],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toEqual([
-      {
-        type: "cell/maximum",
-        columnName: "time",
-        maximum: "17:00:00",
-        rowNumber: 3,
-        cell: "18:00:00",
-      },
-    ])
-  })
-
-  it("should handle maximum for datetime columns", async () => {
-    const table = pl
-      .DataFrame({
-        timestamp: [
-          "2024-01-15T14:30:00",
-          "2024-02-20T08:15:00",
-          "2024-03-25T10:00:00",
-        ],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [
-        {
-          name: "timestamp",
-          type: "datetime",
-          constraints: { maximum: "2024-02-28T23:59:59" },
-        },
-      ],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toEqual([
-      {
-        type: "cell/maximum",
-        columnName: "timestamp",
-        maximum: "2024-02-28T23:59:59",
-        rowNumber: 3,
-        cell: "2024-03-25T10:00:00",
-      },
-    ])
-  })
-
-  it("should handle maximum for date columns with custom format", async () => {
-    const table = pl
-      .DataFrame({
-        date: ["15/01/2024", "20/02/2024", "25/03/2024"],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [
-        {
-          name: "date",
-          type: "date",
-          format: "%d/%m/%Y",
-          constraints: { maximum: "28/02/2024" },
-        },
-      ],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toEqual([
-      {
-        type: "cell/maximum",
-        columnName: "date",
-        maximum: "28/02/2024",
-        rowNumber: 3,
-        cell: "25/03/2024",
-      },
-    ])
-  })
-
-  it("should handle maximum for year columns", async () => {
+  it("should handle maximum for integer year values", async () => {
     const table = pl
       .DataFrame({
         year: ["2020", "2021", "2023"],
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "year",
-          type: "year",
-          constraints: { maximum: "2022" },
+    const tableSchema: TableSchema = {
+      properties: {
+        year: {
+          type: "integer",
+          maximum: 2022,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
@@ -437,24 +302,23 @@ describe("inspectTable (cell/maximum)", () => {
     ])
   })
 
-  it("should handle exclusiveMaximum for year columns", async () => {
+  it("should handle exclusiveMaximum for integer year values", async () => {
     const table = pl
       .DataFrame({
         year: ["2020", "2021", "2022", "2023"],
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        {
-          name: "year",
-          type: "year",
-          constraints: { exclusiveMaximum: "2022" },
+    const tableSchema: TableSchema = {
+      properties: {
+        year: {
+          type: "integer",
+          exclusiveMaximum: 2022,
         },
-      ],
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {
@@ -470,73 +334,6 @@ describe("inspectTable (cell/maximum)", () => {
         maximum: "2022",
         rowNumber: 4,
         cell: "2023",
-      },
-    ])
-  })
-
-  it.skip("should handle maximum for yearmonth columns", async () => {
-    const table = pl
-      .DataFrame({
-        yearmonth: ["2024-01", "2024-03", "2024-06"],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [
-        {
-          name: "yearmonth",
-          type: "yearmonth",
-          constraints: { maximum: "2024-05" },
-        },
-      ],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toEqual([
-      {
-        type: "cell/maximum",
-        columnName: "yearmonth",
-        maximum: "2024-05",
-        rowNumber: 3,
-        cell: "2024-06",
-      },
-    ])
-  })
-
-  it.skip("should handle exclusiveMaximum for yearmonth columns", async () => {
-    const table = pl
-      .DataFrame({
-        yearmonth: ["2024-01", "2024-03", "2024-05", "2024-06"],
-      })
-      .lazy()
-
-    const schema: Schema = {
-      columns: [
-        {
-          name: "yearmonth",
-          type: "yearmonth",
-          constraints: { exclusiveMaximum: "2024-05" },
-        },
-      ],
-    }
-
-    const errors = await inspectTable(table, { schema })
-
-    expect(errors).toEqual([
-      {
-        type: "cell/exclusiveMaximum",
-        columnName: "yearmonth",
-        maximum: "2024-05",
-        rowNumber: 3,
-        cell: "2024-05",
-      },
-      {
-        type: "cell/exclusiveMaximum",
-        columnName: "yearmonth",
-        maximum: "2024-05",
-        rowNumber: 4,
-        cell: "2024-06",
       },
     ])
   })

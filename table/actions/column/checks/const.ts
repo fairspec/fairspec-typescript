@@ -1,4 +1,5 @@
 import type { CellConstError, Column } from "@fairspec/metadata"
+import * as pl from "nodejs-polars"
 import type { CellMapping } from "../../../models/cell.ts"
 
 export function checkCellConst(column: Column, mapping: CellMapping) {
@@ -10,7 +11,7 @@ export function checkCellConst(column: Column, mapping: CellMapping) {
       ? JSON.stringify(constConstraint)
       : constConstraint
 
-  const isErrorExpr = mapping.target.eq(primitiveConstConstraint).not()
+  const isErrorExpr = mapping.target.eq(pl.lit(primitiveConstConstraint)).not()
 
   const errorTemplate: CellConstError = {
     type: "cell/const",

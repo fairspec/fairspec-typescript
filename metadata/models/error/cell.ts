@@ -73,6 +73,16 @@ export const CellJsonError = BaseCellError.extend({
     .describe("JSON Pointer to the validation error location"),
 })
 
+export const CellMinItemsError = BaseCellError.extend({
+  type: z.literal("cell/minItems").describe("Error type identifier"),
+  minItems: z.number().describe("The minimum number of items required"),
+})
+
+export const CellMaxItemsError = BaseCellError.extend({
+  type: z.literal("cell/maxItems").describe("Error type identifier"),
+  maxItems: z.number().describe("The maximum number of items allowed"),
+})
+
 export const CellError = z.discriminatedUnion("type", [
   CellTypeError,
   CellRequiredError,
@@ -82,6 +92,8 @@ export const CellError = z.discriminatedUnion("type", [
   CellExclusiveMaximumError,
   CellMinLengthError,
   CellMaxLengthError,
+  CellMinItemsError,
+  CellMaxItemsError,
   CellPatternError,
   CellUniqueError,
   CellConstError,
@@ -101,6 +113,8 @@ export type CellExclusiveMaximumError = z.infer<
 >
 export type CellMinLengthError = z.infer<typeof CellMinLengthError>
 export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>
+export type CellMinItemsError = z.infer<typeof CellMinItemsError>
+export type CellMaxItemsError = z.infer<typeof CellMaxItemsError>
 export type CellPatternError = z.infer<typeof CellPatternError>
 export type CellUniqueError = z.infer<typeof CellUniqueError>
 export type CellConstError = z.infer<typeof CellConstError>

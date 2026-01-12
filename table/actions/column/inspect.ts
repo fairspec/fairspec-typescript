@@ -9,8 +9,10 @@ import type { ColumnMapping } from "../../models/column.ts"
 import type { Table } from "../../models/table.ts"
 import { checkCellConst } from "./checks/const.ts"
 import { checkCellEnum } from "./checks/enum.ts"
+import { checkCellMaxItems } from "./checks/maxItems.ts"
 import { createCheckCellMaximum } from "./checks/maximum.ts"
 import { checkCellMaxLength } from "./checks/maxLength.ts"
+import { checkCellMinItems } from "./checks/minItems.ts"
 import { createCheckCellMinimum } from "./checks/minimum.ts"
 import { checkCellMinLength } from "./checks/minLength.ts"
 import { checkCellPattern } from "./checks/pattern.ts"
@@ -148,6 +150,8 @@ async function inspectCellsNatively(
     createCheckCellMaximum({ isExclusive: true }),
     checkCellMinLength,
     checkCellMaxLength,
+    checkCellMinItems,
+    checkCellMaxItems,
     checkCellPattern,
   ]) {
     const cellMapping = { source: pl.col("source"), target: pl.col("target") }

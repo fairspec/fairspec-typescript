@@ -6,41 +6,17 @@ import { normalizeTable } from "../../../actions/table/normalize.ts"
 
 describe("parseDateColumn", () => {
   it.each([
-    // Default format
-    ["2019-01-01", new Date(Date.UTC(2019, 0, 1)), {}],
-    ["10th Jan 1969", null, {}],
-    ["invalid", null, {}],
-    ["", null, {}],
-
-    // Custom format
-    [
-      "21/11/2006",
-      new Date(Date.UTC(2006, 10, 21)),
-      { temporalFormat: "%d/%m/%Y" },
-    ],
-    [
-      "21/11/06 16:30",
-      new Date(Date.UTC(2006, 10, 21)),
-      { temporalFormat: "%d/%m/%y" },
-    ],
-    ["invalid", null, { temporalFormat: "%d/%m/%y" }],
-    ["", null, { temporalFormat: "%d/%m/%y" }],
-    [
-      "2006/11/21",
-      new Date(Date.UTC(2006, 10, 21)),
-      { temporalFormat: "%Y/%m/%d" },
-    ],
-
-    // Invalid format
-    ["21/11/06", null, { temporalFormat: "invalid" }],
-  ])("%s -> %s %o", async (cell, expected, options) => {
+    ["2019-01-01", new Date(Date.UTC(2019, 0, 1))],
+    ["10th Jan 1969", null],
+    ["invalid", null],
+    ["", null],
+  ])("default: %s -> %s", async (cell, expected) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
     const tableSchema: TableSchema = {
       properties: {
         name: {
           type: "string",
           format: "date",
-          ...options,
         },
       },
     }
@@ -51,33 +27,109 @@ describe("parseDateColumn", () => {
     const actual = frame.toRecords()[0]?.name
     expect(actual).toEqual(expected)
   })
+
+  it.each([
+    ["21/11/2006", new Date(Date.UTC(2006, 10, 21))],
+    ["invalid", null],
+    ["", null],
+  ])("temporalFormat %%d/%%m/%%Y: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%d/%m/%Y",
+        },
+      },
+    }
+
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    ["21/11/06 16:30", new Date(Date.UTC(2006, 10, 21))],
+    ["invalid", null],
+    ["", null],
+  ])("temporalFormat %%d/%%m/%%y: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%d/%m/%y",
+        },
+      },
+    }
+
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([["2006/11/21", new Date(Date.UTC(2006, 10, 21))]])(
+    "temporalFormat %%Y/%%m/%%d: %s -> %s",
+    async (cell, expected) => {
+      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+      const tableSchema: TableSchema = {
+        properties: {
+          name: {
+            type: "string",
+            format: "date",
+            temporalFormat: "%Y/%m/%d",
+          },
+        },
+      }
+
+      const result = await normalizeTable(table, tableSchema)
+      const frame = await result.collect()
+
+      const actual = frame.toRecords()[0]?.name
+      expect(actual).toEqual(expected)
+    },
+  )
+
+  it.each([["21/11/06", null]])(
+    "invalid temporalFormat: %s -> %s",
+    async (cell, expected) => {
+      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+      const tableSchema: TableSchema = {
+        properties: {
+          name: {
+            type: "string",
+            format: "date",
+            temporalFormat: "invalid",
+          },
+        },
+      }
+
+      const result = await normalizeTable(table, tableSchema)
+      const frame = await result.collect()
+
+      const actual = frame.toRecords()[0]?.name
+      expect(actual).toEqual(expected)
+    },
+  )
 })
 
 describe("stringifyDateColumn", () => {
   it.each([
-    // Default format
-    [new Date(Date.UTC(2019, 0, 1)), "2019-01-01", {}],
-    [new Date(Date.UTC(2006, 10, 21)), "2006-11-21", {}],
-
-    // Custom format
-    [
-      new Date(Date.UTC(2006, 10, 21)),
-      "21/11/2006",
-      { temporalFormat: "%d/%m/%Y" },
-    ],
-    [
-      new Date(Date.UTC(2006, 10, 21)),
-      "2006/11/21",
-      { temporalFormat: "%Y/%m/%d" },
-    ],
-  ])("%s -> %s %o", async (value, expected, options) => {
+    [new Date(Date.UTC(2019, 0, 1)), "2019-01-01"],
+    [new Date(Date.UTC(2006, 10, 21)), "2006-11-21"],
+  ])("default: %s -> %s", async (value, expected) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Date)]).lazy()
     const tableSchema: TableSchema = {
       properties: {
         name: {
           type: "string",
           format: "date",
-          ...options,
         },
       },
     }
@@ -88,4 +140,48 @@ describe("stringifyDateColumn", () => {
     const actual = frame.toRecords()[0]?.name
     expect(actual).toEqual(expected)
   })
+
+  it.each([[new Date(Date.UTC(2006, 10, 21)), "21/11/2006"]])(
+    "temporalFormat %%d/%%m/%%Y: %s -> %s",
+    async (value, expected) => {
+      const table = pl.DataFrame([pl.Series("name", [value], pl.Date)]).lazy()
+      const tableSchema: TableSchema = {
+        properties: {
+          name: {
+            type: "string",
+            format: "date",
+            temporalFormat: "%d/%m/%Y",
+          },
+        },
+      }
+
+      const result = await denormalizeTable(table, tableSchema)
+      const frame = await result.collect()
+
+      const actual = frame.toRecords()[0]?.name
+      expect(actual).toEqual(expected)
+    },
+  )
+
+  it.each([[new Date(Date.UTC(2006, 10, 21)), "2006/11/21"]])(
+    "temporalFormat %%Y/%%m/%%d: %s -> %s",
+    async (value, expected) => {
+      const table = pl.DataFrame([pl.Series("name", [value], pl.Date)]).lazy()
+      const tableSchema: TableSchema = {
+        properties: {
+          name: {
+            type: "string",
+            format: "date",
+            temporalFormat: "%Y/%m/%d",
+          },
+        },
+      }
+
+      const result = await denormalizeTable(table, tableSchema)
+      const frame = await result.collect()
+
+      const actual = frame.toRecords()[0]?.name
+      expect(actual).toEqual(expected)
+    },
+  )
 })

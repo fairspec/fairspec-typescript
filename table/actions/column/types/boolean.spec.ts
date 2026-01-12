@@ -6,53 +6,29 @@ import { normalizeTable } from "../../../actions/table/normalize.ts"
 
 describe("parseBooleanColumn", () => {
   it.each([
-    // Default true values
-    ["true", true, {}],
-    ["True", true, {}],
-    ["TRUE", true, {}],
-    ["1", true, {}],
-
-    // Default false values
-    ["false", false, {}],
-    ["False", false, {}],
-    ["FALSE", false, {}],
-    ["0", false, {}],
-
-    // Invalid values
-    ["", null, {}],
-    ["invalid", null, {}],
-    ["truthy", null, {}],
-    ["falsy", null, {}],
-    ["2", null, {}],
-    ["-100", null, {}],
-    ["t", null, {}],
-    ["f", null, {}],
-    ["3.14", null, {}],
-
-    // Custom true values
-    ["Y", true, { trueValues: ["Y", "y", "yes"] }],
-    ["y", true, { trueValues: ["Y", "y", "yes"] }],
-    ["yes", true, { trueValues: ["Y", "y", "yes"] }],
-    ["true", null, { trueValues: ["Y", "y", "yes"] }],
-
-    // Custom false values
-    ["N", false, { falseValues: ["N", "n", "no"] }],
-    ["n", false, { falseValues: ["N", "n", "no"] }],
-    ["no", false, { falseValues: ["N", "n", "no"] }],
-    ["false", null, { falseValues: ["N", "n", "no"] }],
-
-    // Custom true and false values
-    ["oui", true, { trueValues: ["oui", "si"], falseValues: ["non", "no"] }],
-    ["si", true, { trueValues: ["oui", "si"], falseValues: ["non", "no"] }],
-    ["non", false, { trueValues: ["oui", "si"], falseValues: ["non", "no"] }],
-    ["no", false, { trueValues: ["oui", "si"], falseValues: ["non", "no"] }],
-  ])("%s -> %s %o", async (cell, value, options) => {
+    ["true", true],
+    ["True", true],
+    ["TRUE", true],
+    ["1", true],
+    ["false", false],
+    ["False", false],
+    ["FALSE", false],
+    ["0", false],
+    ["", null],
+    ["invalid", null],
+    ["truthy", null],
+    ["falsy", null],
+    ["2", null],
+    ["-100", null],
+    ["t", null],
+    ["f", null],
+    ["3.14", null],
+  ])("default: %s -> %s", async (cell, expected) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
     const tableSchema: TableSchema = {
       properties: {
         name: {
           type: "boolean",
-          ...options,
         },
       },
     }
@@ -61,34 +37,154 @@ describe("parseBooleanColumn", () => {
     const frame = await result.collect()
 
     const actual = frame.toRecords()[0]?.name
-    expect(actual).toEqual(value)
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    ["Y", true],
+    ["y", true],
+    ["yes", true],
+    ["true", null],
+  ])("trueValues: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "boolean",
+          trueValues: ["Y", "y", "yes"],
+        },
+      },
+    }
+
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    ["N", false],
+    ["n", false],
+    ["no", false],
+    ["false", null],
+  ])("falseValues: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "boolean",
+          falseValues: ["N", "n", "no"],
+        },
+      },
+    }
+
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    ["oui", true],
+    ["si", true],
+    ["non", false],
+    ["no", false],
+  ])("trueValues + falseValues: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "boolean",
+          trueValues: ["oui", "si"],
+          falseValues: ["non", "no"],
+        },
+      },
+    }
+
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 })
 
 describe("stringifyBooleanColumn", () => {
   it.each([
-    // Default values
-    [true, "true", {}],
-    [false, "false", {}],
-
-    // Custom true values
-    [true, "Y", { trueValues: ["Y", "y", "yes"] }],
-    [false, "false", { trueValues: ["Y", "y", "yes"] }],
-
-    // Custom false values
-    [true, "true", { falseValues: ["N", "n", "no"] }],
-    [false, "N", { falseValues: ["N", "n", "no"] }],
-
-    // Custom true and false values
-    [true, "oui", { trueValues: ["oui", "si"], falseValues: ["non", "no"] }],
-    [false, "non", { trueValues: ["oui", "si"], falseValues: ["non", "no"] }],
-  ])("%s -> %s %o", async (value, expected, options) => {
+    [true, "true"],
+    [false, "false"],
+  ])("default: %s -> %s", async (value, expected) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Bool)]).lazy()
     const tableSchema: TableSchema = {
       properties: {
         name: {
           type: "boolean",
-          ...options,
+        },
+      },
+    }
+
+    const result = await denormalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    [true, "Y"],
+    [false, "false"],
+  ])("trueValues: %s -> %s", async (value, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [value], pl.Bool)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "boolean",
+          trueValues: ["Y", "y", "yes"],
+        },
+      },
+    }
+
+    const result = await denormalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    [true, "true"],
+    [false, "N"],
+  ])("falseValues: %s -> %s", async (value, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [value], pl.Bool)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "boolean",
+          falseValues: ["N", "n", "no"],
+        },
+      },
+    }
+
+    const result = await denormalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    [true, "oui"],
+    [false, "non"],
+  ])("trueValues + falseValues: %s -> %s", async (value, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [value], pl.Bool)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "boolean",
+          trueValues: ["oui", "si"],
+          falseValues: ["non", "no"],
         },
       },
     }

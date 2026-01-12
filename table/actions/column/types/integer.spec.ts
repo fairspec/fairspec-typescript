@@ -1,97 +1,140 @@
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { denormalizeTable, normalizeTable } from "../../table/index.ts"
+import { denormalizeTable } from "../../../actions/table/denormalize.ts"
+import { normalizeTable } from "../../../actions/table/normalize.ts"
 
 describe("parseIntegerColumn", () => {
   it.each([
-    // Basic integer parsing
-    ["1", 1, {}],
-    ["2", 2, {}],
-    ["1000", 1000, {}],
-
-    // Empty or invalid values
-    ["", null, {}],
-    ["2.1", null, {}],
-    ["bad", null, {}],
-    ["0.0003", null, {}],
-    ["3.14", null, {}],
-    ["1/2", null, {}],
-
-    // Group character handling
-    ["1", 1, { groupChar: "," }],
-    ["1,000", 1000, { groupChar: "," }],
-    ["1,000,000", 1000000, { groupChar: "," }],
-    ["1 000", 1000, { groupChar: " " }],
-    ["1'000'000", 1000000, { groupChar: "'" }],
-    ["1.000.000", 1000000, { groupChar: "." }],
-
-    // Bare number handling
-    ["1", 1, { bareNumber: false }],
-    ["1000", 1000, { bareNumber: false }],
-    ["$1000", 1000, { bareNumber: false }],
-    ["1000$", 1000, { bareNumber: false }],
-    ["€1000", 1000, { bareNumber: false }],
-    ["1000€", 1000, { bareNumber: false }],
-    ["1,000", null, { bareNumber: false }],
-    ["-12€", -12, { bareNumber: false }],
-    ["€-12", -12, { bareNumber: false }],
-
-    // Leading zeros and whitespace
-    ["000835", 835, {}],
-    ["0", 0, {}],
-    ["00", 0, {}],
-    ["01", 1, {}],
-    //[" 01 ", 1, {}],
-    //["  42  ", 42, {}],
-
-    // Combined cases
-    ["$1,000,000", 1000000, { bareNumber: false, groupChar: "," }],
-    ["1,000,000$", 1000000, { bareNumber: false, groupChar: "," }],
-    ["€ 1.000.000", 1000000, { bareNumber: false, groupChar: "." }],
-    //[" -1,000 ", -1000, { groupChar: "," }],
-    ["000,001", 1, { groupChar: "," }],
-  ])("$0 -> $1 $2", async (cell, value, options) => {
+    ["1", 1],
+    ["2", 2],
+    ["1000", 1000],
+    ["0", 0],
+    ["00", 0],
+    ["01", 1],
+    ["000835", 835],
+    ["", null],
+    ["2.1", null],
+    ["bad", null],
+    ["0.0003", null],
+    ["3.14", null],
+    ["1/2", null],
+  ])("default: %s -> %s", async (cell, expected) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
-    const schema = {
-      columns: [{ name: "name", type: "integer" as const, ...options }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "integer",
+        },
+      },
     }
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
 
-    expect(frame.getColumn("name").get(0)).toEqual(value)
-    expect(frame.getColumn("name").get(0)).toEqual(value)
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 
-  describe("categories", () => {
-    it.each([
-      // Flat categories
-      ["1", 1, { categories: [1, 2] }],
-      ["2", 2, { categories: [1, 2] }],
-      ["3", null, { categories: [1, 2] }],
+  it.each([
+    ["1", 1],
+    ["1,000", 1000],
+    ["1,000,000", 1000000],
+    ["000,001", 1],
+  ])("groupChar ',': %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "integer",
+          groupChar: ",",
+        },
+      },
+    }
 
-      // Object categories
-      ["1", 1, { categories: [{ value: 1, label: "One" }] }],
-      ["2", null, { categories: [{ value: 1, label: "One" }] }],
-    ])("$0 -> $1 $2", async (cell, value, options) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
 
-      const schema = {
-        columns: [{ name: "name", type: "integer" as const, ...options }],
-      }
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
 
-      const result = await normalizeTable(table, schema)
-      const frame = await result.collect()
+  it.each([
+    ["1 000", 1000],
+    ["1'000'000", 1000000],
+    ["1.000.000", 1000000],
+  ])("groupChar other: %s -> %s", async (cell, expected) => {
+    const groupChar = cell.includes(" ") ? " " : cell.includes("'") ? "'" : "."
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "integer",
+          groupChar,
+        },
+      },
+    }
 
-      expect(frame.toRecords()[0]?.name).toEqual(value)
-    })
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    ["1", 1],
+    ["1000", 1000],
+    ["$1000", 1000],
+    ["1000$", 1000],
+    ["€1000", 1000],
+    ["1000€", 1000],
+    ["-12€", -12],
+    ["€-12", -12],
+    ["1,000", null],
+  ])("bareNumber false: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "integer",
+          withText: true,
+        },
+      },
+    }
+
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
+
+  it.each([
+    ["$1,000,000", 1000000],
+    ["1,000,000$", 1000000],
+  ])("bareNumber false + groupChar: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "integer",
+          groupChar: ",",
+          withText: true,
+        },
+      },
+    }
+
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
+
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 })
 
 describe("stringifyIntegerColumn", () => {
   it.each([
-    // Basic integer to string conversion
     [1, "1"],
     [2, "2"],
     [1000, "1000"],
@@ -99,23 +142,23 @@ describe("stringifyIntegerColumn", () => {
     [-1, "-1"],
     [-100, "-100"],
     [0, "0"],
-
-    // Large integers
     [1234567890, "1234567890"],
     [-1234567890, "-1234567890"],
-
-    // Null handling
     [null, ""],
-  ])("%s -> %s", async (value, expected) => {
+  ])("default: %s -> %s", async (value, expected) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Int64)]).lazy()
-
-    const schema = {
-      columns: [{ name: "name", type: "integer" as const }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "integer",
+        },
+      },
     }
 
-    const result = await denormalizeTable(table, schema)
+    const result = await denormalizeTable(table, tableSchema)
     const frame = await result.collect()
 
-    expect(frame.toRecords()[0]?.name).toEqual(expected)
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 })

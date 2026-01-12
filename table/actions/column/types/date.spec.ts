@@ -1,6 +1,8 @@
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { denormalizeTable, normalizeTable } from "../../table/index.ts"
+import { denormalizeTable } from "../../../actions/table/denormalize.ts"
+import { normalizeTable } from "../../../actions/table/normalize.ts"
 
 describe("parseDateColumn", () => {
   it.each([
@@ -11,29 +13,44 @@ describe("parseDateColumn", () => {
     ["", null, {}],
 
     // Custom format
-    ["21/11/2006", new Date(Date.UTC(2006, 10, 21)), { format: "%d/%m/%Y" }],
+    [
+      "21/11/2006",
+      new Date(Date.UTC(2006, 10, 21)),
+      { temporalFormat: "%d/%m/%Y" },
+    ],
     [
       "21/11/06 16:30",
       new Date(Date.UTC(2006, 10, 21)),
-      { format: "%d/%m/%y" },
+      { temporalFormat: "%d/%m/%y" },
     ],
-    ["invalid", null, { format: "%d/%m/%y" }],
-    ["", null, { format: "%d/%m/%y" }],
-    ["2006/11/21", new Date(Date.UTC(2006, 10, 21)), { format: "%Y/%m/%d" }],
+    ["invalid", null, { temporalFormat: "%d/%m/%y" }],
+    ["", null, { temporalFormat: "%d/%m/%y" }],
+    [
+      "2006/11/21",
+      new Date(Date.UTC(2006, 10, 21)),
+      { temporalFormat: "%Y/%m/%d" },
+    ],
 
     // Invalid format
-    ["21/11/06", null, { format: "invalid" }],
+    ["21/11/06", null, { temporalFormat: "invalid" }],
   ])("%s -> %s %o", async (cell, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
-    const schema = {
-      columns: [{ name: "name", type: "date" as const, ...options }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "date",
+          ...options,
+        },
+      },
     }
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
 
-    expect(frame.toRecords()[0]?.name).toEqual(expected)
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 })
 
@@ -44,18 +61,33 @@ describe("stringifyDateColumn", () => {
     [new Date(Date.UTC(2006, 10, 21)), "2006-11-21", {}],
 
     // Custom format
-    [new Date(Date.UTC(2006, 10, 21)), "21/11/2006", { format: "%d/%m/%Y" }],
-    [new Date(Date.UTC(2006, 10, 21)), "2006/11/21", { format: "%Y/%m/%d" }],
+    [
+      new Date(Date.UTC(2006, 10, 21)),
+      "21/11/2006",
+      { temporalFormat: "%d/%m/%Y" },
+    ],
+    [
+      new Date(Date.UTC(2006, 10, 21)),
+      "2006/11/21",
+      { temporalFormat: "%Y/%m/%d" },
+    ],
   ])("%s -> %s %o", async (value, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Date)]).lazy()
 
-    const schema = {
-      columns: [{ name: "name", type: "date" as const, ...options }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "date",
+          ...options,
+        },
+      },
     }
 
-    const result = await denormalizeTable(table, schema)
+    const result = await denormalizeTable(table, tableSchema)
     const frame = await result.collect()
 
-    expect(frame.toRecords()[0]?.name).toEqual(expected)
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 })

@@ -1,195 +1,106 @@
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { normalizeTable } from "../../table/index.ts"
+import { denormalizeTable } from "../../../actions/table/denormalize.ts"
+import { normalizeTable } from "../../../actions/table/normalize.ts"
 
-// TODO: Implement proper tests
-// TODO: Currently, it fails on to JS conversion from Polars
-describe("parseStringColumn", () => {
+describe("parseCategoricalColumn", () => {
   it.each([
-    // Simplr string
-    ["string", "string"],
-
-    // Null handling
-    ["", null],
-  ])("$0 -> $1", async (cell, value) => {
+    ["red", "red", { categories: ["red", "green", "blue"] }],
+    ["green", "green", { categories: ["red", "green", "blue"] }],
+    [
+      "1",
+      "Low",
+      {
+        categories: [
+          { value: "1", label: "Low" },
+          { value: "2", label: "High" },
+        ],
+      },
+    ],
+    [
+      "2",
+      "High",
+      {
+        categories: [
+          { value: "1", label: "Low" },
+          { value: "2", label: "High" },
+        ],
+      },
+    ],
+    ["yellow", null, { categories: ["red", "green", "blue"] }],
+    [
+      "3",
+      null,
+      {
+        categories: [
+          { value: "1", label: "Low" },
+          { value: "2", label: "High" },
+        ],
+      },
+    ],
+  ])("%s -> %s", async (cell, expected, options) => {
     const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
 
-    const schema = {
-      columns: [{ name: "name", type: "string" as const }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          ...options,
+        },
+      },
     }
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
 
-    expect(frame.getColumn("name").dtype).toEqual(pl.String)
-    expect(frame.toRecords()[0]?.name).toEqual(value)
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
+})
 
-  describe("email format", () => {
-    it.each([
-      // Valid emails
-      ["user@example.com", "user@example.com"],
-      ["test.email@domain.co.uk", "test.email@domain.co.uk"],
-      ["user+tag@example.org", "user+tag@example.org"],
-      ["first.last@subdomain.example.com", "first.last@subdomain.example.com"],
-      ["user123@test-domain.com", "user123@test-domain.com"],
-
-      // Invalid emails
-      ["invalid-email", null],
-      ["@example.com", null],
-      ["user@", null],
-      ["user@@example.com", null],
-      ["user@example", null],
-      ["user name@example.com", null],
-
-      // Null handling
-      ["", null],
-    ])("$0 -> $1", async (cell, value) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
-      const schema = {
-        columns: [
-          { name: "name", type: "string" as const, format: "email" as const },
+describe("stringifyCategoricalColumn", () => {
+  it.each([
+    ["red", "red", { categories: ["red", "green", "blue"] }],
+    ["green", "green", { categories: ["red", "green", "blue"] }],
+    [
+      "Low",
+      "1",
+      {
+        categories: [
+          { value: "1", label: "Low" },
+          { value: "2", label: "High" },
         ],
-      }
-
-      const result = await normalizeTable(table, schema)
-      const frame = await result.collect()
-
-      expect(frame.getColumn("name").dtype).toEqual(pl.String)
-      expect(frame.toRecords()[0]?.name).toEqual(value)
-    })
-  })
-
-  describe("uri format", () => {
-    it.each([
-      // Valid URIs
-      ["https://example.com", "https://example.com"],
-      [
-        "http://www.google.com/search?q=test",
-        "http://www.google.com/search?q=test",
-      ],
-      ["ftp://files.example.org/file.txt", "ftp://files.example.org/file.txt"],
-      ["mailto:user@example.com", "mailto:user@example.com"],
-      ["file:///path/to/file", "file:///path/to/file"],
-      ["ssh://user@host:22/path", "ssh://user@host:22/path"],
-
-      // Invalid URIs
-      ["not-a-uri", null],
-      ["://missing-scheme", null],
-      ["http://", null],
-      ["example.com", null],
-      ["http:// space in uri", null],
-
-      // Null handling
-      ["", null],
-    ])("$0 -> $1", async (cell, value) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
-      const schema = {
-        columns: [
-          { name: "name", type: "string" as const, format: "uri" as const },
+      },
+    ],
+    [
+      "High",
+      "2",
+      {
+        categories: [
+          { value: "1", label: "Low" },
+          { value: "2", label: "High" },
         ],
-      }
+      },
+    ],
+  ])("%s -> %s", async (value, expected, options) => {
+    const table = pl
+      .DataFrame([pl.Series("name", [value], pl.Categorical)])
+      .lazy()
 
-      const result = await normalizeTable(table, schema)
-      const frame = await result.collect()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          ...options,
+        },
+      },
+    }
 
-      expect(frame.getColumn("name").dtype).toEqual(pl.String)
-      expect(frame.toRecords()[0]?.name).toEqual(value)
-    })
-  })
+    const result = await denormalizeTable(table, tableSchema)
+    const frame = await result.collect()
 
-  describe("binary format", () => {
-    it.each([
-      // Valid base64 strings
-      ["SGVsbG8gV29ybGQ=", "SGVsbG8gV29ybGQ="],
-      ["YWJjZGVmZw==", "YWJjZGVmZw=="],
-      ["VGVzdA==", "VGVzdA=="],
-      ["QQ==", "QQ=="],
-      ["Zg==", "Zg=="],
-      ["Zm8=", "Zm8="],
-      ["Zm9v", "Zm9v"],
-
-      // Invalid base64 strings
-      ["Hello World!", null],
-      ["SGVsbG8gV29ybGQ===", null],
-      ["Invalid@#$", null],
-      ["SGVsb(8gV29ybGQ=", null],
-
-      // Null handling
-      ["", null],
-    ])("$0 -> $1", async (cell, value) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
-      const schema = {
-        columns: [
-          { name: "name", type: "string" as const, format: "binary" as const },
-        ],
-      }
-
-      const result = await normalizeTable(table, schema)
-      const frame = await result.collect()
-
-      expect(frame.getColumn("name").dtype).toEqual(pl.String)
-      expect(frame.toRecords()[0]?.name).toEqual(value)
-    })
-  })
-
-  describe("uuid format", () => {
-    it.each([
-      // Valid UUIDs
-      [
-        "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-        "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-      ],
-
-      // Invalid UUIDs
-      ["f47ac10b-58cc-4372-a567-0e02b2c3d47X", null],
-      ["f47ac10b", null],
-      ["X", null],
-
-      // Null handling
-      ["", null],
-    ])("$0 -> $1 $2", async (cell, value) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
-      const schema = {
-        columns: [
-          { name: "name", type: "string" as const, format: "uuid" as const },
-        ],
-      }
-
-      const result = await normalizeTable(table, schema)
-      const frame = await result.collect()
-
-      expect(frame.getColumn("name").dtype).toEqual(pl.Categorical)
-      expect(frame.toRecords()[0]?.name).toEqual(value)
-    })
-  })
-
-  describe("categories", () => {
-    it.each([
-      // Flat categories
-      ["apple", "apple", { categories: ["apple", "banana"] }],
-      ["banana", "banana", { categories: ["apple", "banana"] }],
-      ["orange", null, { categories: ["apple", "banana"] }],
-
-      // Object categories
-      ["apple", "apple", { categories: [{ value: "apple", label: "Apple" }] }],
-      ["orange", null, { categories: [{ value: "apple", label: "Apple" }] }],
-    ])("$0 -> $1 $2", async (cell, value, options) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-
-      const schema = {
-        columns: [{ name: "name", type: "string" as const, ...options }],
-      }
-
-      const result = await normalizeTable(table, schema)
-      const frame = await result.collect()
-
-      expect(frame.getColumn("name").dtype).toEqual(pl.Categorical)
-      expect(frame.toRecords()[0]?.name).toEqual(value)
-    })
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 })

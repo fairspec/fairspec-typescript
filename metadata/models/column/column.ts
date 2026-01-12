@@ -55,7 +55,7 @@ export const ColumnType = z.enum([
   "boolean",
   "categorical",
   "date",
-  "datetime",
+  "date-time",
   "duration",
   "email",
   "geojson",

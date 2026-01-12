@@ -61,7 +61,8 @@ describe("parseBooleanColumn", () => {
     const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
 
-    expect(frame.toRecords()[0]?.name).toEqual(value)
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(value)
   })
 })
 
@@ -97,6 +98,7 @@ describe("stringifyBooleanColumn", () => {
     const result = await denormalizeTable(table, tableSchema)
     const frame = await result.collect()
 
-    expect(frame.toRecords()[0]?.name).toEqual(expected)
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
   })
 })

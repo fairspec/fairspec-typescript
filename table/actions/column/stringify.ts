@@ -9,6 +9,7 @@ import { stringifyIntegerColumn } from "./types/integer.ts"
 import { stringifyListColumn } from "./types/list.ts"
 import { stringifyNumberColumn } from "./types/number.ts"
 import { stringifyTimeColumn } from "./types/time.ts"
+import { stringifyUnkonwnColumn } from "./types/unknown.ts"
 
 export function stringifyColumn(column: Column, columnExpr: pl.Expr) {
   switch (column.type) {
@@ -30,6 +31,8 @@ export function stringifyColumn(column: Column, columnExpr: pl.Expr) {
       return stringifyNumberColumn(column, columnExpr)
     case "time":
       return stringifyTimeColumn(column, columnExpr)
+    case "unknown":
+      return stringifyUnkonwnColumn(column, columnExpr)
     default:
       return columnExpr
   }

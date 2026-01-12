@@ -77,11 +77,11 @@ export { Dataset } from "./models/dataset.ts"
 export { Descriptor } from "./models/descriptor.ts"
 export {
   CellConstError,
-  CellDataError,
   CellEnumError,
   CellError,
   CellExclusiveMaximumError,
   CellExclusiveMinimumError,
+  CellJsonError,
   CellMaximumError,
   CellMaxLengthError,
   CellMinimumError,

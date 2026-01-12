@@ -233,7 +233,6 @@ describe("validateArrayColumn", () => {
       properties: {
         scores: {
           type: "array",
-          // @ts-expect-error
           items: { type: "number" },
           minItems: 3,
           maxItems: 3,
@@ -256,7 +255,6 @@ describe("validateArrayColumn", () => {
       properties: {
         numbers: {
           type: "array",
-          // @ts-expect-error
           items: { type: "number" },
           minItems: 2,
         },
@@ -306,7 +304,6 @@ describe("validateArrayColumn", () => {
       properties: {
         users: {
           type: "array",
-          // @ts-expect-error
           items: {
             type: "object",
             properties: {
@@ -343,7 +340,6 @@ describe("validateArrayColumn", () => {
       properties: {
         tags: {
           type: "array",
-          // @ts-expect-error
           items: { type: "string" },
           uniqueItems: true,
         },

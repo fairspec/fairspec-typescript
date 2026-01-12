@@ -3,13 +3,13 @@ import type { Table } from "../../../models/table.ts"
 import geojsonJsonSchema from "../../../schemas/geojson.json" with {
   type: "json",
 }
-import { inspectDataColumn } from "./data.ts"
+import { inspectJsonColumn } from "./json.ts"
 
 export async function inspectGeojsonColumn(
   column: GeojsonColumn,
   table: Table,
 ) {
-  return inspectDataColumn(column, table, {
+  return inspectJsonColumn(column, table, {
     typeJsonSchema: geojsonJsonSchema,
   })
 }

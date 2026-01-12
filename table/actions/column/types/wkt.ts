@@ -1,6 +1,6 @@
 import type { CellError, WktColumn } from "@fairspec/metadata"
-import { wktToGeoJSON } from "betterknown"
 import * as pl from "nodejs-polars"
+import { Geometry } from "wkx-ts"
 import type { Table } from "../../../models/table.ts"
 
 export async function inspectWktColumn(column: WktColumn, table: Table) {
@@ -16,7 +16,7 @@ export async function inspectWktColumn(column: WktColumn, table: Table) {
 
     let target: unknown | undefined
     try {
-      target = wktToGeoJSON(row.source)
+      target = Geometry.parse(row.source)
     } catch {}
 
     if (!target) {

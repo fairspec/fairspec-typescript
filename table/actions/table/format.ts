@@ -15,8 +15,8 @@ export async function joinHeaderRows(
   }
 
   const extraLabelsFrame = await table
-    .withRowIndex("number", 1)
-    .filter(pl.col("row_nr").add(headerOffset).isIn(headerRows))
+    .withRowIndex("fairspec:number", 1)
+    .filter(pl.col("fairspec:number").add(headerOffset).isIn(headerRows))
     .select(...table.columns.map(name => pl.col(name).str.concat(headerJoin)))
     .collect()
 
@@ -31,10 +31,10 @@ export async function joinHeaderRows(
   )
 
   return table
-    .withRowIndex("number", 1)
-    .filter(pl.col("row_nr").add(headerOffset).isIn(headerRows).not())
+    .withRowIndex("fairspec:number", 1)
+    .filter(pl.col("fairspec:number").add(headerOffset).isIn(headerRows).not())
     .rename(mapping)
-    .drop("row_nr")
+    .drop("fairspec:number")
 }
 
 export function skipCommentRows(
@@ -48,7 +48,13 @@ export function skipCommentRows(
   }
 
   return table
-    .withRowIndex("number", 1)
-    .filter(pl.col("row_nr").add(commentOffset).isIn(format.commentRows).not())
-    .drop("row_nr")
+    .withRowIndex("fairspec:number", 1)
+    .filter(
+      pl
+        .col("fairspec:number")
+        .add(commentOffset)
+        .isIn(format.commentRows)
+        .not(),
+    )
+    .drop("fairspec:number")
 }

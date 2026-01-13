@@ -4,7 +4,6 @@ import { stringifyBooleanColumn } from "./types/boolean.ts"
 import { stringifyCategoricalColumn } from "./types/categorical.ts"
 import { stringifyDateColumn } from "./types/date.ts"
 import { stringifyDateTimeColumn } from "./types/dateTime.ts"
-import { stringifyDurationColumn } from "./types/duration.ts"
 import { stringifyIntegerColumn } from "./types/integer.ts"
 import { stringifyListColumn } from "./types/list.ts"
 import { stringifyNumberColumn } from "./types/number.ts"
@@ -21,8 +20,6 @@ export function stringifyColumn(column: Column, columnExpr: pl.Expr) {
       return stringifyDateColumn(column, columnExpr)
     case "date-time":
       return stringifyDateTimeColumn(column, columnExpr)
-    case "duration":
-      return stringifyDurationColumn(column, columnExpr)
     case "integer":
       return stringifyIntegerColumn(column, columnExpr)
     case "list":

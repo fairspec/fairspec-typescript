@@ -5,7 +5,6 @@ import { parseBooleanColumn } from "./types/boolean.ts"
 import { parseCategoricalColumn } from "./types/categorical.ts"
 import { parseDateColumn } from "./types/date.ts"
 import { parseDateTimeColumn } from "./types/dateTime.ts"
-import { parseDurationColumn } from "./types/duration.ts"
 import { parseEmailColumn } from "./types/email.ts"
 import { parseHexColumn } from "./types/hex.ts"
 import { parseIntegerColumn } from "./types/integer.ts"
@@ -29,8 +28,6 @@ export function parseColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
       return parseDateColumn(column, columnExpr)
     case "date-time":
       return parseDateTimeColumn(column, columnExpr)
-    case "duration":
-      return parseDurationColumn(column, columnExpr)
     case "email":
       return parseEmailColumn(column, columnExpr)
     case "hex":

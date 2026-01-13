@@ -1,6 +1,6 @@
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { joinHeaderRows, skipCommentRows, stripInitialSpace } from "./format.ts"
+import { joinHeaderRows, skipCommentRows } from "./format.ts"
 
 describe("joinHeaderRows", () => {
   it("should join two header rows with default space separator", async () => {
@@ -19,7 +19,8 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      dialect: { headerRows: [2, 3] },
+      type: "csv",
+      headerRows: [2, 3],
     })
 
     const collected = await result.collect()
@@ -45,7 +46,9 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      dialect: { headerRows: [2, 3], headerJoin: "_" },
+      type: "csv",
+      headerRows: [2, 3],
+      headerJoin: "_",
     })
 
     const collected = await result.collect()
@@ -67,7 +70,8 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      dialect: { headerRows: [1] },
+      type: "csv",
+      headerRows: [1],
     })
 
     const collected = await result.collect()
@@ -85,7 +89,7 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      dialect: { header: false },
+      type: "csv",
     })
 
     const collected = await result.collect()
@@ -103,7 +107,8 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      dialect: { headerRows: [2, 3, 4] },
+      type: "csv",
+      headerRows: [2, 3, 4],
     })
 
     const collected = await result.collect()
@@ -129,7 +134,8 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      dialect: { headerRows: [2, 3] },
+      type: "csv",
+      headerRows: [2, 3],
     })
 
     const collected = await result.collect()
@@ -153,7 +159,9 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      dialect: { commentRows: [2], header: false },
+      type: "csv",
+      commentRows: [2],
+      headerRows: false,
     })
 
     const collected = await result.collect()
@@ -173,7 +181,9 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      dialect: { commentRows: [2, 4], header: false },
+      type: "csv",
+      commentRows: [2, 4],
+      headerRows: false,
     })
 
     const collected = await result.collect()
@@ -193,7 +203,7 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      dialect: {},
+      type: "csv",
     })
 
     const collected = await result.collect()
@@ -211,7 +221,9 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      dialect: { headerRows: [2], commentRows: [5] },
+      type: "csv",
+      headerRows: [2],
+      commentRows: [5],
     })
 
     const collected = await result.collect()
@@ -231,7 +243,9 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      dialect: { commentRows: [1], header: false },
+      type: "csv",
+      commentRows: [1],
+      headerRows: false,
     })
 
     const collected = await result.collect()
@@ -250,7 +264,9 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      dialect: { commentRows: [3], header: false },
+      type: "csv",
+      commentRows: [3],
+      headerRows: false,
     })
 
     const collected = await result.collect()
@@ -269,7 +285,9 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      dialect: { headerRows: [2, 3], commentRows: [7] },
+      type: "csv",
+      headerRows: [2, 3],
+      commentRows: [7],
     })
 
     const collected = await result.collect()
@@ -278,134 +296,5 @@ describe("skipCommentRows", () => {
     expect(collected.row(1)).toEqual(["first", "last", "city"])
     expect(collected.row(2)).toEqual(["Alice", "Smith", "NYC"])
     expect(collected.row(3)).toEqual(["Bob", "Jones", "LA"])
-  })
-})
-
-describe("stripInitialSpace", () => {
-  it("should strip leading and trailing spaces from all columns", async () => {
-    const table = pl
-      .DataFrame({
-        name: [" Alice ", " Bob", "Charlie "],
-        age: ["30", " 25 ", "35"],
-        city: [" NYC", "LA ", " SF "],
-      })
-      .lazy()
-
-    const result = stripInitialSpace(table, {
-      dialect: { skipInitialSpace: true },
-    })
-
-    const collected = await result.collect()
-    expect(collected.row(0)).toEqual(["Alice", "30", "NYC"])
-    expect(collected.row(1)).toEqual(["Bob", "25", "LA"])
-    expect(collected.row(2)).toEqual(["Charlie", "35", "SF"])
-  })
-
-  it("should return table unchanged when skipInitialSpace is false", async () => {
-    const table = pl
-      .DataFrame({
-        name: [" Alice ", " Bob"],
-        age: ["30", " 25 "],
-        city: [" NYC", "LA "],
-      })
-      .lazy()
-
-    const result = stripInitialSpace(table, {
-      dialect: { skipInitialSpace: false },
-    })
-
-    const collected = await result.collect()
-    expect(collected.row(0)).toEqual([" Alice ", "30", " NYC"])
-    expect(collected.row(1)).toEqual([" Bob", " 25 ", "LA "])
-  })
-
-  it("should return table unchanged when skipInitialSpace is not specified", async () => {
-    const table = pl
-      .DataFrame({
-        name: [" Alice ", " Bob"],
-        age: ["30", " 25 "],
-        city: [" NYC", "LA "],
-      })
-      .lazy()
-
-    const result = stripInitialSpace(table, {
-      dialect: {},
-    })
-
-    const collected = await result.collect()
-    expect(collected.row(0)).toEqual([" Alice ", "30", " NYC"])
-    expect(collected.row(1)).toEqual([" Bob", " 25 ", "LA "])
-  })
-
-  it("should handle strings with no spaces", async () => {
-    const table = pl
-      .DataFrame({
-        name: ["Alice", "Bob"],
-        age: ["30", "25"],
-        city: ["NYC", "LA"],
-      })
-      .lazy()
-
-    const result = stripInitialSpace(table, {
-      dialect: { skipInitialSpace: true },
-    })
-
-    const collected = await result.collect()
-    expect(collected.row(0)).toEqual(["Alice", "30", "NYC"])
-    expect(collected.row(1)).toEqual(["Bob", "25", "LA"])
-  })
-
-  it("should handle empty strings", async () => {
-    const table = pl
-      .DataFrame({
-        name: ["Alice", ""],
-        age: ["30", " "],
-        city: ["", "LA"],
-      })
-      .lazy()
-
-    const result = stripInitialSpace(table, {
-      dialect: { skipInitialSpace: true },
-    })
-
-    const collected = await result.collect()
-    expect(collected.row(0)).toEqual(["Alice", "30", ""])
-    expect(collected.row(1)).toEqual(["", "", "LA"])
-  })
-
-  it("should handle strings with multiple spaces", async () => {
-    const table = pl
-      .DataFrame({
-        name: ["  Alice  ", "   Bob"],
-        age: ["30   ", "  25  "],
-        city: ["  NYC  ", "   LA   "],
-      })
-      .lazy()
-
-    const result = stripInitialSpace(table, {
-      dialect: { skipInitialSpace: true },
-    })
-
-    const collected = await result.collect()
-    expect(collected.row(0)).toEqual(["Alice", "30", "NYC"])
-    expect(collected.row(1)).toEqual(["Bob", "25", "LA"])
-  })
-
-  it("should handle tabs and other whitespace", async () => {
-    const table = pl
-      .DataFrame({
-        name: ["\tAlice\t", "\nBob"],
-        age: ["30\n", "\t25\t"],
-        city: ["\tNYC", "LA\n"],
-      })
-      .lazy()
-
-    const result = stripInitialSpace(table, {
-      dialect: { skipInitialSpace: true },
-    })
-
-    const collected = await result.collect()
-    expect(collected.row(0)).toEqual(["Alice", "30", "NYC"])
-    expect(collected.row(1)).toEqual(["Bob", "25", "LA"])
   })
 })

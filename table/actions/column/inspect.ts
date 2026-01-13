@@ -16,6 +16,7 @@ import { checkCellMinItems } from "./checks/minItems.ts"
 import { createCheckCellMinimum } from "./checks/minimum.ts"
 import { checkCellMinLength } from "./checks/minLength.ts"
 import { checkCellPattern } from "./checks/pattern.ts"
+import { checkCellRequired } from "./checks/required.ts"
 import { checkCellType } from "./checks/type.ts"
 import { normalizeColumn } from "./normalize.ts"
 import { inspectArrayColumn } from "./types/array.ts"
@@ -142,6 +143,7 @@ async function inspectCellsNatively(
 
   for (const checkCell of [
     checkCellType,
+    checkCellRequired,
     checkCellEnum,
     checkCellConst,
     createCheckCellMinimum(),

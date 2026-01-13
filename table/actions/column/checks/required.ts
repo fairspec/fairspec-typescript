@@ -1,9 +1,9 @@
 import type { Column } from "@fairspec/metadata"
 import type { CellRequiredError } from "@fairspec/metadata"
-import type { CellMapping } from "../Mapping.ts"
+import type { CellMapping } from "../../../models/cell.ts"
 
 export function checkCellRequired(column: Column, mapping: CellMapping) {
-  const required = column.constraints?.required
+  const required = column.required
   if (!required) return undefined
 
   const isErrorExpr = mapping.target.isNull()

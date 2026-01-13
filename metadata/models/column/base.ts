@@ -22,6 +22,7 @@ export const BaseColumnProperty = z.object({
 export const BaseColumn = z.object({
   name: z.string(),
   type: z.string(),
+  required: z.boolean().optional(),
   property: BaseColumnProperty,
 })
 

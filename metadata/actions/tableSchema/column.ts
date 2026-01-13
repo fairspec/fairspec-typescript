@@ -13,84 +13,87 @@ export function getColumns(tableSchema: TableSchema) {
   const columns: Column[] = []
 
   for (const [name, property] of objectEntries(tableSchema.properties ?? {})) {
+    const required = tableSchema.required?.includes(name)
+    const baseColumn = { name, required }
+
     switch (property.type) {
       case "boolean":
-        columns.push({ name, type: "boolean", property })
+        columns.push({ ...baseColumn, type: "boolean", property })
         break
       case "integer":
         switch (property.format) {
           case "categorical":
-            columns.push({ name, type: "categorical", property })
+            columns.push({ ...baseColumn, type: "categorical", property })
             break
           case undefined:
-            columns.push({ name, type: "integer", property })
+            columns.push({ ...baseColumn, type: "integer", property })
             break
         }
         break
       case "number":
-        columns.push({ name, type: "number", property })
+        columns.push({ ...baseColumn, type: "number", property })
         break
       case "string":
         switch (property.format) {
           case "categorical":
-            columns.push({ name, type: "categorical", property })
+            columns.push({ ...baseColumn, type: "categorical", property })
             break
           case "list":
-            columns.push({ name, type: "list", property })
+            columns.push({ ...baseColumn, type: "list", property })
             break
           case "base64":
-            columns.push({ name, type: "base64", property })
+            columns.push({ ...baseColumn, type: "base64", property })
             break
           case "hex":
-            columns.push({ name, type: "hex", property })
+            columns.push({ ...baseColumn, type: "hex", property })
             break
           case "email":
-            columns.push({ name, type: "email", property })
+            columns.push({ ...baseColumn, type: "email", property })
             break
           case "url":
-            columns.push({ name, type: "url", property })
+            columns.push({ ...baseColumn, type: "url", property })
             break
           case "date-time":
-            columns.push({ name, type: "date-time", property })
+            columns.push({ ...baseColumn, type: "date-time", property })
             break
           case "date":
-            columns.push({ name, type: "date", property })
+            columns.push({ ...baseColumn, type: "date", property })
             break
           case "time":
-            columns.push({ name, type: "time", property })
+            columns.push({ ...baseColumn, type: "time", property })
             break
           case "duration":
-            columns.push({ name, type: "duration", property })
+            columns.push({ ...baseColumn, type: "duration", property })
             break
           case "wkt":
-            columns.push({ name, type: "wkt", property })
+            columns.push({ ...baseColumn, type: "wkt", property })
             break
           case "wkb":
-            columns.push({ name, type: "wkb", property })
+            columns.push({ ...baseColumn, type: "wkb", property })
             break
           case undefined:
-            columns.push({ name, type: "string", property })
+            columns.push({ ...baseColumn, type: "string", property })
             break
         }
         break
       case "array":
-        columns.push({ name, type: "array", property })
+        columns.push({ ...baseColumn, type: "array", property })
         break
       case "object":
         switch (property.format) {
           case "geojson":
-            columns.push({ name, type: "geojson", property })
+            columns.push({ ...baseColumn, type: "geojson", property })
             break
           case "topojson":
-            columns.push({ name, type: "topojson", property })
+            columns.push({ ...baseColumn, type: "topojson", property })
             break
           case undefined:
-            columns.push({ name, type: "object", property })
+            columns.push({ ...baseColumn, type: "object", property })
             break
         }
         break
       default:
-        columns.push({ name, type: "unknown", property })
+        columns.push({ ...baseColumn, type: "unknown", property })
         break
     }
   }

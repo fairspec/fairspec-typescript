@@ -12,13 +12,12 @@ export function denormalizeColumn(
   mapping: ColumnMapping,
   options?: DenormalizeColumnOptions,
 ) {
-  let expr = pl.col(mapping.source.name)
-  const { nativeTypes } = options ?? {}
+  let columnExpr = pl.col(mapping.source.name)
 
-  if (!nativeTypes?.includes(mapping.target.type)) {
-    expr = stringifyColumn(mapping, expr)
-    expr = desubstituteColumn(mapping.target, expr)
+  if (!options?.nativeTypes?.includes(mapping.target.type)) {
+    columnExpr = stringifyColumn(mapping, columnExpr)
   }
 
-  return expr
+  columnExpr = desubstituteColumn(mapping, columnExpr, options)
+  return columnExpr
 }

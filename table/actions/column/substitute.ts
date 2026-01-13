@@ -7,15 +7,14 @@ export function substituteColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
   // As we know what source polars column type is,
   // we can filter out incompatible missing values
 
-  const missingValueType = getMissingValueType(mapping.source.type)
+  const missingValueType = getMissingValueType(mapping.source)
   if (!missingValueType) {
     return columnExpr
   }
 
-  const flattenMissingValues =
-    mapping.target.property.missingValues?.map(it =>
-      typeof it === "object" ? it.value : it,
-    ) ?? DEFAULT_MISSING_VALUES
+  const flattenMissingValues = (
+    mapping.target.property.missingValues ?? DEFAULT_MISSING_VALUES
+  ).map(it => (typeof it === "object" ? it.value : it))
 
   const compatibleMissingValues = flattenMissingValues.filter(
     value => typeof value === missingValueType,
@@ -32,7 +31,9 @@ export function substituteColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
     .alias(mapping.target.name)
 }
 
-function getMissingValueType(polarsType: PolarsColumn["type"]) {
+function getMissingValueType(polarsColumn: PolarsColumn) {
+  const polarsType = polarsColumn.type
+
   if (polarsType.equals(pl.String)) return "string"
   if (polarsType.equals(pl.Int8)) return "number"
   if (polarsType.equals(pl.Int16)) return "number"
@@ -40,5 +41,6 @@ function getMissingValueType(polarsType: PolarsColumn["type"]) {
   if (polarsType.equals(pl.Int64)) return "number"
   if (polarsType.equals(pl.Float32)) return "number"
   if (polarsType.equals(pl.Float64)) return "number"
+
   return undefined
 }

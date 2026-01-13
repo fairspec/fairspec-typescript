@@ -10,7 +10,7 @@ describe("parseNumberColumn", () => {
     ["2", 2.0],
     ["1000", 1000.0],
     ["1.5", 1.5],
-    ["3.14159", 3.14159],
+    ["4.14159", 4.14159],
     ["-42", -42.0],
     ["-3.14", -3.14],
     ["", null],
@@ -148,28 +148,25 @@ describe("parseNumberColumn", () => {
     ["€ 1.000,00", 1000.0],
     ["1.000,00 €", 1000.0],
     ["1.234,56 €", 1234.56],
-  ])(
-    "withText + groupChar '.' + decimalChar ',': %s -> %s",
-    async (cell, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        properties: {
-          name: {
-            type: "number",
-            withText: true,
-            groupChar: ".",
-            decimalChar: ",",
-          },
+  ])("withText + groupChar '.' + decimalChar ',': %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "number",
+          withText: true,
+          groupChar: ".",
+          decimalChar: ",",
         },
-      }
+      },
+    }
 
-      const result = await normalizeTable(table, tableSchema)
-      const frame = await result.collect()
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    },
-  )
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
 })
 
 describe("stringifyNumberColumn", () => {

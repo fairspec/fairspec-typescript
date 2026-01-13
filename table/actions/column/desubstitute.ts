@@ -1,20 +1,54 @@
 import type { Column } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
+import type { ColumnMapping } from "../../models/column.ts"
+import type { DenormalizeColumnOptions } from "./denormalize.ts"
 
-const DEFAULT_MISSING_VALUE = ""
+const DEFAULT_MISSING_VALUES = [""]
 
-export function desubstituteColumn(column: Column, columnExpr: pl.Expr) {
-  const flattenMissingValues = column.property.missingValues?.map(it =>
-    typeof it === "object" ? it.value : it,
-  )
+export function desubstituteColumn(
+  mapping: ColumnMapping,
+  columnExpr: pl.Expr,
+  options?: DenormalizeColumnOptions,
+) {
+  const missingValueType = getMissingValueType(mapping.target, options)
+  if (!missingValueType) {
+    return columnExpr
+  }
 
-  const missingValue = flattenMissingValues?.[0] ?? DEFAULT_MISSING_VALUE
+  const flattenMissingValues = (
+    mapping.target.property.missingValues ?? DEFAULT_MISSING_VALUES
+  ).map(it => (typeof it === "object" ? it.value : it))
 
-  columnExpr = pl
+  const compatibleMissingValue = flattenMissingValues?.filter(
+    value => typeof value === missingValueType,
+  )[0]
+
+  if (compatibleMissingValue === undefined) {
+    return columnExpr
+  }
+
+  return pl
     .when(columnExpr.isNull())
-    .then(pl.lit(missingValue))
+    .then(pl.lit(compatibleMissingValue))
     .otherwise(columnExpr)
-    .alias(column.name)
+    .alias(mapping.target.name)
+}
 
-  return columnExpr
+// TODD: Improve this initial implementation
+
+function getMissingValueType(
+  column: Column,
+  options?: DenormalizeColumnOptions,
+) {
+  const propertyType = column.property.type
+
+  if (propertyType === "string") {
+    return "string"
+  }
+
+  if (propertyType === "integer" || propertyType === "number") {
+    return options?.nativeTypes?.includes(propertyType) ? "number" : "string"
+  }
+
+  return undefined
 }

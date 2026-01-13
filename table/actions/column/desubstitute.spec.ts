@@ -25,7 +25,7 @@ describe("desubstituteColumn", () => {
     })
 
     it.each([
-      [null, ""],
+      [null, null],
       ["hello", "hello"],
       ["value", "value"],
     ])("schema-level empty array: %s -> %s", async (value, expected) => {
@@ -222,7 +222,7 @@ describe("desubstituteColumn", () => {
     })
   })
 
-  describe.skip("integer missing values", () => {
+  describe("integer missing values", () => {
     it.each([
       [null, -1],
       [0, 0],
@@ -260,9 +260,11 @@ describe("desubstituteColumn", () => {
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["integer"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -280,9 +282,11 @@ describe("desubstituteColumn", () => {
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["integer"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -300,9 +304,11 @@ describe("desubstituteColumn", () => {
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["integer"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -320,9 +326,11 @@ describe("desubstituteColumn", () => {
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["integer"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -340,9 +348,11 @@ describe("desubstituteColumn", () => {
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["integer"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -359,13 +369,15 @@ describe("desubstituteColumn", () => {
       const tableSchema: TableSchema = {
         missingValues: [-1],
         properties: {
-          value: { type: "integer" },
+          value: { type: "number" },
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["number"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -382,13 +394,15 @@ describe("desubstituteColumn", () => {
       const tableSchema: TableSchema = {
         missingValues: [-999],
         properties: {
-          value: { type: "integer" },
+          value: { type: "number" },
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["number"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -404,13 +418,15 @@ describe("desubstituteColumn", () => {
         .lazy()
       const tableSchema: TableSchema = {
         properties: {
-          value: { type: "integer", missingValues: [-1] },
+          value: { type: "number", missingValues: [-1] },
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["number"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -426,13 +442,15 @@ describe("desubstituteColumn", () => {
         .lazy()
       const tableSchema: TableSchema = {
         properties: {
-          value: { type: "integer", missingValues: [-999] },
+          value: { type: "number", missingValues: [-999] },
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["number"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -448,13 +466,15 @@ describe("desubstituteColumn", () => {
       const tableSchema: TableSchema = {
         missingValues: [-99],
         properties: {
-          value: { type: "integer", missingValues: [-1] },
+          value: { type: "number", missingValues: [-1] },
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["number"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -470,13 +490,15 @@ describe("desubstituteColumn", () => {
       const tableSchema: TableSchema = {
         missingValues: [-1],
         properties: {
-          value: { type: "integer", missingValues: [-99] },
+          value: { type: "number", missingValues: [-99] },
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["number"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -493,9 +515,11 @@ describe("desubstituteColumn", () => {
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["integer"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -513,9 +537,11 @@ describe("desubstituteColumn", () => {
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["integer"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })
@@ -533,9 +559,11 @@ describe("desubstituteColumn", () => {
         },
       }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+      const result = await denormalizeTable(table, tableSchema, {
+        nativeTypes: ["integer"],
+      })
 
+      const frame = await result.collect()
       const actual = frame.toRecords()[0]?.value
       expect(actual).toEqual(expected)
     })

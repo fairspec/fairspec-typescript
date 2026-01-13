@@ -10,13 +10,12 @@ export interface SchemaMapping {
   target: TableSchema
 }
 
-export interface SchemaOptions {
+export interface TableSchemaOptions {
   columnNames?: string[]
   columnTypes?: Record<string, Column["type"]>
   missingValues?: string[]
   decimalChar?: string
   groupChar?: string
-  bareNumber?: boolean
   trueValues?: string[]
   falseValues?: string[]
   datetimeFormat?: string

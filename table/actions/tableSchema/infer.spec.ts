@@ -1,8 +1,9 @@
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inferSchemaFromTable } from "./infer.ts"
+import { inferTableSchemaFromTable } from "./infer.ts"
 
-describe.skip("inferSchemaFromTable", () => {
+describe("inferTableSchemaFromTable", () => {
   it("should infer from native types", async () => {
     const table = pl
       .DataFrame({
@@ -11,14 +12,15 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "integer", type: "integer" },
-        { name: "number", type: "number" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        integer: { type: "integer" },
+        number: { type: "number" },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer integers from floats", async () => {
@@ -29,14 +31,15 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "count", type: "integer" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        count: { type: "integer" },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer numeric", async () => {
@@ -49,16 +52,17 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "name1", type: "integer" },
-        { name: "name2", type: "integer", groupChar: "," },
-        { name: "name3", type: "number" },
-        { name: "name4", type: "number", groupChar: "," },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        name1: { type: "integer" },
+        name2: { type: "integer", groupChar: "," },
+        name3: { type: "number" },
+        name4: { type: "number", groupChar: "," },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer numeric (commaDecimal)", async () => {
@@ -69,16 +73,18 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "name1", type: "integer", groupChar: "." },
-        { name: "name2", type: "number", decimalChar: ",", groupChar: "." },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        name1: { type: "integer", groupChar: "." },
+        name2: { type: "number", decimalChar: ",", groupChar: "." },
+      },
     }
 
-    expect(await inferSchemaFromTable(table, { commaDecimal: true })).toEqual(
-      schema,
-    )
+    const result = await inferTableSchemaFromTable(table, {
+      commaDecimal: true,
+    })
+
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer booleans", async () => {
@@ -89,14 +95,15 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "name1", type: "boolean" },
-        { name: "name2", type: "boolean" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        name1: { type: "boolean" },
+        name2: { type: "boolean" },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer objects", async () => {
@@ -107,14 +114,15 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "name1", type: "object" },
-        { name: "name2", type: "object" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        name1: { type: "object" },
+        name2: { type: "object" },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer arrays", async () => {
@@ -125,14 +133,15 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "name1", type: "array" },
-        { name: "name2", type: "array" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        name1: { type: "array" },
+        name2: { type: "array" },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer dates with ISO format", async () => {
@@ -142,11 +151,14 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [{ name: "name1", type: "date" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name1: { type: "string", format: "date" },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer dates with slash format", async () => {
@@ -158,26 +170,54 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schemaDefault = {
-      fields: [
-        { name: "yearFirst", type: "date", format: "%Y/%m/%d" },
-        { name: "dayMonth", type: "date", format: "%d/%m/%Y" },
-        { name: "monthDay", type: "date", format: "%d/%m/%Y" },
-      ],
+    const tableSchemaDefault: TableSchema = {
+      properties: {
+        yearFirst: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%Y/%m/%d",
+        },
+        dayMonth: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%d/%m/%Y",
+        },
+        monthDay: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%d/%m/%Y",
+        },
+      },
     }
 
-    const schemaMonthFirst = {
-      fields: [
-        { name: "yearFirst", type: "date", format: "%Y/%m/%d" },
-        { name: "dayMonth", type: "date", format: "%m/%d/%Y" },
-        { name: "monthDay", type: "date", format: "%m/%d/%Y" },
-      ],
+    const tableSchemaMonthFirst: TableSchema = {
+      properties: {
+        yearFirst: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%Y/%m/%d",
+        },
+        dayMonth: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%m/%d/%Y",
+        },
+        monthDay: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%m/%d/%Y",
+        },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schemaDefault)
-    expect(await inferSchemaFromTable(table, { monthFirst: true })).toEqual(
-      schemaMonthFirst,
-    )
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchemaDefault)
+
+    const monthFirstResult = await inferTableSchemaFromTable(table, {
+      monthFirst: true,
+    })
+
+    expect(monthFirstResult).toEqual(tableSchemaMonthFirst)
   })
 
   it("should infer dates with hyphen format", async () => {
@@ -187,18 +227,34 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schemaDefault = {
-      fields: [{ name: "dayMonth", type: "date", format: "%d-%m-%Y" }],
+    const tableSchemaDefault: TableSchema = {
+      properties: {
+        dayMonth: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%d-%m-%Y",
+        },
+      },
     }
 
-    const schemaMonthFirst = {
-      fields: [{ name: "dayMonth", type: "date", format: "%m-%d-%Y" }],
+    const tableSchemaMonthFirst: TableSchema = {
+      properties: {
+        dayMonth: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%m-%d-%Y",
+        },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schemaDefault)
-    expect(await inferSchemaFromTable(table, { monthFirst: true })).toEqual(
-      schemaMonthFirst,
-    )
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchemaDefault)
+
+    const monthFirstResult = await inferTableSchemaFromTable(table, {
+      monthFirst: true,
+    })
+
+    expect(monthFirstResult).toEqual(tableSchemaMonthFirst)
   })
 
   it("should infer times with standard format", async () => {
@@ -209,14 +265,15 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "fullTime", type: "time" },
-        { name: "shortTime", type: "time", format: "%H:%M" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        fullTime: { type: "string", format: "time" },
+        shortTime: { type: "string", format: "time", temporalFormat: "%H:%M" },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer times with 12-hour format", async () => {
@@ -227,14 +284,23 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "fullTime", type: "time", format: "%I:%M:%S %p" },
-        { name: "shortTime", type: "time", format: "%I:%M %p" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        fullTime: {
+          type: "string",
+          format: "time",
+          temporalFormat: "%I:%M:%S %p",
+        },
+        shortTime: {
+          type: "string",
+          format: "time",
+          temporalFormat: "%I:%M %p",
+        },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer times with timezone offset", async () => {
@@ -244,11 +310,14 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [{ name: "name", type: "time" }],
+    const tableSchema: TableSchema = {
+      properties: {
+        name: { type: "string", format: "time" },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer datetimes with ISO format", async () => {
@@ -277,16 +346,21 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "standard", type: "datetime" },
-        { name: "utc", type: "datetime" },
-        { name: "withTz", type: "datetime" },
-        { name: "withSpace", type: "datetime", format: "%Y-%m-%d %H:%M:%S" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        standard: { type: "string", format: "date-time" },
+        utc: { type: "string", format: "date-time" },
+        withTz: { type: "string", format: "date-time" },
+        withSpace: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%Y-%m-%d %H:%M:%S",
+        },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 
   it("should infer datetimes with custom formats", async () => {
@@ -315,28 +389,64 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schemaDefault = {
-      fields: [
-        { name: "shortDayMonth", type: "datetime", format: "%d/%m/%Y %H:%M" },
-        { name: "fullDayMonth", type: "datetime", format: "%d/%m/%Y %H:%M:%S" },
-        { name: "shortMonthDay", type: "datetime", format: "%d/%m/%Y %H:%M" },
-        { name: "fullMonthDay", type: "datetime", format: "%d/%m/%Y %H:%M:%S" },
-      ],
+    const tableSchemaDefault: TableSchema = {
+      properties: {
+        shortDayMonth: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%d/%m/%Y %H:%M",
+        },
+        fullDayMonth: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%d/%m/%Y %H:%M:%S",
+        },
+        shortMonthDay: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%d/%m/%Y %H:%M",
+        },
+        fullMonthDay: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%d/%m/%Y %H:%M:%S",
+        },
+      },
     }
 
-    const schemaMonthFirst = {
-      fields: [
-        { name: "shortDayMonth", type: "datetime", format: "%m/%d/%Y %H:%M" },
-        { name: "fullDayMonth", type: "datetime", format: "%m/%d/%Y %H:%M:%S" },
-        { name: "shortMonthDay", type: "datetime", format: "%m/%d/%Y %H:%M" },
-        { name: "fullMonthDay", type: "datetime", format: "%m/%d/%Y %H:%M:%S" },
-      ],
+    const tableSchemaMonthFirst: TableSchema = {
+      properties: {
+        shortDayMonth: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%m/%d/%Y %H:%M",
+        },
+        fullDayMonth: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%m/%d/%Y %H:%M:%S",
+        },
+        shortMonthDay: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%m/%d/%Y %H:%M",
+        },
+        fullMonthDay: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%m/%d/%Y %H:%M:%S",
+        },
+      },
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schemaDefault)
-    expect(await inferSchemaFromTable(table, { monthFirst: true })).toEqual(
-      schemaMonthFirst,
-    )
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchemaDefault)
+
+    const monthFirstResult = await inferTableSchemaFromTable(table, {
+      monthFirst: true,
+    })
+
+    expect(monthFirstResult).toEqual(tableSchemaMonthFirst)
   })
 
   it("should infer lists", async () => {
@@ -348,15 +458,16 @@ describe.skip("inferSchemaFromTable", () => {
       })
       .lazy()
 
-    const schema = {
-      fields: [
-        { name: "numericList", type: "list", itemType: "number" },
-        { name: "integerList", type: "list", itemType: "integer" },
-        { name: "singleValue", type: "number" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        numericList: { type: "string", format: "list", itemType: "number" },
+        integerList: { type: "string", format: "list", itemType: "integer" },
+        singleValue: { type: "number" },
+      },
       missingValues: undefined,
     }
 
-    expect(await inferSchemaFromTable(table)).toEqual(schema)
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
   })
 })

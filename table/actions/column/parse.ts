@@ -14,7 +14,9 @@ import { parseTimeColumn } from "./types/time.ts"
 import { parseUrlColumn } from "./types/url.ts"
 
 export function parseColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
-  if (!mapping.source.type.equals(pl.String)) return columnExpr
+  if (!mapping.source.type.equals(pl.String)) {
+    return columnExpr
+  }
 
   const column = mapping.target
   switch (column.type) {

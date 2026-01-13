@@ -1,5 +1,5 @@
-import type { Column } from "@fairspec/metadata"
-import type * as pl from "nodejs-polars"
+import * as pl from "nodejs-polars"
+import type { ColumnMapping } from "../../models/column.ts"
 import { stringifyBooleanColumn } from "./types/boolean.ts"
 import { stringifyCategoricalColumn } from "./types/categorical.ts"
 import { stringifyDateColumn } from "./types/date.ts"
@@ -10,7 +10,12 @@ import { stringifyNumberColumn } from "./types/number.ts"
 import { stringifyTimeColumn } from "./types/time.ts"
 import { stringifyUnkonwnColumn } from "./types/unknown.ts"
 
-export function stringifyColumn(column: Column, columnExpr: pl.Expr) {
+export function stringifyColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
+  if (mapping.source.type.equals(pl.String)) {
+    return columnExpr
+  }
+
+  const column = mapping.target
   switch (column.type) {
     case "boolean":
       return stringifyBooleanColumn(column, columnExpr)

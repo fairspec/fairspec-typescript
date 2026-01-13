@@ -9,7 +9,8 @@ export function createCheckCellMaximum(options?: { isExclusive?: boolean }) {
   return (column: Column, mapping: CellMapping) => {
     if (
       column.property.type !== "integer" &&
-      column.property.type !== "number"
+      column.property.type !== "number" &&
+      column.property.format !== "decimal"
     ) {
       return undefined
     }

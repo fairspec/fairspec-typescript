@@ -15,6 +15,7 @@ import { checkCellMaxLength } from "./checks/maxLength.ts"
 import { checkCellMinItems } from "./checks/minItems.ts"
 import { createCheckCellMinimum } from "./checks/minimum.ts"
 import { checkCellMinLength } from "./checks/minLength.ts"
+import { checkCellMultipleOf } from "./checks/multipleOf.ts"
 import { checkCellPattern } from "./checks/pattern.ts"
 import { checkCellRequired } from "./checks/required.ts"
 import { checkCellType } from "./checks/type.ts"
@@ -150,6 +151,7 @@ async function inspectCellsInPolars(
     createCheckCellMaximum(),
     createCheckCellMinimum({ isExclusive: true }),
     createCheckCellMaximum({ isExclusive: true }),
+    checkCellMultipleOf,
     checkCellMinLength,
     checkCellMaxLength,
     checkCellMinItems,

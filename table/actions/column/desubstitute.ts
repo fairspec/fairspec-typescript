@@ -9,6 +9,7 @@ export function desubstituteColumn(column: Column, columnExpr: pl.Expr) {
   )
 
   const missingValue = flattenMissingValues?.[0] ?? DEFAULT_MISSING_VALUE
+
   columnExpr = pl
     .when(columnExpr.isNull())
     .then(pl.lit(missingValue))

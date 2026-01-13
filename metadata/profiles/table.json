@@ -89,6 +89,7 @@
         "format": {
           "enum": [
             "list",
+            "decimal",
             "hex",
             "base64",
             "email",
@@ -110,6 +111,10 @@
         {
           "if": { "properties": { "format": { "const": "categorical" } } },
           "then": { "$ref": "#/$defs/StringCategoricalColumnProperty" }
+        },
+        {
+          "if": { "properties": { "format": { "const": "decimal" } } },
+          "then": { "$ref": "#/$defs/DecimalColumnProperty" }
         },
         {
           "if": { "properties": { "format": { "const": "list" } } },
@@ -276,6 +281,20 @@
         "format": { "const": "categorical" },
         "categories": { "$ref": "#/$defs/StringCategories" },
         "withOrder": { "type": "boolean" }
+      }
+    },
+    "DecimalColumnProperty": {
+      "allOf": [{ "$ref": "#/$defs/BaseStringColumnProperty" }],
+      "properties": {
+        "format": { "const": "decimal" },
+        "minimum": { "$ref": "#/$defs/NumberMinimum" },
+        "maximum": { "$ref": "#/$defs/NumberMaximum" },
+        "exclusiveMinimum": { "$ref": "#/$defs/NumberExclusiveMinimum" },
+        "exclusiveMaximum": { "$ref": "#/$defs/NumberExclusiveMaximum" },
+        "multipleOf": { "$ref": "#/$defs/NumberMultipleOf" },
+        "decimalChar": { "$ref": "#/$defs/DecimalChar" },
+        "groupChar": { "$ref": "#/$defs/GroupChar" },
+        "withText": { "type": "boolean" }
       }
     },
     "ListColumnProperty": {

@@ -9,6 +9,7 @@ import {
 } from "./categorical.ts"
 import { DateColumn, DateColumnProperty } from "./date.ts"
 import { DateTimeColumn, DateTimeColumnProperty } from "./dateTime.ts"
+import { DecimalColumn, DecimalColumnProperty } from "./decimal.ts"
 import { DurationColumn, DurationColumnProperty } from "./duration.ts"
 import { EmailColumn, EmailColumnProperty } from "./email.ts"
 import { GeojsonColumn, GeojsonColumnProperty } from "./geojson.ts"
@@ -32,6 +33,7 @@ export const Column = z.discriminatedUnion("type", [
   CategoricalColumn,
   DateColumn,
   DateTimeColumn,
+  DecimalColumn,
   DurationColumn,
   EmailColumn,
   GeojsonColumn,
@@ -56,6 +58,7 @@ export const ColumnType = z.enum([
   "categorical",
   "date",
   "date-time",
+  "decimal",
   "duration",
   "email",
   "geojson",
@@ -92,6 +95,7 @@ const StringColumnPropertyGroup = z.discriminatedUnion("format", [
   WkbColumnProperty,
   StringColumnProperty,
   StringCategoricalColumnProperty,
+  DecimalColumnProperty,
 ])
 
 const ObjectColumnPropertyGroup = z.discriminatedUnion("format", [

@@ -4,6 +4,7 @@ import { parseBase64Column } from "./types/base64.ts"
 import { parseBooleanColumn } from "./types/boolean.ts"
 import { parseDateColumn } from "./types/date.ts"
 import { parseDateTimeColumn } from "./types/dateTime.ts"
+import { parseDecimalColumn } from "./types/decimal.ts"
 import { parseEmailColumn } from "./types/email.ts"
 import { parseHexColumn } from "./types/hex.ts"
 import { parseIntegerColumn } from "./types/integer.ts"
@@ -27,6 +28,8 @@ export function parseColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
       return parseDateColumn(column, columnExpr)
     case "date-time":
       return parseDateTimeColumn(column, columnExpr)
+    case "decimal":
+      return parseDecimalColumn(column, columnExpr)
     case "email":
       return parseEmailColumn(column, columnExpr)
     case "hex":

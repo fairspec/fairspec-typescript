@@ -38,6 +38,9 @@ export function getColumns(tableSchema: TableSchema) {
           case "categorical":
             columns.push({ ...baseColumn, type: "categorical", property })
             break
+          case "decimal":
+            columns.push({ ...baseColumn, type: "decimal", property })
+            break
           case "list":
             columns.push({ ...baseColumn, type: "list", property })
             break

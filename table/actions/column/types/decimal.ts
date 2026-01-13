@@ -1,7 +1,9 @@
-import type { NumberColumn } from "@fairspec/metadata"
+import type { DecimalColumn } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 
-export function parseNumberColumn(column: NumberColumn, columnExpr: pl.Expr) {
+// TODO: there is a duplication in integer/number/decimal
+
+export function parseDecimalColumn(column: DecimalColumn, columnExpr: pl.Expr) {
   // Extract the decimal and group characters
   const decimalChar = column.property.decimalChar ?? "."
   const groupChar = column.property.groupChar ?? ""
@@ -35,13 +37,13 @@ export function parseNumberColumn(column: NumberColumn, columnExpr: pl.Expr) {
     columnExpr = columnExpr.str.replaceAll("[^\\d\\-.e]", "")
   }
 
-  // Cast to float64
-  columnExpr = columnExpr.cast(pl.Float64)
+  // Cast to decimal
+  columnExpr = columnExpr.cast(pl.Decimal())
   return columnExpr
 }
 
-export function stringifyNumberColumn(
-  _column: NumberColumn,
+export function stringifyDecimalColumn(
+  _column: DecimalColumn,
   columnExpr: pl.Expr,
 ) {
   // Convert to string

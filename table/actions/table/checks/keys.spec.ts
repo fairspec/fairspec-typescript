@@ -42,10 +42,10 @@ describe("inspectTable (row/unique)", () => {
 
     const errors = await inspectTable(table, { tableSchema })
 
-    expect(errors.filter(e => e.type === "row/unique")).toHaveLength(1)
+    expect(errors.filter(e => e.type === "row/primaryKey")).toHaveLength(1)
     expect(errors).toEqual([
       {
-        type: "row/unique",
+        type: "row/primaryKey",
         rowNumber: 4,
         columnNames: ["id"],
       },
@@ -101,15 +101,15 @@ describe("inspectTable (row/unique)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter(e => e.type === "row/unique")).toHaveLength(2)
+    expect(errors.filter(e => e.type === "row/uniqueKey")).toHaveLength(2)
     expect(errors).toEqual([
       {
-        type: "row/unique",
+        type: "row/uniqueKey",
         rowNumber: 3,
         columnNames: ["email"],
       },
       {
-        type: "row/unique",
+        type: "row/uniqueKey",
         rowNumber: 5,
         columnNames: ["email"],
       },
@@ -135,10 +135,10 @@ describe("inspectTable (row/unique)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter(e => e.type === "row/unique")).toHaveLength(1)
+    expect(errors.filter(e => e.type === "row/uniqueKey")).toHaveLength(1)
     expect(errors).toEqual([
       {
-        type: "row/unique",
+        type: "row/uniqueKey",
         rowNumber: 4,
         columnNames: ["category", "subcategory"],
       },
@@ -171,12 +171,12 @@ describe("inspectTable (row/unique)", () => {
     const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
-      type: "row/unique",
+      type: "row/primaryKey",
       rowNumber: 4,
       columnNames: ["id"],
     })
     expect(errors).toContainEqual({
-      type: "row/unique",
+      type: "row/uniqueKey",
       rowNumber: 5,
       columnNames: ["email"],
     })
@@ -203,12 +203,12 @@ describe("inspectTable (row/unique)", () => {
 
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
-      type: "row/unique",
+      type: "row/uniqueKey",
       rowNumber: 6,
       columnNames: ["id"],
     })
     expect(errors).toContainEqual({
-      type: "row/unique",
+      type: "row/uniqueKey",
       rowNumber: 6,
       columnNames: ["id", "name"],
     })

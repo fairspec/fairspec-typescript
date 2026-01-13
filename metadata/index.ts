@@ -106,7 +106,11 @@ export { ForeignKeyError } from "./models/error/foreignKey.ts"
 export { GeneralError } from "./models/error/general.ts"
 export { MetadataError } from "./models/error/metadata.ts"
 export { ResourceError } from "./models/error/resource.ts"
-export { RowError, RowUniqueError } from "./models/error/row.ts"
+export {
+  RowError,
+  RowPrimaryKeyError,
+  RowUniqueKeyError,
+} from "./models/error/row.ts"
 export { TableError } from "./models/error/table.ts"
 export { ArrowFormat } from "./models/format/arrow.ts"
 export { CsvFormat } from "./models/format/csv.ts"

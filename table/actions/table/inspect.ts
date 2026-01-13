@@ -12,7 +12,7 @@ import { inspectColumn } from "../../actions/column/inspect.ts"
 import { getPolarsSchema } from "../../helpers/schema.ts"
 import type { SchemaMapping } from "../../models/schema.ts"
 import type { Table } from "../../models/table.ts"
-import { createChecksRowUnique } from "./checks/unique.ts"
+import { createRowKeyChecks } from "./checks/keys.ts"
 
 export async function inspectTable(
   table: Table,
@@ -132,7 +132,7 @@ async function inspectRows(
 
   try {
     await pAll(
-      [...createChecksRowUnique(mapping)].map(it => () => collectRowErrors(it)),
+      [...createRowKeyChecks(mapping)].map(it => () => collectRowErrors(it)),
       { concurrency },
     )
   } catch (error) {

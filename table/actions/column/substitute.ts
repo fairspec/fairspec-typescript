@@ -1,24 +1,44 @@
 import * as pl from "nodejs-polars"
-import type { ColumnMapping } from "../../models/column.ts"
+import type { ColumnMapping, PolarsColumn } from "../../models/column.ts"
 
 const DEFAULT_MISSING_VALUES = [""]
 
-// TODO: Support numeric missing values
 export function substituteColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
-  if (!mapping.source.type.equals(pl.String)) return columnExpr
+  // As we know what source polars column type is,
+  // we can filter out incompatible missing values
+
+  const missingValueType = getMissingValueType(mapping.source.type)
+  if (!missingValueType) {
+    return columnExpr
+  }
 
   const flattenMissingValues =
     mapping.target.property.missingValues?.map(it =>
       typeof it === "object" ? it.value : it,
     ) ?? DEFAULT_MISSING_VALUES
 
-  if (flattenMissingValues.length) {
-    columnExpr = pl
-      .when(columnExpr.isIn(flattenMissingValues))
-      .then(pl.lit(null))
-      .otherwise(columnExpr)
-      .alias(mapping.target.name)
+  const compatibleMissingValues = flattenMissingValues.filter(
+    value => typeof value === missingValueType,
+  )
+
+  if (!compatibleMissingValues.length) {
+    return columnExpr
   }
 
-  return columnExpr
+  return pl
+    .when(columnExpr.isIn(compatibleMissingValues))
+    .then(pl.lit(null))
+    .otherwise(columnExpr)
+    .alias(mapping.target.name)
+}
+
+function getMissingValueType(polarsType: PolarsColumn["type"]) {
+  if (polarsType.equals(pl.String)) return "string"
+  if (polarsType.equals(pl.Int8)) return "number"
+  if (polarsType.equals(pl.Int16)) return "number"
+  if (polarsType.equals(pl.Int32)) return "number"
+  if (polarsType.equals(pl.Int64)) return "number"
+  if (polarsType.equals(pl.Float32)) return "number"
+  if (polarsType.equals(pl.Float64)) return "number"
+  return undefined
 }

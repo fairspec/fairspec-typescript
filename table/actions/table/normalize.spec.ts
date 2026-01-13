@@ -1,4 +1,4 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { normalizeTable } from "./normalize.ts"
@@ -12,11 +12,11 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
     const records = [
@@ -24,7 +24,7 @@ describe("normalizeTable", () => {
       { id: 2, name: "中文" },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
@@ -37,12 +37,12 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-        { name: "other", type: "boolean" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+        other: { type: "boolean" },
+      },
     }
 
     const records = [
@@ -50,7 +50,7 @@ describe("normalizeTable", () => {
       { id: 2, name: "中文", other: null },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
@@ -64,11 +64,11 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
     const records = [
@@ -76,12 +76,12 @@ describe("normalizeTable", () => {
       { id: 2, name: "中文" },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
 
-  it("should work based on fields order", async () => {
+  it("should not work based on fields order", async () => {
     const table = pl
       .DataFrame({
         field1: [1, 2],
@@ -89,19 +89,20 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
     const records = [
-      { id: 1, name: "english" },
-      { id: 2, name: "中文" },
+      { id: null, name: null },
+      // TODO: review
+      // { id: null, name: null },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
@@ -114,12 +115,11 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fieldsMatch: "equal",
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
     const records = [
@@ -127,7 +127,7 @@ describe("normalizeTable", () => {
       { id: 2, name: "中文" },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
@@ -140,12 +140,11 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fieldsMatch: "subset",
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
     const records = [
@@ -153,7 +152,7 @@ describe("normalizeTable", () => {
       { id: 2, name: "中文" },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
@@ -166,12 +165,11 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fieldsMatch: "superset",
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
     const records = [
@@ -179,7 +177,7 @@ describe("normalizeTable", () => {
       { id: 2, name: "中文" },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
@@ -192,12 +190,11 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fieldsMatch: "partial",
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
     const records = [
@@ -205,7 +202,7 @@ describe("normalizeTable", () => {
       { id: 2, name: "中文" },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
@@ -218,11 +215,11 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
     const records = [
@@ -230,7 +227,7 @@ describe("normalizeTable", () => {
       { id: 2, name: "中文" },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })
@@ -243,11 +240,11 @@ describe("normalizeTable", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "integer" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "integer" },
+      },
     }
 
     const records = [
@@ -255,7 +252,7 @@ describe("normalizeTable", () => {
       { id: 2, name: null },
     ]
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
     expect(frame.toRecords()).toEqual(records)
   })

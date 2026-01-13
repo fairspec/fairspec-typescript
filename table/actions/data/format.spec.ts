@@ -40,13 +40,13 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       headerRows: false,
     })
 
     expect(result).toEqual([
-      { field1: "Alice", field2: 30, field3: "NYC" },
-      { field1: "Bob", field2: 25, field3: "LA" },
+      { column1: "Alice", column2: 30, column3: "NYC" },
+      { column1: "Bob", column2: 25, column3: "LA" },
     ])
   })
 
@@ -59,7 +59,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       headerRows: [2],
     })
 
@@ -78,7 +78,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       headerRows: [1, 2],
     })
 
@@ -105,7 +105,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       headerRows: [1, 2],
       headerJoin: "_",
     })
@@ -125,7 +125,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       commentRows: [3],
     })
 
@@ -145,7 +145,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       commentChar: "#",
     })
 
@@ -166,7 +166,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       commentChar: "#",
     })
 
@@ -185,7 +185,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       commentChar: "#",
     })
 
@@ -286,7 +286,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       headerRows: [1, 2],
     })
 
@@ -305,7 +305,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       headerRows: [2],
       commentRows: [3],
     })
@@ -326,7 +326,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       commentRows: [4],
       commentChar: "#",
     })
@@ -337,7 +337,7 @@ describe("getRecordsFromRows", () => {
     ])
   })
 
-  it("should generate field names based on longest row when no header", () => {
+  it("should generate column names based on longest row when no header", () => {
     const rows = [
       ["Alice", 30],
       ["Bob", 25, "LA", "USA"],
@@ -345,14 +345,14 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      type: "json",
       headerRows: false,
     })
 
     expect(result).toEqual([
-      { field1: "Alice", field2: 30, field3: undefined, field4: undefined },
-      { field1: "Bob", field2: 25, field3: "LA", field4: "USA" },
-      { field1: "Charlie", field2: 35, field3: "SF", field4: undefined },
+      { column1: "Alice", column2: 30, column3: undefined, column4: undefined },
+      { column1: "Bob", column2: 25, column3: "LA", column4: "USA" },
+      { column1: "Charlie", column2: 35, column3: "SF", column4: undefined },
     ])
   })
 })

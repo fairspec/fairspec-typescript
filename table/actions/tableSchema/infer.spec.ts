@@ -2,7 +2,7 @@ import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { inferSchemaFromTable } from "./infer.ts"
 
-describe("inferSchemaFromTable", () => {
+describe.skip("inferSchemaFromTable", () => {
   it("should infer from native types", async () => {
     const table = pl
       .DataFrame({

@@ -1,7 +1,6 @@
 import * as pl from "nodejs-polars"
 import type { ColumnMapping } from "../../models/column.ts"
 import { stringifyBooleanColumn } from "./types/boolean.ts"
-import { stringifyCategoricalColumn } from "./types/categorical.ts"
 import { stringifyDateColumn } from "./types/date.ts"
 import { stringifyDateTimeColumn } from "./types/dateTime.ts"
 import { stringifyIntegerColumn } from "./types/integer.ts"
@@ -19,8 +18,6 @@ export function stringifyColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
   switch (column.type) {
     case "boolean":
       return stringifyBooleanColumn(column, columnExpr)
-    case "categorical":
-      return stringifyCategoricalColumn(column, columnExpr)
     case "date":
       return stringifyDateColumn(column, columnExpr)
     case "date-time":

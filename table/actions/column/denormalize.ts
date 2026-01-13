@@ -1,6 +1,7 @@
 import type { Column } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import type { ColumnMapping } from "../../models/column.ts"
+import { denarrowColumn } from "./denarrow.ts"
 import { desubstituteColumn } from "./desubstitute.ts"
 import { stringifyColumn } from "./stringify.ts"
 
@@ -15,6 +16,7 @@ export function denormalizeColumn(
   let columnExpr = pl.col(mapping.source.name)
 
   if (!options?.nativeTypes?.includes(mapping.target.type)) {
+    columnExpr = denarrowColumn(mapping, columnExpr)
     columnExpr = stringifyColumn(mapping, columnExpr)
   }
 

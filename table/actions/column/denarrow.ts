@@ -12,35 +12,18 @@ const ALPHANUMERIC_VARIANTS = [
   ...STRING_VARIANTS,
 ]
 
-export function narrowColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
+export function denarrowColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
   const variant = mapping.source.type.variant
-
-  if (mapping.target.type === "boolean") {
-    if (INTEGER_VARIANTS.includes(variant)) {
-      columnExpr = pl
-        .when(columnExpr.eq(1))
-        .then(pl.lit(true))
-        .when(columnExpr.eq(0))
-        .then(pl.lit(false))
-        .otherwise(pl.lit(null))
-    }
-  }
-
-  if (mapping.target.type === "integer") {
-    if (NUMBER_VARIANTS.includes(variant)) {
-      columnExpr = pl
-        .when(columnExpr.eq(columnExpr.round(0)))
-        .then(columnExpr.cast(pl.Int64))
-        .otherwise(pl.lit(null))
-    }
-  }
 
   if (mapping.target.type === "categorical") {
     if (ALPHANUMERIC_VARIANTS.includes(variant)) {
       const { values, labels } = getCategoricalValuesAndLabels(mapping.target)
 
+      const polarsType =
+        mapping.target.property.type === "string" ? pl.String : pl.Int64
+
       return values.length
-        ? columnExpr.replaceStrict(values, labels, pl.lit(null), pl.Categorical)
+        ? columnExpr.replaceStrict(labels, values, pl.lit(null), polarsType)
         : columnExpr
     }
   }

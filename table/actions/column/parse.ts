@@ -2,7 +2,6 @@ import * as pl from "nodejs-polars"
 import type { ColumnMapping } from "../../models/column.ts"
 import { parseBase64Column } from "./types/base64.ts"
 import { parseBooleanColumn } from "./types/boolean.ts"
-import { parseCategoricalColumn } from "./types/categorical.ts"
 import { parseDateColumn } from "./types/date.ts"
 import { parseDateTimeColumn } from "./types/dateTime.ts"
 import { parseEmailColumn } from "./types/email.ts"
@@ -24,8 +23,6 @@ export function parseColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
       return parseBase64Column(column, columnExpr)
     case "boolean":
       return parseBooleanColumn(column, columnExpr)
-    case "categorical":
-      return parseCategoricalColumn(column, columnExpr)
     case "date":
       return parseDateColumn(column, columnExpr)
     case "date-time":

@@ -16,7 +16,7 @@ describe("saveArrowTable", () => {
 
     await saveArrowTable(source, { path })
 
-    const table = await loadArrowTable({ path })
+    const table = await loadArrowTable({ data: path })
     expect((await table.collect()).toRecords()).toEqual([
       { id: 1.0, name: "Alice" },
       { id: 2.0, name: "Bob" },
@@ -49,7 +49,7 @@ describe("saveArrowTable", () => {
 
     await saveArrowTable(source, {
       path,
-      fieldTypes: {
+      columnTypes: {
         array: "array",
         geojson: "geojson",
         geopoint: "geopoint",
@@ -63,7 +63,7 @@ describe("saveArrowTable", () => {
       },
     })
 
-    const target = await loadArrowTable({ path }, { denormalized: true })
+    const target = await loadArrowTable({ data: path }, { denormalized: true })
     expect((await target.collect()).toRecords()).toEqual([
       {
         array: "[1, 2, 3]",

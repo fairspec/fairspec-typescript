@@ -12,7 +12,7 @@ describe("loadArrowTable", () => {
       const path = getTempFilePath()
       pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeIPC(path)
 
-      const table = await loadArrowTable({ path })
+      const table = await loadArrowTable({ data: path })
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
         { id: 2, name: "中文" },
@@ -25,7 +25,7 @@ describe("loadArrowTable", () => {
       pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeIPC(path1)
       pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeIPC(path2)
 
-      const table = await loadArrowTable({ path: [path1, path2] })
+      const table = await loadArrowTable({ data: [path1, path2] })
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
         { id: 2, name: "中文" },
@@ -36,7 +36,7 @@ describe("loadArrowTable", () => {
 
     it.skip("should load remote file", async () => {
       const table = await loadArrowTable({
-        path: "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/arrow/table/fixtures/table.arrow",
+        data: "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/arrow/table/fixtures/table.arrow",
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -47,7 +47,7 @@ describe("loadArrowTable", () => {
 
     it.skip("should load remote file (multipart)", async () => {
       const table = await loadArrowTable({
-        path: [
+        data: [
           "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/arrow/table/fixtures/table.arrow",
           "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/arrow/table/fixtures/table.arrow",
         ],

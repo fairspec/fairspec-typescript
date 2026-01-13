@@ -38,15 +38,7 @@
     "ColumnProperty": {
       "properties": {
         "type": {
-          "enum": [
-            "null",
-            "boolean",
-            "integer",
-            "number",
-            "string",
-            "array",
-            "object"
-          ]
+          "enum": ["boolean", "integer", "number", "string", "array", "object"]
         }
       },
       "allOf": [
@@ -73,10 +65,6 @@
         {
           "if": { "properties": { "type": { "const": "object" } } },
           "then": { "$ref": "#/$defs/ObjectColumnPropertyGroup" }
-        },
-        {
-          "if": { "properties": { "type": { "const": "null" } } },
-          "then": { "$ref": "#/$defs/UnknownColumnProperty" }
         },
         {
           "if": { "not": { "required": ["type"] } },
@@ -409,7 +397,6 @@
     "UnknownColumnProperty": {
       "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
-        "type": { "const": "null" },
         "enum": { "$ref": "#/$defs/UnknownEnum" },
         "const": { "$ref": "#/$defs/UnknownConst" },
         "examples": { "$ref": "#/$defs/UnknownExamples" },

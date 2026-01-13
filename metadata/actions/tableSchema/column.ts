@@ -25,7 +25,7 @@ export function getColumns(tableSchema: TableSchema) {
           case "categorical":
             columns.push({ ...baseColumn, type: "categorical", property })
             break
-          case undefined:
+          default:
             columns.push({ ...baseColumn, type: "integer", property })
             break
         }
@@ -71,7 +71,7 @@ export function getColumns(tableSchema: TableSchema) {
           case "wkb":
             columns.push({ ...baseColumn, type: "wkb", property })
             break
-          case undefined:
+          default:
             columns.push({ ...baseColumn, type: "string", property })
             break
         }
@@ -87,7 +87,7 @@ export function getColumns(tableSchema: TableSchema) {
           case "topojson":
             columns.push({ ...baseColumn, type: "topojson", property })
             break
-          case undefined:
+          default:
             columns.push({ ...baseColumn, type: "object", property })
             break
         }

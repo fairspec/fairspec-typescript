@@ -1,7 +1,7 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inspectTable } from "../../table/index.ts"
+import { inspectTable } from "../inspect.ts"
 
 describe("inspectTable (row/unique)", () => {
   it("should not errors when all rows are unique for primary key", async () => {
@@ -12,15 +12,15 @@ describe("inspectTable (row/unique)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "number" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "number" },
+        name: { type: "string" },
+      },
       primaryKey: ["id"],
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -32,22 +32,24 @@ describe("inspectTable (row/unique)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "number" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "number" },
+        name: { type: "string" },
+      },
       primaryKey: ["id"],
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors.filter(e => e.type === "row/unique")).toHaveLength(1)
-    expect(errors).toContainEqual({
-      type: "row/unique",
-      rowNumber: 4,
-      fieldNames: ["id"],
-    })
+    expect(errors).toEqual([
+      {
+        type: "row/unique",
+        rowNumber: 4,
+        columnNames: ["id"],
+      },
+    ])
   })
 
   it("should not errors when all rows are unique for unique key", async () => {
@@ -64,15 +66,15 @@ describe("inspectTable (row/unique)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "number" },
-        { name: "email", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "number" },
+        email: { type: "string" },
+      },
       uniqueKeys: [["email"]],
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors).toHaveLength(0)
   })
 
@@ -90,26 +92,28 @@ describe("inspectTable (row/unique)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "number" },
-        { name: "email", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "number" },
+        email: { type: "string" },
+      },
       uniqueKeys: [["email"]],
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors.filter(e => e.type === "row/unique")).toHaveLength(2)
-    expect(errors).toContainEqual({
-      type: "row/unique",
-      rowNumber: 3,
-      fieldNames: ["email"],
-    })
-    expect(errors).toContainEqual({
-      type: "row/unique",
-      rowNumber: 5,
-      fieldNames: ["email"],
-    })
+    expect(errors).toEqual([
+      {
+        type: "row/unique",
+        rowNumber: 3,
+        columnNames: ["email"],
+      },
+      {
+        type: "row/unique",
+        rowNumber: 5,
+        columnNames: ["email"],
+      },
+    ])
   })
 
   it("should handle composite unique keys", async () => {
@@ -121,22 +125,24 @@ describe("inspectTable (row/unique)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "category", type: "string" },
-        { name: "subcategory", type: "string" },
-        { name: "value", type: "number" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        category: { type: "string" },
+        subcategory: { type: "string" },
+        value: { type: "number" },
+      },
       uniqueKeys: [["category", "subcategory"]],
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     expect(errors.filter(e => e.type === "row/unique")).toHaveLength(1)
-    expect(errors).toContainEqual({
-      type: "row/unique",
-      rowNumber: 4,
-      fieldNames: ["category", "subcategory"],
-    })
+    expect(errors).toEqual([
+      {
+        type: "row/unique",
+        rowNumber: 4,
+        columnNames: ["category", "subcategory"],
+      },
+    ])
   })
 
   it("should handle both primary key and unique keys", async () => {
@@ -153,26 +159,26 @@ describe("inspectTable (row/unique)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "number" },
-        { name: "email", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "number" },
+        email: { type: "string" },
+      },
       primaryKey: ["id"],
       uniqueKeys: [["email"]],
     }
 
-    const errors = await inspectTable(table, { schema })
-    expect(errors.filter(e => e.type === "row/unique")).toHaveLength(2)
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "row/unique",
       rowNumber: 4,
-      fieldNames: ["id"],
+      columnNames: ["id"],
     })
     expect(errors).toContainEqual({
       type: "row/unique",
       rowNumber: 5,
-      fieldNames: ["email"],
+      columnNames: ["email"],
     })
   })
 
@@ -184,27 +190,27 @@ describe("inspectTable (row/unique)", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      fields: [
-        { name: "id", type: "number" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "number" },
+        name: { type: "string" },
+      },
       uniqueKeys: [["id"], ["id", "name"]],
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
     console.log(errors)
 
     expect(errors).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "row/unique",
       rowNumber: 6,
-      fieldNames: ["id"],
+      columnNames: ["id"],
     })
     expect(errors).toContainEqual({
       type: "row/unique",
       rowNumber: 6,
-      fieldNames: ["id", "name"],
+      columnNames: ["id", "name"],
     })
   })
 })

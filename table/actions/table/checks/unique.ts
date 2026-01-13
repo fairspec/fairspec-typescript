@@ -1,6 +1,6 @@
 import type { RowUniqueError } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import type { SchemaMapping } from "../../schema/index.ts"
+import type { SchemaMapping } from "../../../models/schema.ts"
 
 export function createChecksRowUnique(mapping: SchemaMapping) {
   const uniqueKeys = mapping.target.uniqueKeys ?? []
@@ -22,7 +22,7 @@ function createCheckRowUnique(uniqueKey: string[]) {
 
   const errorTemplate: RowUniqueError = {
     type: "row/unique",
-    fieldNames: uniqueKey,
+    columnNames: uniqueKey,
     rowNumber: 0,
   }
 

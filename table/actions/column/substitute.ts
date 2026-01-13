@@ -1,8 +1,6 @@
 import * as pl from "nodejs-polars"
 import type { ColumnMapping, PolarsColumn } from "../../models/column.ts"
 
-const DEFAULT_MISSING_VALUES = [""]
-
 export function substituteColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
   // As we know what source polars column type is,
   // we can filter out incompatible missing values
@@ -13,7 +11,7 @@ export function substituteColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
   }
 
   const flattenMissingValues = (
-    mapping.target.property.missingValues ?? DEFAULT_MISSING_VALUES
+    mapping.target.property.missingValues ?? []
   ).map(it => (typeof it === "object" ? it.value : it))
 
   const compatibleMissingValues = flattenMissingValues.filter(

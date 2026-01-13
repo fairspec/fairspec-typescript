@@ -3,8 +3,6 @@ import * as pl from "nodejs-polars"
 import type { ColumnMapping } from "../../models/column.ts"
 import type { DenormalizeColumnOptions } from "./denormalize.ts"
 
-const DEFAULT_MISSING_VALUES = [""]
-
 export function desubstituteColumn(
   mapping: ColumnMapping,
   columnExpr: pl.Expr,
@@ -16,7 +14,7 @@ export function desubstituteColumn(
   }
 
   const flattenMissingValues = (
-    mapping.target.property.missingValues ?? DEFAULT_MISSING_VALUES
+    mapping.target.property.missingValues ?? []
   ).map(it => (typeof it === "object" ? it.value : it))
 
   const compatibleMissingValue = flattenMissingValues?.filter(

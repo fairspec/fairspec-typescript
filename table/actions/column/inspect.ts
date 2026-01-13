@@ -119,11 +119,11 @@ async function inspectCells(
     case "topojson":
       return await inspectTopojsonColumn(mapping.target, table)
     default:
-      return await inspectCellsNatively(mapping, table, options)
+      return await inspectCellsInPolars(mapping, table, options)
   }
 }
 
-async function inspectCellsNatively(
+async function inspectCellsInPolars(
   mapping: ColumnMapping,
   table: Table,
   options: {

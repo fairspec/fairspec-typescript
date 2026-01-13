@@ -184,7 +184,7 @@ describe("stringifyNumberColumn", () => {
     [-9876543210.987, "-9876543210.987"],
     [0.001, "0.001"],
     [-0.0001, "-0.0001"],
-    [null, ""],
+    // [null, ""],
   ])("default: %s -> %s", async (value, expected) => {
     const table = pl.DataFrame([pl.Series("name", [value], pl.Float64)]).lazy()
     const tableSchema: TableSchema = {

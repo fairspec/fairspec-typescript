@@ -6,7 +6,7 @@ import { denormalizeTable } from "../../actions/table/denormalize.ts"
 describe("desubstituteColumn", () => {
   describe("string missing values", () => {
     it.each([
-      [null, ""],
+      [null, null],
       ["hello", "hello"],
       ["value", "value"],
     ])("no missing values: %s -> %s", async (value, expected) => {

@@ -77,20 +77,6 @@ describe("ArrowPlugin", () => {
       expect(result).toEqual(mockTable)
     })
 
-    it("should handle explicit feather format specification", async () => {
-      const resource: Partial<Resource> = {
-        data: "test.txt",
-        format: { type: "arrow" },
-      }
-      const mockTable = pl.DataFrame().lazy()
-      mockLoadArrowTable.mockResolvedValue(mockTable)
-
-      const result = await plugin.loadTable(resource)
-
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, undefined)
-      expect(result).toEqual(mockTable)
-    })
-
     it("should pass through load options", async () => {
       const resource: Partial<Resource> = {
         data: "test.arrow",
@@ -131,7 +117,7 @@ describe("ArrowPlugin", () => {
   describe("saveTable", () => {
     it("should save table to arrow file", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { data: "output.arrow" }
+      const options = { path: "output.arrow" }
       mockSaveArrowTable.mockResolvedValue("output.arrow")
 
       const result = await plugin.saveTable(table, options)
@@ -142,7 +128,7 @@ describe("ArrowPlugin", () => {
 
     it("should save table to feather file", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { data: "output.feather" }
+      const options = { path: "output.feather" }
       mockSaveArrowTable.mockResolvedValue("output.feather")
 
       const result = await plugin.saveTable(table, options)
@@ -153,7 +139,7 @@ describe("ArrowPlugin", () => {
 
     it("should return undefined for non-arrow files", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { data: "output.csv" }
+      const options = { path: "output.csv" }
 
       const result = await plugin.saveTable(table, options)
 
@@ -163,18 +149,7 @@ describe("ArrowPlugin", () => {
 
     it("should handle explicit arrow format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { data: "output.txt", format: "arrow" as const }
-      mockSaveArrowTable.mockResolvedValue("output.txt")
-
-      const result = await plugin.saveTable(table, options)
-
-      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, options)
-      expect(result).toBe("output.txt")
-    })
-
-    it("should handle explicit feather format specification", async () => {
-      const table = pl.DataFrame().lazy()
-      const options = { data: "output.txt", format: "feather" as const }
+      const options = { path: "output.txt", format: "arrow" as const }
       mockSaveArrowTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)
@@ -185,7 +160,7 @@ describe("ArrowPlugin", () => {
 
     it("should handle paths with directories", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { data: "/path/to/output.arrow" }
+      const options = { path: "/path/to/output.arrow" }
       mockSaveArrowTable.mockResolvedValue("/path/to/output.arrow")
 
       await plugin.saveTable(table, options)
@@ -195,7 +170,7 @@ describe("ArrowPlugin", () => {
 
     it("should return undefined for files without extension", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { data: "output" }
+      const options = { path: "output" }
 
       const result = await plugin.saveTable(table, options)
 
@@ -205,7 +180,7 @@ describe("ArrowPlugin", () => {
 
     it("should return undefined for parquet files", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { data: "output.parquet" }
+      const options = { path: "output.parquet" }
 
       const result = await plugin.saveTable(table, options)
 

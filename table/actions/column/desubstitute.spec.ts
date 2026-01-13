@@ -1,9 +1,9 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { denormalizeTable } from "../table/index.ts"
+import { denormalizeTable } from "../../actions/table/denormalize.ts"
 
-describe("stringifyColumn", () => {
+describe("desubstituteColumn", () => {
   describe("missing values", () => {
     it.each([
       // Schema-level - null values should be converted to first missing value
@@ -32,19 +32,23 @@ describe("stringifyColumn", () => {
       // Multiple missing values - should use first one
       [null, "-", { columnLevel: ["-", "n/a", "null"] }],
       [null, "n/a", { schemaLevel: ["n/a", "NULL", ""] }],
+      [null, "-", { columnLevel: ["-"], schemaLevel: [""] }],
 
       // @ts-expect-error
     ])("%s -> %s %s", async (value, expected, { columnLevel, schemaLevel }) => {
       const table = pl.DataFrame({ name: [value] }).lazy()
-      const schema: Schema = {
+      const tableSchema: TableSchema = {
         missingValues: schemaLevel,
-        columns: [{ name: "name", type: "string", missingValues: columnLevel }],
+        properties: {
+          name: { type: "string", missingValues: columnLevel },
+        },
       }
 
-      const result = await denormalizeTable(table, schema)
+      const result = await denormalizeTable(table, tableSchema)
       const frame = await result.collect()
 
-      expect(frame.toRecords()[0]?.name).toEqual(expected)
+      const actual = frame.toRecords()[0]?.name
+      expect(actual).toEqual(expected)
     })
   })
 })

@@ -1,9 +1,9 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { normalizeTable } from "../table/index.ts"
+import { normalizeTable } from "../../actions/table/normalize.ts"
 
-describe("parseColumn", () => {
+describe("substituteColumn", () => {
   describe("missing values", () => {
     it.each([
       // Schema-level
@@ -20,19 +20,22 @@ describe("parseColumn", () => {
 
       // Schema-level and column-level
       ["-", null, { schemaLevel: ["x"], columnLevel: ["-"] }],
-      ["-", "-", { schemaLevel: ["-"], columnLevel: ["x"] }],
+      ["-", null, { schemaLevel: ["-"], columnLevel: ["x"] }],
       // @ts-expect-error
-    ])("$0 -> $1 $2", async (cell, value, { columnLevel, schemaLevel }) => {
+    ])("$0 -> $1 $2", async (cell, expected, { columnLevel, schemaLevel }) => {
       const table = pl.DataFrame({ name: [cell] }).lazy()
-      const schema: Schema = {
+      const tableSchema: TableSchema = {
         missingValues: schemaLevel,
-        columns: [{ name: "name", type: "string", missingValues: columnLevel }],
+        properties: {
+          name: { type: "string", missingValues: columnLevel },
+        },
       }
 
-      const result = await normalizeTable(table, schema)
+      const result = await normalizeTable(table, tableSchema)
       const frame = await result.collect()
 
-      expect(frame.getColumn("name").get(0)).toEqual(value)
+      const actual = frame.getColumn("name").get(0)
+      expect(actual).toEqual(expected)
     })
   })
 })

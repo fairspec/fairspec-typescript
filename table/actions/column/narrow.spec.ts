@@ -1,8 +1,8 @@
-import type { Schema } from "@fairspec/metadata"
+import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { inspectTable } from "../table/inspect.ts"
-import { normalizeTable } from "../table/normalize.ts"
+import { inspectTable } from "../../actions/table/inspect.ts"
+import { normalizeTable } from "../../actions/table/normalize.ts"
 
 describe("narrowColumn", () => {
   it("should narrow float to integer", async () => {
@@ -13,14 +13,14 @@ describe("narrowColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
-    const result = await normalizeTable(table, schema)
+    const result = await normalizeTable(table, tableSchema)
     const frame = await result.collect()
 
     expect(frame.toRecords()).toEqual([
@@ -38,14 +38,14 @@ describe("narrowColumn", () => {
       })
       .lazy()
 
-    const schema: Schema = {
-      columns: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
     }
 
-    const errors = await inspectTable(table, { schema })
+    const errors = await inspectTable(table, { tableSchema })
 
     expect(errors).toEqual([
       {

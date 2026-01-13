@@ -7,7 +7,8 @@ export function checkCellMinLength(column: Column, mapping: CellMapping) {
   const minLength = column.property.minLength
   if (!minLength) return undefined
 
-  const isErrorExpr = mapping.target.str.lengths().lt(minLength)
+  // For string-based columns we test against the source polars column
+  const isErrorExpr = mapping.source.str.lengths().lt(minLength)
 
   const errorTemplate: CellMinLengthError = {
     type: "cell/minLength",

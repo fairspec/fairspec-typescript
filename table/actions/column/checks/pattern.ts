@@ -7,7 +7,8 @@ export function checkCellPattern(column: Column, mapping: CellMapping) {
   const pattern = column.property.pattern
   if (!pattern) return undefined
 
-  const isErrorExpr = mapping.target.str.contains(pattern).not()
+  // For string-based columns we test against the source polars column
+  const isErrorExpr = mapping.source.str.contains(pattern).not()
 
   const errorTemplate: CellPatternError = {
     type: "cell/pattern",

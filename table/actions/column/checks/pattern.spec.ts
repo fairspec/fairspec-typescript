@@ -48,7 +48,9 @@ describe("inspectTable (cell/pattern)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/pattern")).toHaveLength(2)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/pattern"),
+    ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/pattern",
       columnName: "email",
@@ -63,5 +65,27 @@ describe("inspectTable (cell/pattern)", () => {
       rowNumber: 3,
       cell: "test.io",
     })
+  })
+
+  // TODO: recover polars panic
+  it.skip("should not error for valid decimal values", async () => {
+    const table = pl
+      .DataFrame([
+        pl.Series("amount", ["100.00", "200.00", "300.00"], pl.String),
+      ])
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        amount: {
+          type: "string",
+          format: "decimal",
+          pattern: "^\\d{3}\\.\\d{2}$",
+        },
+      },
+    }
+
+    const errors = await inspectTable(table, { tableSchema })
+    expect(errors).toHaveLength(0)
   })
 })

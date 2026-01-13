@@ -31,6 +31,11 @@ export const CellExclusiveMinimumError = BaseCellError.extend({
   minimum: z.string().describe("The exclusive minimum value"),
 })
 
+export const CellMultipleOfError = BaseCellError.extend({
+  type: z.literal("cell/multipleOf").describe("Error type identifier"),
+  multipleOf: z.number().describe("The multiple of constraint"),
+})
+
 export const CellExclusiveMaximumError = BaseCellError.extend({
   type: z.literal("cell/exclusiveMaximum").describe("Error type identifier"),
   maximum: z.string().describe("The exclusive maximum value"),
@@ -90,6 +95,7 @@ export const CellError = z.discriminatedUnion("type", [
   CellMaximumError,
   CellExclusiveMinimumError,
   CellExclusiveMaximumError,
+  CellMultipleOfError,
   CellMinLengthError,
   CellMaxLengthError,
   CellMinItemsError,
@@ -111,6 +117,7 @@ export type CellExclusiveMinimumError = z.infer<
 export type CellExclusiveMaximumError = z.infer<
   typeof CellExclusiveMaximumError
 >
+export type CellMultipleOfError = z.infer<typeof CellMultipleOfError>
 export type CellMinLengthError = z.infer<typeof CellMinLengthError>
 export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>
 export type CellMinItemsError = z.infer<typeof CellMinItemsError>

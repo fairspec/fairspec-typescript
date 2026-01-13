@@ -89,6 +89,7 @@ export {
   CellMinItemsError,
   CellMinimumError,
   CellMinLengthError,
+  CellMultipleOfError,
   CellPatternError,
   CellRequiredError,
   CellTypeError,

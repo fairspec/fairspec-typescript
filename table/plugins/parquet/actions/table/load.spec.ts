@@ -12,7 +12,7 @@ describe("loadParquetTable", () => {
       const path = getTempFilePath()
       pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeParquet(path)
 
-      const table = await loadParquetTable({ path })
+      const table = await loadParquetTable({ data: path })
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
         { id: 2, name: "中文" },
@@ -29,7 +29,7 @@ describe("loadParquetTable", () => {
         path2,
       )
 
-      const table = await loadParquetTable({ path: [path1, path2] })
+      const table = await loadParquetTable({ data: [path1, path2] })
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
         { id: 2, name: "中文" },
@@ -40,7 +40,7 @@ describe("loadParquetTable", () => {
 
     it.skip("should load remote file", async () => {
       const table = await loadParquetTable({
-        path: "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/parquet/table/fixtures/table.parquet",
+        data: "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/parquet/table/fixtures/table.parquet",
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -51,7 +51,7 @@ describe("loadParquetTable", () => {
 
     it.skip("should load remote file (multipart)", async () => {
       const table = await loadParquetTable({
-        path: [
+        data: [
           "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/parquet/table/fixtures/table.parquet",
           "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/parquet/table/fixtures/table.parquet",
         ],

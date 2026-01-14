@@ -2,20 +2,12 @@ import type { Column, TableSchema } from "@fairspec/metadata"
 import { getColumnProperties } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { getPolarsSchema } from "../../helpers/schema.ts"
-import type { TableSchemaOptions } from "../../models/schema.ts"
+import type { InferTableSchemaOptions } from "../../models/schema.ts"
 import type { Table } from "../../models/table.ts"
 
 // TODO: Rework the implementation
 // TODO: Implement actual options usage for inferring
 // TODO: Review default values being {columns: []} vs undefined
-
-export interface InferTableSchemaOptions extends TableSchemaOptions {
-  sampleRows?: number
-  confidence?: number
-  commaDecimal?: boolean
-  monthFirst?: boolean
-  keepStrings?: boolean
-}
 
 export async function inferTableSchemaFromTable(
   table: Table,

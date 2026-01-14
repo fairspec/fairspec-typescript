@@ -25,3 +25,11 @@ export interface TableSchemaOptions {
   listDelimiter?: string
   listItemType?: ListColumn["property"]["itemType"]
 }
+
+export interface InferTableSchemaOptions extends TableSchemaOptions {
+  sampleRows?: number
+  confidence?: number
+  commaDecimal?: boolean
+  monthFirst?: boolean
+  keepStrings?: boolean
+}

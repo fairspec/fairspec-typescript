@@ -10,12 +10,10 @@ export type FormatWithHeaderAndCommentRows = Extract<
   }
 >
 
-// TODO: Implement
-
-export interface InferDialectOptions extends DialectOptions {
-  sampleBytes?: number
+export interface FormatOptions {
+  delimiter?: string
 }
 
-export interface DialectOptions {
-  delimiter?: string
+export interface InferFormatOptions extends FormatOptions {
+  sampleBytes?: number
 }

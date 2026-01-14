@@ -1,38 +1,40 @@
-import type { DatasetPlugin, SavePackageOptions } from "@fairspec/dataset"
-import type { Dialect, Package, Resource, Schema } from "@fairspec/metadata"
-import type { DialectOptions, InferDialectOptions } from "./dialect/index.ts"
-import type { InferSchemaOptions, SchemaOptions } from "./schema/index.ts"
-import type { Table } from "./table/index.ts"
+import type { DatasetPlugin, SaveDatasetOptions } from "@fairspec/dataset"
+import type { Dataset, Format, Resource, TableSchema } from "@fairspec/metadata"
+import type { FormatOptions, InferFormatOptions } from "./models/format.ts"
+import type {
+  InferTableSchemaOptions,
+  TableSchemaOptions,
+} from "./models/schema.ts"
+import type { Table } from "./models/table.ts"
 
-export type LoadTableOptions = InferDialectOptions &
-  InferSchemaOptions & {
+export type LoadTableOptions = InferFormatOptions &
+  InferTableSchemaOptions & {
     denormalized?: boolean
   }
 
-export type SaveTableOptions = DialectOptions &
-  SchemaOptions & {
+export type SaveTableOptions = FormatOptions &
+  TableSchemaOptions & {
     path: string
-    format?: string
-    dialect?: Dialect
-    schema?: Schema
+    format?: Format
+    schema?: TableSchema
     overwrite?: boolean
   }
 
 export interface TablePlugin extends DatasetPlugin {
   savePackage?(
-    dataPackage: Package,
-    options: SavePackageOptions & { plugins?: TablePlugin[] },
+    dataset: Dataset,
+    options: SaveDatasetOptions & { plugins?: TablePlugin[] },
   ): Promise<{ path?: string } | undefined>
 
-  inferDialect?(
+  inferFormat?(
     resource: Partial<Resource>,
-    options?: InferDialectOptions,
-  ): Promise<Dialect | undefined>
+    options?: InferFormatOptions,
+  ): Promise<Format | undefined>
 
-  inferSchema?(
+  inferTableSchema?(
     resource: Partial<Resource>,
-    options?: InferSchemaOptions,
-  ): Promise<Schema | undefined>
+    options?: InferTableSchemaOptions,
+  ): Promise<TableSchema | undefined>
 
   loadTable?(
     resource: Partial<Resource>,

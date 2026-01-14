@@ -22,15 +22,15 @@ export async function loadXlsxTable(
     throw new Error("Resource path is not defined")
   }
 
-  const xlsxFormat = resource.format?.type === "xlsx" ? resource.format : undefined
+  const format = resource.format?.type === "xlsx" ? resource.format : undefined
 
   const tables: Table[] = []
   for (const path of paths) {
     const buffer = await loadFile(path)
 
     const book = read(buffer, { type: "buffer" })
-    const sheetIndex = xlsxFormat?.sheetNumber ? xlsxFormat.sheetNumber - 1 : 0
-    const sheetName = xlsxFormat?.sheetName ?? book.SheetNames[sheetIndex]
+    const sheetIndex = format?.sheetNumber ? format.sheetNumber - 1 : 0
+    const sheetName = format?.sheetName ?? book.SheetNames[sheetIndex]
     const sheet = sheetName ? book.Sheets[sheetName] : undefined
 
     if (sheet) {
@@ -39,7 +39,7 @@ export async function loadXlsxTable(
         raw: true,
       }) as DataRow[]
 
-      const records = getRecordsFromRows(rows, xlsxFormat)
+      const records = getRecordsFromRows(rows, format)
       const table = pl.DataFrame(records).lazy()
 
       tables.push(table)

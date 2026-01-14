@@ -6,9 +6,9 @@ import type { Table } from "../../../../models/table.ts"
 import type { SaveTableOptions } from "../../../../plugin.ts"
 
 export async function saveOdsTable(table: Table, options: SaveTableOptions) {
-  const { path, overwrite, format } = options
+  const { path, overwrite } = options
 
-  const odsFormat = format?.type === "ods" ? format : undefined
+  const format = options.format?.type === "ods" ? options.format : undefined
 
   const tableSchema =
     options.tableSchema ??
@@ -22,7 +22,7 @@ export async function saveOdsTable(table: Table, options: SaveTableOptions) {
   })
 
   const frame = await table.collect()
-  const sheetName = odsFormat?.sheetName ?? "Sheet1"
+  const sheetName = format?.sheetName ?? "Sheet1"
 
   const sheet = utils.json_to_sheet(frame.toRecords())
   const book = utils.book_new()

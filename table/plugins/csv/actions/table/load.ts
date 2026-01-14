@@ -1,35 +1,39 @@
-import type { Dialect, Resource } from "@fairspec/metadata"
-import { resolveDialect, resolveTableSchema } from "@fairspec/metadata"
+import type { Resource } from "@fairspec/metadata"
+import { getHeaderRows } from "../../../../helpers/format.ts"
+import type {CsvFormat, TsvFormat} from "@fairspec/metadata"
+import { resolveTableSchema } from "@fairspec/metadata"
 import { prefetchFiles } from "@fairspec/dataset"
-import type { LoadTableOptions } from "../../../plugin.ts"
-import { inferSchemaFromTable } from "../../../schema/index.ts"
-import { joinHeaderRows } from "../../../table/index.ts"
-import { normalizeTable } from "../../../table/index.ts"
-import { skipCommentRows } from "../../../table/index.ts"
-import { stripInitialSpace } from "../../../table/index.ts"
-import type { Table } from "../../../table/index.ts"
+import type { LoadTableOptions } from "../../../../plugin.ts"
+import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
+import { joinHeaderRows } from "../../../../actions/table/format.ts"
+import { normalizeTable } from "../../../../actions/table/normalize.ts"
+import { skipCommentRows } from "../../../../actions/table/format.ts"
+import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
-import { inferCsvDialect } from "../dialect/index.ts"
+import { inferCsvFormat } from "../../actions/format/infer.ts"
 
 // TODO: Condier using sample to extract header first
 // for better commentChar + headerRows/commentRows support
 // (consult with the Data Package Working Group)
 
 export async function loadCsvTable(
-  resource: Partial<Resource> & { format?: "csv" | "tsv" },
+  resource: Partial<Resource>,
   options?: LoadTableOptions,
 ) {
-  const paths = await prefetchFiles(resource.path)
+  const paths = await prefetchFiles(resource)
   if (!paths.length) {
     throw new Error("Resource path is not defined")
   }
 
-  let dialect = await resolveDialect(resource.dialect)
-  if (!dialect) {
-    dialect = await inferCsvDialect({ ...resource, path: paths[0] }, options)
+  const csvFormat = resource.format?.type === "csv" ? resource.format : undefined
+  const tsvFormat = resource.format?.type === "tsv" ? resource.format : undefined
+  let format = csvFormat ?? tsvFormat
+
+  if (!format) {
+    format = await inferCsvFormat({ ...resource, data: paths[0] }, options)
   }
 
-  const scanOptions = getScanOptions(resource, dialect)
+  const scanOptions = getScanOptions(format)
   const tables: Table[] = []
   for (const path of paths) {
     const table = pl.scanCSV(path, scanOptions)
@@ -47,68 +51,35 @@ export async function loadCsvTable(
     )
   }
 
-  if (dialect) {
-    table = await joinHeaderRows(table, { dialect })
-    table = skipCommentRows(table, { dialect })
-    table = stripInitialSpace(table, { dialect })
+  if (format) {
+    table = await joinHeaderRows(table, format)
+    table = skipCommentRows(table, format)
   }
 
   if (!options?.denormalized) {
-    let schema = await resolveTableSchema(resource.schema)
-    if (!schema) schema = await inferSchemaFromTable(table, options)
-    table = await normalizeTable(table, schema)
+    let tableSchema = await resolveTableSchema(resource.tableSchema)
+    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
+    table = await normalizeTable(table, tableSchema)
   }
 
   return table
 }
 
-function getScanOptions(resource: Partial<Resource>, dialect?: Dialect) {
+function getScanOptions(format?: TsvFormat | CsvFormat) {
+  const headerRows = getHeaderRows(format)
+
   const options: Partial<pl.ScanCsvOptions> = {
     inferSchemaLength: 0,
     truncateRaggedLines: true,
   }
 
-  if (resource.encoding) {
-    options.encoding = resource.encoding
-
-    // Polars supports only utf-8 and utf-8-lossy encodings
-    if (options.encoding === "utf-8") {
-      options.encoding = "utf8"
-    }
-
-    if (options.encoding !== "utf8") {
-      throw new Error(`Encoding ${options.encoding} for CSV files is not supported`)
-    }
-  }
-
-  options.skipRows = getRowsToSkip(dialect)
-  options.hasHeader = dialect?.header !== false
-  options.eolChar = dialect?.lineTerminator ?? "\n"
-  options.sep = dialect?.delimiter ?? ","
-
-  // TODO: try convincing nodejs-polars to support escapeChar
-  // https://github.com/pola-rs/polars/issues/3074
-  //options.escapeChar = dialect?.escapeChar
-
-  options.quoteChar = dialect?.quoteChar ?? '"'
-  options.nullValues = dialect?.nullSequence
-
-  // TODO: try convincing nodejs-polars to support doubleQuote
-  //options.doubleQuote = dialect?.doubleQuote ?? true
-
-  // TODO: remove ts-ignore when issues is fixed
-  // https://github.com/pola-rs/nodejs-polars/issues/334
-  // @ts-ignore
-  options.commentPrefix = dialect?.commentChar
+  options.skipRows = headerRows[0] ? headerRows[0] - 1 : 0
+  options.hasHeader = headerRows.length > 0
+  options.eolChar = format?.lineTerminator ?? "\r\n"
+  options.sep = format?.type === "csv" ? (format?.delimiter ?? ",") : "\t"
+  options.quoteChar = format?.type === "csv" ? format?.quoteChar ?? '"' : undefined
+  options.nullValues = format?.nullSequence
+  options.commentPrefix = format?.commentChar
 
   return options
-}
-
-function getRowsToSkip(dialect?: Dialect) {
-  const headerRows = getHeaderRows(dialect)
-  return headerRows[0] ? headerRows[0] - 1 : 0
-}
-
-function getHeaderRows(dialect?: Dialect) {
-  return dialect?.header !== false ? (dialect?.headerRows ?? [1]) : []
 }

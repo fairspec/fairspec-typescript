@@ -9,9 +9,9 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 // polars-rust might be able to provide a faster native implementation
 
 export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
-  const { path, overwrite, format } = options
+  const { path, overwrite } = options
 
-  const xlsxFormat = format?.type === "xlsx" ? format : undefined
+  const format = options.format?.type === "xlsx" ? options.format : undefined
 
   const tableSchema =
     options.tableSchema ??
@@ -25,7 +25,7 @@ export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   })
 
   const frame = await table.collect()
-  const sheetName = xlsxFormat?.sheetName ?? "Sheet1"
+  const sheetName = format?.sheetName ?? "Sheet1"
 
   const sheet = utils.json_to_sheet(frame.toRecords())
   const book = utils.book_new()

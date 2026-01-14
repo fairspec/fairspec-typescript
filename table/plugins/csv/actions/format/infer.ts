@@ -14,7 +14,7 @@ export async function inferCsvFormat(
 ) {
   const { sampleBytes = 10_000 } = options ?? {}
 
-  const csvFormat: CsvFormat = {
+  const format: CsvFormat = {
     type: "csv",
   }
 
@@ -28,11 +28,11 @@ export async function inferCsvFormat(
     const result = sniffSample(sample, DELIMITERS)
 
     if (result?.delimiter) {
-      csvFormat.delimiter = result.delimiter
+      format.delimiter = result.delimiter
     }
 
     if (result?.quoteChar) {
-      csvFormat.quoteChar = result.quoteChar
+      format.quoteChar = result.quoteChar
     }
 
     //if (result.lineTerminator) {
@@ -45,7 +45,7 @@ export async function inferCsvFormat(
     //}
   }
 
-  return csvFormat
+  return format
 }
 
 // Sniffer can fail for some reasons

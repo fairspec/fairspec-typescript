@@ -6,15 +6,16 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
 import { encodeJsonBuffer } from "../../actions/buffer/encode.ts"
 
-export async function saveJsonTable(
-  table: Table,
-  options: SaveTableOptions & {
-    format?: "json" | "jsonl" | "ndjson"
-    dialect?: any
-  },
-) {
-  const { path, dialect, overwrite, format } = options
-  const isLines = format === "jsonl" || format === "ndjson"
+export async function saveJsonTable(table: Table, options: SaveTableOptions) {
+  const { path, overwrite } = options
+
+  const jsonFormat =
+    options.format?.type === "json" ? options.format : undefined
+  const jsonlFormat =
+    options.format?.type === "jsonl" ? options.format : undefined
+  const format = jsonFormat ?? jsonlFormat
+
+  const isLines = format?.type === "jsonl"
 
   const tableSchema =
     options.tableSchema ??
@@ -31,8 +32,8 @@ export async function saveJsonTable(
   let buffer = frame.writeJSON({ format: isLines ? "lines" : "json" })
   let data = decodeJsonBuffer(buffer, { isLines })
 
-  if (dialect) {
-    data = processData(data, dialect)
+  if (format) {
+    data = processData(data, format)
   }
 
   buffer = encodeJsonBuffer(data, { isLines })

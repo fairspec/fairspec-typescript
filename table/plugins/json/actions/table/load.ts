@@ -13,12 +13,13 @@ export async function loadJsonTable(
   resource: Partial<Resource>,
   options?: LoadTableOptions,
 ) {
-  const jsonFormat = resource.format?.type === "json" || resource.format?.type === "jsonl"
-    ? resource.format
-    : undefined
 
-  const isLines = jsonFormat?.type === "jsonl"
-  const isDefault = Object.keys(jsonFormat ?? {})
+  const jsonFormat = resource.format?.type === "json" ? resource.format : undefined
+  const jsonlFormat = resource.format?.type === "jsonl" ? resource.format : undefined
+  const format = jsonFormat ?? jsonlFormat
+
+  const isLines = format?.type === "jsonl"
+  const isDefault = Object.keys(format ?? {})
     .filter(key => !['type', 'title', 'description'].includes(key)).length === 0
 
 
@@ -38,7 +39,7 @@ export async function loadJsonTable(
     const buffer = await loadFile(path)
     let data = decodeJsonBuffer(buffer, { isLines })
     if (!isDefault) {
-      data = processData(data, jsonFormat)
+      data = processData(data, format)
     }
 
     const table = pl.DataFrame(data).lazy()

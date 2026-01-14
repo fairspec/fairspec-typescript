@@ -19,7 +19,7 @@ describe("loadOdsTable", () => {
       const path = getTempFilePath()
       await writeTestData(path, [row1, row2, row3])
 
-      const table = await loadOdsTable({ path })
+      const table = await loadOdsTable({ data: path })
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
     })
 
@@ -29,7 +29,7 @@ describe("loadOdsTable", () => {
       await writeTestData(path1, [row1, row2, row3])
       await writeTestData(path2, [row1, row2, row3])
 
-      const table = await loadOdsTable({ path: [path1, path2] })
+      const table = await loadOdsTable({ data: [path1, path2] })
       expect((await table.collect()).toRecords()).toEqual([
         record1,
         record2,
@@ -40,7 +40,7 @@ describe("loadOdsTable", () => {
 
     it.skip("should load remote file", async () => {
       const table = await loadOdsTable({
-        path: "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/ods/table/fixtures/table.ods",
+        data: "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/ods/table/fixtures/table.ods",
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -51,7 +51,7 @@ describe("loadOdsTable", () => {
 
     it.skip("should load multipart remote file", async () => {
       const table = await loadOdsTable({
-        path: [
+        data: [
           "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/ods/table/fixtures/table.ods",
           "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/ods/table/fixtures/table.ods",
         ],
@@ -66,14 +66,14 @@ describe("loadOdsTable", () => {
     })
   })
 
-  describe("dialect variations", () => {
+  describe("format variations", () => {
     it("should support sheetNumber", async () => {
       const path = getTempFilePath()
       await writeTestData(path, [row1, row2, row3], { sheetNumber: 2 })
 
       const table = await loadOdsTable({
-        path,
-        dialect: { sheetNumber: 2 },
+        data: path,
+        format: { type: "ods", sheetNumber: 2 },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -84,8 +84,8 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row1, row2, row3], { sheetName: "Sheet2" })
 
       const table = await loadOdsTable({
-        path,
-        dialect: { sheetName: "Sheet2" },
+        data: path,
+        format: { type: "ods", sheetName: "Sheet2" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -96,13 +96,13 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row2, row3])
 
       const table = await loadOdsTable({
-        path,
-        dialect: { header: false },
+        data: path,
+        format: { type: "ods", headerRows: false },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
-        { field1: 1, field2: "english" },
-        { field1: 2, field2: "中文" },
+        { column1: 1, column2: "english" },
+        { column1: 2, column2: "中文" },
       ])
     })
 
@@ -111,8 +111,8 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row1, row2, row3])
 
       const table = await loadOdsTable({
-        path,
-        dialect: { headerRows: [2] },
+        data: path,
+        format: { type: "ods", headerRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -125,8 +125,8 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row1, row2, row3])
 
       const table = await loadOdsTable({
-        path,
-        dialect: { headerRows: [1, 2] },
+        data: path,
+        format: { type: "ods", headerRows: [1, 2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -139,8 +139,8 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row1, row2, row3])
 
       const table = await loadOdsTable({
-        path,
-        dialect: { headerRows: [1, 2], headerJoin: "-" },
+        data: path,
+        format: { type: "ods", headerRows: [1, 2], headerJoin: "-" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -153,8 +153,8 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row1, row2, row3])
 
       const table = await loadOdsTable({
-        path,
-        dialect: { commentRows: [2] },
+        data: path,
+        format: { type: "ods", commentRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record2])
@@ -165,8 +165,8 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row1, row2, row3, ["#comment"]])
 
       const table = await loadOdsTable({
-        path,
-        dialect: { commentChar: "#" },
+        data: path,
+        format: { type: "ods", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -177,8 +177,8 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row1, row2, row3, [3, "german", "bad"]])
 
       const table = await loadOdsTable({
-        path,
-        dialect: { commentChar: "#" },
+        data: path,
+        format: { type: "ods", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -193,8 +193,8 @@ describe("loadOdsTable", () => {
       await writeTestData(path, [row1, row2, row3, [3]])
 
       const table = await loadOdsTable({
-        path,
-        dialect: { commentChar: "#" },
+        data: path,
+        format: { type: "ods", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

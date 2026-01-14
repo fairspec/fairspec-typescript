@@ -8,6 +8,7 @@ export async function inferTableSchemaFromSqlite(resource: Partial<Resource>) {
     throw new Error("Database is not defined")
   }
 
+  // TODO: Use first table if not defined
   const format =
     resource.format?.type === "sqlite" ? resource.format : undefined
   if (!format?.tableName) {

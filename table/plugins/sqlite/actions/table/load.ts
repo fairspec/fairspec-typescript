@@ -19,6 +19,7 @@ export async function loadSqliteTable(
     throw new Error("Resource path is not defined")
   }
 
+  // TODO: Use first table if not defined
   const format = resource.format?.type === "sqlite" ? resource.format : undefined
   if (!format?.tableName) {
     throw new Error("Table name is not defined")

@@ -10,12 +10,12 @@ describe("loadSqliteTable", () => {
     ).rejects.toThrow("Resource path is not defined")
   })
 
-  it("throws error when table name is not defined in dialect", async () => {
+  it("throws error when table name is not defined", async () => {
     await expect(
       loadSqliteTable({
         data: "path",
         format: { type: "sqlite" },
       }),
-    ).rejects.toThrow("Table name is not defined in dialect")
+    ).rejects.toThrow("Table name is not defined")
   })
 })

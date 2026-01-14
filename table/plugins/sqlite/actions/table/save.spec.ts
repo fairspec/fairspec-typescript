@@ -45,6 +45,7 @@ describe("saveSqliteTable", () => {
 
     const source = pl
       .DataFrame([
+        pl.Series("boolean", [true], pl.Bool),
         pl.Series("date", [new Date(Date.UTC(2025, 0, 1))], pl.Date),
         pl.Series("datetime", [new Date(Date.UTC(2025, 0, 1))], pl.Datetime),
         pl.Series("integer", [1], pl.Int32),
@@ -76,12 +77,12 @@ describe("saveSqliteTable", () => {
     ])
   })
 
-  it("throws error when table name is not defined in dialect", async () => {
+  it("throws error when table name is not defined", async () => {
     await expect(
       saveSqliteTable(mockTable, {
         path: "test.db",
         format: { type: "sqlite" },
       }),
-    ).rejects.toThrow("Table name is not defined in dialect")
+    ).rejects.toThrow("Table name is not defined")
   })
 })

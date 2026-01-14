@@ -12,6 +12,7 @@ import type { SqliteSchema } from "../../models/schema.ts"
 export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
+  // TODO: Use first table if not defined
   const format = options.format?.type === "sqlite" ? options.format : undefined
   if (!format?.tableName) {
     throw new Error("Table name is not defined")

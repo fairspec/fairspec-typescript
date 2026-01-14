@@ -1,9 +1,10 @@
 ---
-title: Working with Database
+title: Working with Sqlite
 sidebar:
-  label: Database
+  label: Sqlite
   order: 5
 ---
+
 Database connectivity and operations with support for SQLite, PostgreSQL, and MySQL through Kysely query builder integration.
 
 ## Introduction

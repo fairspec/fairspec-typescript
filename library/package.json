@@ -26,7 +26,6 @@
   ],
   "dependencies": {
     "@fairspec/dataset": "workspace:*",
-    "@fairspec/database": "workspace:*",
     "@fairspec/extension": "workspace:*",
     "@fairspec/metadata": "workspace:*",
     "@fairspec/table": "workspace:*",

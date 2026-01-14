@@ -1,6 +1,5 @@
 dangerouslyAllowAllBuilds: true
 packages:
-  - database
   - dataset
   - extension
   - fairspec

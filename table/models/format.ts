@@ -9,11 +9,3 @@ export type FormatWithHeaderAndCommentRows = Extract<
     commentChar?: any
   }
 >
-
-export interface FormatOptions {
-  delimiter?: string
-}
-
-export interface InferFormatOptions extends FormatOptions {
-  sampleBytes?: number
-}

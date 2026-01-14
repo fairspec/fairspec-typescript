@@ -64,14 +64,14 @@ describe("loadJsonTable", () => {
     })
   })
 
-  describe("dialect variations", () => {
+  describe("format variations", () => {
     it("should handle property", async () => {
       const body = '{"key": [{"id":1,"name":"english"},{"id":2,"name":"中文"}]}'
       const path = await writeTempFile(body)
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { property: "key" },
+        format: { type: "json", jsonPointer: "key" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -86,7 +86,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { itemKeys: ["name"] },
+        format: { type: "json", columnNames: ["name"] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -101,7 +101,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { itemType: "array" },
+        format: { type: "json", rowType: "array" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -116,7 +116,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { itemType: "object" },
+        format: { type: "json", rowType: "object" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -133,7 +133,11 @@ describe("loadJsonTable (format=jsonl)", () => {
       const body = '{"id":1,"name":"english"}\n{"id":2,"name":"中文"}'
       const path = await writeTempFile(body)
 
-      const table = await loadJsonTable({ data: path, format: "jsonl" })
+      const table = await loadJsonTable({
+        data: path,
+        format: { type: "jsonl" },
+      })
+
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
         { id: 2, name: "中文" },
@@ -147,7 +151,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: [path1, path2],
-        format: "jsonl",
+        format: { type: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -161,7 +165,7 @@ describe("loadJsonTable (format=jsonl)", () => {
     it.skip("should load remote file", async () => {
       const table = await loadJsonTable({
         data: "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
-        format: "jsonl",
+        format: { type: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -176,7 +180,7 @@ describe("loadJsonTable (format=jsonl)", () => {
           "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
           "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
         ],
-        format: "jsonl",
+        format: { type: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -195,8 +199,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: "jsonl",
-        dialect: { itemKeys: ["name"] },
+        format: { type: "jsonl", columnNames: ["name"] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -211,8 +214,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: "jsonl",
-        dialect: { itemType: "array" },
+        format: { type: "jsonl", rowType: "array" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -227,8 +229,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: "jsonl",
-        dialect: { itemType: "object" },
+        format: { type: "jsonl", rowType: "object" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

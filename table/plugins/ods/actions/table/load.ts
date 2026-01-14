@@ -19,15 +19,15 @@ export async function loadOdsTable(
     throw new Error("Resource data is not defined")
   }
 
-  const odsFormat = resource.format?.type === "ods" ? resource.format : undefined
+  const format = resource.format?.type === "ods" ? resource.format : undefined
 
   const tables: Table[] = []
   for (const path of paths) {
     const buffer = await loadFile(path)
 
     const book = read(buffer, { type: "buffer" })
-    const sheetIndex = odsFormat?.sheetNumber ? odsFormat.sheetNumber - 1 : 0
-    const sheetName = odsFormat?.sheetName ?? book.SheetNames[sheetIndex]
+    const sheetIndex = format?.sheetNumber ? format.sheetNumber - 1 : 0
+    const sheetName = format?.sheetName ?? book.SheetNames[sheetIndex]
     const sheet = sheetName ? book.Sheets[sheetName] : undefined
 
     if (sheet) {
@@ -36,7 +36,7 @@ export async function loadOdsTable(
         raw: true,
       }) as DataRow[]
 
-      const records = getRecordsFromRows(rows, odsFormat)
+      const records = getRecordsFromRows(rows, format)
       const table = pl.DataFrame(records).lazy()
 
       tables.push(table)

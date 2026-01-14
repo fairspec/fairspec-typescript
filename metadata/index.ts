@@ -34,6 +34,7 @@ export {
   getFirstDataPath,
   getJsonData,
   getPathData,
+  getTableData,
   isRemoteResource,
 } from "./actions/resource/general.ts"
 export { inferResourceName } from "./actions/resource/infer.ts"

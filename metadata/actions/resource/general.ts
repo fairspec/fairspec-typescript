@@ -35,6 +35,13 @@ export function getJsonData(resource: Partial<Resource>) {
   return undefined
 }
 
+export function getTableData(resource: Partial<Resource>) {
+  const jsonData = getJsonData(resource)
+  if (!jsonData) return undefined
+
+  return Array.isArray(jsonData) ? jsonData : undefined
+}
+
 export function getDataPaths(resource: Partial<Resource>) {
   const pathData = getPathData(resource)
   if (!pathData) return []

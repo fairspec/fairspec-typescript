@@ -1,4 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
+import { getTableData } from "@fairspec/metadata"
 import type { LoadTableOptions, TablePlugin } from "../../plugin.ts"
 import { loadInlineTable } from "./actions/table/load.ts"
 
@@ -12,6 +13,6 @@ export class InlinePlugin implements TablePlugin {
 }
 
 function getIsInline(resource: Resource) {
-  const isInlineData = Array.isArray(resource.data)
-  return isInlineData
+  const tableData = getTableData(resource)
+  return !!tableData
 }

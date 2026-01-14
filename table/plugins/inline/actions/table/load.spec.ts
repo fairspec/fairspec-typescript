@@ -1,3 +1,4 @@
+import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
 import { loadInlineTable } from "./load.ts"
 
@@ -18,34 +19,13 @@ describe("loadInlineTable", () => {
     )
   })
 
-  it("should read arrays", async () => {
-    const resource = {
-      name: "test",
-      data: [
-        ["id", "name"],
-        [1, "english"],
-        [2, "中文"],
-      ],
-    }
-
-    // @ts-expect-error
-    const table = await loadInlineTable(resource)
-    const frame = await table.collect()
-
-    expect([
-      { id: 1, name: "english" },
-      { id: 2, name: "中文" },
-    ]).toEqual(frame.toRecords())
-  })
-
-  it("should read objects", async () => {
-    const resource = {
+  it("should read table data", async () => {
+    const resource: Resource = {
       name: "test",
       data: [
         { id: 1, name: "english" },
         { id: 2, name: "中文" },
       ],
-      tableSchema: undefined,
     }
 
     const table = await loadInlineTable(resource)
@@ -58,12 +38,10 @@ describe("loadInlineTable", () => {
   })
 
   it("should handle longer rows", async () => {
-    const resource = {
-      name: "test",
+    const resource: Resource = {
       data: [
-        ["id", "name"],
-        [1, "english"],
-        [2, "中文", "bad"],
+        { id: 1, name: "english" },
+        { id: 2, name: "中文", extra: "bad" },
       ],
       tableSchema: {
         properties: {
@@ -73,7 +51,6 @@ describe("loadInlineTable", () => {
       },
     }
 
-    // @ts-expect-error
     const table = await loadInlineTable(resource)
     const frame = await table.collect()
 
@@ -84,9 +61,9 @@ describe("loadInlineTable", () => {
   })
 
   it("should handle shorter rows", async () => {
-    const resource = {
+    const resource: Resource = {
       name: "test",
-      data: [["id", "name"], [1, "english"], [2]],
+      data: [{ id: 1, name: "english" }, { id: 2 }],
       tableSchema: {
         properties: {
           id: { type: "integer" },
@@ -95,7 +72,6 @@ describe("loadInlineTable", () => {
       },
     }
 
-    // @ts-expect-error
     const table = await loadInlineTable(resource)
     const frame = await table.collect()
 
@@ -106,8 +82,7 @@ describe("loadInlineTable", () => {
   })
 
   it("should handle various data types", async () => {
-    const resource = {
-      name: "test",
+    const resource: Resource = {
       data: [
         {
           string: "string",
@@ -118,7 +93,6 @@ describe("loadInlineTable", () => {
           datetime: new Date("2025-01-01"),
         },
       ],
-      tableSchema: undefined,
     }
 
     const table = await loadInlineTable(resource)
@@ -137,8 +111,7 @@ describe("loadInlineTable", () => {
   })
 
   it("should handle objects with shorter rows", async () => {
-    const resource = {
-      name: "test",
+    const resource: Resource = {
       data: [{ id: 1, name: "english" }, { id: 2, name: "中文" }, { id: 3 }],
     }
 
@@ -153,8 +126,7 @@ describe("loadInlineTable", () => {
   })
 
   it("should handle objects with longer rows", async () => {
-    const resource = {
-      name: "test",
+    const resource: Resource = {
       data: [
         { id: 1, name: "english" },
         { id: 2, name: "中文" },

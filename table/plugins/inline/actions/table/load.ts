@@ -1,8 +1,7 @@
 import type { Resource } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
-import { getRecordsFromRows } from "../../../../actions/data/format.ts"
+import { getTableData } from "@fairspec/metadata"
 import type { LoadTableOptions } from "../../../../plugin.ts"
-import type { FormatWithHeaderAndCommentRows } from "../../../../models/format.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import * as pl from "nodejs-polars"
@@ -11,16 +10,12 @@ export async function loadInlineTable(
   resource: Partial<Resource>,
   options?: LoadTableOptions,
 ) {
-  const data = resource.data
-  if (!Array.isArray(data)) {
+  const tableData = getTableData(resource)
+  if (!tableData) {
     throw new Error("Resource data is not defined or tabular")
   }
 
-  const isRows = data.every(row => Array.isArray(row))
-  const records = isRows
-    ? getRecordsFromRows(data, resource.format as FormatWithHeaderAndCommentRows)
-    : data
-  let table = pl.DataFrame(records).lazy()
+  let table = pl.DataFrame(tableData).lazy()
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)

@@ -18,7 +18,9 @@ describe("saveCsvTable", () => {
     await saveCsvTable(table, { path })
 
     const content = await readFile(path, "utf-8")
-    expect(content).toEqual("id,name\n1.0,Alice\n2.0,Bob\n3.0,Charlie\n")
+    expect(content).toEqual(
+      "id,name\r\n1.0,Alice\r\n2.0,Bob\r\n3.0,Charlie\r\n",
+    )
   })
 
   it("should save with custom delimiter", async () => {

@@ -1,32 +1,46 @@
-import type { Resource } from "@fairspec/metadata"
-import { inferFormat } from "@fairspec/metadata"
+import type { CsvFormat, Resource, TsvFormat } from "@fairspec/metadata"
+import { getFileExtension, getFirstDataPath } from "@fairspec/metadata"
+import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
-import type { Table } from "../../table/index.ts"
-import { loadCsvTable, saveCsvTable } from "./table/index.ts"
+import { loadCsvTable } from "./actions/table/load.ts"
+import { saveCsvTable } from "./actions/table/save.ts"
+
+// TODO: splig csv/tsv and similar plugins?
+// TODO: improve nameing loadCsvTable/saveCsvTable (tsv?)
 
 export class CsvPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const csvFormat = getCsvFormat(resource)
-    if (!csvFormat) return undefined
+    const format = getSupportedFormat(resource)
+    if (!format) return undefined
 
-    return await loadCsvTable({ ...resource, format: csvFormat }, options)
+    return await loadCsvTable({ ...resource, format }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path, format } = options
+    const { path } = options
 
-    const csvFormat = getCsvFormat({ path, format })
-    if (!csvFormat) return undefined
+    const format = getSupportedFormat({ data: path, ...options })
+    if (!format) return undefined
 
-    return await saveCsvTable(table, { ...options, format: csvFormat })
+    return await saveCsvTable(table, { ...options, format })
   }
 }
 
-function getCsvFormat(resource: Partial<Resource>) {
-  const format = inferFormat(resource)
-  return format === "csv" || format === "tsv" ? format : undefined
+function getSupportedFormat(resource: Partial<Resource>) {
+  if (resource.format?.type === "csv" || resource.format?.type === "tsv") {
+    return resource.format
+  }
+
+  const firstPath = getFirstDataPath(resource)
+  if (!firstPath) return undefined
+
+  const extension = getFileExtension(firstPath)
+  const format: CsvFormat | TsvFormat | undefined =
+    extension === "csv" || extension === "tsv" ? { type: extension } : undefined
+
+  return format
 }

@@ -1,11 +1,15 @@
 import type { Resource } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import * as loadModule from "./actions/table/load.ts"
+import * as saveModule from "./actions/table/save.ts"
 import { CsvPlugin } from "./plugin.ts"
-import * as tableModule from "./table/index.ts"
 
-vi.mock("./table/index.ts", () => ({
+vi.mock("./actions/table/load.ts", () => ({
   loadCsvTable: vi.fn(),
+}))
+
+vi.mock("./actions/table/save.ts", () => ({
   saveCsvTable: vi.fn(),
 }))
 
@@ -16,15 +20,15 @@ describe("CsvPlugin", () => {
 
   beforeEach(() => {
     plugin = new CsvPlugin()
-    mockLoadCsvTable = vi.mocked(tableModule.loadCsvTable)
-    mockSaveCsvTable = vi.mocked(tableModule.saveCsvTable)
+    mockLoadCsvTable = vi.mocked(loadModule.loadCsvTable)
+    mockSaveCsvTable = vi.mocked(saveModule.saveCsvTable)
     vi.clearAllMocks()
   })
 
   describe("loadTable", () => {
     it("should load table from csv file", async () => {
       const resource: Partial<Resource> = {
-        path: "test.csv",
+        data: "test.csv",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadCsvTable.mockResolvedValue(mockTable)
@@ -32,7 +36,7 @@ describe("CsvPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadCsvTable).toHaveBeenCalledWith(
-        { ...resource, format: "csv" },
+        { ...resource, format: { type: "csv" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -40,7 +44,7 @@ describe("CsvPlugin", () => {
 
     it("should load table from tsv file", async () => {
       const resource: Partial<Resource> = {
-        path: "test.tsv",
+        data: "test.tsv",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadCsvTable.mockResolvedValue(mockTable)
@@ -48,7 +52,7 @@ describe("CsvPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadCsvTable).toHaveBeenCalledWith(
-        { ...resource, format: "tsv" },
+        { ...resource, format: { type: "tsv" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -56,7 +60,7 @@ describe("CsvPlugin", () => {
 
     it("should return undefined for non-csv files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.json",
+        data: "test.json",
       }
 
       const result = await plugin.loadTable(resource)
@@ -67,8 +71,8 @@ describe("CsvPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const resource: Partial<Resource> = {
-        path: "test.txt",
-        format: "csv",
+        data: "test.txt",
+        format: { type: "csv" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadCsvTable.mockResolvedValue(mockTable)
@@ -76,7 +80,7 @@ describe("CsvPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadCsvTable).toHaveBeenCalledWith(
-        { ...resource, format: "csv" },
+        { ...resource, format: { type: "csv" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -84,7 +88,7 @@ describe("CsvPlugin", () => {
 
     it("should pass through load options", async () => {
       const resource: Partial<Resource> = {
-        path: "test.csv",
+        data: "test.csv",
       }
       const options = { denormalized: true }
       const mockTable = pl.DataFrame().lazy()
@@ -93,14 +97,14 @@ describe("CsvPlugin", () => {
       await plugin.loadTable(resource, options)
 
       expect(mockLoadCsvTable).toHaveBeenCalledWith(
-        { ...resource, format: "csv" },
+        { ...resource, format: { type: "csv" } },
         options,
       )
     })
 
     it("should handle paths with directories", async () => {
       const resource: Partial<Resource> = {
-        path: "/path/to/data.csv",
+        data: "/path/to/data.csv",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadCsvTable.mockResolvedValue(mockTable)
@@ -108,15 +112,15 @@ describe("CsvPlugin", () => {
       await plugin.loadTable(resource)
 
       expect(mockLoadCsvTable).toHaveBeenCalledWith(
-        { ...resource, format: "csv" },
+        { ...resource, format: { type: "csv" } },
         undefined,
       )
     })
 
     it("should handle explicit tsv format specification", async () => {
       const resource: Partial<Resource> = {
-        path: "test.txt",
-        format: "tsv",
+        data: "test.txt",
+        format: { type: "tsv" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadCsvTable.mockResolvedValue(mockTable)
@@ -124,7 +128,7 @@ describe("CsvPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadCsvTable).toHaveBeenCalledWith(
-        { ...resource, format: "tsv" },
+        { ...resource, format: { type: "tsv" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -141,7 +145,7 @@ describe("CsvPlugin", () => {
 
       expect(mockSaveCsvTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "csv",
+        format: { type: "csv" },
       })
       expect(result).toBe("output.csv")
     })
@@ -155,7 +159,7 @@ describe("CsvPlugin", () => {
 
       expect(mockSaveCsvTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "tsv",
+        format: { type: "tsv" },
       })
       expect(result).toBe("output.tsv")
     })
@@ -172,14 +176,14 @@ describe("CsvPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "csv" as const }
+      const options = { path: "output.txt", format: { type: "csv" as const } }
       mockSaveCsvTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)
 
       expect(mockSaveCsvTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "csv",
+        format: { type: "csv" },
       })
       expect(result).toBe("output.txt")
     })
@@ -193,7 +197,7 @@ describe("CsvPlugin", () => {
 
       expect(mockSaveCsvTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "csv",
+        format: { type: "csv" },
       })
     })
 
@@ -209,14 +213,14 @@ describe("CsvPlugin", () => {
 
     it("should handle explicit tsv format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "tsv" as const }
+      const options = { path: "output.txt", format: { type: "tsv" as const } }
       mockSaveCsvTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)
 
       expect(mockSaveCsvTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "tsv",
+        format: { type: "tsv" },
       })
       expect(result).toBe("output.txt")
     })

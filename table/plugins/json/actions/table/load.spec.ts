@@ -192,7 +192,7 @@ describe("loadJsonTable (format=jsonl)", () => {
     })
   })
 
-  describe("dialect variations", () => {
+  describe("format variations", () => {
     it("should handle item keys", async () => {
       const body = '{"id":1,"name":"english"}\n{"id":2,"name":"中文"}'
       const path = await writeTempFile(body)

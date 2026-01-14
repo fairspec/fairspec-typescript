@@ -41,12 +41,12 @@ export async function loadCsvTable(
   }
 
   // There is no way to specify column names in nodejs-polars by default
-  // so we have to rename `column_*` to `field*` is table doesn't have header
+  // so we have to rename `column_*` to `column*` is table doesn't have header
   let table = pl.concat(tables)
   if (!scanOptions.hasHeader) {
     table = table.rename(
       Object.fromEntries(
-        table.columns.map(name => [name, name.replace("column_", "field")]),
+        table.columns.map(name => [name, name.replace("column_", "column")]),
       ),
     )
   }

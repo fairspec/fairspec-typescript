@@ -239,7 +239,7 @@ describe("loadCsvTable", () => {
     ])
   })
 
-  it("should handle multiple dialect options together", async () => {
+  it("should handle multiple format options together", async () => {
     const path = await writeTempFile(
       "#comment\nid|'full name'|age\n1|'alice smith'|25\n2|'bob jones'|30",
     )

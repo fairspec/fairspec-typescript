@@ -19,36 +19,28 @@ export async function inferCsvFormat(
   }
 
   const pathData = getPathData(resource)
-  if (pathData) {
-    const stream = await loadFileStream(pathData, {
-      maxBytes: sampleBytes,
-    })
+  if (!pathData) {
+    return format
+  }
 
-    const sample = await text(stream)
-    const result = sniffSample(sample, DELIMITERS)
+  const stream = await loadFileStream(pathData, {
+    maxBytes: sampleBytes,
+  })
 
-    if (result?.delimiter) {
-      format.delimiter = result.delimiter
-    }
+  const sample = await text(stream)
+  const result = sniffSample(sample, DELIMITERS)
 
-    if (result?.quoteChar) {
-      format.quoteChar = result.quoteChar
-    }
+  if (result?.delimiter) {
+    format.delimiter = result.delimiter
+  }
 
-    //if (result.lineTerminator) {
-    //  dialect.lineTerminator = result.lineTerminator
-    //}
-
-    // TODO: it gives false positives
-    //if (!result.hasHeader) {
-    //  dialect.header = false
-    //}
+  if (result?.quoteChar) {
+    format.quoteChar = result.quoteChar
   }
 
   return format
 }
 
-// Sniffer can fail for some reasons
 function sniffSample(sample: string, delimiters: string[]) {
   try {
     const CsvSniffer = CsvSnifferFactory()

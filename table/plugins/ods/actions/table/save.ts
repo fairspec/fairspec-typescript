@@ -5,11 +5,10 @@ import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer
 import type { Table } from "../../../../models/table.ts"
 import type { SaveTableOptions } from "../../../../plugin.ts"
 
-export async function saveOdsTable(
-  table: Table,
-  options: SaveTableOptions & { dialect?: any },
-) {
-  const { path, overwrite, dialect } = options
+export async function saveOdsTable(table: Table, options: SaveTableOptions) {
+  const { path, overwrite, format } = options
+
+  const odsFormat = format?.type === "ods" ? format : undefined
 
   const tableSchema =
     options.tableSchema ??
@@ -23,7 +22,7 @@ export async function saveOdsTable(
   })
 
   const frame = await table.collect()
-  const sheetName = dialect?.sheetName ?? "Sheet1"
+  const sheetName = odsFormat?.sheetName ?? "Sheet1"
 
   const sheet = utils.json_to_sheet(frame.toRecords())
   const book = utils.book_new()

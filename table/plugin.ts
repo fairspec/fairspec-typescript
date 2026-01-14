@@ -16,7 +16,7 @@ export type SaveTableOptions = FormatOptions &
   TableSchemaOptions & {
     path: string
     format?: Format
-    schema?: TableSchema
+    tableSchema?: TableSchema
     overwrite?: boolean
   }
 

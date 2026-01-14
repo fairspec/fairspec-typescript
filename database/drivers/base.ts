@@ -1,8 +1,8 @@
-import type { Field, FieldType, Schema } from "@fairspec/metadata"
+import type { Column, Schema } from "@fairspec/metadata"
 import type { Dialect } from "kysely"
 import { Kysely } from "kysely"
 import { LRUCache } from "lru-cache"
-import type { DatabaseField, DatabaseType } from "../field/index.ts"
+import type { DatabaseColumn, DatabaseType } from "../column/index.ts"
 import type { DatabaseSchema } from "../schema/index.ts"
 
 // We cache database connections (only works in serverfull environments)
@@ -12,7 +12,7 @@ const databases = new LRUCache<string, Kysely<any>>({
 })
 
 export abstract class BaseAdapter {
-  abstract get nativeTypes(): FieldType[]
+  abstract get nativeTypes(): Column["type"][]
 
   async connectDatabase(path: string, options?: { create?: boolean }) {
     const cachedDatabase = databases.get(path)
@@ -33,34 +33,34 @@ export abstract class BaseAdapter {
   ): Promise<Dialect>
 
   normalizeSchema(databaseSchema: DatabaseSchema) {
-    const schema: Schema = { fields: [] }
+    const schema: Schema = { columns: [] }
 
-    for (const databaseField of databaseSchema.columns) {
-      schema.fields.push(this.normalizeField(databaseField))
+    for (const databaseColumn of databaseSchema.columns) {
+      schema.columns.push(this.normalizeColumn(databaseColumn))
     }
 
     return schema
   }
 
-  normalizeField(databaseField: DatabaseField) {
-    const field: Field = {
-      name: databaseField.name,
-      type: this.normalizeType(databaseField.dataType),
+  normalizeColumn(databaseColumn: DatabaseColumn) {
+    const column: Column = {
+      name: databaseColumn.name,
+      type: this.normalizeType(databaseColumn.dataType),
     }
 
-    if (!databaseField.isNullable) {
-      field.constraints ??= {}
-      field.constraints.required = true
+    if (!databaseColumn.isNullable) {
+      column.constraints ??= {}
+      column.constraints.required = true
     }
 
-    if (databaseField.comment) {
-      field.description = databaseField.comment
+    if (databaseColumn.comment) {
+      column.description = databaseColumn.comment
     }
 
-    return field
+    return column
   }
 
-  abstract normalizeType(databaseType: DatabaseType): Field["type"]
+  abstract normalizeType(databaseType: DatabaseType): Column["type"]
 
   denormalizeSchema(schema: Schema, tableName: string): DatabaseSchema {
     const databaseSchema: DatabaseSchema = {
@@ -69,8 +69,8 @@ export abstract class BaseAdapter {
       isView: false,
     }
 
-    for (const field of schema.fields) {
-      databaseSchema.columns.push(this.denormalizeField(field))
+    for (const column of schema.columns) {
+      databaseSchema.columns.push(this.denormalizeColumn(column))
     }
 
     if (schema.primaryKey) {
@@ -80,18 +80,18 @@ export abstract class BaseAdapter {
     return databaseSchema
   }
 
-  denormalizeField(field: Field): DatabaseField {
-    const databaseField: DatabaseField = {
-      name: field.name,
-      dataType: this.denormalizeType(field.type),
-      isNullable: !field.constraints?.required,
-      comment: field.description,
+  denormalizeColumn(column: Column): DatabaseColumn {
+    const databaseColumn: DatabaseColumn = {
+      name: column.name,
+      dataType: this.denormalizeType(column.type),
+      isNullable: !column.constraints?.required,
+      comment: column.description,
       isAutoIncrementing: false,
       hasDefaultValue: false,
     }
 
-    return databaseField
+    return databaseColumn
   }
 
-  abstract denormalizeType(fieldType: Field["type"]): DatabaseType
+  abstract denormalizeType(columnType: Column["type"]): DatabaseType
 }

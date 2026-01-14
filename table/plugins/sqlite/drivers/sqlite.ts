@@ -7,8 +7,10 @@ import {
   GenericSqliteDialect,
   parseBigInt,
 } from "kysely-generic-sqlite"
-import type { DatabaseColumn } from "../models/column.ts"
+import type { SqliteColumn } from "../models/column.ts"
 import { BaseDriver } from "./base.ts"
+
+// TODO: Split and move to actions
 
 export class SqliteDriver extends BaseDriver {
   nativeTypes = ["integer", "number", "string"] satisfies Column["type"][]
@@ -27,7 +29,7 @@ export class SqliteDriver extends BaseDriver {
   }
 
   convertColumnPropertyFromDatabase(
-    databaseType: DatabaseColumn["dataType"],
+    databaseType: SqliteColumn["dataType"],
   ): Column["property"] {
     switch (databaseType.toLowerCase()) {
       case "blob":
@@ -46,7 +48,7 @@ export class SqliteDriver extends BaseDriver {
 
   convertColumnTypeToDatabase(
     columnType: Column["type"],
-  ): DatabaseColumn["dataType"] {
+  ): SqliteColumn["dataType"] {
     switch (columnType) {
       case "boolean":
         return "integer"

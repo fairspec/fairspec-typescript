@@ -1,6 +1,8 @@
-import type { SaveTableOptions, Table } from "@fairspec/table"
-import { denormalizeTable, inferTableSchemaFromTable } from "@fairspec/table"
 import type { Kysely } from "kysely"
+import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
+import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
+import type { Table } from "../../../../models/table.ts"
+import type { SaveTableOptions } from "../../../../plugin.ts"
 import { SqliteDriver } from "../../drivers/sqlite.ts"
 import type { SqliteSchema } from "../../models/schema.ts"
 

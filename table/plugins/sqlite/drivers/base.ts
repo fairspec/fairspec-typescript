@@ -6,8 +6,10 @@ import {
 } from "@fairspec/metadata"
 import type { Dialect } from "kysely"
 import { Kysely } from "kysely"
-import type { DatabaseColumn } from "../models/column.ts"
-import type { DatabaseSchema } from "../models/schema.ts"
+import type { SqliteColumn } from "../models/column.ts"
+import type { SqliteSchema } from "../models/schema.ts"
+
+// TODO: Split and move to actions
 
 export abstract class BaseDriver {
   abstract get nativeTypes(): Column["type"][]
@@ -23,7 +25,7 @@ export abstract class BaseDriver {
     options?: { create?: boolean },
   ): Promise<Dialect>
 
-  convertTableSchemaFromDatabase(databaseSchema: DatabaseSchema) {
+  convertTableSchemaFromDatabase(databaseSchema: SqliteSchema) {
     const columns: Column[] = []
     const required: string[] = []
 
@@ -43,7 +45,7 @@ export abstract class BaseDriver {
     }
   }
 
-  convertColumnFromDatabase(databaseColumn: DatabaseColumn) {
+  convertColumnFromDatabase(databaseColumn: SqliteColumn) {
     const property = this.convertColumnPropertyFromDatabase(
       databaseColumn.dataType,
     )
@@ -59,14 +61,14 @@ export abstract class BaseDriver {
   }
 
   abstract convertColumnPropertyFromDatabase(
-    databaseType: DatabaseColumn["dataType"],
+    databaseType: SqliteColumn["dataType"],
   ): Column["property"]
 
   convertTableSchemaToDatabase(
     tableSchema: TableSchema,
     tableName: string,
-  ): DatabaseSchema {
-    const databaseSchema: DatabaseSchema = {
+  ): SqliteSchema {
+    const databaseSchema: SqliteSchema = {
       name: tableName,
       columns: [],
       isView: false,
@@ -87,8 +89,8 @@ export abstract class BaseDriver {
     return databaseSchema
   }
 
-  convertColumnToDatabase(column: Column, isNullable = true): DatabaseColumn {
-    const databaseColumn: DatabaseColumn = {
+  convertColumnToDatabase(column: Column, isNullable = true): SqliteColumn {
+    const databaseColumn: SqliteColumn = {
       name: column.name,
       dataType: this.convertColumnTypeToDatabase(column.type),
       isNullable,
@@ -102,5 +104,5 @@ export abstract class BaseDriver {
 
   abstract convertColumnTypeToDatabase(
     columnType: Column["type"],
-  ): DatabaseColumn["dataType"]
+  ): SqliteColumn["dataType"]
 }

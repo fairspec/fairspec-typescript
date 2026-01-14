@@ -1,5 +1,5 @@
 import type { TableMetadata } from "kysely"
 
-export interface DatabaseSchema extends TableMetadata {
+export interface SqliteSchema extends TableMetadata {
   primaryKey?: string[]
 }

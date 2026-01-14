@@ -1,32 +1,21 @@
 import { describe, expect, it } from "vitest"
-import { loadDatabaseTable } from "./load.ts"
+import { loadSqliteTable } from "./load.ts"
 
-describe("loadDatabaseTable", () => {
+describe("loadSqliteTable", () => {
   it("throws error when resource path is not defined", async () => {
     await expect(
-      loadDatabaseTable({
-        format: "sqlite",
-        dialect: { table: "fairspec" },
+      loadSqliteTable({
+        format: { type: "sqlite", tableName: "fairspec" },
       }),
     ).rejects.toThrow("Resource path is not defined")
   })
 
   it("throws error when table name is not defined in dialect", async () => {
     await expect(
-      loadDatabaseTable({
-        path: "path",
-        format: "sqlite",
+      loadSqliteTable({
+        data: "path",
+        format: { type: "sqlite" },
       }),
     ).rejects.toThrow("Table name is not defined in dialect")
-  })
-
-  it("throws error when format is not supported", async () => {
-    await expect(
-      loadDatabaseTable({
-        path: "path",
-        format: "unsupported" as any,
-        dialect: { table: "fairspec" },
-      }),
-    ).rejects.toThrow('Unsupported database format: "unsupported"')
   })
 })

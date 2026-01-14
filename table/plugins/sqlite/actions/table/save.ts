@@ -2,15 +2,12 @@ import type { SaveTableOptions, Table } from "@fairspec/table"
 import { denormalizeTable, inferTableSchemaFromTable } from "@fairspec/table"
 import type { Kysely } from "kysely"
 import { SqliteDriver } from "../../drivers/sqlite.ts"
-import type { DatabaseSchema } from "../../models/schema.ts"
+import type { SqliteSchema } from "../../models/schema.ts"
 
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation
 
-export async function saveDatabaseTable(
-  table: Table,
-  options: SaveTableOptions,
-) {
+export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
   const format = options.format?.type === "sqlite" ? options.format : undefined
@@ -31,12 +28,12 @@ export async function saveDatabaseTable(
   })
 
   const database = await driver.connectDatabase(path, { create: true })
-  const databaseSchema = driver.convertTableSchemaToDatabase(
+  const sqliteSchema = driver.convertTableSchemaToDatabase(
     tableSchema,
     format.tableName,
   )
 
-  await defineTable(database, databaseSchema, { overwrite })
+  await defineTable(database, sqliteSchema, { overwrite })
   await populateTable(database, format.tableName, table)
 
   return path
@@ -44,27 +41,27 @@ export async function saveDatabaseTable(
 
 async function defineTable(
   database: Kysely<any>,
-  databaseSchema: DatabaseSchema,
+  sqliteSchema: SqliteSchema,
   options: {
     overwrite?: boolean
   },
 ) {
   if (options.overwrite) {
-    await database.schema.dropTable(databaseSchema.name).ifExists().execute()
+    await database.schema.dropTable(sqliteSchema.name).ifExists().execute()
   }
 
-  let query = database.schema.createTable(databaseSchema.name)
+  let query = database.schema.createTable(sqliteSchema.name)
 
-  for (const field of databaseSchema.columns) {
+  for (const field of sqliteSchema.columns) {
     // @ts-expect-error
     query = query.addColumn(field.name, field.dataType)
   }
 
-  if (databaseSchema.primaryKey) {
+  if (sqliteSchema.primaryKey) {
     query = query.addPrimaryKeyConstraint(
-      `${databaseSchema.name}_pkey`,
+      `${sqliteSchema.name}_pkey`,
       // @ts-expect-error
-      databaseSchema.primaryKey,
+      sqliteSchema.primaryKey,
     )
   }
 

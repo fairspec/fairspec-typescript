@@ -1,3 +1,3 @@
 import type { ColumnMetadata } from "kysely"
 
-export interface DatabaseColumn extends ColumnMetadata {}
+export interface SqliteColumn extends ColumnMetadata {}

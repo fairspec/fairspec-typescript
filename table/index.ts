@@ -4,7 +4,6 @@ export { normalizeTable } from "./actions/table/normalize.ts"
 export { queryTable } from "./actions/table/query.ts"
 export { inferTableSchemaFromTable } from "./actions/tableSchema/infer.ts"
 
-export type { FormatOptions, InferFormatOptions } from "./models/format.ts"
 export type { Frame } from "./models/frame.ts"
 export type {
   InferTableSchemaOptions,

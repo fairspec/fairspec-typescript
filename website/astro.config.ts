@@ -10,7 +10,6 @@ import starlightTypeDoc from "starlight-typedoc"
 const PACKAGES = {
   fairspec: "../fairspec",
   "@fairspec/library": "../library",
-  "@fairspec/database": "../database",
   "@fairspec/dataset": "../dataset",
   "@fairspec/document": "../document",
   "@fairspec/metadata": "../metadata",

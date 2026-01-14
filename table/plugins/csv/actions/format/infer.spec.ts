@@ -1,22 +1,24 @@
 import { writeTempFile } from "@fairspec/dataset"
 import { describe, expect, it } from "vitest"
-import { inferCsvDialect } from "./infer.ts"
+import { inferCsvFormat } from "./infer.ts"
 
-describe("inferCsvDialect", () => {
+describe("inferCsvFormat", () => {
   it("should infer a simple CSV file", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
-    const dialect = await inferCsvDialect({ path })
+    const dialect = await inferCsvFormat({ data: path })
 
     expect(dialect).toEqual({
+      type: "csv",
       delimiter: ",",
     })
   })
 
   it("should infer quoteChar", async () => {
     const path = await writeTempFile('id,name\n1,"John Doe"\n2,"Jane Smith"')
-    const dialect = await inferCsvDialect({ path })
+    const dialect = await inferCsvFormat({ data: path })
 
     expect(dialect).toEqual({
+      type: "csv",
       delimiter: ",",
       quoteChar: '"',
     })
@@ -24,9 +26,10 @@ describe("inferCsvDialect", () => {
 
   it("should infer quoteChar with single quotes", async () => {
     const path = await writeTempFile("id,name\n1,'John Doe'\n2,'Jane Smith'")
-    const dialect = await inferCsvDialect({ path })
+    const dialect = await inferCsvFormat({ data: path })
 
     expect(dialect).toEqual({
+      type: "csv",
       delimiter: ",",
       quoteChar: "'",
     })
@@ -35,9 +38,10 @@ describe("inferCsvDialect", () => {
   // TODO: it gives false positives
   it.skip("should infer header false when no header present", async () => {
     const path = await writeTempFile("1,english\n2,中文\n3,español")
-    const dialect = await inferCsvDialect({ path })
+    const dialect = await inferCsvFormat({ data: path })
 
     expect(dialect).toEqual({
+      type: "csv",
       delimiter: ",",
       header: false,
     })
@@ -45,9 +49,10 @@ describe("inferCsvDialect", () => {
 
   it("should not set header when header is present", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
-    const dialect = await inferCsvDialect({ path })
+    const dialect = await inferCsvFormat({ data: path })
 
     expect(dialect).toEqual({
+      type: "csv",
       delimiter: ",",
     })
   })
@@ -58,8 +63,9 @@ describe("inferCsvDialect", () => {
       'name,description\n"Product A","A great product with, commas"\n"Product B","Another product"',
     )
 
-    const dialect = await inferCsvDialect({ path })
+    const dialect = await inferCsvFormat({ data: path })
     expect(dialect).toEqual({
+      type: "csv",
       delimiter: ",",
       quoteChar: '"',
     })

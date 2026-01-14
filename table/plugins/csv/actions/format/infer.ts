@@ -1,36 +1,38 @@
 import { text } from "node:stream/consumers"
 import { loadFileStream } from "@fairspec/dataset"
-import type { Dialect, Resource } from "@fairspec/metadata"
+import type { CsvFormat, Resource } from "@fairspec/metadata"
+import { getPathData } from "@fairspec/metadata"
 import { default as CsvSnifferFactory } from "csv-sniffer"
 
-const CSV_DELIMITERS = [",", ";", ":", "|", "\t", "^", "*", "&"]
-const TSV_DELIMITERS = ["\t"]
+const DELIMITERS = [",", ";", ":", "|", "\t", "^", "*", "&"]
 
-export async function inferCsvDialect(
+export async function inferCsvFormat(
   resource: Partial<Resource>,
   options?: {
     sampleBytes?: number
   },
 ) {
   const { sampleBytes = 10_000 } = options ?? {}
-  const isTabs = resource.format === "tsv"
 
-  const dialect: Dialect = {}
+  const csvFormat: CsvFormat = {
+    type: "csv",
+  }
 
-  if (resource.path) {
-    const stream = await loadFileStream(resource.path, {
+  const pathData = getPathData(resource)
+  if (pathData) {
+    const stream = await loadFileStream(pathData, {
       maxBytes: sampleBytes,
     })
 
     const sample = await text(stream)
-    const result = sniffSample(sample, isTabs ? TSV_DELIMITERS : CSV_DELIMITERS)
+    const result = sniffSample(sample, DELIMITERS)
 
     if (result?.delimiter) {
-      dialect.delimiter = result.delimiter
+      csvFormat.delimiter = result.delimiter
     }
 
     if (result?.quoteChar) {
-      dialect.quoteChar = result.quoteChar
+      csvFormat.quoteChar = result.quoteChar
     }
 
     //if (result.lineTerminator) {
@@ -43,7 +45,7 @@ export async function inferCsvDialect(
     //}
   }
 
-  return dialect
+  return csvFormat
 }
 
 // Sniffer can fail for some reasons

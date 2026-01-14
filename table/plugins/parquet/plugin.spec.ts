@@ -1,9 +1,9 @@
 import type { Resource } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { ParquetPlugin } from "./plugin.ts"
 import * as loadModule from "./actions/table/load.ts"
 import * as saveModule from "./actions/table/save.ts"
+import { ParquetPlugin } from "./plugin.ts"
 
 vi.mock("./actions/table/load.ts", () => ({
   loadParquetTable: vi.fn(),
@@ -136,7 +136,10 @@ describe("ParquetPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "parquet" as const }
+      const options = {
+        path: "output.txt",
+        format: { type: "parquet" } as const,
+      }
       mockSaveParquetTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

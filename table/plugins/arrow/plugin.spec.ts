@@ -149,7 +149,7 @@ describe("ArrowPlugin", () => {
 
     it("should handle explicit arrow format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "arrow" as const }
+      const options = { path: "output.txt", format: { type: "arrow" } as const }
       mockSaveArrowTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

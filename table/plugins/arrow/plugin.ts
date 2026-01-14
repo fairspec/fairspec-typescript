@@ -20,8 +20,7 @@ export class ArrowPlugin implements TablePlugin {
   async saveTable(table: Table, options: SaveTableOptions) {
     const { path, format } = options
 
-    const formatObject = format ? { type: format } : undefined
-    const isArrow = getIsArrow({ data: path, format: formatObject })
+    const isArrow = getIsArrow({ data: path, format })
     if (!isArrow) return undefined
 
     return await saveArrowTable(table, options)

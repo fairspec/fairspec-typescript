@@ -189,7 +189,7 @@ describe("JsonPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "json" as const }
+      const options = { path: "output.txt", format: { type: "json" } as const }
       mockSaveJsonTable.mockResolvedValue({ path: "output.txt" })
 
       const result = await plugin.saveTable(table, options)

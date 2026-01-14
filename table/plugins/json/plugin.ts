@@ -1,5 +1,10 @@
 import type { Resource } from "@fairspec/metadata"
-import { getDataPaths, getFileExtension } from "@fairspec/metadata"
+import {
+  getFileExtension,
+  getFirstDataPath,
+  type JsonFormat,
+  type JsonlFormat,
+} from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -11,33 +16,35 @@ import { saveJsonTable } from "./actions/table/save.ts"
 
 export class JsonPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const jsonFormat = getJsonFormat(resource)
-    if (!jsonFormat) return undefined
+    const format = getSupportedFormat(resource)
+    if (!format) return undefined
 
-    return await loadJsonTable({ ...resource, format: jsonFormat }, options)
+    return await loadJsonTable({ ...resource, format }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path, format } = options
+    const { path } = options
 
-    const formatObject = format ? { type: format } : undefined
-    const jsonFormat = getJsonFormat({ data: path, format: formatObject })
-    if (!jsonFormat) return undefined
+    const format = getSupportedFormat({ data: path, ...options })
+    if (!format) return undefined
 
-    return await saveJsonTable(table, { ...options, format: jsonFormat })
+    return await saveJsonTable(table, { ...options, format })
   }
 }
 
-function getJsonFormat(resource: Partial<Resource>) {
-  if (resource.format?.type === "json") return "json"
-  if (resource.format?.type === "jsonl") return "jsonl"
+function getSupportedFormat(resource: Partial<Resource>) {
+  if (resource.format?.type === "csv" || resource.format?.type === "tsv") {
+    return resource.format
+  }
 
-  const paths = getDataPaths(resource)
-  const firstPath = paths[0]
+  const firstPath = getFirstDataPath(resource)
   if (!firstPath) return undefined
 
   const extension = getFileExtension(firstPath)
-  if (extension === "json") return "json"
-  if (extension === "jsonl" || extension === "ndjson") return "jsonl"
-  return undefined
+  const format: JsonFormat | JsonlFormat | undefined =
+    extension === "json" || extension === "jsonl"
+      ? { type: extension }
+      : undefined
+
+  return format
 }

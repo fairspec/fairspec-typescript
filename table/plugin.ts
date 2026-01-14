@@ -42,4 +42,4 @@ export interface TablePlugin extends DatasetPlugin {
     resource: Partial<Resource>,
     options?: InferTableSchemaOptions,
   ): Promise<TableSchema | undefined>
-
+}

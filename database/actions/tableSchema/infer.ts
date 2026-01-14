@@ -1,32 +1,29 @@
 import type { Resource } from "@fairspec/metadata"
-import { resolveDialect } from "@fairspec/metadata"
-import { createAdapter } from "../adapters/create.ts"
+import { getFileProtocol, getFirstDataPath } from "@fairspec/metadata"
+import { createDriver } from "../../drivers/create.ts"
 
-export async function inferDatabaseSchema(
-  resource: Partial<Resource> & { format: "postgresql" | "mysql" | "sqlite" },
-) {
-  const adapter = createAdapter(resource.format)
-  if (!adapter) {
-    throw new Error("Supported database format is not defined")
+export async function inferDatabaseSchema(resource: Partial<Resource>) {
+  const firstPath = getFirstDataPath(resource)
+  if (!firstPath) {
+    throw new Error("Database is not defined")
   }
 
-  const dialect = await resolveDialect(resource.dialect)
-  if (!dialect?.table) {
-    throw new Error("Table name is not defined in dialect")
+  const format =
+    resource.format?.type === "sqlite" ? resource.format : undefined
+  if (!format?.tableName) {
+    throw new Error("Table name is not defined")
   }
 
-  const path = typeof resource.path === "string" ? resource.path : undefined
-  if (!path) {
-    throw new Error("Resource path is not defined")
-  }
+  const protocol = getFileProtocol(firstPath)
+  const driver = createDriver(protocol)
 
-  const database = await adapter.connectDatabase(path)
+  const database = await driver.connectDatabase(firstPath)
   const databaseSchemas = await database.introspection.getTables()
 
-  const databaseSchema = databaseSchemas.find(s => s.name === dialect.table)
+  const databaseSchema = databaseSchemas.find(s => s.name === format.tableName)
   if (!databaseSchema) {
-    throw new Error(`Table is not found in database: ${dialect.table}`)
+    throw new Error(`Table is not found in the database: ${format.tableName}`)
   }
 
-  return adapter.normalizeSchema(databaseSchema)
+  return driver.convertTableSchemaFromDatabase(databaseSchema)
 }

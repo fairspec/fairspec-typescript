@@ -1,15 +1,17 @@
+import { DatabaseSync } from "node:sqlite"
 import { isLocalPathExist } from "@fairspec/dataset"
-import type { FieldType } from "@fairspec/metadata"
-import type { DatabaseType } from "../field/index.ts"
-import { BaseAdapter } from "./base.ts"
+import type { Column } from "@fairspec/metadata"
+import type { IGenericSqlite } from "kysely-generic-sqlite"
+import {
+  buildQueryFn,
+  GenericSqliteDialect,
+  parseBigInt,
+} from "kysely-generic-sqlite"
+import type { DatabaseColumn } from "../models/column.ts"
+import { BaseDriver } from "./base.ts"
 
-// TODO: Currently, the solution is not optimal / hacky
-// We need to rebase on proper sqlite dialect when it will be available
-// - https://github.com/kysely-org/kysely/issues/1292
-// - https://github.com/oven-sh/bun/issues/20412
-
-export class SqliteAdapter extends BaseAdapter {
-  nativeTypes = ["integer", "number", "string", "year"] satisfies FieldType[]
+export class SqliteDriver extends BaseDriver {
+  nativeTypes = ["integer", "number", "string"] satisfies Column["type"][]
 
   async createDialect(path: string, options?: { create?: boolean }) {
     path = path.replace(/^sqlite:\/\//, "")
@@ -21,34 +23,31 @@ export class SqliteAdapter extends BaseAdapter {
       }
     }
 
-    // @ts-expect-error
-    if (typeof Bun !== "undefined") {
-      const { createBunSqliteDialect } = await import("./sqlite.bun.ts")
-      return await createBunSqliteDialect(path)
-    }
-
-    const { createNodeSqliteDialect } = await import("./sqlite.node.ts")
-    return await createNodeSqliteDialect(path)
+    return createSqliteDialect(path)
   }
 
-  normalizeType(databaseType: DatabaseType): FieldType {
+  convertColumnPropertyFromDatabase(
+    databaseType: DatabaseColumn["dataType"],
+  ): Column["property"] {
     switch (databaseType.toLowerCase()) {
       case "blob":
-        return "string"
+        return { type: "string" }
       case "text":
-        return "string"
+        return { type: "string" }
       case "integer":
-        return "integer"
+        return { type: "integer" }
       case "numeric":
       case "real":
-        return "number"
+        return { type: "number" }
       default:
-        return "string"
+        return {}
     }
   }
 
-  denormalizeType(fieldType: FieldType): DatabaseType {
-    switch (fieldType) {
+  convertColumnTypeToDatabase(
+    columnType: Column["type"],
+  ): DatabaseColumn["dataType"] {
+    switch (columnType) {
       case "boolean":
         return "integer"
       case "integer":
@@ -57,10 +56,60 @@ export class SqliteAdapter extends BaseAdapter {
         return "real"
       case "string":
         return "text"
-      case "year":
-        return "integer"
       default:
         return "text"
     }
+  }
+}
+
+// TODO: Currently, the solution is not optimal / hacky
+// We need to rebase on proper sqlite dialect when it will be available
+// - https://github.com/kysely-org/kysely/issues/1292
+// - https://github.com/oven-sh/bun/issues/20412
+
+export async function createSqliteDialect(path: string) {
+  return new GenericSqliteDialect(() =>
+    createSqliteExecutor(new DatabaseSync(path)),
+  )
+}
+
+function createSqliteExecutor(db: DatabaseSync): IGenericSqlite<DatabaseSync> {
+  const getStmt = (sql: string) => {
+    const stmt = db.prepare(sql)
+    // We change it from original to use plain numbers
+    //stmt.setReadBigInts(true)
+    return stmt
+  }
+
+  return {
+    db,
+    query: buildQueryFn({
+      all: (sql, parameters = []) =>
+        getStmt(sql)
+          .all(...parameters)
+          // We change it from original to make it work
+          // (by default it returns object with null prototype which breaks polars)
+          .map(row => ({ ...row })),
+
+      run: (sql, parameters = []) => {
+        const { changes, lastInsertRowid } = getStmt(sql).run(...parameters)
+        return {
+          insertId: parseBigInt(lastInsertRowid),
+          numAffectedRows: parseBigInt(changes),
+        }
+      },
+    }),
+    close: () => db.close(),
+    iterator: (isSelect, sql, parameters = []) => {
+      if (!isSelect) {
+        throw new Error("Only support select in stream()")
+      }
+      return (
+        getStmt(sql)
+          .iterate(...parameters) // We change it from original to make it work
+          // (by default it returns object with null prototype which breaks polars)
+          .map(row => ({ ...row })) as any
+      )
+    },
   }
 }

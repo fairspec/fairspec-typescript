@@ -1,20 +1,19 @@
-import type { FieldType } from "@fairspec/metadata"
+import type { Column } from "@fairspec/metadata"
 import { MysqlDialect } from "kysely"
 import { createPool } from "mysql2"
-import type { DatabaseType } from "../field/index.ts"
-import { BaseAdapter } from "./base.ts"
+import type { DatabaseColumn } from "../models/column.ts"
+import { BaseDriver } from "./base.ts"
 
 // TODO: Support more native types
 
-export class MysqlAdapter extends BaseAdapter {
+export class MysqlDriver extends BaseDriver {
   nativeTypes = [
     "boolean",
-    "datetime",
+    "date-time",
     "integer",
     "number",
     "string",
-    "year",
-  ] satisfies FieldType[]
+  ] satisfies Column["type"][]
 
   async createDialect(path: string) {
     return new MysqlDialect({
@@ -22,25 +21,27 @@ export class MysqlAdapter extends BaseAdapter {
     })
   }
 
-  normalizeType(databaseType: DatabaseType): FieldType {
+  convertColumnPropertyFromDatabase(
+    databaseType: DatabaseColumn["dataType"],
+  ): Column["property"] {
     switch (databaseType.toLowerCase()) {
+      case "bit":
+      case "bool":
+      case "boolean":
+        return { type: "boolean" }
       case "tinyint":
       case "smallint":
       case "mediumint":
       case "int":
       case "integer":
       case "bigint":
-        return "integer"
+        return { type: "integer" }
       case "decimal":
       case "numeric":
       case "float":
       case "double":
       case "real":
-        return "number"
-      case "bit":
-      case "bool":
-      case "boolean":
-        return "boolean"
+        return { type: "number" }
       case "char":
       case "varchar":
       case "tinytext":
@@ -49,18 +50,16 @@ export class MysqlAdapter extends BaseAdapter {
       case "longtext":
       case "enum":
       case "set":
-        return "string"
+        return { type: "string" }
       case "date":
-        return "date"
+        return { type: "string", format: "date" }
       case "time":
-        return "time"
+        return { type: "string", format: "time" }
       case "datetime":
       case "timestamp":
-        return "datetime"
-      case "year":
-        return "year"
+        return { type: "string", format: "date-time" }
       case "json":
-        return "object"
+        return { type: "object" }
       case "geometry":
       case "point":
       case "linestring":
@@ -69,17 +68,19 @@ export class MysqlAdapter extends BaseAdapter {
       case "multilinestring":
       case "multipolygon":
       case "geometrycollection":
-        return "geojson"
+        return { type: "object", format: "geojson" }
       default:
-        return "string"
+        return {}
     }
   }
 
-  denormalizeType(fieldType: FieldType): DatabaseType {
-    switch (fieldType) {
+  convertColumnTypeToDatabase(
+    columnType: Column["type"],
+  ): DatabaseColumn["dataType"] {
+    switch (columnType) {
       case "boolean":
         return "boolean"
-      case "datetime":
+      case "date-time":
         return "datetime"
       case "integer":
         return "integer"
@@ -87,8 +88,6 @@ export class MysqlAdapter extends BaseAdapter {
         return "double precision"
       case "string":
         return "text"
-      case "year":
-        return "integer"
       default:
         return "text"
     }

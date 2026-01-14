@@ -58,7 +58,7 @@ export abstract class BaseDriver {
   }
 
   convertColumnFromToDatabase(databaseColumn: DatabaseColumn) {
-    const property = this.convertColumnPropertyFromToDatabase(
+    const property = this.convertColumnPropertyFromDatabase(
       databaseColumn.dataType,
     )
 
@@ -72,7 +72,7 @@ export abstract class BaseDriver {
     return column
   }
 
-  abstract convertColumnPropertyFromToDatabase(
+  abstract convertColumnPropertyFromDatabase(
     databaseType: DatabaseColumn["dataType"],
   ): Column["property"]
 

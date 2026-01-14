@@ -1,18 +1,18 @@
-import type { SavePackageOptions } from "@fairspec/dataset"
-import type { Package } from "@fairspec/metadata"
+import type { SaveDatasetOptions } from "@fairspec/dataset"
+import type { Dataset } from "@fairspec/metadata"
 import { isRemoteResource, resolveTableSchema } from "@fairspec/metadata"
 import type { TablePlugin } from "@fairspec/table"
-import type { DatabaseFormat } from "../resource/index.ts"
-import { saveDatabaseTable } from "../table/index.ts"
+import { saveDatabaseTable } from "../../actions/table/save.ts"
+import type { DatabaseProtocol } from "../../models/protocol.ts"
 
-export async function savePackageToDatabase(
-  dataPackage: Package,
-  options: SavePackageOptions & {
-    format: DatabaseFormat
+export async function saveDatasetToDatabase(
+  dataset: Dataset,
+  options: SaveDatasetOptions & {
+    protocol: DatabaseProtocol
     plugins?: TablePlugin[]
   },
 ) {
-  for (const resource of dataPackage.resources) {
+  for (const resource of dataset.resources ?? []) {
     for (const plugin of options.plugins ?? []) {
       const isRemote = isRemoteResource(resource)
       if (isRemote && !options.withRemote) {
@@ -22,15 +22,13 @@ export async function savePackageToDatabase(
       const table = await plugin.loadTable?.(resource)
 
       if (table) {
-        const dialect = { table: resource.name }
-        const schema = await resolveTableSchema(resource.schema)
+        const tableSchema = await resolveTableSchema(resource.tableSchema)
 
         // TODO: support parallel saving?
         await saveDatabaseTable(table, {
           path: options.target,
-          format: options.format,
-          dialect,
-          schema,
+          format: { type: "sqlite", tableName: resource.name },
+          tableSchema,
         })
 
         break

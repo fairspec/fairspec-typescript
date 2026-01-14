@@ -1,25 +1,22 @@
-import type { Package } from "@fairspec/metadata"
-import { createAdapter } from "../adapters/create.ts"
-import type { DatabaseFormat } from "../resource/index.ts"
+import type { Dataset, Resource } from "@fairspec/metadata"
+import type { DatabaseProtocol } from "../../models/protocol.ts"
+import { createDriver } from "../../drivers/create.ts"
 
-export async function loadPackageFromDatabase(
+export async function loadDatasetFromDatabase(
   connectionString: string,
   options: {
-    format: DatabaseFormat
+    protocol: DatabaseProtocol
     includeTables?: string[]
     excludeTables?: string[]
   },
 ) {
   const { includeTables, excludeTables } = options
 
-  const adapter = createAdapter(options.format)
-  const database = await adapter.connectDatabase(connectionString)
+  const driver = createDriver(options.protocol)
+  const database = await driver.connectDatabase(connectionString)
   const databaseSchemas = await database.introspection.getTables()
 
-  const dataPackage: Package = {
-    resources: [],
-  }
-
+  const resources: Resource[] = []
   for (const databaseSchema of databaseSchemas) {
     const name = databaseSchema.name
 
@@ -31,17 +28,19 @@ export async function loadPackageFromDatabase(
       continue
     }
 
-    const schema = adapter.normalizeSchema(databaseSchema)
-    const dialect = { table: name }
+    const tableSchema = driver.convertTableSchemaFromDatabase(databaseSchema)
 
-    dataPackage.resources.push({
+    resources.push({
       name,
-      path: connectionString,
-      format: options.format,
-      dialect,
-      schema,
+      data: connectionString,
+      format: { type: 'sqlite', tableName: name },
+      tableSchema,
     })
   }
 
-  return dataPackage
+  const dataset: Dataset = {
+    resources,
+  }
+
+  return dataset
 }

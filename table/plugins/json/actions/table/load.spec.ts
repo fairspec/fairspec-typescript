@@ -11,7 +11,7 @@ describe("loadJsonTable", () => {
       const body = '[{"id":1,"name":"english"},{"id":2,"name":"中文"}]'
       const path = await writeTempFile(body)
 
-      const table = await loadJsonTable({ path })
+      const table = await loadJsonTable({ data: path })
 
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
@@ -25,7 +25,7 @@ describe("loadJsonTable", () => {
       const path2 = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path: [path1, path2],
+        data: [path1, path2],
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -38,7 +38,7 @@ describe("loadJsonTable", () => {
 
     it.skip("should load remote file", async () => {
       const table = await loadJsonTable({
-        path: "https://github.com/fairspect/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.json",
+        data: "https://github.com/fairspect/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.json",
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -49,7 +49,7 @@ describe("loadJsonTable", () => {
 
     it.skip("should load remote file (multipart)", async () => {
       const table = await loadJsonTable({
-        path: [
+        data: [
           "https://github.com/fairspect/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.json",
           "https://github.com/fairspect/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.json",
         ],
@@ -70,7 +70,7 @@ describe("loadJsonTable", () => {
       const path = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path,
+        data: path,
         dialect: { property: "key" },
       })
 
@@ -85,7 +85,7 @@ describe("loadJsonTable", () => {
       const path = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path,
+        data: path,
         dialect: { itemKeys: ["name"] },
       })
 
@@ -100,7 +100,7 @@ describe("loadJsonTable", () => {
       const path = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path,
+        data: path,
         dialect: { itemType: "array" },
       })
 
@@ -115,7 +115,7 @@ describe("loadJsonTable", () => {
       const path = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path,
+        data: path,
         dialect: { itemType: "object" },
       })
 
@@ -133,7 +133,7 @@ describe("loadJsonTable (format=jsonl)", () => {
       const body = '{"id":1,"name":"english"}\n{"id":2,"name":"中文"}'
       const path = await writeTempFile(body)
 
-      const table = await loadJsonTable({ path, format: "jsonl" })
+      const table = await loadJsonTable({ data: path, format: "jsonl" })
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
         { id: 2, name: "中文" },
@@ -146,7 +146,7 @@ describe("loadJsonTable (format=jsonl)", () => {
       const path2 = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path: [path1, path2],
+        data: [path1, path2],
         format: "jsonl",
       })
 
@@ -160,7 +160,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
     it.skip("should load remote file", async () => {
       const table = await loadJsonTable({
-        path: "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
+        data: "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
         format: "jsonl",
       })
 
@@ -172,7 +172,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
     it.skip("should load remote file (multipart)", async () => {
       const table = await loadJsonTable({
-        path: [
+        data: [
           "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
           "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
         ],
@@ -194,7 +194,7 @@ describe("loadJsonTable (format=jsonl)", () => {
       const path = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path,
+        data: path,
         format: "jsonl",
         dialect: { itemKeys: ["name"] },
       })
@@ -210,7 +210,7 @@ describe("loadJsonTable (format=jsonl)", () => {
       const path = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path,
+        data: path,
         format: "jsonl",
         dialect: { itemType: "array" },
       })
@@ -226,7 +226,7 @@ describe("loadJsonTable (format=jsonl)", () => {
       const path = await writeTempFile(body)
 
       const table = await loadJsonTable({
-        path,
+        data: path,
         format: "jsonl",
         dialect: { itemType: "object" },
       })

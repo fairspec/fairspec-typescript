@@ -1,26 +1,25 @@
-import type { Dialect, Resource } from "@fairspec/metadata"
-import { resolveDialect } from "@fairspec/metadata"
+import type { Resource } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
-import type { LoadTableOptions } from "../../../plugin.ts"
-import { inferSchemaFromTable } from "../../../schema/index.ts"
-import { normalizeTable } from "../../../table/index.ts"
-import type { Table } from "../../../table/index.ts"
+import type { LoadTableOptions } from "../../../../plugin.ts"
+import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
+import { normalizeTable } from "../../../../actions/table/normalize.ts"
+import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
-import { decodeJsonBuffer } from "../buffer/index.ts"
+import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
 
 export async function loadJsonTable(
-  resource: Partial<Resource> & { format?: "json" | "jsonl" | "ndjson" },
+  resource: Partial<Resource> & { format?: "json" | "jsonl" | "ndjson"; dialect?: any },
   options?: LoadTableOptions,
 ) {
   const isLines = resource.format === "jsonl" || resource.format === "ndjson"
 
-  const paths = await prefetchFiles(resource.path)
+  const paths = await prefetchFiles(resource)
   if (!paths.length) {
-    throw new Error("Resource path is not defined")
+    throw new Error("Resource data is not defined")
   }
 
-  const dialect = await resolveDialect(resource.dialect)
+  const dialect = resource.dialect
 
   const tables: Table[] = []
   for (const path of paths) {
@@ -43,15 +42,15 @@ export async function loadJsonTable(
   let table = pl.concat(tables)
 
   if (!options?.denormalized) {
-    let schema = await resolveTableSchema(resource.schema)
-    if (!schema) schema = await inferSchemaFromTable(table, options)
-    table = await normalizeTable(table, schema)
+    let tableSchema = await resolveTableSchema(resource.tableSchema)
+    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
+    table = await normalizeTable(table, tableSchema)
   }
 
   return table
 }
 
-function processData(data: any, dialect: Dialect) {
+function processData(data: any, dialect: any) {
   if (dialect.property) {
     data = data[dialect.property]
   }

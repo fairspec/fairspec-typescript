@@ -1,2 +1,3 @@
-export * from "./plugin.ts"
-export * from "./table/index.ts"
+export { loadJsonTable } from "./actions/table/load.ts"
+export { saveJsonTable } from "./actions/table/save.ts"
+export { JsonPlugin } from "./plugin.ts"

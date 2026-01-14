@@ -1,34 +1,32 @@
 import { saveFile } from "@fairspec/dataset"
-import type { Dialect } from "@fairspec/metadata"
-import type { SaveTableOptions } from "../../../plugin.ts"
-import { inferSchemaFromTable } from "../../../schema/index.ts"
-import type { Table } from "../../../table/index.ts"
-import { denormalizeTable } from "../../../table/index.ts"
-import { decodeJsonBuffer, encodeJsonBuffer } from "../buffer/index.ts"
-
-// TODO: rebase on sinkJSON when it is available
-// https://github.com/pola-rs/nodejs-polars/issues/353
+import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
+import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
+import type { Table } from "../../../../models/table.ts"
+import type { SaveTableOptions } from "../../../../plugin.ts"
+import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
+import { encodeJsonBuffer } from "../../actions/buffer/encode.ts"
 
 export async function saveJsonTable(
   table: Table,
-  options: SaveTableOptions & { format?: "json" | "jsonl" | "ndjson" },
+  options: SaveTableOptions & {
+    format?: "json" | "jsonl" | "ndjson"
+    dialect?: any
+  },
 ) {
   const { path, dialect, overwrite, format } = options
   const isLines = format === "jsonl" || format === "ndjson"
 
-  const schema =
-    options.schema ??
-    (await inferSchemaFromTable(table, {
+  const tableSchema =
+    options.tableSchema ??
+    (await inferTableSchemaFromTable(table, {
       ...options,
       keepStrings: true,
     }))
 
-  table = await denormalizeTable(table, schema, {
-    nativeTypes: ["boolean", "integer", "list", "number", "string", "year"],
+  table = await denormalizeTable(table, tableSchema, {
+    nativeTypes: ["boolean", "integer", "list", "number", "string"],
   })
 
-  // We use polars to serialize the data
-  // But encode it manually to support dialects/formatting
   const frame = await table.collect()
   let buffer = frame.writeJSON({ format: isLines ? "lines" : "json" })
   let data = decodeJsonBuffer(buffer, { isLines })
@@ -43,7 +41,7 @@ export async function saveJsonTable(
   return path
 }
 
-function processData(records: Record<string, any>[], dialect: Dialect) {
+function processData(records: Record<string, any>[], dialect: any) {
   let data: any = records
 
   if (dialect.itemKeys) {

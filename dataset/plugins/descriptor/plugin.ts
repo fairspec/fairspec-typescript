@@ -9,8 +9,8 @@ import type { DatasetPlugin } from "../../plugin.ts"
 
 export class DescriptorPlugin implements DatasetPlugin {
   async loadDataset(source: string) {
-    const isLocalJson = await getIsLocalJson(source)
-    if (!isLocalJson) return undefined
+    const isJson = getIsJson(source)
+    if (!isJson) return undefined
 
     const dataset = await loadDatasetDescriptor(source)
     return dataset
@@ -20,7 +20,7 @@ export class DescriptorPlugin implements DatasetPlugin {
     dataset: Dataset,
     options: { target: string; withRemote?: boolean },
   ) {
-    const isLocalJson = await getIsLocalJson(options.target)
+    const isLocalJson = getIsLocalJson(options.target)
     if (!isLocalJson) return undefined
 
     if (!options.target.endsWith("datapackage.json")) {
@@ -33,8 +33,13 @@ export class DescriptorPlugin implements DatasetPlugin {
   }
 }
 
-async function getIsLocalJson(path: string) {
+function getIsLocalJson(path: string) {
+  const isJson = getIsJson(path)
   const isRemote = isRemotePath(path)
+  return isJson && !isRemote
+}
+
+function getIsJson(path: string) {
   const extension = getFileExtension(path)
-  return !isRemote && extension === "json"
+  return extension === "json"
 }

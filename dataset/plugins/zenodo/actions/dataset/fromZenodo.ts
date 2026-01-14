@@ -4,7 +4,6 @@ import type { ZenodoRecord } from "../../models/record.ts"
 
 export function convertDatasetFromZenodo(zenodoRecord: ZenodoRecord): Dataset {
   const dataset: Dataset = {
-    $schema: "https://fairspec.org/profiles/latest/dataset.json",
     resources: [],
   }
 

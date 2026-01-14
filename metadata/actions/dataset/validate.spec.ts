@@ -7,7 +7,6 @@ useRecording()
 describe("validateDatasetMetadata", () => {
   it("returns valid result for valid dataset", async () => {
     const dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           data: "data.csv",
@@ -23,7 +22,6 @@ describe("validateDatasetMetadata", () => {
 
   it("returns validation errors for invalid dataset", async () => {
     const dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: "not-an-array",
     }
 
@@ -33,7 +31,7 @@ describe("validateDatasetMetadata", () => {
     expect(report.errors.length).toBeGreaterThan(0)
   })
 
-  it("returns validation error for missing schema", async () => {
+  it("dont return validation error for missing schema", async () => {
     const dataset = {
       resources: [
         {
@@ -43,14 +41,11 @@ describe("validateDatasetMetadata", () => {
     }
 
     const report = await validateDatasetMetadata(dataset)
-
-    expect(report.valid).toBe(false)
-    expect(report.errors.length).toBeGreaterThan(0)
+    expect(report.valid).toBe(true)
   })
 
   it("validates dataset with datacite metadata", async () => {
     const dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       creators: [
         {
           name: "John Doe",

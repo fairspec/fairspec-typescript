@@ -1,74 +1,64 @@
 import { z } from "zod"
-import { ArrayColumn } from "./array.ts"
-import { Base64Column } from "./base64.ts"
-import { BooleanColumn } from "./boolean.ts"
-import { DateColumn } from "./date.ts"
-import { DatetimeColumn } from "./datetime.ts"
-import { DurationColumn } from "./duration.ts"
-import { EmailColumn } from "./email.ts"
-import { GeojsonColumn } from "./geojson.ts"
-import { HexColumn } from "./hex.ts"
-import { IntegerColumn } from "./integer.ts"
-import { ListColumn } from "./list.ts"
-import { NumberColumn } from "./number.ts"
-import { ObjectColumn } from "./object.ts"
-import { StringColumn } from "./string.ts"
-import { TimeColumn } from "./time.ts"
-import { TopojsonColumn } from "./topojson.ts"
-import { UrlColumn } from "./url.ts"
-import { UuidColumn } from "./uuid.ts"
-import { WkbColumn } from "./wkb.ts"
-import { WktColumn } from "./wkt.ts"
-import { YearColumn } from "./year.ts"
-
-const StringColumnGroup = z.discriminatedUnion("format", [
-  ListColumn,
-  Base64Column,
-  HexColumn,
-  EmailColumn,
-  UuidColumn,
-  UrlColumn,
-  DatetimeColumn,
-  DateColumn,
-  TimeColumn,
-  DurationColumn,
-  WktColumn,
-  WkbColumn,
-  StringColumn,
-])
-
-const IntegerColumnGroup = z.discriminatedUnion("format", [
-  YearColumn,
-  IntegerColumn,
-])
-
-const ColumnTypeObject = z.discriminatedUnion("format", [
-  GeojsonColumn,
-  TopojsonColumn,
-  ObjectColumn,
-])
-
-const NumberColumnGroup = z.discriminatedUnion("format", [NumberColumn])
-
-const BooleanColumnGroup = z.discriminatedUnion("format", [BooleanColumn])
-
-const ArrayColumnGroup = z.discriminatedUnion("format", [ArrayColumn])
+import { ArrayColumn, ArrayColumnProperty } from "./array.ts"
+import { Base64Column, Base64ColumnProperty } from "./base64.ts"
+import { BooleanColumn, BooleanColumnProperty } from "./boolean.ts"
+import {
+  CategoricalColumn,
+  IntegerCategoricalColumnProperty,
+  StringCategoricalColumnProperty,
+} from "./categorical.ts"
+import { DateColumn, DateColumnProperty } from "./date.ts"
+import { DateTimeColumn, DateTimeColumnProperty } from "./dateTime.ts"
+import { DecimalColumn, DecimalColumnProperty } from "./decimal.ts"
+import { DurationColumn, DurationColumnProperty } from "./duration.ts"
+import { EmailColumn, EmailColumnProperty } from "./email.ts"
+import { GeojsonColumn, GeojsonColumnProperty } from "./geojson.ts"
+import { HexColumn, HexColumnProperty } from "./hex.ts"
+import { IntegerColumn, IntegerColumnProperty } from "./integer.ts"
+import { ListColumn, ListColumnProperty } from "./list.ts"
+import { NumberColumn, NumberColumnProperty } from "./number.ts"
+import { ObjectColumn, ObjectColumnProperty } from "./object.ts"
+import { StringColumn, StringColumnProperty } from "./string.ts"
+import { TimeColumn, TimeColumnProperty } from "./time.ts"
+import { TopojsonColumn, TopojsonColumnProperty } from "./topojson.ts"
+import { UnknownColumn, UnknownColumnProperty } from "./unknown.ts"
+import { UrlColumn, UrlColumnProperty } from "./url.ts"
+import { WkbColumn, WkbColumnProperty } from "./wkb.ts"
+import { WktColumn, WktColumnProperty } from "./wkt.ts"
 
 export const Column = z.discriminatedUnion("type", [
-  StringColumnGroup,
-  IntegerColumnGroup,
-  NumberColumnGroup,
-  BooleanColumnGroup,
-  ArrayColumnGroup,
-  ColumnTypeObject,
+  ArrayColumn,
+  Base64Column,
+  BooleanColumn,
+  CategoricalColumn,
+  DateColumn,
+  DateTimeColumn,
+  DecimalColumn,
+  DurationColumn,
+  EmailColumn,
+  GeojsonColumn,
+  HexColumn,
+  IntegerColumn,
+  ListColumn,
+  NumberColumn,
+  ObjectColumn,
+  StringColumn,
+  TimeColumn,
+  TopojsonColumn,
+  UnknownColumn,
+  UrlColumn,
+  WkbColumn,
+  WktColumn,
 ])
 
 export const ColumnType = z.enum([
   "array",
   "base64",
   "boolean",
+  "categorical",
   "date",
-  "datetime",
+  "date-time",
+  "decimal",
   "duration",
   "email",
   "geojson",
@@ -80,12 +70,50 @@ export const ColumnType = z.enum([
   "string",
   "time",
   "topojson",
+  "unknown",
   "url",
-  "uuid",
   "wkb",
   "wkt",
-  "year",
 ])
 
-export type ColumnType = z.infer<typeof ColumnType>
+const IntegerColumnPropertyGroup = z.discriminatedUnion("format", [
+  IntegerColumnProperty,
+  IntegerCategoricalColumnProperty,
+])
+
+const StringColumnPropertyGroup = z.discriminatedUnion("format", [
+  ListColumnProperty,
+  Base64ColumnProperty,
+  HexColumnProperty,
+  EmailColumnProperty,
+  UrlColumnProperty,
+  DateTimeColumnProperty,
+  DateColumnProperty,
+  TimeColumnProperty,
+  DurationColumnProperty,
+  WktColumnProperty,
+  WkbColumnProperty,
+  StringColumnProperty,
+  StringCategoricalColumnProperty,
+  DecimalColumnProperty,
+])
+
+const ObjectColumnPropertyGroup = z.discriminatedUnion("format", [
+  GeojsonColumnProperty,
+  TopojsonColumnProperty,
+  ObjectColumnProperty,
+])
+
+export const ColumnProperty = z.discriminatedUnion("type", [
+  BooleanColumnProperty,
+  IntegerColumnPropertyGroup,
+  NumberColumnProperty,
+  StringColumnPropertyGroup,
+  ArrayColumnProperty,
+  ObjectColumnPropertyGroup,
+  UnknownColumnProperty,
+])
+
 export type Column = z.infer<typeof Column>
+export type ColumnType = z.infer<typeof ColumnType>
+export type ColumnProperty = z.infer<typeof ColumnProperty>

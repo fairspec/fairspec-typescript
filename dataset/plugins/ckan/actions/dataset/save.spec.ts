@@ -9,7 +9,6 @@ describe("saveDatasetToCkan", () => {
     relative(process.cwd(), `${import.meta.dirname}/fixtures/${name}`)
 
   const mockDataset: Dataset = {
-    $schema: "https://fairspec.org/profiles/latest/dataset.json",
     titles: [{ title: "Test Package" }],
     descriptions: [
       {
@@ -22,7 +21,7 @@ describe("saveDatasetToCkan", () => {
       {
         name: "test-resource",
         data: getFixturePath("data.csv"),
-        format: { name: "csv" },
+        format: { type: "csv" },
       },
     ],
   }
@@ -310,12 +309,12 @@ describe("saveDatasetToCkan", () => {
         {
           name: "resource-1",
           data: getFixturePath("data.csv"),
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource-2",
           data: getFixturePath("data.csv"),
-          format: { name: "json" },
+          format: { type: "json" },
         },
       ],
     }

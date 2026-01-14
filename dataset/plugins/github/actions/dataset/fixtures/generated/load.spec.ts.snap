@@ -2,7 +2,6 @@
 
 exports[`loadDatasetFromGithub > should load a dataset 1`] = `
 {
-  "$schema": "https://fairspec.org/schema/latest/dataset.json",
   "creators": [
     {
       "name": "roll",

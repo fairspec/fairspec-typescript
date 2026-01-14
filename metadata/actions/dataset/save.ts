@@ -1,6 +1,7 @@
 import { saveDescriptor } from "../../actions/descriptor/save.ts"
 import { getBasepath } from "../../actions/path/basepath.ts"
 import type { Dataset } from "../../models/dataset.ts"
+import * as settings from "../../settings.ts"
 import { denormalizeDataset } from "./denormalize.ts"
 
 /**
@@ -16,6 +17,10 @@ export async function saveDatasetDescriptor(
 ) {
   const basepath = getBasepath(options.path)
   const descriptor = denormalizeDataset(dataset, { basepath })
+
+  descriptor.$schema =
+    descriptor.$schema ??
+    `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/dataset.json`
 
   await saveDescriptor(descriptor, {
     path: options.path,

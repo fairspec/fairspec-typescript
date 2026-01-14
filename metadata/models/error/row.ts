@@ -1,15 +1,28 @@
 import { z } from "zod"
 
-export const RowUniqueError = z.object({
-  type: z.literal("row/unique").describe("Error type identifier"),
+export const RowPrimaryKeyError = z.object({
+  type: z.literal("row/primaryKey").describe("Error type identifier"),
   rowNumber: z.number().describe("The row number where the error occurred"),
 
   columnNames: z
     .array(z.string())
-    .describe("Column names involved in the unique constraint violation"),
+    .describe("Column names involved in the primary key constraint violation"),
 })
 
-export const RowError = z.discriminatedUnion("type", [RowUniqueError])
+export const RowUniqueKeyError = z.object({
+  type: z.literal("row/uniqueKey").describe("Error type identifier"),
+  rowNumber: z.number().describe("The row number where the error occurred"),
 
-export type RowUniqueError = z.infer<typeof RowUniqueError>
+  columnNames: z
+    .array(z.string())
+    .describe("Column names involved in the unique key constraint violation"),
+})
+
+export const RowError = z.discriminatedUnion("type", [
+  RowPrimaryKeyError,
+  RowUniqueKeyError,
+])
+
+export type RowPrimaryKeyError = z.infer<typeof RowPrimaryKeyError>
+export type RowUniqueKeyError = z.infer<typeof RowUniqueKeyError>
 export type RowError = z.infer<typeof RowError>

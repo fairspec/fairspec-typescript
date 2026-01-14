@@ -1,8 +1,14 @@
 import { z } from "zod"
-import { StringColumn } from "./string.ts"
+import { BaseColumn } from "./base.ts"
+import { BaseStringColumnProperty } from "./string.ts"
 
-export const WkbColumn = StringColumn.extend({
+export const WkbColumnProperty = BaseStringColumnProperty.extend({
   format: z.literal("wkb"),
+})
+
+export const WkbColumn = BaseColumn.extend({
+  type: z.literal("wkb"),
+  property: WkbColumnProperty,
 })
 
 export type WkbColumn = z.infer<typeof WkbColumn>

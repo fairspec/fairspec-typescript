@@ -5,7 +5,6 @@ import { assertTableSchema } from "./assert.ts"
 describe("assertTableSchema", () => {
   it("returns typed schema when valid", async () => {
     const descriptor = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "integer",
@@ -25,7 +24,6 @@ describe("assertTableSchema", () => {
 
   it("throws Error when schema is invalid", async () => {
     const descriptor = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: 123,
@@ -36,21 +34,8 @@ describe("assertTableSchema", () => {
     await expect(assertTableSchema(descriptor)).rejects.toThrow(Error)
   })
 
-  it("throws Error when $schema is missing", async () => {
-    const descriptor = {
-      properties: {
-        id: {
-          type: "integer",
-        },
-      },
-    }
-
-    await expect(assertTableSchema(descriptor)).rejects.toThrow(Error)
-  })
-
   it("accepts schema with all features", async () => {
     const descriptor = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       required: ["id", "email"],
       properties: {
         id: {

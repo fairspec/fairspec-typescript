@@ -3,12 +3,7 @@ import { Datacite } from "./datacite/datacite.ts"
 import { Resource } from "./resource.ts"
 
 export const Dataset = Datacite.extend({
-  $schema: z
-    .string()
-    .regex(/dataset\.json$/)
-    .describe(
-      "URI to one of the officially published Fairspec Dataset profiles. It must end with the dataset.json suffix.",
-    ),
+  $schema: z.httpUrl().optional().describe("Fairspec Dataset profile url."),
 
   resources: z
     .array(Resource)

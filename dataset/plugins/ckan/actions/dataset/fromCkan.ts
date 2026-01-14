@@ -4,7 +4,6 @@ import type { CkanDataset } from "../../models/dataset.ts"
 
 export function convertDatasetFromCkan(ckanDataset: CkanDataset): Dataset {
   const dataset: Dataset = {
-    $schema: "https://fairspec.org/profiles/latest/dataset.json",
     resources: [],
   }
 

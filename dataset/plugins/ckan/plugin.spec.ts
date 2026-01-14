@@ -20,7 +20,6 @@ describe("CkanPlugin", () => {
   describe("loadDataset", () => {
     it("should load dataset from ckan url with /dataset/ path", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
       mockLoadDatasetFromCkan.mockResolvedValue(mockDataset)
@@ -58,7 +57,6 @@ describe("CkanPlugin", () => {
 
     it("should handle ckan urls with additional path segments", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
       mockLoadDatasetFromCkan.mockResolvedValue(mockDataset)
@@ -75,7 +73,6 @@ describe("CkanPlugin", () => {
 
     it("should handle ckan urls with query parameters", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
       mockLoadDatasetFromCkan.mockResolvedValue(mockDataset)
@@ -92,7 +89,6 @@ describe("CkanPlugin", () => {
 
     it("should handle http ckan urls", async () => {
       const mockDataset: Dataset = {
-        $schema: "https://fairspec.org/profiles/latest/dataset.json",
         resources: [{ name: "test", data: "https://example.com/data.csv" }],
       }
       mockLoadDatasetFromCkan.mockResolvedValue(mockDataset)

@@ -1,15 +1,15 @@
 import type { Resource } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import * as loadModule from "./actions/table/load.ts"
+import * as saveModule from "./actions/table/save.ts"
 import { OdsPlugin } from "./plugin.ts"
-import * as loadModule from "./table/load.ts"
-import * as saveModule from "./table/save.ts"
 
-vi.mock("./table/load.ts", () => ({
+vi.mock("./actions/table/load.ts", () => ({
   loadOdsTable: vi.fn(),
 }))
 
-vi.mock("./table/save.ts", () => ({
+vi.mock("./actions/table/save.ts", () => ({
   saveOdsTable: vi.fn(),
 }))
 
@@ -28,7 +28,7 @@ describe("OdsPlugin", () => {
   describe("loadTable", () => {
     it("should load table from ods file", async () => {
       const resource: Partial<Resource> = {
-        path: "test.ods",
+        data: "test.ods",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadOdsTable.mockResolvedValue(mockTable)
@@ -41,7 +41,7 @@ describe("OdsPlugin", () => {
 
     it("should return undefined for non-ods files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.csv",
+        data: "test.csv",
       }
 
       const result = await plugin.loadTable(resource)
@@ -52,8 +52,8 @@ describe("OdsPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const resource: Partial<Resource> = {
-        path: "test.txt",
-        format: "ods",
+        data: "test.txt",
+        format: { type: "ods" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadOdsTable.mockResolvedValue(mockTable)
@@ -66,7 +66,7 @@ describe("OdsPlugin", () => {
 
     it("should pass through load options", async () => {
       const resource: Partial<Resource> = {
-        path: "test.ods",
+        data: "test.ods",
       }
       const options = { denormalized: true }
       const mockTable = pl.DataFrame().lazy()
@@ -79,7 +79,7 @@ describe("OdsPlugin", () => {
 
     it("should handle paths with directories", async () => {
       const resource: Partial<Resource> = {
-        path: "/path/to/data.ods",
+        data: "/path/to/data.ods",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadOdsTable.mockResolvedValue(mockTable)
@@ -91,7 +91,7 @@ describe("OdsPlugin", () => {
 
     it("should return undefined for json files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.json",
+        data: "test.json",
       }
 
       const result = await plugin.loadTable(resource)
@@ -102,7 +102,7 @@ describe("OdsPlugin", () => {
 
     it("should return undefined for xlsx files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.xlsx",
+        data: "test.xlsx",
       }
 
       const result = await plugin.loadTable(resource)
@@ -136,7 +136,7 @@ describe("OdsPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "ods" as const }
+      const options = { path: "output.txt", format: { type: "ods" as const } }
       mockSaveOdsTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

@@ -1,15 +1,15 @@
 import type { Resource } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import * as loadModule from "./actions/table/load.ts"
+import * as saveModule from "./actions/table/save.ts"
 import { ParquetPlugin } from "./plugin.ts"
-import * as loadModule from "./table/load.ts"
-import * as saveModule from "./table/save.ts"
 
-vi.mock("./table/load.ts", () => ({
+vi.mock("./actions/table/load.ts", () => ({
   loadParquetTable: vi.fn(),
 }))
 
-vi.mock("./table/save.ts", () => ({
+vi.mock("./actions/table/save.ts", () => ({
   saveParquetTable: vi.fn(),
 }))
 
@@ -28,7 +28,7 @@ describe("ParquetPlugin", () => {
   describe("loadTable", () => {
     it("should load table from parquet file", async () => {
       const resource: Partial<Resource> = {
-        path: "test.parquet",
+        data: "test.parquet",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadParquetTable.mockResolvedValue(mockTable)
@@ -41,7 +41,7 @@ describe("ParquetPlugin", () => {
 
     it("should return undefined for non-parquet files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.csv",
+        data: "test.csv",
       }
 
       const result = await plugin.loadTable(resource)
@@ -52,8 +52,8 @@ describe("ParquetPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const resource: Partial<Resource> = {
-        path: "test.txt",
-        format: "parquet",
+        data: "test.txt",
+        format: { type: "parquet" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadParquetTable.mockResolvedValue(mockTable)
@@ -66,7 +66,7 @@ describe("ParquetPlugin", () => {
 
     it("should pass through load options", async () => {
       const resource: Partial<Resource> = {
-        path: "test.parquet",
+        data: "test.parquet",
       }
       const options = { denormalized: true }
       const mockTable = pl.DataFrame().lazy()
@@ -79,7 +79,7 @@ describe("ParquetPlugin", () => {
 
     it("should handle paths with directories", async () => {
       const resource: Partial<Resource> = {
-        path: "/path/to/data.parquet",
+        data: "/path/to/data.parquet",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadParquetTable.mockResolvedValue(mockTable)
@@ -91,7 +91,7 @@ describe("ParquetPlugin", () => {
 
     it("should return undefined for arrow files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.arrow",
+        data: "test.arrow",
       }
 
       const result = await plugin.loadTable(resource)
@@ -102,7 +102,7 @@ describe("ParquetPlugin", () => {
 
     it("should return undefined for json files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.json",
+        data: "test.json",
       }
 
       const result = await plugin.loadTable(resource)
@@ -136,7 +136,10 @@ describe("ParquetPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "parquet" as const }
+      const options = {
+        path: "output.txt",
+        format: { type: "parquet" } as const,
+      }
       mockSaveParquetTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

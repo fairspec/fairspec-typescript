@@ -10,7 +10,6 @@ import { convertDatasetToCkan } from "./toCkan.ts"
 describe("convertDatasetToCkan", () => {
   it("converts a Fairspec Dataset to a CKAN dataset", () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Package" }],
       descriptions: [
         {
@@ -58,7 +57,7 @@ describe("convertDatasetToCkan", () => {
         {
           name: "test-resource",
           data: "https://example.com/data.csv",
-          format: { name: "csv" },
+          format: { type: "csv" },
           descriptions: [
             {
               description: "Test resource",
@@ -144,7 +143,7 @@ describe("convertDatasetToCkan", () => {
           firstResource.descriptions?.[0]?.description,
         )
         expect(firstCkanResource.format).toEqual(
-          firstResource.format?.name.toUpperCase(),
+          firstResource.format?.type?.toUpperCase(),
         )
         expect(firstCkanResource.hash).toEqual(firstResource.integrity?.hash)
       }
@@ -153,7 +152,6 @@ describe("convertDatasetToCkan", () => {
 
   it("handles empty resources array", () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [],
     }
 
@@ -164,7 +162,6 @@ describe("convertDatasetToCkan", () => {
 
   it("handles undefined optional properties", () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [],
     }
 

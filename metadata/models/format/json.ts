@@ -1,18 +1,23 @@
 import { z } from "zod"
+import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
+  CommentChar,
+  CommentRows,
   HeaderJoin,
   HeaderRows,
   JsonPointer,
   RowType,
 } from "./common.ts"
 
-export const JsonFormat = z.object({
-  name: z.literal("json"),
+export const JsonFormat = BaseFormat.extend({
+  type: z.literal("json"),
   jsonPointer: JsonPointer.optional(),
   rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),
+  commentRows: CommentRows.optional(),
+  commentChar: CommentChar.optional(),
   columnNames: ColumnNames.optional(),
 })
 

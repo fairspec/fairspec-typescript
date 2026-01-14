@@ -42,6 +42,7 @@
       "suspicious": {
         "noExplicitAny": "off",
         "noArrayIndexKey": "off",
+        "noThenProperty": "off",
         "noShadowRestrictedNames": "off"
       }
     }

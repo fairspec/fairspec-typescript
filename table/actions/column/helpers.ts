@@ -1,0 +1,130 @@
+import type {
+  ArrayColumn,
+  CellError,
+  DurationColumn,
+  GeojsonColumn,
+  ObjectColumn,
+  TopojsonColumn,
+  WkbColumn,
+  WktColumn,
+} from "@fairspec/metadata"
+import { inspectJson } from "@fairspec/metadata"
+import * as pl from "nodejs-polars"
+import { isObject } from "../../helpers/general.ts"
+import type { Table } from "../../models/table.ts"
+
+// TODO: Generalize wkt/wkb/duration inspectors
+
+export async function inspectTextColumn(
+  column: DurationColumn | WktColumn | WkbColumn,
+  table: Table,
+  options: {
+    parse: (source: string) => unknown | undefined
+  },
+) {
+  const errors: CellError[] = []
+
+  const frame = await table
+    .withRowIndex("number", 1)
+    .select(pl.col("number"), pl.col(column.name).alias("source"))
+    .collect()
+
+  for (const row of frame.toRecords() as any[]) {
+    if (row.source === null) continue
+
+    let target: unknown | undefined
+    try {
+      target = options.parse(row.source)
+    } catch {}
+
+    if (!target) {
+      errors.push({
+        type: "cell/type",
+        cell: String(row.source),
+        columnName: column.name,
+        columnType: column.type,
+        rowNumber: row.number,
+      })
+    }
+  }
+
+  return errors
+}
+
+export async function inspectJsonColumn(
+  column: ArrayColumn | ObjectColumn | GeojsonColumn | TopojsonColumn,
+  table: Table,
+  options?: {
+    typeJsonSchema?: Record<string, any>
+  },
+) {
+  const errors: CellError[] = []
+
+  const typeJsonSchema = options?.typeJsonSchema
+  const constraintJsonSchema = column.property
+
+  const frame = await table
+    .withRowIndex("number", 1)
+    .select(pl.col("number"), pl.col(column.name).alias("source"))
+    .collect()
+
+  for (const row of frame.toRecords() as any[]) {
+    if (row.source === null) continue
+
+    let target: Record<string, any> | undefined
+    const checkCompat = column.type === "array" ? Array.isArray : isObject
+
+    try {
+      target = JSON.parse(row.source)
+    } catch {}
+
+    if (!target || !checkCompat(target)) {
+      errors.push({
+        type: "cell/type",
+        cell: String(row.source),
+        columnName: column.name,
+        columnType: column.type,
+        rowNumber: row.number,
+      })
+
+      continue
+    }
+
+    if (typeJsonSchema) {
+      const formatErrors = await inspectJson(target, {
+        jsonSchema: typeJsonSchema,
+      })
+
+      if (formatErrors.length) {
+        errors.push({
+          type: "cell/type",
+          cell: String(row.source),
+          columnName: column.name,
+          columnType: column.type,
+          rowNumber: row.number,
+        })
+      }
+
+      continue
+    }
+
+    if (constraintJsonSchema) {
+      const constraintErrors = await inspectJson(target, {
+        jsonSchema: constraintJsonSchema,
+      })
+
+      for (const error of constraintErrors) {
+        errors.push({
+          type: "cell/json",
+          cell: String(row.source),
+          columnName: column.name,
+          rowNumber: row.number,
+          message: error.message,
+          jsonPointer: error.jsonPointer,
+        })
+      }
+    }
+  }
+
+  return errors
+}

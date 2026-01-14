@@ -1,13 +1,10 @@
 import { z } from "zod"
-import { Column } from "./column/column.ts"
+import { ColumnProperty } from "./column/column.ts"
 import { ForeignKey } from "./foreignKey.ts"
 import { UniqueKey } from "./uniqueKey.ts"
 
 export const TableSchema = z.object({
-  $schema: z
-    .string()
-    .regex(/table\.json$/)
-    .describe("URI to one of the officially published Fairspec Table profiles"),
+  $schema: z.httpUrl().optional().describe("Fairspec Table profile url."),
 
   title: z
     .string()
@@ -25,7 +22,8 @@ export const TableSchema = z.object({
     .describe("An optional list of column names that must be present"),
 
   properties: z
-    .record(z.string(), Column)
+    .record(z.string(), ColumnProperty)
+    .optional()
     .describe(
       "An object defining the schema for table columns, where each key is a column name",
     ),
@@ -34,10 +32,10 @@ export const TableSchema = z.object({
     .array(
       z.union([
         z.string(),
+        z.int(),
         z.number(),
-        z.boolean(),
         z.object({
-          value: z.union([z.string(), z.number(), z.boolean()]),
+          value: z.union([z.string(), z.int(), z.number()]),
           label: z.string(),
         }),
       ]),

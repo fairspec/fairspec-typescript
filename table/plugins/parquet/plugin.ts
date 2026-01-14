@@ -1,12 +1,13 @@
 import type { Resource } from "@fairspec/metadata"
-import { inferFormat } from "@fairspec/metadata"
+import { getDataPaths, getFileExtension } from "@fairspec/metadata"
+import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
-import type { Table } from "../../table/index.ts"
-import { loadParquetTable, saveParquetTable } from "./table/index.ts"
+import { loadParquetTable } from "./actions/table/load.ts"
+import { saveParquetTable } from "./actions/table/save.ts"
 
 export class ParquetPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
@@ -19,7 +20,7 @@ export class ParquetPlugin implements TablePlugin {
   async saveTable(table: Table, options: SaveTableOptions) {
     const { path, format } = options
 
-    const isParquet = getIsParquet({ path, format })
+    const isParquet = getIsParquet({ data: path, format })
     if (!isParquet) return undefined
 
     return await saveParquetTable(table, options)
@@ -27,6 +28,12 @@ export class ParquetPlugin implements TablePlugin {
 }
 
 function getIsParquet(resource: Partial<Resource>) {
-  const format = inferFormat(resource)
-  return format === "parquet"
+  if (resource.format?.type === "parquet") return true
+
+  const paths = getDataPaths(resource)
+  const firstPath = paths[0]
+  if (!firstPath) return false
+
+  const extension = getFileExtension(firstPath)
+  return extension === "parquet"
 }

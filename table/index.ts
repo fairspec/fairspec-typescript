@@ -1,11 +1,22 @@
-export type { DataRecord, DataRow } from "./data/index.ts"
-export type { DialectOptions, InferDialectOptions } from "./dialect/index.ts"
-export type { DenormalizeFieldOptions, PolarsField } from "./field/index.ts"
+export { denormalizeTable } from "./actions/table/denormalize.ts"
+export { inspectTable } from "./actions/table/inspect.ts"
+export { normalizeTable } from "./actions/table/normalize.ts"
+export { queryTable } from "./actions/table/query.ts"
+export { inferTableSchemaFromTable } from "./actions/tableSchema/infer.ts"
+
+export type { FormatOptions, InferFormatOptions } from "./models/format.ts"
+export type { Frame } from "./models/frame.ts"
+export type {
+  InferTableSchemaOptions,
+  TableSchemaOptions,
+} from "./models/schema.ts"
+export type { Table } from "./models/table.ts"
 export type {
   LoadTableOptions,
   SaveTableOptions,
   TablePlugin,
 } from "./plugin.ts"
+
 export {
   ArrowPlugin,
   loadArrowTable,
@@ -29,16 +40,3 @@ export {
   saveXlsxTable,
   XlsxPlugin,
 } from "./plugins/xlxs/index.ts"
-export type {
-  InferSchemaOptions,
-  PolarsSchema,
-  SchemaOptions,
-} from "./schema/index.ts"
-export { inferSchemaFromSample, inferSchemaFromTable } from "./schema/index.ts"
-export type { Frame, Table } from "./table/index.ts"
-export {
-  denormalizeTable,
-  inspectTable,
-  normalizeTable,
-  queryTable,
-} from "./table/index.ts"

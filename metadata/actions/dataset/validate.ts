@@ -1,5 +1,6 @@
 import { loadDescriptor } from "../../actions/descriptor/load.ts"
 import { validateDescriptor } from "../../actions/descriptor/validate.ts"
+import { loadProfile } from "../../actions/profile/load.ts"
 import { validateTableSchema } from "../../actions/tableSchema/validate.ts"
 import type { Dataset } from "../../models/dataset.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
@@ -16,8 +17,17 @@ export async function validateDatasetMetadata(
       ? await loadDescriptor(source)
       : (source as Descriptor)
 
-  const report = await validateDescriptor(descriptor, {
+  const $schema =
+    typeof descriptor.$schema === "string"
+      ? descriptor.$schema
+      : `https://fairspec.org/profiles/latest/dataset.json`
+
+  const profile = await loadProfile($schema, {
     profileType: "dataset",
+  })
+
+  const report = await validateDescriptor(descriptor, {
+    profile,
   })
 
   let dataset: Dataset | undefined

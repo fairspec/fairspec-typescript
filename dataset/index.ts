@@ -10,7 +10,11 @@ export { validateFile } from "./actions/file/validate.ts"
 export { getTempFolderPath } from "./actions/folder/temp.ts"
 export { loadFileStream } from "./actions/stream/load.ts"
 
-export type { DatasetPlugin, SaveDatasetOptions } from "./plugin.ts"
+export type {
+  DatasetPlugin,
+  InferFormatOptions,
+  SaveDatasetOptions,
+} from "./plugin.ts"
 export {
   CkanPlugin,
   loadDatasetFromCkan,

@@ -1,46 +1,28 @@
 import { z } from "zod"
-import { BaseColumn } from "./base.ts"
+import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
-export const StringColumn = BaseColumn.extend({
+export const BaseStringColumnProperty = BaseColumnProperty.extend({
   type: z.literal("string"),
-  format: z.undefined().optional(),
 
   enum: z
     .array(z.string())
     .optional()
     .describe("An optional array of allowed values for the column"),
 
-  pattern: z
+  const: z
     .string()
     .optional()
-    .describe("An optional regular expression pattern that values must match"),
+    .describe("An optional const that all values must match"),
 
-  minLength: z
-    .number()
-    .int()
-    .min(0)
+  default: z
+    .array(z.string())
     .optional()
-    .describe("An optional minimum length constraint for string values"),
+    .describe("An optional default value for the column"),
 
-  maxLength: z
-    .number()
-    .int()
-    .min(0)
+  examples: z
+    .array(z.string())
     .optional()
-    .describe("An optional maximum length constraint for string values"),
-
-  categories: z
-    .array(
-      z.union([
-        z.string(),
-        z.object({
-          value: z.string(),
-          label: z.string(),
-        }),
-      ]),
-    )
-    .optional()
-    .describe("An optional array of categorical values with optional labels"),
+    .describe("An optional array of examples for the column"),
 
   missingValues: z
     .array(
@@ -56,6 +38,34 @@ export const StringColumn = BaseColumn.extend({
     .describe(
       "An optional column-specific list of values that represent missing or null data",
     ),
+
+  minLength: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("An optional minimum length constraint for string values"),
+
+  maxLength: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("An optional maximum length constraint for string values"),
+
+  pattern: z
+    .string()
+    .optional()
+    .describe("An optional regular expression pattern that values must match"),
+})
+
+export const StringColumnProperty = BaseStringColumnProperty.extend({
+  format: z.undefined().optional(),
+})
+
+export const StringColumn = BaseColumn.extend({
+  type: z.literal("string"),
+  property: StringColumnProperty,
 })
 
 export type StringColumn = z.infer<typeof StringColumn>

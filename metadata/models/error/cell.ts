@@ -2,15 +2,14 @@ import { z } from "zod"
 import { ColumnType } from "../column/column.ts"
 
 const BaseCellError = z.object({
-  fieldName: z.string().describe("The name of the field/column"),
+  columnName: z.string().describe("The name of the column"),
   rowNumber: z.number().describe("The row number where the error occurred"),
   cell: z.string().describe("The cell value that caused the error"),
 })
 
 export const CellTypeError = BaseCellError.extend({
   type: z.literal("cell/type").describe("Error type identifier"),
-  fieldType: ColumnType.describe("The expected column type"),
-  fieldFormat: z.string().optional().describe("The expected field format"),
+  columnType: ColumnType.describe("The expected column type"),
 })
 
 export const CellRequiredError = BaseCellError.extend({
@@ -30,6 +29,11 @@ export const CellMaximumError = BaseCellError.extend({
 export const CellExclusiveMinimumError = BaseCellError.extend({
   type: z.literal("cell/exclusiveMinimum").describe("Error type identifier"),
   minimum: z.string().describe("The exclusive minimum value"),
+})
+
+export const CellMultipleOfError = BaseCellError.extend({
+  type: z.literal("cell/multipleOf").describe("Error type identifier"),
+  multipleOf: z.number().describe("The multiple of constraint"),
 })
 
 export const CellExclusiveMaximumError = BaseCellError.extend({
@@ -56,15 +60,32 @@ export const CellUniqueError = BaseCellError.extend({
   type: z.literal("cell/unique").describe("Error type identifier"),
 })
 
+export const CellConstError = BaseCellError.extend({
+  type: z.literal("cell/const").describe("Error type identifier"),
+  const: z.string().describe("The allowed value"),
+})
+
 export const CellEnumError = BaseCellError.extend({
   type: z.literal("cell/enum").describe("Error type identifier"),
   enum: z.array(z.string()).describe("The allowed enumeration values"),
 })
 
-export const CellJsonSchemaError = BaseCellError.extend({
-  type: z.literal("cell/jsonSchema").describe("Error type identifier"),
-  pointer: z.string().describe("JSON Pointer to the validation error location"),
+export const CellJsonError = BaseCellError.extend({
+  type: z.literal("cell/json").describe("Error type identifier"),
   message: z.string().describe("The JSON schema validation error message"),
+  jsonPointer: z
+    .string()
+    .describe("JSON Pointer to the validation error location"),
+})
+
+export const CellMinItemsError = BaseCellError.extend({
+  type: z.literal("cell/minItems").describe("Error type identifier"),
+  minItems: z.number().describe("The minimum number of items required"),
+})
+
+export const CellMaxItemsError = BaseCellError.extend({
+  type: z.literal("cell/maxItems").describe("Error type identifier"),
+  maxItems: z.number().describe("The maximum number of items allowed"),
 })
 
 export const CellError = z.discriminatedUnion("type", [
@@ -74,12 +95,16 @@ export const CellError = z.discriminatedUnion("type", [
   CellMaximumError,
   CellExclusiveMinimumError,
   CellExclusiveMaximumError,
+  CellMultipleOfError,
   CellMinLengthError,
   CellMaxLengthError,
+  CellMinItemsError,
+  CellMaxItemsError,
   CellPatternError,
   CellUniqueError,
+  CellConstError,
   CellEnumError,
-  CellJsonSchemaError,
+  CellJsonError,
 ])
 
 export type CellTypeError = z.infer<typeof CellTypeError>
@@ -92,10 +117,14 @@ export type CellExclusiveMinimumError = z.infer<
 export type CellExclusiveMaximumError = z.infer<
   typeof CellExclusiveMaximumError
 >
+export type CellMultipleOfError = z.infer<typeof CellMultipleOfError>
 export type CellMinLengthError = z.infer<typeof CellMinLengthError>
 export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>
+export type CellMinItemsError = z.infer<typeof CellMinItemsError>
+export type CellMaxItemsError = z.infer<typeof CellMaxItemsError>
 export type CellPatternError = z.infer<typeof CellPatternError>
 export type CellUniqueError = z.infer<typeof CellUniqueError>
+export type CellConstError = z.infer<typeof CellConstError>
 export type CellEnumError = z.infer<typeof CellEnumError>
-export type CellJsonSchemaError = z.infer<typeof CellJsonSchemaError>
+export type CellJsonError = z.infer<typeof CellJsonError>
 export type CellError = z.infer<typeof CellError>

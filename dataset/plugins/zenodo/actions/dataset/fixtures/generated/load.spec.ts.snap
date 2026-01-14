@@ -2,7 +2,6 @@
 
 exports[`loadDatasetFromZenodo > should load a package 1`] = `
 {
-  "$schema": "https://fairspec.org/profiles/latest/dataset.json",
   "creators": [
     {
       "affiliation": undefined,

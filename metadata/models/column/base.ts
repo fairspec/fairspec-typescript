@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const BaseColumn = z.object({
+export const BaseColumnProperty = z.object({
   title: z
     .string()
     .optional()
@@ -15,6 +15,15 @@ export const BaseColumn = z.object({
     .string()
     .optional()
     .describe("An optional URI for semantic type (RDF)"),
+
+  default: z.unknown().optional(),
+})
+
+export const BaseColumn = z.object({
+  name: z.string(),
+  type: z.string(),
+  required: z.boolean().optional(),
+  property: BaseColumnProperty,
 })
 
 export type BaseColumn = z.infer<typeof BaseColumn>

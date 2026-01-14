@@ -42,6 +42,7 @@ describe("loadTableSchema", () => {
 
     expect(schema.required).toEqual(["id", "email"])
 
+    expect.assert(schema.properties)
     expect(Object.keys(schema.properties)).toHaveLength(9)
 
     expect(schema.properties.id?.type).toBe("integer")

@@ -1,8 +1,7 @@
 {
-  "name": 1,
   "resources": [
     {
-      "name": "name",
+      "name": 1,
       "data": "table.csv"
     }
   ]

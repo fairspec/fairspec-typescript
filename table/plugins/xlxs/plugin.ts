@@ -1,12 +1,13 @@
 import type { Resource } from "@fairspec/metadata"
-import { inferFormat } from "@fairspec/metadata"
+import { getFileExtension, getFirstDataPath } from "@fairspec/metadata"
+import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
-import type { Table } from "../../table/index.ts"
-import { loadXlsxTable, saveXlsxTable } from "./table/index.ts"
+import { loadXlsxTable } from "./actions/table/load.ts"
+import { saveXlsxTable } from "./actions/table/save.ts"
 
 export class XlsxPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
@@ -19,7 +20,7 @@ export class XlsxPlugin implements TablePlugin {
   async saveTable(table: Table, options: SaveTableOptions) {
     const { path, format } = options
 
-    const isXlsx = getIsXlsx({ path, format })
+    const isXlsx = getIsXlsx({ data: path, format })
     if (!isXlsx) return undefined
 
     return await saveXlsxTable(table, options)
@@ -27,6 +28,11 @@ export class XlsxPlugin implements TablePlugin {
 }
 
 function getIsXlsx(resource: Partial<Resource>) {
-  const format = inferFormat(resource)
-  return ["xlsx"].includes(format ?? "")
+  if (resource.format?.type === "xlsx") return true
+
+  const firstPath = getFirstDataPath(resource)
+  if (!firstPath) return false
+
+  const extension = getFileExtension(firstPath)
+  return extension === "xlsx"
 }

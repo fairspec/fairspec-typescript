@@ -18,7 +18,6 @@ describe("saveDatasetToFolder", () => {
 
   it("should save a basic dataset to folder", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test-resource",
@@ -35,7 +34,6 @@ describe("saveDatasetToFolder", () => {
 
   it("should save dataset with metadata", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -57,7 +55,6 @@ describe("saveDatasetToFolder", () => {
 
   it("should save dataset with inline data resources", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test-resource",
@@ -80,12 +77,11 @@ describe("saveDatasetToFolder", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test-resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -101,12 +97,11 @@ describe("saveDatasetToFolder", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "resource-1",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource-2",
@@ -123,13 +118,11 @@ describe("saveDatasetToFolder", () => {
 
   it("should save dataset with tableSchema", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test-resource",
           data: [{ id: 1, name: "alice" }],
           tableSchema: {
-            $schema: "https://fairspec.org/profiles/latest/table.json",
             properties: {
               id: { type: "integer" },
               name: { type: "string" },
@@ -150,12 +143,11 @@ describe("saveDatasetToFolder", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test-resource",
           data: csvPath,
-          format: { name: "csv", delimiter: ";" },
+          format: { type: "csv", delimiter: ";" },
         },
       ],
     }
@@ -168,7 +160,6 @@ describe("saveDatasetToFolder", () => {
 
   it("should save and reload dataset with same structure", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -195,7 +186,6 @@ describe("saveDatasetToFolder", () => {
 
   it("should save and reload dataset preserving metadata", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -218,13 +208,11 @@ describe("saveDatasetToFolder", () => {
 
   it("should save and reload dataset with tableSchema", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: [{ id: 1, name: "alice" }],
           tableSchema: {
-            $schema: "https://fairspec.org/profiles/latest/table.json",
             properties: {
               id: { type: "integer" },
               name: { type: "string" },
@@ -241,9 +229,9 @@ describe("saveDatasetToFolder", () => {
     expect(schema).toBeDefined()
     expect(typeof schema === "object" && "properties" in schema).toBe(true)
     if (typeof schema === "object" && "properties" in schema) {
-      expect(Object.keys(schema.properties)).toHaveLength(2)
-      expect(schema.properties.id).toBeDefined()
-      expect(schema.properties.name).toBeDefined()
+      expect(Object.keys(schema.properties ?? {})).toHaveLength(2)
+      expect(schema.properties?.id).toBeDefined()
+      expect(schema.properties?.name).toBeDefined()
     }
   })
 
@@ -252,12 +240,11 @@ describe("saveDatasetToFolder", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -267,12 +254,11 @@ describe("saveDatasetToFolder", () => {
 
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
-    expect(reloadedDataset.resources?.[0]?.format?.name).toBe("csv")
+    expect(reloadedDataset.resources?.[0]?.format?.type).toBe("csv")
   })
 
   it("should throw error when saving to existing folder", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -292,7 +278,6 @@ describe("saveDatasetToFolder", () => {
 
   it("should create valid folder structure", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -304,9 +289,6 @@ describe("saveDatasetToFolder", () => {
     await saveDatasetToFolder(dataset, { folderPath: tempFolderPath })
     const reloadedDataset = await loadDatasetFromFolder(tempFolderPath)
 
-    expect(reloadedDataset.$schema).toBe(
-      "https://fairspec.org/profiles/latest/dataset.json",
-    )
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
   })
@@ -318,17 +300,16 @@ describe("saveDatasetToFolder", () => {
     const csv2Path = await writeTempFile(csv2Content)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "resource1",
           data: csv1Path,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource2",
           data: csv2Path,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -343,7 +324,6 @@ describe("saveDatasetToFolder", () => {
 
   it("should create dataset.json in folder", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -358,9 +338,6 @@ describe("saveDatasetToFolder", () => {
     const descriptorContent = await readFile(descriptorPath, "utf-8")
     const descriptor = JSON.parse(descriptorContent)
 
-    expect(descriptor.$schema).toBe(
-      "https://fairspec.org/profiles/latest/dataset.json",
-    )
     expect(descriptor.resources).toHaveLength(1)
   })
 
@@ -369,12 +346,11 @@ describe("saveDatasetToFolder", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }

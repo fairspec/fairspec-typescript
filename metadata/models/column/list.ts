@@ -1,7 +1,8 @@
 import { z } from "zod"
-import { StringColumn } from "./string.ts"
+import { BaseColumn } from "./base.ts"
+import { BaseStringColumnProperty } from "./string.ts"
 
-export const ListColumn = StringColumn.extend({
+export const ListColumnProperty = BaseStringColumnProperty.extend({
   format: z.literal("list"),
 
   itemType: z
@@ -10,7 +11,7 @@ export const ListColumn = StringColumn.extend({
       "integer",
       "number",
       "boolean",
-      "datetime",
+      "date-time",
       "date",
       "time",
     ])
@@ -24,6 +25,25 @@ export const ListColumn = StringColumn.extend({
     .describe(
       "An optional single character used to delimit items in a list column",
     ),
+
+  minItems: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("An optional minimum length constraint for list values"),
+
+  maxItems: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("An optional maximum length constraint for list values"),
+})
+
+export const ListColumn = BaseColumn.extend({
+  type: z.literal("list"),
+  property: ListColumnProperty,
 })
 
 export type ListColumn = z.infer<typeof ListColumn>

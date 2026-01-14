@@ -1,34 +1,54 @@
 import type { Resource } from "@fairspec/metadata"
-import { inferFormat } from "@fairspec/metadata"
+import {
+  getFileExtension,
+  getFirstDataPath,
+  type JsonFormat,
+  type JsonlFormat,
+} from "@fairspec/metadata"
+import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
-import type { Table } from "../../table/index.ts"
-import { loadJsonTable, saveJsonTable } from "./table/index.ts"
+import { loadJsonTable } from "./actions/table/load.ts"
+import { saveJsonTable } from "./actions/table/save.ts"
 
 export class JsonPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const jsonFormat = getJsonFormat(resource)
-    if (!jsonFormat) return undefined
+    const format = getSupportedFormat(resource)
+    if (!format) return undefined
 
-    return await loadJsonTable({ ...resource, format: jsonFormat }, options)
+    return await loadJsonTable({ ...resource, format }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path, format } = options
+    const { path } = options
 
-    const jsonFormat = getJsonFormat({ path, format })
-    if (!jsonFormat) return undefined
+    const format = getSupportedFormat({ data: path, ...options })
+    if (!format) return undefined
 
-    return await saveJsonTable(table, { ...options, format: jsonFormat })
+    return await saveJsonTable(table, { ...options, format })
   }
 }
 
-function getJsonFormat(resource: Partial<Resource>) {
-  const format = inferFormat(resource)
-  return format === "json" || format === "jsonl" || format === "ndjson"
-    ? format
-    : undefined
+function getSupportedFormat(resource: Partial<Resource>) {
+  if (resource.format?.type === "json" || resource.format?.type === "jsonl") {
+    return resource.format
+  }
+
+  const firstPath = getFirstDataPath(resource)
+  if (!firstPath) return undefined
+
+  const extension = getFileExtension(firstPath)
+  let format: JsonFormat | JsonlFormat | undefined =
+    extension === "json" || extension === "jsonl"
+      ? { type: extension }
+      : undefined
+
+  if (extension === "ndjson") {
+    format = { type: "jsonl" }
+  }
+
+  return format
 }

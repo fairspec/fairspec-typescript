@@ -3,11 +3,12 @@ import { ColumnType } from "../column/column.ts"
 
 export const ColumnMissingError = z.object({
   type: z.literal("column/missing").describe("Error type identifier"),
-  columnNames: z.array(z.string()).describe("Names of missing columns"),
+  columnName: z.string().describe("Names of missing column"),
 })
 
 export const ColumnTypeError = z.object({
   type: z.literal("column/type").describe("Error type identifier"),
+  columnName: z.string().describe("The name of the column"),
   expectedColumnType: ColumnType.describe("The column type that was expected"),
   actualColumnType: ColumnType.describe("The actual column type found"),
 })

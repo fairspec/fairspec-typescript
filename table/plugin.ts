@@ -1,38 +1,32 @@
-import type { DatasetPlugin, SavePackageOptions } from "@fairspec/dataset"
-import type { Dialect, Package, Resource, Schema } from "@fairspec/metadata"
-import type { DialectOptions, InferDialectOptions } from "./dialect/index.ts"
-import type { InferSchemaOptions, SchemaOptions } from "./schema/index.ts"
-import type { Table } from "./table/index.ts"
+import type {
+  DatasetPlugin,
+  InferFormatOptions,
+  SaveDatasetOptions,
+} from "@fairspec/dataset"
+import type { Dataset, Format, Resource, TableSchema } from "@fairspec/metadata"
+import type {
+  InferTableSchemaOptions,
+  TableSchemaOptions,
+} from "./models/schema.ts"
+import type { Table } from "./models/table.ts"
 
-export type LoadTableOptions = InferDialectOptions &
-  InferSchemaOptions & {
+export type LoadTableOptions = InferFormatOptions &
+  InferTableSchemaOptions & {
     denormalized?: boolean
   }
 
-export type SaveTableOptions = DialectOptions &
-  SchemaOptions & {
-    path: string
-    format?: string
-    dialect?: Dialect
-    schema?: Schema
-    overwrite?: boolean
-  }
+export type SaveTableOptions = TableSchemaOptions & {
+  path: string
+  format?: Format
+  tableSchema?: TableSchema
+  overwrite?: boolean
+}
 
 export interface TablePlugin extends DatasetPlugin {
-  savePackage?(
-    dataPackage: Package,
-    options: SavePackageOptions & { plugins?: TablePlugin[] },
+  saveDataset?(
+    dataset: Dataset,
+    options: SaveDatasetOptions & { plugins?: TablePlugin[] },
   ): Promise<{ path?: string } | undefined>
-
-  inferDialect?(
-    resource: Partial<Resource>,
-    options?: InferDialectOptions,
-  ): Promise<Dialect | undefined>
-
-  inferSchema?(
-    resource: Partial<Resource>,
-    options?: InferSchemaOptions,
-  ): Promise<Schema | undefined>
 
   loadTable?(
     resource: Partial<Resource>,
@@ -43,4 +37,9 @@ export interface TablePlugin extends DatasetPlugin {
     table: Table,
     options: SaveTableOptions,
   ): Promise<string | undefined>
+
+  inferTableSchema?(
+    resource: Partial<Resource>,
+    options?: InferTableSchemaOptions,
+  ): Promise<TableSchema | undefined>
 }

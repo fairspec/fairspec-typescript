@@ -2,7 +2,6 @@
 
 exports[`loadDatasetFromCkan > should load a package 1`] = `
 {
-  "$schema": "https://fairspec.org/profiles/latest/dataset.json",
   "creators": [
     {
       "name": "Natural History Museum",
@@ -75,7 +74,6 @@ The criteria underpinning collection units and the methodology by which they are
         "896648 bytes",
       ],
       "tableSchema": {
-        "$schema": "https://fairspec.org/profiles/latest/table.json",
         "properties": {
           "Bibliographic level": {
             "type": "string",
@@ -208,7 +206,6 @@ The criteria underpinning collection units and the methodology by which they are
         "5868 bytes",
       ],
       "tableSchema": {
-        "$schema": "https://fairspec.org/profiles/latest/table.json",
         "properties": {
           "Documentation reference": {
             "type": "string",

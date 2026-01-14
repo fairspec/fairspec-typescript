@@ -58,7 +58,7 @@
       "name": "name",
       "data": "table.csv",
       "format": {
-        "name": "csv"
+        "type": "csv"
       },
       "tableSchema": "schema.json"
     }

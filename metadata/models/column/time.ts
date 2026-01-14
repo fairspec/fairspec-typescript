@@ -1,7 +1,8 @@
 import { z } from "zod"
-import { StringColumn } from "./string.ts"
+import { BaseColumn } from "./base.ts"
+import { BaseStringColumnProperty } from "./string.ts"
 
-export const TimeColumn = StringColumn.extend({
+export const TimeColumnProperty = BaseStringColumnProperty.extend({
   format: z.literal("time"),
 
   temporalFormat: z
@@ -10,6 +11,11 @@ export const TimeColumn = StringColumn.extend({
     .describe(
       "An optional string specifying the datetime format pattern as per the Strftime specification",
     ),
+})
+
+export const TimeColumn = BaseColumn.extend({
+  type: z.literal("time"),
+  property: TimeColumnProperty,
 })
 
 export type TimeColumn = z.infer<typeof TimeColumn>

@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
   CommentChar,
@@ -11,8 +12,8 @@ import {
   QuoteChar,
 } from "./common.ts"
 
-export const CsvFormat = z.object({
-  name: z.literal("csv"),
+export const CsvFormat = BaseFormat.extend({
+  type: z.literal("csv"),
   delimiter: Delimiter.optional(),
   lineTerminator: LineTerminator.optional(),
   quoteChar: QuoteChar.optional(),

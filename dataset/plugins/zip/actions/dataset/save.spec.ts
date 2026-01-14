@@ -17,7 +17,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save a basic dataset to zip", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -34,7 +33,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save dataset with metadata", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -56,7 +54,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save dataset with inline data resources", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -79,12 +76,11 @@ describe("saveDatasetToZip", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -100,12 +96,11 @@ describe("saveDatasetToZip", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "resource_1",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource_2",
@@ -122,13 +117,11 @@ describe("saveDatasetToZip", () => {
 
   it("should save dataset with tableSchema", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: [{ id: 1, name: "alice" }],
           tableSchema: {
-            $schema: "https://fairspec.org/profiles/latest/table.json",
             properties: {
               id: { type: "integer" },
               name: { type: "string" },
@@ -149,12 +142,11 @@ describe("saveDatasetToZip", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv", delimiter: ";" },
+          format: { type: "csv", delimiter: ";" },
         },
       ],
     }
@@ -167,7 +159,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save and reload dataset with same structure", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -194,7 +185,6 @@ describe("saveDatasetToZip", () => {
 
   it("should save and reload dataset preserving metadata", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       titles: [{ title: "Test Dataset" }],
       descriptions: [
         { description: "A test dataset", descriptionType: "Abstract" },
@@ -222,13 +212,11 @@ describe("saveDatasetToZip", () => {
 
   it("should save and reload dataset with tableSchema", async () => {
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: [{ id: 1, name: "alice" }],
           tableSchema: {
-            $schema: "https://fairspec.org/profiles/latest/table.json",
             properties: {
               id: { type: "integer" },
               name: { type: "string" },
@@ -247,7 +235,7 @@ describe("saveDatasetToZip", () => {
       true,
     )
     if (typeof tableSchema === "object" && "properties" in tableSchema) {
-      const properties = Object.entries(tableSchema.properties)
+      const properties = Object.entries(tableSchema.properties ?? {})
       expect(properties).toHaveLength(2)
       expect(properties[0]?.[0]).toBe("id")
       expect(properties[1]?.[0]).toBe("name")
@@ -259,12 +247,11 @@ describe("saveDatasetToZip", () => {
     const csvPath = await writeTempFile(csvContent)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }
@@ -274,12 +261,11 @@ describe("saveDatasetToZip", () => {
 
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
-    expect(reloadedDataset.resources?.[0]?.format?.name).toBe("csv")
+    expect(reloadedDataset.resources?.[0]?.format?.type).toBe("csv")
   })
 
   it("should throw error when saving to existing file", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -298,7 +284,6 @@ describe("saveDatasetToZip", () => {
 
   it("should create valid zip file structure", async () => {
     const dataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "test_resource",
@@ -326,17 +311,16 @@ describe("saveDatasetToZip", () => {
     const csv2Path = await writeTempFile(csv2Content)
 
     const originalDataset: Dataset = {
-      $schema: "https://fairspec.org/profiles/latest/dataset.json",
       resources: [
         {
           name: "resource_1",
           data: csv1Path,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
         {
           name: "resource_2",
           data: csv2Path,
-          format: { name: "csv" },
+          format: { type: "csv" },
         },
       ],
     }

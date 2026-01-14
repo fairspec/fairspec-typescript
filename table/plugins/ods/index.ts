@@ -1,2 +1,3 @@
-export * from "./plugin.ts"
-export * from "./table/index.ts"
+export { loadOdsTable } from "./actions/table/load.ts"
+export { saveOdsTable } from "./actions/table/save.ts"
+export { OdsPlugin } from "./plugin.ts"

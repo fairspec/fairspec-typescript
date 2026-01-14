@@ -4,9 +4,8 @@
   "$defs": {
     "Dataset": {
       "type": "object",
-      "required": ["$schema"],
       "properties": {
-        "$schema": { "$ref": "#/$defs/MetaSchema" },
+        "$schema": { "$ref": "#/$defs/Profile" },
         "resources": { "$ref": "#/$defs/Resources" },
         "doi": { "$ref": "#/$defs/Doi" },
         "prefix": { "$ref": "#/$defs/DoiPrefix" },
@@ -32,9 +31,8 @@
         "relatedItems": { "$ref": "#/$defs/RelatedItems" }
       }
     },
-    "MetaSchema": {
-      "type": "string",
-      "pattern": "dataset.json$"
+    "Profile": {
+      "$ref": "#/$defs/ExternalPath"
     },
     "Resources": {
       "type": "array",
@@ -42,14 +40,13 @@
     },
     "Resource": {
       "type": "object",
-      "required": ["data"],
       "properties": {
         "name": { "$ref": "#/$defs/Name" },
         "data": { "$ref": "#/$defs/Data" },
         "format": { "$ref": "#/$defs/Format" },
         "textual": { "$ref": "#/$defs/Textual" },
         "integrity": { "$ref": "#/$defs/Integrity" },
-        "jsonSchema": { "$ref": "#/$defs/JsonSchema" },
+        "dataSchema": { "$ref": "#/$defs/DataSchema" },
         "tableSchema": { "$ref": "#/$defs/TableSchema" },
         "doi": { "$ref": "#/$defs/Doi" },
         "prefix": { "$ref": "#/$defs/DoiPrefix" },
@@ -91,7 +88,7 @@
         "hash": { "type": "string" }
       }
     },
-    "JsonSchema": {
+    "DataSchema": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
         { "$ref": "https://json-schema.org/draft/2020-12/schema" }
@@ -140,48 +137,59 @@
     "Format": {
       "allOf": [
         {
-          "if": { "properties": { "name": { "const": "csv" } } },
+          "if": { "properties": { "type": { "const": "csv" } } },
           "then": { "$ref": "#/$defs/CsvFormat" }
         },
         {
-          "if": { "properties": { "name": { "const": "tsv" } } },
+          "if": { "properties": { "type": { "const": "tsv" } } },
           "then": { "$ref": "#/$defs/TsvFormat" }
         },
         {
-          "if": { "properties": { "name": { "const": "json" } } },
+          "if": { "properties": { "type": { "const": "json" } } },
           "then": { "$ref": "#/$defs/JsonFormat" }
         },
         {
-          "if": { "properties": { "name": { "const": "jsonl" } } },
+          "if": { "properties": { "type": { "const": "jsonl" } } },
           "then": { "$ref": "#/$defs/JsonlFormat" }
         },
         {
-          "if": { "properties": { "name": { "const": "xlsx" } } },
+          "if": { "properties": { "type": { "const": "xlsx" } } },
           "then": { "$ref": "#/$defs/XlsxFormat" }
         },
         {
-          "if": { "properties": { "name": { "const": "ods" } } },
+          "if": { "properties": { "type": { "const": "ods" } } },
           "then": { "$ref": "#/$defs/OdsFormat" }
         },
         {
-          "if": { "properties": { "name": { "const": "sqlite" } } },
+          "if": { "properties": { "type": { "const": "sqlite" } } },
           "then": { "$ref": "#/$defs/SqliteFormat" }
         },
         {
-          "if": { "properties": { "name": { "const": "parquet" } } },
+          "if": { "properties": { "type": { "const": "parquet" } } },
           "then": { "$ref": "#/$defs/ParquetFormat" }
         },
         {
-          "if": { "properties": { "name": { "const": "arrow" } } },
+          "if": { "properties": { "type": { "const": "arrow" } } },
           "then": { "$ref": "#/$defs/ArrowFormat" }
+        },
+        {
+          "if": { "not": { "required": ["type"] } },
+          "then": { "$ref": "#/$defs/CustomFormat" }
         }
       ]
     },
-    "CsvFormat": {
+    "BaseFormat": {
       "type": "object",
-      "required": ["name"],
       "properties": {
-        "name": { "const": "csv" },
+        "title": { "$ref": "#/$defs/FormatTitle" },
+        "description": { "$ref": "#/$defs/FormatDescription" }
+      }
+    },
+    "CsvFormat": {
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
+      "properties": {
+        "type": { "const": "csv" },
         "delimiter": { "$ref": "#/$defs/Delimiter" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
         "quoteChar": { "$ref": "#/$defs/QuoteChar" },
@@ -194,10 +202,10 @@
       }
     },
     "TsvFormat": {
-      "type": "object",
-      "required": ["name"],
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
       "properties": {
-        "name": { "const": "tsv" },
+        "type": { "const": "tsv" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
         "nullSequence": { "$ref": "#/$defs/NullSequence" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
@@ -208,33 +216,37 @@
       }
     },
     "JsonFormat": {
-      "type": "object",
-      "required": ["name"],
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
       "properties": {
-        "name": { "const": "json" },
+        "type": { "const": "json" },
         "jsonPointer": { "$ref": "#/$defs/JsonPointer" },
         "rowType": { "$ref": "#/$defs/RowType" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
+        "commentRows": { "$ref": "#/$defs/CommentRows" },
+        "commentChar": { "$ref": "#/$defs/CommentChar" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
     "JsonlFormat": {
-      "type": "object",
-      "required": ["name"],
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
       "properties": {
-        "name": { "const": "jsonl" },
+        "type": { "const": "jsonl" },
         "rowType": { "$ref": "#/$defs/RowType" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
+        "commentRows": { "$ref": "#/$defs/CommentRows" },
+        "commentChar": { "$ref": "#/$defs/CommentChar" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
     "XlsxFormat": {
-      "type": "object",
-      "required": ["name"],
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
       "properties": {
-        "name": { "const": "xlxs" },
+        "type": { "const": "xlxs" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
         "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
@@ -245,10 +257,10 @@
       }
     },
     "OdsFormat": {
-      "type": "object",
-      "required": ["name"],
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
       "properties": {
-        "name": { "const": "ods" },
+        "type": { "const": "ods" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
         "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
@@ -259,26 +271,35 @@
       }
     },
     "SqliteFormat": {
-      "type": "object",
-      "required": ["name"],
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
       "properties": {
-        "name": { "const": "sqlite" },
+        "type": { "const": "sqlite" },
         "tableName": { "$ref": "#/$defs/TableName" }
       }
     },
     "ParquetFormat": {
-      "type": "object",
-      "required": ["name"],
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
       "properties": {
-        "name": { "const": "parquet" }
+        "type": { "const": "parquet" }
       }
     },
     "ArrowFormat": {
-      "type": "object",
-      "required": ["name"],
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["type"],
       "properties": {
-        "name": { "const": "arrow" }
+        "type": { "const": "arrow" }
       }
+    },
+    "CustomFormat": {
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }]
+    },
+    "FormatTitle": {
+      "type": "string"
+    },
+    "FormatDescription": {
+      "type": "string"
     },
     "Delimiter": {
       "type": "string",

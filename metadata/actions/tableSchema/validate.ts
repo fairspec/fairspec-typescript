@@ -1,5 +1,6 @@
 import { loadDescriptor } from "../../actions/descriptor/load.ts"
 import { validateDescriptor } from "../../actions/descriptor/validate.ts"
+import { loadProfile } from "../../actions/profile/load.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
 import type { TableSchema } from "../../models/tableSchema.ts"
 
@@ -17,8 +18,17 @@ export async function validateTableSchema(
       ? await loadDescriptor(source)
       : (source as Descriptor)
 
-  const report = await validateDescriptor(descriptor, {
+  const $schema =
+    typeof descriptor.$schema === "string"
+      ? descriptor.$schema
+      : `https://fairspec.org/profiles/latest/table.json`
+
+  const profile = await loadProfile($schema, {
     profileType: "table",
+  })
+
+  const report = await validateDescriptor(descriptor, {
+    profile,
     rootJsonPointer: options?.rootJsonPointer,
   })
 

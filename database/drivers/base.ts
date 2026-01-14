@@ -1,9 +1,10 @@
-import type { Column, Schema } from "@fairspec/metadata"
+import type { Column, TableSchema } from "@fairspec/metadata"
+import { getColumnProperties } from "@fairspec/metadata"
 import type { Dialect } from "kysely"
 import { Kysely } from "kysely"
 import { LRUCache } from "lru-cache"
-import type { DatabaseColumn, DatabaseType } from "../column/index.ts"
-import type { DatabaseSchema } from "../schema/index.ts"
+import type { DatabaseColumn } from "../models/column.ts"
+import type { DatabaseSchema } from "../models/schema.ts"
 
 // We cache database connections (only works in serverfull environments)
 const databases = new LRUCache<string, Kysely<any>>({
@@ -32,17 +33,20 @@ export abstract class BaseAdapter {
     options?: { create?: boolean },
   ): Promise<Dialect>
 
-  normalizeSchema(databaseSchema: DatabaseSchema) {
-    const schema: Schema = { columns: [] }
+  convertSchemaFrom(databaseSchema: DatabaseSchema) {
+    const columns: Column[] = []
 
     for (const databaseColumn of databaseSchema.columns) {
-      schema.columns.push(this.normalizeColumn(databaseColumn))
+      columns.push(this.convertColumnFrom(databaseColumn))
     }
 
-    return schema
+    return {
+      properties: getColumnProperties(columns),
+      primaryKey: databaseSchema.primaryKey,
+    }
   }
 
-  normalizeColumn(databaseColumn: DatabaseColumn) {
+  convertColumnFrom(databaseColumn: DatabaseColumn) {
     const column: Column = {
       name: databaseColumn.name,
       type: this.normalizeType(databaseColumn.dataType),

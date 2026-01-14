@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getDataPaths, getFileExtension } from "@fairspec/metadata"
+import { getFileExtension, getFirstDataPath } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -8,6 +8,8 @@ import type {
 } from "../../plugin.ts"
 import { loadOdsTable } from "./actions/table/load.ts"
 import { saveOdsTable } from "./actions/table/save.ts"
+
+// TODO: merge into xlxs plugin as it is very similar?
 
 export class OdsPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
@@ -20,8 +22,7 @@ export class OdsPlugin implements TablePlugin {
   async saveTable(table: Table, options: SaveTableOptions) {
     const { path, format } = options
 
-    const formatObject = format ? { type: format } : undefined
-    const isOds = getIsOds({ data: path, format: formatObject })
+    const isOds = getIsOds({ data: path, format })
     if (!isOds) return undefined
 
     return await saveOdsTable(table, options)
@@ -31,8 +32,7 @@ export class OdsPlugin implements TablePlugin {
 function getIsOds(resource: Partial<Resource>) {
   if (resource.format?.type === "ods") return true
 
-  const paths = getDataPaths(resource)
-  const firstPath = paths[0]
+  const firstPath = getFirstDataPath(resource)
   if (!firstPath) return false
 
   const extension = getFileExtension(firstPath)

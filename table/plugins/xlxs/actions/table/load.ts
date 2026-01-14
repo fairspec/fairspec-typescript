@@ -1,13 +1,12 @@
-import { resolveDialect } from "@fairspec/metadata"
 import type { Resource } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
-import type { DataRow } from "../../../data/index.ts"
-import { getRecordsFromRows } from "../../../data/index.ts"
-import type { LoadTableOptions } from "../../../plugin.ts"
-import { inferSchemaFromTable } from "../../../schema/index.ts"
-import { normalizeTable } from "../../../table/index.ts"
-import type { Table } from "../../../table/index.ts"
+import type { DataRow } from "../../../../models/data.ts"
+import { getRecordsFromRows } from "../../../../actions/data/format.ts"
+import type { LoadTableOptions } from "../../../../plugin.ts"
+import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
+import { normalizeTable } from "../../../../actions/table/normalize.ts"
+import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { read, utils } from "xlsx"
 
@@ -18,20 +17,20 @@ export async function loadXlsxTable(
   resource: Partial<Resource>,
   options?: LoadTableOptions,
 ) {
-  const paths = await prefetchFiles(resource.path)
+  const paths = await prefetchFiles(resource)
   if (!paths.length) {
     throw new Error("Resource path is not defined")
   }
 
-  const dialect = await resolveDialect(resource.dialect)
+  const xlsxFormat = resource.format?.type === "xlsx" ? resource.format : undefined
 
   const tables: Table[] = []
   for (const path of paths) {
     const buffer = await loadFile(path)
 
     const book = read(buffer, { type: "buffer" })
-    const sheetIndex = dialect?.sheetNumber ? dialect.sheetNumber - 1 : 0
-    const sheetName = dialect?.sheetName ?? book.SheetNames[sheetIndex]
+    const sheetIndex = xlsxFormat?.sheetNumber ? xlsxFormat.sheetNumber - 1 : 0
+    const sheetName = xlsxFormat?.sheetName ?? book.SheetNames[sheetIndex]
     const sheet = sheetName ? book.Sheets[sheetName] : undefined
 
     if (sheet) {
@@ -40,7 +39,7 @@ export async function loadXlsxTable(
         raw: true,
       }) as DataRow[]
 
-      const records = getRecordsFromRows(rows, dialect)
+      const records = getRecordsFromRows(rows, xlsxFormat)
       const table = pl.DataFrame(records).lazy()
 
       tables.push(table)
@@ -50,9 +49,9 @@ export async function loadXlsxTable(
   let table = pl.concat(tables)
 
   if (!options?.denormalized) {
-    let schema = await resolveTableSchema(resource.schema)
-    if (!schema) schema = await inferSchemaFromTable(table, options)
-    table = await normalizeTable(table, schema)
+    let tableSchema = await resolveTableSchema(resource.tableSchema)
+    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
+    table = await normalizeTable(table, tableSchema)
   }
 
   return table

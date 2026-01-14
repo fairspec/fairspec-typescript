@@ -24,11 +24,11 @@ export async function saveArrowTable(table: Table, options: SaveTableOptions) {
   table = await denormalizeTable(table, tableSchema, {
     nativeTypes: [
       "boolean",
-      "date-time",
       "integer",
-      "list",
       "number",
       "string",
+      "list",
+      "date-time",
     ],
   })
 

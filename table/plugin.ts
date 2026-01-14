@@ -21,7 +21,7 @@ export type SaveTableOptions = FormatOptions &
   }
 
 export interface TablePlugin extends DatasetPlugin {
-  savePackage?(
+  saveDataset?(
     dataset: Dataset,
     options: SaveDatasetOptions & { plugins?: TablePlugin[] },
   ): Promise<{ path?: string } | undefined>

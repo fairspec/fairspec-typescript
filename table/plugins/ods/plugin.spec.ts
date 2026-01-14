@@ -136,7 +136,7 @@ describe("OdsPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "ods" as const }
+      const options = { path: "output.txt", format: { type: "ods" as const } }
       mockSaveOdsTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

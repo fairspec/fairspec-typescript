@@ -1,15 +1,15 @@
 import type { Resource } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import * as loadModule from "./actions/table/load.ts"
+import * as saveModule from "./actions/table/save.ts"
 import { XlsxPlugin } from "./plugin.ts"
-import * as loadModule from "./table/load.ts"
-import * as saveModule from "./table/save.ts"
 
-vi.mock("./table/load.ts", () => ({
+vi.mock("./actions/table/load.ts", () => ({
   loadXlsxTable: vi.fn(),
 }))
 
-vi.mock("./table/save.ts", () => ({
+vi.mock("./actions/table/save.ts", () => ({
   saveXlsxTable: vi.fn(),
 }))
 
@@ -28,7 +28,7 @@ describe("XlsxPlugin", () => {
   describe("loadTable", () => {
     it("should load table from xlsx file", async () => {
       const resource: Partial<Resource> = {
-        path: "test.xlsx",
+        data: "test.xlsx",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadXlsxTable.mockResolvedValue(mockTable)
@@ -41,7 +41,7 @@ describe("XlsxPlugin", () => {
 
     it("should return undefined for non-xlsx files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.csv",
+        data: "test.csv",
       }
 
       const result = await plugin.loadTable(resource)
@@ -52,8 +52,8 @@ describe("XlsxPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const resource: Partial<Resource> = {
-        path: "test.txt",
-        format: "xlsx",
+        data: "test.txt",
+        format: { type: "xlsx" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadXlsxTable.mockResolvedValue(mockTable)
@@ -66,7 +66,7 @@ describe("XlsxPlugin", () => {
 
     it("should pass through load options", async () => {
       const resource: Partial<Resource> = {
-        path: "test.xlsx",
+        data: "test.xlsx",
       }
       const options = { denormalized: true }
       const mockTable = pl.DataFrame().lazy()
@@ -79,7 +79,7 @@ describe("XlsxPlugin", () => {
 
     it("should handle paths with directories", async () => {
       const resource: Partial<Resource> = {
-        path: "/path/to/data.xlsx",
+        data: "/path/to/data.xlsx",
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadXlsxTable.mockResolvedValue(mockTable)
@@ -91,7 +91,7 @@ describe("XlsxPlugin", () => {
 
     it("should return undefined for ods files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.ods",
+        data: "test.ods",
       }
 
       const result = await plugin.loadTable(resource)
@@ -102,7 +102,7 @@ describe("XlsxPlugin", () => {
 
     it("should return undefined for json files", async () => {
       const resource: Partial<Resource> = {
-        path: "test.json",
+        data: "test.json",
       }
 
       const result = await plugin.loadTable(resource)
@@ -136,7 +136,7 @@ describe("XlsxPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: "xlsx" as const }
+      const options = { path: "output.txt", format: { type: "xlsx" as const } }
       mockSaveXlsxTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

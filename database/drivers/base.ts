@@ -1,5 +1,9 @@
 import type { Column, TableSchema } from "@fairspec/metadata"
-import { getColumnProperties } from "@fairspec/metadata"
+import {
+  composeColumn,
+  getColumnProperties,
+  getColumns,
+} from "@fairspec/metadata"
 import type { Dialect } from "kysely"
 import { Kysely } from "kysely"
 import { LRUCache } from "lru-cache"
@@ -12,7 +16,7 @@ const databases = new LRUCache<string, Kysely<any>>({
   max: 10,
 })
 
-export abstract class BaseAdapter {
+export abstract class BaseDriver {
   abstract get nativeTypes(): Column["type"][]
 
   async connectDatabase(path: string, options?: { create?: boolean }) {
@@ -33,63 +37,76 @@ export abstract class BaseAdapter {
     options?: { create?: boolean },
   ): Promise<Dialect>
 
-  convertSchemaFrom(databaseSchema: DatabaseSchema) {
+  convertTableSchemaFromToDatabase(databaseSchema: DatabaseSchema) {
     const columns: Column[] = []
+    const required: string[] = []
 
     for (const databaseColumn of databaseSchema.columns) {
-      columns.push(this.convertColumnFrom(databaseColumn))
+      columns.push(this.convertColumnFromToDatabase(databaseColumn))
+
+      // TODO: Update when required uses JSON Schema symantics
+      if (!databaseColumn.isNullable) {
+        required.push(databaseColumn.name)
+      }
     }
 
     return {
       properties: getColumnProperties(columns),
       primaryKey: databaseSchema.primaryKey,
+      required,
     }
   }
 
-  convertColumnFrom(databaseColumn: DatabaseColumn) {
-    const column: Column = {
-      name: databaseColumn.name,
-      type: this.normalizeType(databaseColumn.dataType),
-    }
+  convertColumnFromToDatabase(databaseColumn: DatabaseColumn) {
+    const property = this.convertColumnPropertyFromToDatabase(
+      databaseColumn.dataType,
+    )
 
-    if (!databaseColumn.isNullable) {
-      column.constraints ??= {}
-      column.constraints.required = true
-    }
+    const name = databaseColumn.name
+    const column = composeColumn(name, property)
 
     if (databaseColumn.comment) {
-      column.description = databaseColumn.comment
+      column.property.description = databaseColumn.comment
     }
 
     return column
   }
 
-  abstract normalizeType(databaseType: DatabaseType): Column["type"]
+  abstract convertColumnPropertyFromToDatabase(
+    databaseType: DatabaseColumn["dataType"],
+  ): Column["property"]
 
-  denormalizeSchema(schema: Schema, tableName: string): DatabaseSchema {
+  convertTableSchemaToToDatabase(
+    tableSchema: TableSchema,
+    tableName: string,
+  ): DatabaseSchema {
     const databaseSchema: DatabaseSchema = {
       name: tableName,
       columns: [],
       isView: false,
     }
 
-    for (const column of schema.columns) {
-      databaseSchema.columns.push(this.denormalizeColumn(column))
+    const columns = getColumns(tableSchema)
+    for (const column of columns) {
+      // TODO: Update when required uses JSON Schema symantics
+      const isNullable = tableSchema.required?.includes(column.name)
+      const databaseColumn = this.convertColumnToDatabase(column, isNullable)
+      databaseSchema.columns.push(databaseColumn)
     }
 
-    if (schema.primaryKey) {
-      databaseSchema.primaryKey = schema.primaryKey
+    if (tableSchema.primaryKey) {
+      databaseSchema.primaryKey = tableSchema.primaryKey
     }
 
     return databaseSchema
   }
 
-  denormalizeColumn(column: Column): DatabaseColumn {
+  convertColumnToDatabase(column: Column, isNullable = true): DatabaseColumn {
     const databaseColumn: DatabaseColumn = {
       name: column.name,
-      dataType: this.denormalizeType(column.type),
-      isNullable: !column.constraints?.required,
-      comment: column.description,
+      dataType: this.convertColumnTypeToDatabase(column.type),
+      isNullable,
+      comment: column.property.description,
       isAutoIncrementing: false,
       hasDefaultValue: false,
     }
@@ -97,5 +114,7 @@ export abstract class BaseAdapter {
     return databaseColumn
   }
 
-  abstract denormalizeType(columnType: Column["type"]): DatabaseType
+  abstract convertColumnTypeToDatabase(
+    columnType: Column["type"],
+  ): DatabaseColumn["dataType"]
 }

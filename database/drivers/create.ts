@@ -1,12 +1,9 @@
-import type { DatabaseFormat } from "../resource/index.ts"
 import { MysqlAdapter } from "./mysql.ts"
 import { PostgresqlAdapter } from "./postgresql.ts"
 import { SqliteAdapter } from "./sqlite.ts"
 
-// TODO: Enable SQLite support
-
-export function createAdapter(format: DatabaseFormat) {
-  switch (format) {
+export function createDriver(name: string) {
+  switch (name) {
     case "postgresql":
       return new PostgresqlAdapter()
     case "mysql":
@@ -14,6 +11,6 @@ export function createAdapter(format: DatabaseFormat) {
     case "sqlite":
       return new SqliteAdapter()
     default:
-      throw new Error(`Unsupported database format: "${format}"`)
+      throw new Error(`Unsupported database: "${name}"`)
   }
 }

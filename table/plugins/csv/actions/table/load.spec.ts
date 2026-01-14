@@ -88,8 +88,8 @@ describe("loadCsvTable", () => {
 
     const records = (await table.collect()).toRecords()
     expect(records).toEqual([
-      { field1: 1, field2: "alice" },
-      { field1: 2, field2: "bob" },
+      { column1: 1, column2: "alice" },
+      { column1: 2, column2: "bob" },
     ])
   })
 

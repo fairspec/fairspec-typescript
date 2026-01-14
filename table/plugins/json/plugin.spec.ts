@@ -36,7 +36,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: "json" },
+        { ...resource, format: { type: "json" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -52,7 +52,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: "jsonl" },
+        { ...resource, format: { type: "jsonl" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -68,7 +68,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: "jsonl" },
+        { ...resource, format: { type: "jsonl" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -96,7 +96,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: "json" },
+        { ...resource, format: { type: "json" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -113,7 +113,7 @@ describe("JsonPlugin", () => {
       await plugin.loadTable(resource, options)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: "json" },
+        { ...resource, format: { type: "json" } },
         options,
       )
     })
@@ -128,7 +128,7 @@ describe("JsonPlugin", () => {
       await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: "json" },
+        { ...resource, format: { type: "json" } },
         undefined,
       )
     })
@@ -144,7 +144,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "json",
+        format: { type: "json" },
       })
       expect(result).toEqual({ path: "output.json" })
     })
@@ -158,7 +158,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "jsonl",
+        format: { type: "jsonl" },
       })
       expect(result).toEqual({ path: "output.jsonl" })
     })
@@ -172,7 +172,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "jsonl",
+        format: { type: "jsonl" },
       })
       expect(result).toEqual({ path: "output.ndjson" })
     })
@@ -196,7 +196,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "json",
+        format: { type: "json" },
       })
       expect(result).toEqual({ path: "output.txt" })
     })
@@ -210,7 +210,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: "json",
+        format: { type: "json" },
       })
     })
 

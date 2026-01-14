@@ -33,7 +33,7 @@ export class JsonPlugin implements TablePlugin {
 }
 
 function getSupportedFormat(resource: Partial<Resource>) {
-  if (resource.format?.type === "csv" || resource.format?.type === "tsv") {
+  if (resource.format?.type === "json" || resource.format?.type === "jsonl") {
     return resource.format
   }
 
@@ -41,10 +41,14 @@ function getSupportedFormat(resource: Partial<Resource>) {
   if (!firstPath) return undefined
 
   const extension = getFileExtension(firstPath)
-  const format: JsonFormat | JsonlFormat | undefined =
+  let format: JsonFormat | JsonlFormat | undefined =
     extension === "json" || extension === "jsonl"
       ? { type: extension }
       : undefined
+
+  if (extension === "ndjson") {
+    format = { type: "jsonl" }
+  }
 
   return format
 }

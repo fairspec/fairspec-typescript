@@ -75,7 +75,7 @@ function getScanOptions(format?: TsvFormat | CsvFormat) {
 
   options.skipRows = headerRows[0] ? headerRows[0] - 1 : 0
   options.hasHeader = headerRows.length > 0
-  options.eolChar = format?.lineTerminator ?? "\r\n"
+  options.eolChar = format?.lineTerminator ?? "\n"
   options.sep = format?.type === "csv" ? (format?.delimiter ?? ",") : "\t"
   options.quoteChar = format?.type === "csv" ? format?.quoteChar ?? '"' : undefined
   options.nullValues = format?.nullSequence

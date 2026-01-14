@@ -35,7 +35,7 @@ export async function saveCsvTable(table: Table, options: SaveTableOptions) {
       maintainOrder: true,
       includeHeader: headerRows.length > 0,
       separator: csvFormat?.delimiter ?? (isTabs ? "\t" : ","),
-      lineTerminator: csvFormat?.lineTerminator ?? "\r\n",
+      lineTerminator: csvFormat?.lineTerminator ?? "\n",
       quoteChar: csvFormat?.quoteChar ?? '"',
     })
     .collect()

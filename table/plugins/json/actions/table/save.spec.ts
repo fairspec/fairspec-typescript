@@ -23,7 +23,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      dialect: { property: "key" },
+      format: { type: "json", jsonPointer: "key" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -35,7 +35,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      dialect: { itemKeys: ["name"] },
+      format: { type: "json", columnNames: ["name"] },
     })
 
     const content = await readFile(path, "utf-8")
@@ -49,7 +49,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      dialect: { itemType: "array" },
+      format: { type: "json", rowType: "array" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -98,7 +98,7 @@ describe("saveJsonTable (format=jsonl)", () => {
   it("should save table to file", async () => {
     const path = getTempFilePath()
 
-    await saveJsonTable(table, { path, format: "jsonl" })
+    await saveJsonTable(table, { path, format: { type: "jsonl" } })
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual(
@@ -110,8 +110,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      format: "jsonl",
-      dialect: { itemKeys: ["name"] },
+      format: { type: "jsonl", columnNames: ["name"] },
     })
 
     const content = await readFile(path, "utf-8")
@@ -127,8 +126,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      format: "jsonl",
-      dialect: { itemType: "array" },
+      format: { type: "jsonl", rowType: "array" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -145,8 +143,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      format: "jsonl",
-      dialect: { itemType: "object" },
+      format: { type: "jsonl", rowType: "object" },
     })
 
     const content = await readFile(path, "utf-8")

@@ -12,7 +12,7 @@ import { inspectColumn } from "../../actions/column/inspect.ts"
 import { getPolarsSchema } from "../../helpers/schema.ts"
 import type { SchemaMapping } from "../../models/schema.ts"
 import type { Table } from "../../models/table.ts"
-import { createRowKeyChecks } from "./checks/keys.ts"
+import { createRowKeyChecks } from "./checks/key.ts"
 
 export async function inspectTable(
   table: Table,

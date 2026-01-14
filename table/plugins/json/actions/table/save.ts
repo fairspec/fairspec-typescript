@@ -1,4 +1,5 @@
 import { saveFile } from "@fairspec/dataset"
+import type { JsonFormat, JsonlFormat } from "@fairspec/metadata"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { Table } from "../../../../models/table.ts"
@@ -13,8 +14,8 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
     options.format?.type === "json" ? options.format : undefined
   const jsonlFormat =
     options.format?.type === "jsonl" ? options.format : undefined
-  const format = jsonFormat ?? jsonlFormat
 
+  const format = jsonFormat ?? jsonlFormat
   const isLines = format?.type === "jsonl"
 
   const tableSchema =
@@ -42,23 +43,32 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   return path
 }
 
-function processData(records: Record<string, any>[], dialect: any) {
+function processData(
+  records: Record<string, any>[],
+  format: JsonFormat | JsonlFormat,
+) {
   let data: any = records
 
-  if (dialect.itemKeys) {
-    const keys = dialect.itemKeys
+  if (format.columnNames) {
+    const names = format.columnNames
     data = data.map((row: any) =>
-      Object.fromEntries(keys.map((key: any) => [key, row[key]])),
+      Object.fromEntries(names.map((name: any) => [name, row[name]])),
     )
   }
 
-  if (dialect.itemType === "array") {
-    const keys = dialect.itemKeys ?? Object.keys(data[0])
-    data = [keys, ...data.map((row: any) => keys.map((key: any) => row[key]))]
+  if (format.rowType === "array") {
+    const names = format.columnNames ?? Object.keys(data[0])
+    data = [
+      names,
+      ...data.map((row: any) => names.map((nmae: any) => row[nmae])),
+    ]
   }
 
-  if (dialect.property) {
-    data = { [dialect.property]: data }
+  if (format.type === "json") {
+    if (format.jsonPointer) {
+      // TODO: cover more jsonPointer cases
+      data = { [format.jsonPointer]: data }
+    }
   }
 
   return data

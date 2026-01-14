@@ -6,29 +6,15 @@ import {
 } from "@fairspec/metadata"
 import type { Dialect } from "kysely"
 import { Kysely } from "kysely"
-import { LRUCache } from "lru-cache"
 import type { DatabaseColumn } from "../models/column.ts"
 import type { DatabaseSchema } from "../models/schema.ts"
-
-// We cache database connections (only works in serverfull environments)
-const databases = new LRUCache<string, Kysely<any>>({
-  dispose: database => database.destroy(),
-  max: 10,
-})
 
 export abstract class BaseDriver {
   abstract get nativeTypes(): Column["type"][]
 
   async connectDatabase(path: string, options?: { create?: boolean }) {
-    const cachedDatabase = databases.get(path)
-    if (cachedDatabase) {
-      return cachedDatabase
-    }
-
     const dialect = await this.createDialect(path, options)
     const database = new Kysely<any>({ dialect })
-    databases.set(path, new Kysely<any>({ dialect }))
-
     return database
   }
 

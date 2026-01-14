@@ -233,6 +233,12 @@ importers:
       csv-sniffer:
         specifier: ^0.1.1
         version: 0.1.1
+      kysely:
+        specifier: ^0.28.7
+        version: 0.28.7
+      kysely-generic-sqlite:
+        specifier: ^1.2.1
+        version: 1.2.1(kysely@0.28.7)
       nodejs-polars:
         specifier: ^0.23.5
         version: 0.23.5

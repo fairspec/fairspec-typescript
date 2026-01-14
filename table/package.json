@@ -39,6 +39,8 @@
     "@fairspec/dataset": "workspace:*",
     "@fairspec/metadata": "workspace:*",
     "csv-sniffer": "^0.1.1",
+    "kysely": "^0.28.7",
+    "kysely-generic-sqlite": "^1.2.1",
     "nodejs-polars": "^0.23.5",
     "p-all": "^5.0.1",
     "temporal-polyfill": "^0.3.0",

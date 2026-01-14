@@ -1,15 +1,15 @@
-import { MysqlAdapter } from "./mysql.ts"
-import { PostgresqlAdapter } from "./postgresql.ts"
-import { SqliteAdapter } from "./sqlite.ts"
+import { MysqlDriver } from "./mysql.ts"
+import { PostgresqlDriver } from "./postgresql.ts"
+import { SqliteDriver } from "./sqlite.ts"
 
 export function createDriver(name: string) {
   switch (name) {
     case "postgresql":
-      return new PostgresqlAdapter()
+      return new PostgresqlDriver()
     case "mysql":
-      return new MysqlAdapter()
+      return new MysqlDriver()
     case "sqlite":
-      return new SqliteAdapter()
+      return new SqliteDriver()
     default:
       throw new Error(`Unsupported database: "${name}"`)
   }

@@ -1,6 +1,9 @@
 import type { Column, ColumnProperty } from "../../models/column/column.ts"
 
-export function composeColumn(name: string, property: ColumnProperty): Column {
+export function createColumnFromProperty(
+  name: string,
+  property: ColumnProperty,
+): Column {
   switch (property.type) {
     case "boolean":
       return { type: "boolean", name, property }

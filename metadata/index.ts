@@ -1,4 +1,4 @@
-export { composeColumn } from "./actions/column/compose.ts"
+export { createColumnFromProperty } from "./actions/column/create.ts"
 export { getColumnProperties } from "./actions/column/property.ts"
 export { assertDataset } from "./actions/dataset/assert.ts"
 export { denormalizeDataset } from "./actions/dataset/denormalize.ts"

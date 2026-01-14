@@ -1,6 +1,6 @@
 import type { Column, TableSchema } from "@fairspec/metadata"
 import {
-  composeColumn,
+  createColumnFromProperty,
   getColumnProperties,
   getColumns,
 } from "@fairspec/metadata"
@@ -37,12 +37,12 @@ export abstract class BaseDriver {
     options?: { create?: boolean },
   ): Promise<Dialect>
 
-  convertTableSchemaFromToDatabase(databaseSchema: DatabaseSchema) {
+  convertTableSchemaFromDatabase(databaseSchema: DatabaseSchema) {
     const columns: Column[] = []
     const required: string[] = []
 
     for (const databaseColumn of databaseSchema.columns) {
-      columns.push(this.convertColumnFromToDatabase(databaseColumn))
+      columns.push(this.convertColumnFromDatabase(databaseColumn))
 
       // TODO: Update when required uses JSON Schema symantics
       if (!databaseColumn.isNullable) {
@@ -57,13 +57,13 @@ export abstract class BaseDriver {
     }
   }
 
-  convertColumnFromToDatabase(databaseColumn: DatabaseColumn) {
+  convertColumnFromDatabase(databaseColumn: DatabaseColumn) {
     const property = this.convertColumnPropertyFromDatabase(
       databaseColumn.dataType,
     )
 
     const name = databaseColumn.name
-    const column = composeColumn(name, property)
+    const column = createColumnFromProperty(name, property)
 
     if (databaseColumn.comment) {
       column.property.description = databaseColumn.comment

@@ -1,20 +1,19 @@
-import type { FieldType } from "@fairspec/metadata"
+import type { Column } from "@fairspec/metadata"
 import { PostgresDialect } from "kysely"
 import { Pool } from "pg"
-import type { DatabaseType } from "../field/index.ts"
-import { BaseAdapter } from "./base.ts"
+import type { DatabaseColumn } from "../models/column.ts"
+import { BaseDriver } from "./base.ts"
 
 // TODO: Support more native types
 
-export class PostgresqlAdapter extends BaseAdapter {
+export class PostgresqlDriver extends BaseDriver {
   nativeTypes = [
     "boolean",
-    "datetime",
+    "date-time",
     "integer",
     "number",
     "string",
-    "year",
-  ] satisfies FieldType[]
+  ] satisfies Column["type"][]
 
   async createDialect(path: string) {
     return new PostgresDialect({
@@ -22,8 +21,13 @@ export class PostgresqlAdapter extends BaseAdapter {
     })
   }
 
-  normalizeType(databaseType: DatabaseType): FieldType {
+  convertColumnPropertyFromDatabase(
+    databaseType: DatabaseColumn["dataType"],
+  ): Column["property"] {
     switch (databaseType.toLowerCase()) {
+      case "boolean":
+      case "bool":
+        return { type: "boolean" }
       case "smallint":
       case "integer":
       case "int":
@@ -34,17 +38,14 @@ export class PostgresqlAdapter extends BaseAdapter {
       case "smallserial":
       case "serial":
       case "bigserial":
-        return "integer"
+        return { type: "integer" }
       case "decimal":
       case "numeric":
       case "real":
       case "float4":
       case "double precision":
       case "float8":
-        return "number"
-      case "boolean":
-      case "bool":
-        return "boolean"
+        return { type: "number" }
       case "char":
       case "character":
       case "varchar":
@@ -52,24 +53,24 @@ export class PostgresqlAdapter extends BaseAdapter {
       case "text":
       case "citext":
       case "uuid":
-        return "string"
+        return { type: "string" }
       case "date":
-        return "date"
+        return { type: "string", format: "date" }
       case "time":
       case "time without time zone":
       case "time with time zone":
       case "timetz":
-        return "time"
+        return { type: "string", format: "time" }
       case "timestamp":
       case "timestamp without time zone":
       case "timestamp with time zone":
       case "timestamptz":
-        return "datetime"
+        return { type: "string", format: "date-time" }
       case "interval":
-        return "duration"
+        return { type: "string", format: "duration" }
       case "json":
       case "jsonb":
-        return "object"
+        return { type: "object" }
       case "point":
       case "line":
       case "lseg":
@@ -79,17 +80,19 @@ export class PostgresqlAdapter extends BaseAdapter {
       case "circle":
       case "geometry":
       case "geography":
-        return "geojson"
+        return { type: "object", format: "geojson" }
       default:
-        return "string"
+        return {}
     }
   }
 
-  denormalizeType(fieldType: FieldType): DatabaseType {
-    switch (fieldType) {
+  convertColumnTypeToDatabase(
+    columnType: Column["type"],
+  ): DatabaseColumn["dataType"] {
+    switch (columnType) {
       case "boolean":
         return "boolean"
-      case "datetime":
+      case "date-time":
         return "timestamp"
       case "integer":
         return "integer"
@@ -97,8 +100,6 @@ export class PostgresqlAdapter extends BaseAdapter {
         return "double precision"
       case "string":
         return "text"
-      case "year":
-        return "integer"
       default:
         return "text"
     }

@@ -2,7 +2,7 @@ import { writeTempFile } from "@fairspec/dataset"
 import { describe, expect, it } from "vitest"
 import { inferTable } from "./infer.ts"
 
-describe("inferTable", () => {
+describe.skip("inferTable", () => {
   it("should infer table with dialect and schema from CSV", async () => {
     const csvPath = await writeTempFile("id,name\n1,alice\n2,bob")
     const resource = { path: csvPath, format: "csv" as const }

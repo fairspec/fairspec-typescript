@@ -1,21 +1,19 @@
-import type { Dialect, Resource } from "@fairspec/metadata"
-import type { InferDialectOptions } from "@fairspec/table"
-import { system } from "../system.ts"
+import type { InferFormatOptions } from "@fairspec/dataset"
+import type { Resource } from "@fairspec/metadata"
+import { system } from "../../system.ts"
 
 // TODO: review default values being {} vs undefined
 
-export async function inferDialect(
+export async function inferFormat(
   resource: Partial<Resource>,
-  options?: InferDialectOptions,
+  options?: InferFormatOptions,
 ) {
-  let dialect: Dialect = {}
-
   for (const plugin of system.plugins) {
-    const result = await plugin.inferDialect?.(resource, options)
-    if (result) {
-      dialect = result
+    const format = await plugin.inferFormat?.(resource, options)
+    if (format) {
+      return format
     }
   }
 
-  return dialect
+  return undefined
 }

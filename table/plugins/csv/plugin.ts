@@ -6,6 +6,7 @@ import type {
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
+import { inferCsvFormat } from "./actions/format/infer.ts"
 import { loadCsvTable } from "./actions/table/load.ts"
 import { saveCsvTable } from "./actions/table/save.ts"
 
@@ -27,6 +28,13 @@ export class CsvPlugin implements TablePlugin {
     if (!format) return undefined
 
     return await saveCsvTable(table, { ...options, format })
+  }
+
+  async inferFormat(resource: Partial<Resource>) {
+    const format = getSupportedFormat(resource)
+    if (!format) return undefined
+
+    return await inferCsvFormat(resource)
   }
 }
 

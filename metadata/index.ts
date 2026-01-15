@@ -114,7 +114,11 @@ export { FileError, IntegrityError, TextualError } from "./models/error/file.ts"
 export { ForeignKeyError } from "./models/error/foreignKey.ts"
 export { GeneralError } from "./models/error/general.ts"
 export { MetadataError } from "./models/error/metadata.ts"
-export { ResourceError } from "./models/error/resource.ts"
+export {
+  ResourceError,
+  ResourceMissingError,
+  ResourceTypeError,
+} from "./models/error/resource.ts"
 export {
   RowError,
   RowPrimaryKeyError,

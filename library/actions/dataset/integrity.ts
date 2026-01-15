@@ -1,25 +1,27 @@
-import type { BoundError, Package } from "@fairspec/metadata"
+import type { Dataset, DatasetError } from "@fairspec/metadata"
 import { createReport, resolveTableSchema } from "@fairspec/metadata"
 import type { Table } from "@fairspec/table"
-import { loadTable } from "../table/index.ts"
+import { loadTable } from "../../actions/table/load.ts"
 
-// TODO: foreign key fields definition should be validated as well (metadata/here?)
-// TODO: review temporary files creation from validatePackage call
+// TODO: foreign key columns definition should be validated as well (metadata/here?)
+// TODO: review temporary files creation from validateDataset call
 
-export async function validatePackageIntegrity(
-  dataPackage: Package,
+export async function validateDatasetIntegrity(
+  dataset: Dataset,
   options?: { maxErrors?: number },
 ) {
   const { maxErrors = 1000 } = options ?? {}
 
-  const errors: BoundError[] = []
+  const errors: DatasetError[] = []
   const tables: Record<string, Table> = {}
 
-  for (const resource of dataPackage.resources) {
-    const schema = await resolveTableSchema(resource.schema)
-    if (!schema) continue
+  for (const [index, resource] of (dataset.resources ?? []).entries()) {
+    const resourceName = resource.name ?? `resource${index + 1}`
 
-    const foreignKeys = schema.foreignKeys
+    const tableSchema = await resolveTableSchema(resource.tableSchema)
+    if (!tableSchema) continue
+
+    const foreignKeys = tableSchema.foreignKeys
     if (!foreignKeys) continue
 
     const names = [
@@ -28,13 +30,13 @@ export async function validatePackageIntegrity(
     ].filter(Boolean) as string[]
 
     for (const name of names) {
-      const resource = dataPackage.resources.find(r => r.name === name)
+      const resource = dataset.resources?.find(res => res.name === name)
 
       if (!resource) {
         errors.push({
-          type: "data",
-          message: `missing ${name} resource`,
-          resource: name,
+          type: "resource/missing",
+          resourceName: name,
+          resource: resourceName,
         })
 
         continue
@@ -45,9 +47,9 @@ export async function validatePackageIntegrity(
 
         if (!table) {
           errors.push({
-            type: "data",
-            message: `missing ${resource.name} table`,
-            resource: name,
+            type: "resource/type",
+            expectedResourceType: "table",
+            resource: resourceName,
           })
 
           continue
@@ -58,17 +60,17 @@ export async function validatePackageIntegrity(
     }
 
     for (const foreignKey of foreignKeys) {
-      const left = tables[resource.name] as Table
+      const left = tables[resourceName] as Table
       const right = tables[
-        foreignKey.reference.resource ?? resource.name
+        foreignKey.reference.resource ?? resourceName
       ] as Table
 
       const foreignKeyCheckTable = left
-        .select(...foreignKey.fields)
+        .select(...foreignKey.columns)
         .join(right, {
           how: "anti",
-          leftOn: foreignKey.fields,
-          rightOn: foreignKey.reference.fields,
+          leftOn: foreignKey.columns,
+          rightOn: foreignKey.reference.columns,
         })
 
       const foreignKeyCheckFrame = await foreignKeyCheckTable
@@ -80,7 +82,7 @@ export async function validatePackageIntegrity(
           type: "foreignKey",
           foreignKey,
           cells: Object.values(row).map(String),
-          resource: resource.name,
+          resource: resourceName,
         })
       }
     }

@@ -32,8 +32,8 @@ export async function validateTable(
 
     if (!table) {
       errors.push({
-        type: "resource",
-        expectedDataType: "table",
+        type: "resource/type",
+        expectedResourceType: "table",
       })
     }
   }

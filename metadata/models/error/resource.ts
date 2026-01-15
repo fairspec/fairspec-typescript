@@ -1,12 +1,10 @@
 import { z } from "zod"
-import { GeneralError } from "./general.ts"
 
-export const ResourceError = GeneralError.and(
-  z.object({
-    resource: z
-      .string()
-      .describe("The resource identifier where the error occurred"),
-  }),
-)
+export const ResourceError = z.object({
+  type: z.literal("resource").describe("Error type identifier"),
+  expectedDataType: z
+    .enum(["data", "table"])
+    .describe("The expected data type"),
+})
 
 export type ResourceError = z.infer<typeof ResourceError>

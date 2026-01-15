@@ -1,8 +1,8 @@
-import type { Resource, UnboundError } from "@fairspec/metadata"
+import type { GeneralError, Resource } from "@fairspec/metadata"
 import { createReport, resolveTableSchema } from "@fairspec/metadata"
 import type { LoadTableOptions } from "@fairspec/table"
 import { inspectTable } from "@fairspec/table"
-import { inferSchema } from "../schema/index.ts"
+import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
 import { loadTable } from "./load.ts"
 
 export async function validateTable(
@@ -11,21 +11,21 @@ export async function validateTable(
 ) {
   const { maxErrors } = options ?? {}
 
-  const errors: UnboundError[] = []
+  const errors: GeneralError[] = []
   const table = await loadTable(resource, { denormalized: true })
 
   if (table) {
-    let schema = await resolveTableSchema(resource.schema)
-    if (!schema) schema = await inferSchema(resource, options)
-    const tableErrors = await inspectTable(table, { schema, maxErrors })
+    let tableSchema = await resolveTableSchema(resource.tableSchema)
+    if (!tableSchema) tableSchema = await inferTableSchema(resource, options)
+    const tableErrors = await inspectTable(table, { tableSchema, maxErrors })
     errors.push(...tableErrors)
+  } else if (resource.tableSchema) {
   }
 
-  // TODO: review
-  if (!table && resource.schema) {
+  if (!table && resource.tableSchema) {
     errors.push({
-      type: "data",
-      message: `missing ${resource.name} table`,
+      type: "resource",
+      expectedDataType: "table",
     })
   }
 

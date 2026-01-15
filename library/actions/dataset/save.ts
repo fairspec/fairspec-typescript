@@ -1,13 +1,13 @@
-import type { SavePackageOptions } from "@fairspec/dataset"
-import type { Package } from "@fairspec/metadata"
-import { system } from "../system.ts"
+import type { SaveDatasetOptions } from "@fairspec/dataset"
+import type { Dataset } from "@fairspec/metadata"
+import { system } from "../../system.ts"
 
-export async function savePackage(
-  dataPackage: Package,
-  options: SavePackageOptions,
+export async function saveDataset(
+  dataset: Dataset,
+  options: SaveDatasetOptions,
 ) {
   for (const plugin of system.plugins) {
-    const result = await plugin.savePackage?.(dataPackage, {
+    const result = await plugin.saveDataset?.(dataset, {
       plugins: system.plugins,
       ...options,
     })
@@ -15,5 +15,5 @@ export async function savePackage(
     if (result) return result
   }
 
-  throw new Error(`No plugin can save the package: ${options.target}`)
+  throw new Error(`No plugin can save the dataset: ${options.target}`)
 }

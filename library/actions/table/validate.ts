@@ -5,12 +5,14 @@ import { inspectTable } from "@fairspec/table"
 import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
 import { loadTable } from "./load.ts"
 
+export type ValidateTableOptions = LoadTableOptions & {
+  noInfer?: boolean
+  maxErrors?: number
+}
+
 export async function validateTable(
   resource: Partial<Resource>,
-  options?: LoadTableOptions & {
-    noInfer?: boolean
-    maxErrors?: number
-  },
+  options?: ValidateTableOptions,
 ) {
   const { maxErrors } = options ?? {}
   const errors: GeneralError[] = []

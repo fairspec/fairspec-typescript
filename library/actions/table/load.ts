@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import type { LoadTableOptions } from "@fairspec/table"
-import { system } from "../system.ts"
+import { system } from "../../system.ts"
 
 export async function loadTable(
   resource: Partial<Resource>,

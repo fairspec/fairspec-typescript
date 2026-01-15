@@ -1,10 +1,10 @@
-import { system } from "../system.ts"
+import { system } from "../../system.ts"
 
-export async function loadPackage(source: string) {
+export async function loadDataset(source: string) {
   for (const plugin of system.plugins) {
-    const result = await plugin.loadPackage?.(source)
-    if (result) return result
+    const dataset = await plugin.loadDataset?.(source)
+    if (dataset) return dataset
   }
 
-  throw new Error(`No plugin can load the package: ${source}`)
+  throw new Error(`No plugin can load the dataset: ${source}`)
 }

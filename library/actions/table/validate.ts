@@ -7,26 +7,33 @@ import { loadTable } from "./load.ts"
 
 export async function validateTable(
   resource: Partial<Resource>,
-  options?: LoadTableOptions & { maxErrors?: number },
+  options?: LoadTableOptions & {
+    noInfer?: boolean
+    maxErrors?: number
+  },
 ) {
   const { maxErrors } = options ?? {}
-
   const errors: GeneralError[] = []
-  const table = await loadTable(resource, { denormalized: true })
 
-  if (table) {
-    let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema) tableSchema = await inferTableSchema(resource, options)
-    const tableErrors = await inspectTable(table, { tableSchema, maxErrors })
-    errors.push(...tableErrors)
-  } else if (resource.tableSchema) {
+  let tableSchema = await resolveTableSchema(resource.tableSchema)
+  if (!tableSchema && !options?.noInfer) {
+    tableSchema = await inferTableSchema(resource, options)
   }
 
-  if (!table && resource.tableSchema) {
-    errors.push({
-      type: "resource",
-      expectedDataType: "table",
-    })
+  if (!tableSchema) {
+    const table = await loadTable(resource, { denormalized: true })
+
+    if (table) {
+      const tableErrors = await inspectTable(table, { tableSchema, maxErrors })
+      errors.push(...tableErrors)
+    }
+
+    if (!table) {
+      errors.push({
+        type: "resource",
+        expectedDataType: "table",
+      })
+    }
   }
 
   return createReport(errors, { maxErrors })

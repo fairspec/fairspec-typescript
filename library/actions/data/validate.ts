@@ -1,14 +1,10 @@
 import type { GeneralError, Resource } from "@fairspec/metadata"
 import { createReport, resolveTableSchema } from "@fairspec/metadata"
-import type { LoadTableOptions } from "@fairspec/table"
 import { inspectTable } from "@fairspec/table"
 import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
-import { loadTable } from "./load.ts"
+import { loadData } from "./load.ts"
 
-export async function validateTable(
-  resource: Partial<Resource>,
-  options?: LoadTableOptions & { maxErrors?: number },
-) {
+export async function validateData(resource: Partial<Resource>) {
   const { maxErrors } = options ?? {}
 
   const errors: GeneralError[] = []

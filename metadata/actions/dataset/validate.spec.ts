@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest"
 import { useRecording } from "vitest-polly"
-import { validateDatasetMetadata } from "./validate.ts"
+import { validateDatasetDescriptor } from "./validate.ts"
 
 useRecording()
 
-describe("validateDatasetMetadata", () => {
+describe("validateDatasetDescriptor", () => {
   it("returns valid result for valid dataset", async () => {
     const dataset = {
       resources: [
@@ -14,7 +14,7 @@ describe("validateDatasetMetadata", () => {
       ],
     }
 
-    const report = await validateDatasetMetadata(dataset)
+    const report = await validateDatasetDescriptor(dataset)
 
     expect(report.valid).toBe(true)
     expect(report.errors).toEqual([])
@@ -25,7 +25,7 @@ describe("validateDatasetMetadata", () => {
       resources: "not-an-array",
     }
 
-    const report = await validateDatasetMetadata(dataset)
+    const report = await validateDatasetDescriptor(dataset)
 
     expect(report.valid).toBe(false)
     expect(report.errors.length).toBeGreaterThan(0)
@@ -40,7 +40,7 @@ describe("validateDatasetMetadata", () => {
       ],
     }
 
-    const report = await validateDatasetMetadata(dataset)
+    const report = await validateDatasetDescriptor(dataset)
     expect(report.valid).toBe(true)
   })
 
@@ -63,7 +63,7 @@ describe("validateDatasetMetadata", () => {
       ],
     }
 
-    const report = await validateDatasetMetadata(dataset)
+    const report = await validateDatasetDescriptor(dataset)
 
     expect(report.valid).toBe(true)
     expect(report.errors).toEqual([])

@@ -4,9 +4,6 @@ import { loadProfile } from "../../actions/profile/load.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
 import type { TableSchema } from "../../models/tableSchema.ts"
 
-/**
- * Validate a Schema descriptor (JSON Object) against its profile
- */
 export async function validateTableSchema(
   source: TableSchema | Descriptor | string,
   options?: {

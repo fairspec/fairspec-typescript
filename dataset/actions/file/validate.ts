@@ -26,7 +26,7 @@ export async function validateFile(resource: Partial<Resource>) {
         type: "file/integrity",
         hashType: resource.integrity.type,
         expectedHash,
-        actualHash,
+        actualHash: actualHash ?? "",
       })
     }
   }

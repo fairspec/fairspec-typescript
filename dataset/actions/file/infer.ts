@@ -12,32 +12,6 @@ import { prefetchFiles } from "./fetch.ts"
 
 export type HashType = NonNullable<Resource["integrity"]>["type"]
 
-export async function inferBytes(resource: Partial<Resource>) {
-  const localPaths = await prefetchFiles(resource)
-
-  let bytes = 0
-  for (const localPath of localPaths) {
-    const result = await stat(localPath)
-    bytes += result.size
-  }
-
-  return bytes
-}
-
-export async function inferHash(
-  resource: Partial<Resource>,
-  options?: { hashType?: HashType },
-) {
-  const algorithm = options?.hashType ?? "sha256"
-  const localPaths = await prefetchFiles(resource)
-
-  const streams = await pMap(localPaths, async path => loadFileStream(path))
-  const stream = concatFileStreams(streams)
-
-  const hash = await hasha.hash(stream, { algorithm })
-  return hash
-}
-
 export async function inferTextual(
   resource: Partial<Resource>,
   options?: { sampleBytes?: number; confidencePercent?: number },
@@ -65,4 +39,45 @@ export async function inferTextual(
   }
 
   return false
+}
+
+export async function inferIntegrity(resource: Partial<Resource>) {
+  const type: HashType = "sha256"
+  const hash = await inferHash(resource, { hashType: type })
+
+  if (!hash) {
+    return undefined
+  }
+
+  return { type, hash }
+}
+
+export async function inferHash(
+  resource: Partial<Resource>,
+  options?: { hashType?: HashType },
+) {
+  const algorithm = options?.hashType ?? "sha256"
+  const localPaths = await prefetchFiles(resource)
+
+  if (!localPaths.length) {
+    return ""
+  }
+
+  const streams = await pMap(localPaths, async path => loadFileStream(path))
+  const stream = concatFileStreams(streams)
+
+  const hash = await hasha.hash(stream, { algorithm })
+  return hash
+}
+
+export async function inferBytes(resource: Partial<Resource>) {
+  const localPaths = await prefetchFiles(resource)
+
+  let bytes = 0
+  for (const localPath of localPaths) {
+    const result = await stat(localPath)
+    bytes += result.size
+  }
+
+  return bytes
 }

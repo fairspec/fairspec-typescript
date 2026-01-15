@@ -1,15 +1,11 @@
 import type { InferFormatOptions } from "@fairspec/dataset"
-import {
-  inferBytes,
-  inferEncoding,
-  inferHash,
-  prefetchFile,
-} from "@fairspec/dataset"
+import { inferIntegrity, inferTextual } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
-import { inferFormat, inferName } from "@fairspec/metadata"
+import { copyDescriptor, inferResourceName } from "@fairspec/metadata"
 import type { InferTableSchemaOptions } from "@fairspec/table"
-import { inferDialect } from "../dialect/index.ts"
-import { inferSchema } from "../schema/index.ts"
+import { inferDataSchema } from "../../actions/dataSchema/infer.ts"
+import { inferFormat } from "../../actions/format/infer.ts"
+import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
 
 export type InferResourceOptions = InferFormatOptions & InferTableSchemaOptions
 
@@ -17,52 +13,46 @@ export async function inferResource(
   resource: Partial<Resource>,
   options?: InferResourceOptions,
 ) {
-  const result = {
-    ...resource,
-    name: resource.name ?? inferName(resource),
+  resource = copyDescriptor(resource)
+
+  if (!resource.name) {
+    resource.name = inferResourceName(resource)
   }
 
-  if (!result.format) {
-    result.format = inferFormat(resource)
-  }
-
-  if (typeof resource.path === "string") {
-    const localPath = await prefetchFile(resource.path)
-    const localResource = { ...resource, path: localPath }
-
-    if (!result.encoding) {
-      const encoding = await inferEncoding(localResource)
-      if (encoding) {
-        result.encoding = encoding
-      }
-    }
-
-    if (!result.bytes) {
-      result.bytes = await inferBytes(localResource)
-    }
-
-    if (!result.hash) {
-      result.hash = await inferHash(localResource)
-    }
-
-    if (!result.dialect) {
-      try {
-        result.dialect = await inferDialect(localResource, options)
-      } catch {}
-    }
-
-    if (!result.schema) {
-      try {
-        result.schema = await inferSchema(localResource, options)
-      } catch {}
+  if (!resource.format) {
+    const format = await inferFormat(resource)
+    if (format) {
+      resource.format = format
     }
   }
 
-  if (!result.type) {
-    if (result.schema) {
-      result.type = "table"
+  if (!resource.textual) {
+    const textual = await inferTextual(resource)
+    if (textual) {
+      resource.textual = textual
     }
   }
 
-  return result
+  if (!resource.integrity) {
+    const integrity = await inferIntegrity(resource)
+    if (integrity) {
+      resource.integrity = integrity
+    }
+  }
+
+  if (!resource.dataSchema) {
+    const dataSchema = await inferDataSchema(resource)
+    if (dataSchema) {
+      resource.dataSchema = dataSchema
+    }
+  }
+
+  if (!resource.tableSchema) {
+    const tableSchema = await inferTableSchema(resource, options)
+    if (tableSchema) {
+      resource.tableSchema = tableSchema
+    }
+  }
+
+  return resource
 }

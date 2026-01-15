@@ -1,30 +1,22 @@
 import os from "node:os"
-import type { Package, Resource } from "@fairspec/metadata"
-import type { InferDialectOptions, InferSchemaOptions } from "@fairspec/table"
+import type { Dataset } from "@fairspec/metadata"
 import pAll from "p-all"
-import { inferResource } from "../resource/index.ts"
+import type { InferResourceOptions } from "../../actions/resource/infer.ts"
+import { inferResource } from "../../actions/resource/infer.ts"
 
-// TODO: Move PartialPackage/Resource to @fairspec/metadata?
-
-interface PartialPackage extends Omit<Package, "resources"> {
-  resources: Partial<Resource>[]
-}
-
-export async function inferPackage(
-  dataPackage: PartialPackage,
-  options?: InferDialectOptions & InferSchemaOptions,
+export async function inferDataset(
+  dataset: Dataset,
+  options?: InferResourceOptions,
 ) {
   const concurrency = os.cpus().length
 
   const resources = await pAll(
-    dataPackage.resources.map(
-      resource => () => inferResource(resource, options),
-    ),
+    (dataset.resources ?? []).map(res => () => inferResource(res, options)),
     { concurrency },
   )
 
   const result = {
-    ...dataPackage,
+    ...dataset,
     resources,
   }
 

@@ -1,3 +1,4 @@
+import type { InferFormatOptions } from "@fairspec/dataset"
 import {
   inferBytes,
   inferEncoding,
@@ -6,13 +7,15 @@ import {
 } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
 import { inferFormat, inferName } from "@fairspec/metadata"
-import type { InferDialectOptions, InferSchemaOptions } from "@fairspec/table"
+import type { InferTableSchemaOptions } from "@fairspec/table"
 import { inferDialect } from "../dialect/index.ts"
 import { inferSchema } from "../schema/index.ts"
 
+export type InferResourceOptions = InferFormatOptions & InferTableSchemaOptions
+
 export async function inferResource(
   resource: Partial<Resource>,
-  options?: InferDialectOptions & InferSchemaOptions,
+  options?: InferResourceOptions,
 ) {
   const result = {
     ...resource,

@@ -1,14 +1,14 @@
 import type { Resource } from "@fairspec/metadata"
-import { getFileExtension, getFirstDataPath, getJsonData } from "@fairspec/metadata"
+import { getFileExtension, getDataFirstPath, getDataValue } from "@fairspec/metadata"
 import { loadDescriptor } from "@fairspec/metadata"
 
 export async function loadData(
   resource: Partial<Resource>,
 ) {
-  const jsonData = getJsonData(resource)
-  if (jsonData) return jsonData
+  const dataValue = getDataValue(resource)
+  if (dataValue) return dataValue
 
-  const firstPath = getFirstDataPath(resource)
+  const firstPath = getDataFirstPath(resource)
   if (firstPath) {
     const format = resource.format
     const extension = getFileExtension(firstPath)

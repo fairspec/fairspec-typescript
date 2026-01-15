@@ -17,7 +17,7 @@ export async function validateData(resource: Partial<Resource>) {
       const dataErrors = await inspectJson(data, { jsonSchema: dataSchema })
       errors.push(
         ...dataErrors.map(error => ({
-          type: "data",
+          type: "data" as const,
           ...error,
         })),
       )

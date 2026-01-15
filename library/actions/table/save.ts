@@ -1,5 +1,5 @@
 import type { SaveTableOptions, Table } from "@fairspec/table"
-import { system } from "../system.ts"
+import { system } from "../../system.ts"
 
 export async function saveTable(table: Table, options: SaveTableOptions) {
   for (const plugin of system.plugins) {

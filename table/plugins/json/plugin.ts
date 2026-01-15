@@ -1,7 +1,7 @@
 import type { Resource } from "@fairspec/metadata"
 import {
+  getDataFirstPath,
   getFileExtension,
-  getFirstDataPath,
   type JsonFormat,
   type JsonlFormat,
 } from "@fairspec/metadata"
@@ -37,7 +37,7 @@ function getSupportedFormat(resource: Partial<Resource>) {
     return resource.format
   }
 
-  const firstPath = getFirstDataPath(resource)
+  const firstPath = getDataFirstPath(resource)
   if (!firstPath) return undefined
 
   const extension = getFileExtension(firstPath)

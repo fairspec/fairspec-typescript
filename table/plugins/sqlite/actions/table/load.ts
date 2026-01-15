@@ -1,5 +1,5 @@
 import { resolveTableSchema } from "@fairspec/metadata"
-import { getFirstDataPath } from "@fairspec/metadata"
+import { getDataFirstPath } from "@fairspec/metadata"
 import type { Resource } from "@fairspec/metadata"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import type { LoadTableOptions } from "../../../../plugin.ts"
@@ -14,7 +14,7 @@ export async function loadSqliteTable(
   resource: Partial<Resource>,
   options?: LoadTableOptions,
 ) {
-  const firstPath = getFirstDataPath(resource)
+  const firstPath = getDataFirstPath(resource)
   if (!firstPath) {
     throw new Error("Resource path is not defined")
   }

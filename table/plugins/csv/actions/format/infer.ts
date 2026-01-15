@@ -1,7 +1,7 @@
 import { text } from "node:stream/consumers"
 import { loadFileStream } from "@fairspec/dataset"
 import type { CsvFormat, Resource, TsvFormat } from "@fairspec/metadata"
-import { getPathData } from "@fairspec/metadata"
+import { getDataPath } from "@fairspec/metadata"
 import { default as CsvSnifferFactory } from "csv-sniffer"
 
 const DELIMITERS = [",", ";", ":", "|", "\t", "^", "*", "&"]
@@ -14,12 +14,12 @@ export async function inferCsvFormat(
 ) {
   const { sampleBytes = 10_000 } = options ?? {}
 
-  const pathData = getPathData(resource)
-  if (!pathData) {
+  const dataPath = getDataPath(resource)
+  if (!dataPath) {
     return undefined
   }
 
-  const stream = await loadFileStream(pathData, {
+  const stream = await loadFileStream(dataPath, {
     maxBytes: sampleBytes,
   })
 

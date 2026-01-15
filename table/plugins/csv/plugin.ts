@@ -1,5 +1,5 @@
 import type { CsvFormat, Resource, TsvFormat } from "@fairspec/metadata"
-import { getFileExtension, getFirstDataPath } from "@fairspec/metadata"
+import { getDataFirstPath, getFileExtension } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -43,7 +43,7 @@ function getSupportedFormat(resource: Partial<Resource>) {
     return resource.format
   }
 
-  const firstPath = getFirstDataPath(resource)
+  const firstPath = getDataFirstPath(resource)
   if (!firstPath) return undefined
 
   const extension = getFileExtension(firstPath)

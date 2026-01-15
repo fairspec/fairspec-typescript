@@ -1,5 +1,6 @@
 export { createColumnFromProperty } from "./actions/column/create.ts"
 export { getColumnProperties } from "./actions/column/property.ts"
+export { resolveDataSchema } from "./actions/dataSchema/resolve.ts"
 export { assertDataset } from "./actions/dataset/assert.ts"
 export { denormalizeDataset } from "./actions/dataset/denormalize.ts"
 export { loadDatasetDescriptor } from "./actions/dataset/load.ts"
@@ -30,15 +31,15 @@ export {
 } from "./actions/path/general.ts"
 export { normalizePath } from "./actions/path/normalize.ts"
 export { createReport } from "./actions/report/create.ts"
-export { denormalizeResource } from "./actions/resource/denormalize.ts"
 export {
+  getDataFirstPath,
+  getDataPath,
   getDataPaths,
-  getFirstDataPath,
-  getJsonData,
-  getPathData,
-  getTableData,
-  isRemoteResource,
-} from "./actions/resource/general.ts"
+  getDataRecords,
+  getDataValue,
+} from "./actions/resource/data.ts"
+export { denormalizeResource } from "./actions/resource/denormalize.ts"
+export { isRemoteResource } from "./actions/resource/general.ts"
 export { inferResourceName } from "./actions/resource/infer.ts"
 export { normalizeResource } from "./actions/resource/normalize.ts"
 export { assertTableSchema } from "./actions/tableSchema/assert.ts"
@@ -72,8 +73,14 @@ export { UnknownColumn } from "./models/column/unknown.ts"
 export { UrlColumn } from "./models/column/url.ts"
 export { WkbColumn } from "./models/column/wkb.ts"
 export { WktColumn } from "./models/column/wkt.ts"
-export { Data, JsonData, PathData } from "./models/data.ts"
+export {
+  Data,
+  ResourceData,
+  ResourceDataPath,
+  ResourceDataValue,
+} from "./models/data.ts"
 export { Datacite } from "./models/datacite/datacite.ts"
+export { DataSchema } from "./models/dataSchema.ts"
 export { Dataset } from "./models/dataset.ts"
 export { Descriptor } from "./models/descriptor.ts"
 export {

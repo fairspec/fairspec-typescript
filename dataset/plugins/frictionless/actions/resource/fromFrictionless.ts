@@ -45,7 +45,7 @@ export function convertResourceFromFrictionless(
   }
 
   if (frictionlessResource.jsonSchema) {
-    resource.jsonSchema = frictionlessResource.jsonSchema
+    resource.dataSchema = frictionlessResource.jsonSchema
   }
 
   if (frictionlessResource.title) {

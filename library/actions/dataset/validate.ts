@@ -4,7 +4,7 @@ import {
   createReport,
   loadDescriptor,
   resolveBasepath,
-  validateDatasetMetadata,
+  validateDatasetDescriptor,
 } from "@fairspec/metadata"
 import pAll from "p-all"
 import { validateResource } from "../../actions/resource/validate.ts"
@@ -35,34 +35,40 @@ export async function validateDataset(
     }
   }
 
-  const metadataReport = await validateDatasetMetadata(descriptor, {
+  const descriptorReport = await validateDatasetDescriptor(descriptor, {
     basepath,
   })
 
-  if (!metadataReport.dataset) {
+  if (!descriptorReport.dataset) {
     return {
-      valid: metadataReport.valid,
-      errors: metadataReport.errors.map(error => ({
+      valid: descriptorReport.valid,
+      errors: descriptorReport.errors.map(error => ({
         ...error,
         resource: undefined,
       })),
     }
   }
 
-  const dataReport = await validateDatasetData(metadataReport.dataset)
-  const integrityReport = await validateDatasetIntegrity(metadataReport.dataset)
+  const resourcesReport = await validateDatasetResources(
+    descriptorReport.dataset,
+  )
 
-  const errors = [...dataReport.errors, ...integrityReport.errors]
+  const integrityReport = await validateDatasetIntegrity(
+    descriptorReport.dataset,
+  )
+
+  const errors = [...resourcesReport.errors, ...integrityReport.errors]
   return createReport(errors)
 }
 
-export async function validateDatasetData(dataset: Dataset) {
+export async function validateDatasetResources(dataset: Dataset) {
   const concurrency = os.cpus().length
 
   const errors: DatasetError[] = (
     await pAll(
       (dataset.resources ?? []).map((resource, index) => async () => {
         const resourceName = resource.name ?? `resource${index + 1}`
+
         try {
           const report = await validateResource(resource)
           return report.errors.map(error => ({

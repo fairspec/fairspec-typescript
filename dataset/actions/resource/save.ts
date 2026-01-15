@@ -75,7 +75,7 @@ export async function saveResourceFiles(
     }
   }
 
-  for (const name of ["jsonSchema", "tableSchema"] as const) {
+  for (const name of ["dataSchema", "tableSchema"] as const) {
     const property = resource[name]
     if (typeof property === "string") {
       descriptor[name] = await saveFile(property, name, 0)

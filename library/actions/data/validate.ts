@@ -25,8 +25,8 @@ export async function validateData(resource: Partial<Resource>) {
 
     if (!data) {
       errors.push({
-        type: "resource",
-        expectedDataType: "data",
+        type: "resource/type",
+        expectedResourceType: "data",
       })
     }
   }

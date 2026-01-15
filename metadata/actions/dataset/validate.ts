@@ -44,7 +44,7 @@ export async function validateDatasetMetadata(
 
   if (dataset) {
     for (const [index, resource] of (dataset?.resources ?? []).entries()) {
-      if (typeof resource.jsonSchema === "string") {
+      if (typeof resource.dataSchema === "string") {
         // TODO: implement
       }
 

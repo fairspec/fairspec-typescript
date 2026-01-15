@@ -1,9 +1,9 @@
 import { z } from "zod"
 import { Data } from "./data.ts"
 import { Datacite } from "./datacite/datacite.ts"
+import { DataSchema } from "./dataSchema.ts"
 import { Format } from "./format/format.ts"
 import { Integrity } from "./integrity.ts"
-import { JsonSchema } from "./jsonSchema.ts"
 import { Path } from "./path.ts"
 import { TableSchema } from "./tableSchema.ts"
 
@@ -33,8 +33,8 @@ export const Resource = Datacite.extend({
     "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",
   ),
 
-  jsonSchema: z
-    .union([Path, JsonSchema])
+  dataSchema: z
+    .union([Path, DataSchema])
     .optional()
     .describe(
       "A path to a JSON Schema or an object with the JSON Schema. The JSON Schema must be compatible with the JSONSchema Draft 2020-12 specification.",

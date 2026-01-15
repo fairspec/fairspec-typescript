@@ -1,10 +1,10 @@
 import { createReadStream } from "node:fs"
-import type { PathData } from "@fairspec/metadata"
+import type { ResourceDataPath } from "@fairspec/metadata"
 import { Readable, Transform } from "node:stream"
 import { isRemotePath } from "@fairspec/metadata"
 
 export async function loadFileStream(
-  pathData: PathData,
+  dataPath: ResourceDataPath,
   options?: {
     index?: number
     maxBytes?: number
@@ -12,7 +12,7 @@ export async function loadFileStream(
 ) {
   const index = options?.index ?? 0
 
-  const paths = Array.isArray(pathData) ? pathData : [pathData]
+  const paths = Array.isArray(dataPath) ? dataPath : [dataPath]
   const indexPath = paths[index]
 
   if (!indexPath) {

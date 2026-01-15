@@ -1,6 +1,6 @@
 import type { Dataset } from "../../models/dataset.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
-import { validateDatasetMetadata } from "./validate.ts"
+import { validateDatasetDescriptor } from "./validate.ts"
 
 /**
  * Assert a Dataset descriptor (JSON Object) against its profile
@@ -11,7 +11,7 @@ export async function assertDataset(
     basepath?: string
   },
 ) {
-  const report = await validateDatasetMetadata(source, options)
+  const report = await validateDatasetDescriptor(source, options)
 
   if (!report.dataset) {
     throw new Error(

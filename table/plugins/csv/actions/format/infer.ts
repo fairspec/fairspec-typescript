@@ -1,7 +1,7 @@
 import { text } from "node:stream/consumers"
 import { loadFileStream } from "@fairspec/dataset"
-import type { CsvFormat, Resource } from "@fairspec/metadata"
-import { getPathData } from "@fairspec/metadata"
+import type { CsvFormat, Resource, TsvFormat } from "@fairspec/metadata"
+import { getDataPath } from "@fairspec/metadata"
 import { default as CsvSnifferFactory } from "csv-sniffer"
 
 const DELIMITERS = [",", ";", ":", "|", "\t", "^", "*", "&"]
@@ -14,28 +14,36 @@ export async function inferCsvFormat(
 ) {
   const { sampleBytes = 10_000 } = options ?? {}
 
-  const format: CsvFormat = {
-    type: "csv",
+  const dataPath = getDataPath(resource)
+  if (!dataPath) {
+    return undefined
   }
 
-  const pathData = getPathData(resource)
-  if (!pathData) {
-    return format
-  }
-
-  const stream = await loadFileStream(pathData, {
+  const stream = await loadFileStream(dataPath, {
     maxBytes: sampleBytes,
   })
 
   const sample = await text(stream)
   const result = sniffSample(sample, DELIMITERS)
 
+  let format: CsvFormat | TsvFormat = { type: "csv" }
+
   if (result?.delimiter) {
-    format.delimiter = result.delimiter
+    if (result.delimiter === "\t") {
+      format = { type: "tsv" }
+    } else {
+      format.delimiter = result.delimiter
+    }
   }
 
-  if (result?.quoteChar) {
-    format.quoteChar = result.quoteChar
+  if (format.type === "csv") {
+    if (result?.quoteChar) {
+      format.quoteChar = result.quoteChar
+    }
+  }
+
+  if (result?.newlineStr) {
+    format.lineTerminator = result.newlineStr
   }
 
   return format

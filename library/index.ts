@@ -3,15 +3,19 @@ export * from "@fairspec/extension"
 export * from "@fairspec/metadata"
 export * from "@fairspec/table"
 
-export { inferDialect } from "./dialect/index.ts"
-export {
-  inferPackage,
-  loadPackage,
-  savePackage,
-  validatePackage,
-} from "./package/index.ts"
+export { loadData } from "./actions/data/load.ts"
+export { validateData } from "./actions/data/validate.ts"
+export { inferDataSchema } from "./actions/dataSchema/infer.ts"
+export { inferDataset } from "./actions/dataset/infer.ts"
+export { loadDataset } from "./actions/dataset/load.ts"
+export { saveDataset } from "./actions/dataset/save.ts"
+export { validateDataset } from "./actions/dataset/validate.ts"
+export { inferFormat } from "./actions/format/infer.ts"
+export { inferResource } from "./actions/resource/infer.ts"
+export { validateResource } from "./actions/resource/validate.ts"
+export { loadTable } from "./actions/table/load.ts"
+export { saveTable } from "./actions/table/save.ts"
+export { validateTable } from "./actions/table/validate.ts"
+export { inferTableSchema } from "./actions/tableSchema/infer.ts"
 export type { Plugin } from "./plugin.ts"
-export { inferResource, validateResource } from "./resource/index.ts"
-export { inferSchema } from "./schema/index.ts"
 export { System, system } from "./system.ts"
-export { loadTable, saveTable, validateTable } from "./table/index.ts"

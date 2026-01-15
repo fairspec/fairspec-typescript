@@ -33,8 +33,8 @@ export function convertResourceToFrictionless(
     }
   }
 
-  if (resource.jsonSchema) {
-    frictionlessResource.jsonSchema = resource.jsonSchema
+  if (resource.dataSchema) {
+    frictionlessResource.jsonSchema = resource.dataSchema
   }
 
   if (resource.titles && resource.titles.length > 0) {

@@ -1,7 +1,5 @@
-import { DatabasePlugin } from "@fairspec/database"
 import {
   CkanPlugin,
-  DatahubPlugin,
   DescriptorPlugin,
   FolderPlugin,
   GithubPlugin,
@@ -32,7 +30,6 @@ export const system = new System()
 // Dataset
 
 system.register(CkanPlugin)
-system.register(DatahubPlugin)
 system.register(DescriptorPlugin)
 system.register(GithubPlugin)
 system.register(ZenodoPlugin)
@@ -48,7 +45,3 @@ system.register(JsonPlugin)
 system.register(OdsPlugin)
 system.register(ParquetPlugin)
 system.register(XlsxPlugin)
-
-// Mixed
-
-system.register(DatabasePlugin)

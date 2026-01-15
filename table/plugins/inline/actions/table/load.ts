@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
-import { getTableData } from "@fairspec/metadata"
+import { getDataRecords } from "@fairspec/metadata"
 import type { LoadTableOptions } from "../../../../plugin.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
@@ -10,12 +10,12 @@ export async function loadInlineTable(
   resource: Partial<Resource>,
   options?: LoadTableOptions,
 ) {
-  const tableData = getTableData(resource)
-  if (!tableData) {
+  const dataRecords = getDataRecords(resource)
+  if (!dataRecords) {
     throw new Error("Resource data is not defined or tabular")
   }
 
-  let table = pl.DataFrame(tableData).lazy()
+  let table = pl.DataFrame(dataRecords).lazy()
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)

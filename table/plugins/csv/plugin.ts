@@ -1,11 +1,12 @@
 import type { CsvFormat, Resource, TsvFormat } from "@fairspec/metadata"
-import { getFileExtension, getFirstDataPath } from "@fairspec/metadata"
+import { getDataFirstPath, getFileExtension } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
+import { inferCsvFormat } from "./actions/format/infer.ts"
 import { loadCsvTable } from "./actions/table/load.ts"
 import { saveCsvTable } from "./actions/table/save.ts"
 
@@ -28,6 +29,13 @@ export class CsvPlugin implements TablePlugin {
 
     return await saveCsvTable(table, { ...options, format })
   }
+
+  async inferFormat(resource: Partial<Resource>) {
+    const format = getSupportedFormat(resource)
+    if (!format) return undefined
+
+    return await inferCsvFormat(resource)
+  }
 }
 
 function getSupportedFormat(resource: Partial<Resource>) {
@@ -35,7 +43,7 @@ function getSupportedFormat(resource: Partial<Resource>) {
     return resource.format
   }
 
-  const firstPath = getFirstDataPath(resource)
+  const firstPath = getDataFirstPath(resource)
   if (!firstPath) return undefined
 
   const extension = getFileExtension(firstPath)

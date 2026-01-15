@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getFileExtension, getFirstDataPath } from "@fairspec/metadata"
+import { getDataFirstPath, getFileExtension } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -30,7 +30,7 @@ export class SqlitePlugin implements TablePlugin {
 function getIsSqlite(resource: Partial<Resource>) {
   if (resource.format?.type === "sqlite") return true
 
-  const firstPath = getFirstDataPath(resource)
+  const firstPath = getDataFirstPath(resource)
   if (!firstPath) return false
 
   const extension = getFileExtension(firstPath)

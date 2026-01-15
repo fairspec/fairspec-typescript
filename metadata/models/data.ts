@@ -1,15 +1,18 @@
 import { z } from "zod"
 import { Path } from "./path.ts"
 
-export const PathData = z.union([Path, z.array(Path)])
+export const ResourceDataPath = z.union([Path, z.array(Path)])
 
-export const JsonData = z.union([
+export const ResourceDataValue = z.union([
   z.record(z.string(), z.unknown()),
   z.array(z.record(z.string(), z.unknown())),
 ])
 
-export const Data = z.union([PathData, JsonData])
+export const ResourceData = z.union([ResourceDataPath, ResourceDataValue])
 
-export type PathData = z.infer<typeof PathData>
-export type JsonData = z.infer<typeof JsonData>
+export const Data = z.unknown()
+
+export type ResourceDataPath = z.infer<typeof ResourceDataPath>
+export type ResourceDataValue = z.infer<typeof ResourceDataValue>
+export type ResourceData = z.infer<typeof ResourceData>
 export type Data = z.infer<typeof Data>

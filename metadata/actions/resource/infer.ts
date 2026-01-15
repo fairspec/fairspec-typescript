@@ -1,12 +1,12 @@
 import { getFileNameSlug } from "../../actions/path/general.ts"
 import type { Resource } from "../../models/resource.ts"
-import { getFirstDataPath } from "./general.ts"
+import { getDataFirstPath } from "./data.ts"
 
 export function inferResourceName(resource: Partial<Resource>) {
-  const path = getFirstDataPath(resource)
+  const firstPath = getDataFirstPath(resource)
 
-  if (path) {
-    const name = getFileNameSlug(path)
+  if (firstPath) {
+    const name = getFileNameSlug(firstPath)
     if (name) return name
   }
 

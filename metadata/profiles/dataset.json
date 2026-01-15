@@ -3,32 +3,10 @@
   "allOf": [{ "$ref": "#/$defs/Dataset" }],
   "$defs": {
     "Dataset": {
-      "type": "object",
+      "allOf": [{ "$ref": "#/$defs/Datacite" }],
       "properties": {
         "$schema": { "$ref": "#/$defs/Profile" },
-        "resources": { "$ref": "#/$defs/Resources" },
-        "doi": { "$ref": "#/$defs/Doi" },
-        "prefix": { "$ref": "#/$defs/DoiPrefix" },
-        "suffix": { "$ref": "#/$defs/DoiSuffix" },
-        "creators": { "$ref": "#/$defs/Creators" },
-        "titles": { "$ref": "#/$defs/Titles" },
-        "publisher": { "$ref": "#/$defs/Publisher" },
-        "publicationYear": { "$ref": "#/$defs/PublicationYear" },
-        "subjects": { "$ref": "#/$defs/Subjects" },
-        "contributors": { "$ref": "#/$defs/Contributors" },
-        "dates": { "$ref": "#/$defs/Dates" },
-        "language": { "$ref": "#/$defs/Language" },
-        "types": { "$ref": "#/$defs/ContentTypes" },
-        "alternateIdentifiers": { "$ref": "#/$defs/AlternateIdentifiers" },
-        "relatedIdentifiers": { "$ref": "#/$defs/RelatedIdentifiers" },
-        "sizes": { "$ref": "#/$defs/Sizes" },
-        "formats": { "$ref": "#/$defs/Formats" },
-        "version": { "$ref": "#/$defs/Version" },
-        "rightsList": { "$ref": "#/$defs/RightsList" },
-        "descriptions": { "$ref": "#/$defs/Descriptions" },
-        "geoLocations": { "$ref": "#/$defs/GeoLocations" },
-        "fundingReferences": { "$ref": "#/$defs/FundingReferences" },
-        "relatedItems": { "$ref": "#/$defs/RelatedItems" }
+        "resources": { "$ref": "#/$defs/Resources" }
       }
     },
     "Profile": {
@@ -39,7 +17,7 @@
       "items": { "$ref": "#/$defs/Resource" }
     },
     "Resource": {
-      "type": "object",
+      "allOf": [{ "$ref": "#/$defs/Datacite" }],
       "properties": {
         "name": { "$ref": "#/$defs/Name" },
         "data": { "$ref": "#/$defs/Data" },
@@ -47,29 +25,7 @@
         "textual": { "$ref": "#/$defs/Textual" },
         "integrity": { "$ref": "#/$defs/Integrity" },
         "dataSchema": { "$ref": "#/$defs/DataSchema" },
-        "tableSchema": { "$ref": "#/$defs/TableSchema" },
-        "doi": { "$ref": "#/$defs/Doi" },
-        "prefix": { "$ref": "#/$defs/DoiPrefix" },
-        "suffix": { "$ref": "#/$defs/DoiSuffix" },
-        "creators": { "$ref": "#/$defs/Creators" },
-        "titles": { "$ref": "#/$defs/Titles" },
-        "publisher": { "$ref": "#/$defs/Publisher" },
-        "publicationYear": { "$ref": "#/$defs/PublicationYear" },
-        "subjects": { "$ref": "#/$defs/Subjects" },
-        "contributors": { "$ref": "#/$defs/Contributors" },
-        "dates": { "$ref": "#/$defs/Dates" },
-        "language": { "$ref": "#/$defs/Language" },
-        "types": { "$ref": "#/$defs/ContentTypes" },
-        "alternateIdentifiers": { "$ref": "#/$defs/AlternateIdentifiers" },
-        "relatedIdentifiers": { "$ref": "#/$defs/RelatedIdentifiers" },
-        "sizes": { "$ref": "#/$defs/Sizes" },
-        "formats": { "$ref": "#/$defs/Formats" },
-        "version": { "$ref": "#/$defs/Version" },
-        "rightsList": { "$ref": "#/$defs/RightsList" },
-        "descriptions": { "$ref": "#/$defs/Descriptions" },
-        "geoLocations": { "$ref": "#/$defs/GeoLocations" },
-        "fundingReferences": { "$ref": "#/$defs/FundingReferences" },
-        "relatedItems": { "$ref": "#/$defs/RelatedItems" }
+        "tableSchema": { "$ref": "#/$defs/TableSchema" }
       }
     },
     "Name": {
@@ -355,6 +311,33 @@
     },
     "TableName": {
       "type": "string"
+    },
+    "Datacite": {
+      "type": "object",
+      "properties": {
+        "doi": { "$ref": "#/$defs/Doi" },
+        "prefix": { "$ref": "#/$defs/DoiPrefix" },
+        "suffix": { "$ref": "#/$defs/DoiSuffix" },
+        "creators": { "$ref": "#/$defs/Creators" },
+        "titles": { "$ref": "#/$defs/Titles" },
+        "publisher": { "$ref": "#/$defs/Publisher" },
+        "publicationYear": { "$ref": "#/$defs/PublicationYear" },
+        "subjects": { "$ref": "#/$defs/Subjects" },
+        "contributors": { "$ref": "#/$defs/Contributors" },
+        "dates": { "$ref": "#/$defs/Dates" },
+        "language": { "$ref": "#/$defs/Language" },
+        "types": { "$ref": "#/$defs/ContentTypes" },
+        "alternateIdentifiers": { "$ref": "#/$defs/AlternateIdentifiers" },
+        "relatedIdentifiers": { "$ref": "#/$defs/RelatedIdentifiers" },
+        "sizes": { "$ref": "#/$defs/Sizes" },
+        "formats": { "$ref": "#/$defs/Formats" },
+        "version": { "$ref": "#/$defs/Version" },
+        "rightsList": { "$ref": "#/$defs/RightsList" },
+        "descriptions": { "$ref": "#/$defs/Descriptions" },
+        "geoLocations": { "$ref": "#/$defs/GeoLocations" },
+        "fundingReferences": { "$ref": "#/$defs/FundingReferences" },
+        "relatedItems": { "$ref": "#/$defs/RelatedItems" }
+      }
     },
     "Doi": {
       "type": "string",

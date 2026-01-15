@@ -1,3 +1,4 @@
+import { validateDataSchema } from "../../actions/dataSchema/validate.ts"
 import { loadDescriptor } from "../../actions/descriptor/load.ts"
 import { validateDescriptor } from "../../actions/descriptor/validate.ts"
 import { loadProfile } from "../../actions/profile/load.ts"
@@ -6,7 +7,7 @@ import type { Dataset } from "../../models/dataset.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
 import { normalizeDataset } from "./normalize.ts"
 
-export async function validateDatasetMetadata(
+export async function validateDatasetDescriptor(
   source: Dataset | Descriptor | string,
   options?: {
     basepath?: string
@@ -44,16 +45,24 @@ export async function validateDatasetMetadata(
 
   if (dataset) {
     for (const [index, resource] of (dataset?.resources ?? []).entries()) {
-      if (typeof resource.jsonSchema === "string") {
-        // TODO: implement
+      const rootJsonPointer = `/resources/${index}`
+
+      if (typeof resource.dataSchema === "string") {
+        const dataReport = await validateDataSchema(
+          resource.dataSchema,
+          { rootJsonPointer },
+        )
+
+        report.errors.push(...dataReport.errors)
       }
 
       if (typeof resource.tableSchema === "string") {
-        const report = await validateTableSchema(resource.tableSchema, {
-          rootJsonPointer: `/resources/${index}`,
-        })
+        const tableReport = await validateTableSchema(
+          resource.tableSchema,
+          { rootJsonPointer },
+        )
 
-        report.errors.push(...report.errors)
+        report.errors.push(...tableReport.errors)
       }
     }
 

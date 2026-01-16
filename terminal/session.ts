@@ -1,6 +1,7 @@
 import { setTimeout } from "node:timers/promises"
 import util from "node:util"
 import type { Frame } from "@fairspec/library"
+import { colorize } from "json-colorizer"
 import pc from "picocolors"
 import type { TaskInnerAPI } from "tasuku"
 import tasuku from "tasuku"
@@ -57,7 +58,7 @@ export class Session implements SessionOptions {
       return
     }
 
-    console.log(data)
+    console.log(colorize(data))
   }
 
   renderTableResult(frame: Frame) {

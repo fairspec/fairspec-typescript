@@ -1,6 +1,8 @@
 export { createColumnFromProperty } from "./actions/column/create.ts"
 export { getColumnProperties } from "./actions/column/property.ts"
+export { loadDataSchema } from "./actions/dataSchema/load.ts"
 export { resolveDataSchema } from "./actions/dataSchema/resolve.ts"
+export { validateDataSchema } from "./actions/dataSchema/validate.ts"
 export { assertDataset } from "./actions/dataset/assert.ts"
 export { denormalizeDataset } from "./actions/dataset/denormalize.ts"
 export { loadDatasetDescriptor } from "./actions/dataset/load.ts"

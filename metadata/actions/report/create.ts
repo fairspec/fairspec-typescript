@@ -8,5 +8,5 @@ export function createReport(
   errors = (errors ?? []).slice(0, options?.maxErrors)
   const valid = errors.length === 0
 
-  return { errors, valid }
+  return { valid, errors }
 }

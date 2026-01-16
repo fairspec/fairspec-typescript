@@ -9,6 +9,11 @@ export const bytes = new Option(
   "expected file size in bytes",
 )
 
+export const sampleBytes = new Option(
+  "--sample-bytes <sampleBytes>",
+  "sample size in bytes",
+).argParser(Number.parseInt)
+
 export const hash = new Option(
   "--hash <hash>",
   "expected file hash calculated with the specified hash type",

@@ -2,9 +2,9 @@ import { writeTempFile } from "@dpkit/dataset"
 import { Command } from "commander"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import * as sessionModule from "../../session.ts"
-import { explorePackageCommand } from "./explore.tsx"
+import { explorePackageCommand } from "./explore.ts"
 
-vi.mock("../../components/Package/Package.tsx", () => ({
+vi.mock("../../components/Package/Package.ts", () => ({
   Package: vi.fn(() => null),
 }))
 

@@ -3,7 +3,7 @@ import { writeTempFile } from "@dpkit/dataset"
 import { Command } from "commander"
 import { describe, expect, it, vi } from "vitest"
 import { useRecording } from "vitest-polly"
-import { validatePackageCommand } from "./validate.tsx"
+import { validatePackageCommand } from "./validate.ts"
 
 useRecording()
 

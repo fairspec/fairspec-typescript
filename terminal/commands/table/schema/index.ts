@@ -1,8 +1,8 @@
 import { Command } from "commander"
 import { helpConfiguration } from "../../../helpers/help.ts"
-import { convertTableSchemaCommand } from "./convert.tsx"
-import { inferTableSchemaCommand } from "./infer.tsx"
-import { validateTableSchemaCommand } from "./validate.tsx"
+import { convertTableSchemaCommand } from "./convert.ts"
+import { inferTableSchemaCommand } from "./infer.ts"
+import { validateTableSchemaCommand } from "./validate.ts"
 
 export const tableSchemaCommand = new Command("schema")
   .configureHelp(helpConfiguration)

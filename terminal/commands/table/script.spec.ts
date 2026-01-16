@@ -3,9 +3,9 @@ import { writeTempFile } from "@dpkit/dataset"
 import { Command } from "commander"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import * as sessionModule from "../../session.ts"
-import { scriptPackageCommand } from "./script.tsx"
+import { scriptTableCommand } from "./script.ts"
 
-describe("package script", () => {
+describe("table script", () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
@@ -32,32 +32,19 @@ describe("package script", () => {
   })
 
   it("should call session methods when starting a script session", async () => {
-    const packageDescriptor = JSON.stringify({
-      name: "test-package",
-      resources: [
-        {
-          name: "data",
-          path: "data.csv",
-          schema: {
-            fields: [
-              { name: "id", type: "integer" },
-              { name: "name", type: "string" },
-            ],
-          },
-        },
-      ],
-    })
-    const descriptorPath = await writeTempFile(packageDescriptor)
+    const csvPath = await writeTempFile(
+      "id,name,age\n1,alice,25\n2,bob,30\n3,charlie,35",
+    )
 
     const command = new Command()
-      .addCommand(scriptPackageCommand)
+      .addCommand(scriptTableCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
       })
 
     try {
-      await command.parseAsync(["node", "test", "script", descriptorPath])
+      await command.parseAsync(["node", "test", "script", csvPath])
     } catch (error) {}
 
     const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
@@ -66,48 +53,11 @@ describe("package script", () => {
     expect(mockSession.task).toHaveBeenCalled()
   })
 
-  it("should handle package with multiple resources", async () => {
-    const packageDescriptor = JSON.stringify({
-      name: "multi-resource-package",
-      resources: [
-        {
-          name: "users",
-          path: "users.csv",
-        },
-        {
-          name: "products",
-          path: "products.csv",
-        },
-      ],
-    })
-    const descriptorPath = await writeTempFile(packageDescriptor)
+  it("should handle custom delimiter option", async () => {
+    const csvPath = await writeTempFile("id|name|value\n1|test|100\n2|demo|200")
 
     const command = new Command()
-      .addCommand(scriptPackageCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
-
-    try {
-      await command.parseAsync(["node", "test", "script", descriptorPath])
-    } catch (error) {}
-
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
-      ?.value
-    expect(mockSession).toBeDefined()
-    expect(mockSession.task).toHaveBeenCalled()
-  })
-
-  it("should handle json output option", async () => {
-    const packageDescriptor = JSON.stringify({
-      name: "test-package",
-      resources: [],
-    })
-    const descriptorPath = await writeTempFile(packageDescriptor)
-
-    const command = new Command()
-      .addCommand(scriptPackageCommand)
+      .addCommand(scriptTableCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -118,8 +68,38 @@ describe("package script", () => {
         "node",
         "test",
         "script",
-        descriptorPath,
-        "--json",
+        csvPath,
+        "--delimiter",
+        "|",
+      ])
+    } catch (error) {}
+
+    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+      ?.value
+    expect(mockSession).toBeDefined()
+    expect(mockSession.task).toHaveBeenCalled()
+  })
+
+  it("should handle query option", async () => {
+    const csvPath = await writeTempFile(
+      "id,name,age\n1,alice,25\n2,bob,30\n3,charlie,35",
+    )
+
+    const command = new Command()
+      .addCommand(scriptTableCommand)
+      .configureOutput({
+        writeOut: () => {},
+        writeErr: () => {},
+      })
+
+    try {
+      await command.parseAsync([
+        "node",
+        "test",
+        "script",
+        csvPath,
+        "--query",
+        "SELECT * FROM self WHERE age > 25",
       ])
     } catch (error) {}
 

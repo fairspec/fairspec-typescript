@@ -1,10 +1,10 @@
 import { Command } from "commander"
 import { helpConfiguration } from "../../helpers/help.ts"
-import { describeTableCommand } from "./describe.tsx"
-import { queryTableCommand } from "./query.tsx"
+import { describeTableCommand } from "./describe.ts"
+import { queryTableCommand } from "./query.ts"
 import { tableSchemaCommand } from "./schema/index.ts"
-import { scriptTableCommand } from "./script.tsx"
-import { validateTableCommand } from "./validate.tsx"
+import { scriptTableCommand } from "./script.ts"
+import { validateTableCommand } from "./validate.ts"
 
 export const tableCommand = new Command("table")
   .configureHelp(helpConfiguration)

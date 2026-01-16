@@ -2,7 +2,7 @@ import { writeTempFile } from "@dpkit/dataset"
 import { Command } from "commander"
 import { describe, expect, it, vi } from "vitest"
 import { useRecording } from "vitest-polly"
-import { validateFileCommand } from "./validate.tsx"
+import { validateFileCommand } from "./validate.ts"
 
 useRecording()
 

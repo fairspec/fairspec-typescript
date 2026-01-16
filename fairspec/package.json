@@ -28,6 +28,7 @@
     "@fairspec/terminal": "workspace:*"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "type": "tsc --noEmit"
   }
 }

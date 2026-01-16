@@ -8,12 +8,12 @@ describe("saveResourceFiles", () => {
       basepath: "data",
       resource: {
         data: "data/table.csv",
-        jsonSchema: "data/json-schema.json",
+        dataSchema: "data/data-schema.json",
         tableSchema: "data/table-schema.json",
       },
       descriptor: {
         data: "table.csv",
-        jsonSchema: "json-schema.json",
+        dataSchema: "data-schema.json",
         tableSchema: "table-schema.json",
       },
     },

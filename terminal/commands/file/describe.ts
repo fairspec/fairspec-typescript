@@ -11,7 +11,7 @@ export const describeFileCommand = new Command("describe")
   .description("Show stats for a local or remote file")
 
   .addArgument(params.positionalFilePath)
-  .addOption(params.fromPackage)
+  .addOption(params.fromDataset)
   .addOption(params.fromResource)
   .addOption(params.hashType)
   .addOption(params.silent)

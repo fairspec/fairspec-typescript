@@ -1,6 +1,6 @@
 import { Option } from "commander"
 
 export const silent = new Option(
-  "-s, --silent",
+  "--silent",
   "suppress all output except errors",
 )

@@ -5,14 +5,14 @@ export const withRemote = new Option(
   "include remote resources",
 )
 
-export const fromPackage = new Option(
-  "-p --package <path>",
-  "package to select resource from",
+export const fromDataset = new Option(
+  "-d --dataset <path>",
+  "dataset to select resource from",
 )
 
 export const fromResource = new Option(
   "-r --resource <path>",
-  "resource in provided package",
+  "resource in provided dataset",
 )
 
 export const toFolder = new Option(

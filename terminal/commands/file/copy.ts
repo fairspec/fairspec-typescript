@@ -12,7 +12,7 @@ export const copyFileCommand = new Command("copy")
 
   .addArgument(params.positionalFilePath)
   .addOption(params.toPathRequired)
-  .addOption(params.fromPackage)
+  .addOption(params.fromDataset)
   .addOption(params.fromResource)
   .addOption(params.silent)
   .addOption(params.debug)

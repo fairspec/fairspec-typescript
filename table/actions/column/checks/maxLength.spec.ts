@@ -41,7 +41,9 @@ describe("inspectTable (cell/maxLength)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/maxLength")).toHaveLength(1)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/maxLength"),
+    ).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/maxLength",
       columnName: "username",

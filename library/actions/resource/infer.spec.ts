@@ -15,7 +15,9 @@ describe("inferResource", () => {
   })
 
   it("should infer format from file extension", async () => {
-    const path = await writeTempFile("id,name\n1,alice\n2,bob", { format: "csv" })
+    const path = await writeTempFile("id,name\n1,alice\n2,bob", {
+      format: "csv",
+    })
     const source: Resource = { data: path }
 
     const target = await inferResource(source)

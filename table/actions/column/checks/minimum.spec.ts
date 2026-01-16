@@ -41,7 +41,9 @@ describe("inspectTable (cell/minimum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/minimum")).toHaveLength(1)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/minimum"),
+    ).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/minimum",
       columnName: "temperature",
@@ -68,9 +70,11 @@ describe("inspectTable (cell/minimum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/exclusiveMinimum")).toHaveLength(
-      2,
-    )
+    expect(
+      errors.filter(
+        (e: { type: string }) => e.type === "cell/exclusiveMinimum",
+      ),
+    ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/exclusiveMinimum",
       columnName: "temperature",

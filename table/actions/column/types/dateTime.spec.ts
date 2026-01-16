@@ -53,27 +53,26 @@ describe.skip("parseDatetimeColumn", () => {
     expect(actual).toEqual(expected)
   })
 
-  it.each([["21/11/06 16:30", null]])(
-    "invalid temporalFormat: %s -> %s",
-    async (cell, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        properties: {
-          name: {
-            type: "string",
-            format: "date-time",
-            temporalFormat: "invalid",
-          },
+  it.each([
+    ["21/11/06 16:30", null],
+  ])("invalid temporalFormat: %s -> %s", async (cell, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "invalid",
         },
-      }
+      },
+    }
 
-      const result = await normalizeTable(table, tableSchema)
-      const frame = await result.collect()
+    const result = await normalizeTable(table, tableSchema)
+    const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    },
-  )
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
 })
 
 describe("stringifyDatetimeColumn", () => {
@@ -98,51 +97,45 @@ describe("stringifyDatetimeColumn", () => {
     expect(actual).toEqual(expected)
   })
 
-  it.each([[new Date(Date.UTC(2006, 10, 21, 16, 30, 0)), "21/11/2006 16:30"]])(
-    "temporalFormat %%d/%%m/%%Y %%H:%%M: %s -> %s",
-    async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("name", [value], pl.Datetime)])
-        .lazy()
-      const tableSchema: TableSchema = {
-        properties: {
-          name: {
-            type: "string",
-            format: "date-time",
-            temporalFormat: "%d/%m/%Y %H:%M",
-          },
+  it.each([
+    [new Date(Date.UTC(2006, 10, 21, 16, 30, 0)), "21/11/2006 16:30"],
+  ])("temporalFormat %%d/%%m/%%Y %%H:%%M: %s -> %s", async (value, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [value], pl.Datetime)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%d/%m/%Y %H:%M",
         },
-      }
+      },
+    }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+    const result = await denormalizeTable(table, tableSchema)
+    const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    },
-  )
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
 
-  it.each([[new Date(Date.UTC(2014, 0, 1, 6, 0, 0)), "2014/01/01T06:00:00"]])(
-    "temporalFormat %%Y/%%m/%%dT%%H:%%M:%%S: %s -> %s",
-    async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("name", [value], pl.Datetime)])
-        .lazy()
-      const tableSchema: TableSchema = {
-        properties: {
-          name: {
-            type: "string",
-            format: "date-time",
-            temporalFormat: "%Y/%m/%dT%H:%M:%S",
-          },
+  it.each([
+    [new Date(Date.UTC(2014, 0, 1, 6, 0, 0)), "2014/01/01T06:00:00"],
+  ])("temporalFormat %%Y/%%m/%%dT%%H:%%M:%%S: %s -> %s", async (value, expected) => {
+    const table = pl.DataFrame([pl.Series("name", [value], pl.Datetime)]).lazy()
+    const tableSchema: TableSchema = {
+      properties: {
+        name: {
+          type: "string",
+          format: "date-time",
+          temporalFormat: "%Y/%m/%dT%H:%M:%S",
         },
-      }
+      },
+    }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+    const result = await denormalizeTable(table, tableSchema)
+    const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    },
-  )
+    const actual = frame.toRecords()[0]?.name
+    expect(actual).toEqual(expected)
+  })
 })

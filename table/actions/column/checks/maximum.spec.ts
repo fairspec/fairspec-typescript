@@ -41,7 +41,9 @@ describe("inspectTable (cell/maximum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/maximum")).toHaveLength(1)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/maximum"),
+    ).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/maximum",
       columnName: "temperature",
@@ -68,9 +70,11 @@ describe("inspectTable (cell/maximum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/exclusiveMaximum")).toHaveLength(
-      2,
-    )
+    expect(
+      errors.filter(
+        (e: { type: string }) => e.type === "cell/exclusiveMaximum",
+      ),
+    ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/exclusiveMaximum",
       columnName: "temperature",

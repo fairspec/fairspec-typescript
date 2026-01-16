@@ -1,59 +1,40 @@
-import { validateFile } from "@fairspec/library"
+import { validateFile } from "@fairspec/dataset"
 import { Command } from "commander"
-import React from "react"
-import { Report } from "../../components/Report/index.ts"
-import { selectErrorType } from "../../helpers/error.ts"
+import pc from "picocolors"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const validateFileCommand = new Command("validate")
   .configureHelp(helpConfiguration)
   .description("Validate a file from a local or remote path")
 
   .addArgument(params.requiredPositionalFilePath)
-  .addOption(params.bytes)
   .addOption(params.hash)
-  .addOption(params.json)
+  .addOption(params.hashType)
+  .addOption(params.silent)
   .addOption(params.debug)
-  .addOption(params.quit)
-  .addOption(params.all)
 
   .action(async (path, options) => {
-    const session = createSession({
-      title: "Validate file",
-      json: options.json,
+    const session = new Session({
+      silent: options.silent,
       debug: options.debug,
-      quit: options.quit,
-      all: options.all,
     })
 
-    if (!options.bytes && !options.hash) {
-      session.terminate("You must specify either --bytes or --hash")
-      process.exit(1) // typescript ignore never return type above
-    }
+    await session.task(pc.bold("Validate file"), async () => {
+      const report = await validateFile({
+        data: path,
+        integrity: options.hash
+          ? { hash: options.hash, type: options.hashType ?? "md5" }
+          : undefined,
+      })
 
-    const report = await session.task(
-      "Validating file",
-      validateFile({
-        path,
-        bytes: options.bytes ? Number.parseInt(options.bytes) : undefined,
-        hash: options.hash,
-      }),
-    )
+      for (const error of report.errors) {
+        console.log(error)
+      }
 
-    if (report.errors.length) {
-      const type = await selectErrorType(session, report.errors)
-      if (type) report.errors = report.errors.filter(e => e.type === type)
-    }
-
-    if (report.valid) {
-      session.success("File is valid")
-      return
-    }
-
-    session.render(
-      report,
-      <Report errors={report.errors} quit={options.quit} />,
-    )
+      if (!report.valid) {
+        throw new Error("File is not valid")
+      }
+    })
   })

@@ -2,11 +2,13 @@
   "name": "@fairspec/terminal",
   "type": "module",
   "version": "0.0.0-dev",
-  "exports": "./build/index.js",
   "sideEffects": false,
   "files": [
     "build"
   ],
+  "bin": {
+    "fairspec": "./build/entrypoints/run.js"
+  },
   "license": "MIT",
   "author": "Evgeny Karev",
   "repository": "https://github.com/fairspec/fairspec-typescript",
@@ -22,15 +24,20 @@
     "validation",
     "quality",
     "fair",
-    "document",
-    "html"
+    "terminal",
+    "cli"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && pnpm build:copy && pnpm build:mode",
+    "build:copy": "cp entrypoints/*.cmd build/entrypoints && cp package.json build",
+    "build:mode": "chmod +x ./build/entrypoints/*.js",
     "type": "tsc --noEmit"
   },
   "dependencies": {
-    "@fairspec/library": "workspace:*"
-  },
-  "devDependencies": {}
+    "@commander-js/extra-typings": "^14.0.0",
+    "@fairspec/library": "workspace:*",
+    "commander": "^14.0.0",
+    "picocolors": "^1.1.1",
+    "tasuku": "^2.0.5"
+  }
 }

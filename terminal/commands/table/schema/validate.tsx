@@ -2,24 +2,22 @@ import type { Resource } from "@dpkit/library"
 import { loadDescriptor, resolveSchema, validateSchema } from "@dpkit/library"
 import { Command } from "commander"
 import React from "react"
+import * as params from "../../../params/index.ts"
+import { Session } from "../../../session.ts"
 import { Report } from "../../components/Report/index.ts"
 import { selectErrorType } from "../../helpers/error.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
-import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
 
 export const validateTableSchemaCommand = new Command("validate")
   .configureHelp(helpConfiguration)
   .description("Validate a table schema from a local or remote path")
 
   .addArgument(params.positionalDescriptorPath)
-  .addOption(params.fromPackage)
+  .addOption(params.fromDataset)
   .addOption(params.fromResource)
-  .addOption(params.json)
   .addOption(params.debug)
-  .addOption(params.quit)
-  .addOption(params.all)
+  .addOption(params.json)
 
   .action(async (path, options) => {
     const session = Session.create({

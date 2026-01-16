@@ -34,10 +34,10 @@ export const copyFileCommand = new Command("copy")
         sourcePath: path,
         targetPath: options.toPath,
       })
-
-      session.renderTextResult(
-        "success",
-        `Copied file from ${pc.bold(path)} to ${pc.bold(options.toPath)}`,
-      )
     })
+
+    session.renderTextResult(
+      "success",
+      `Copied file from ${pc.bold(path)} to ${pc.bold(options.toPath)}`,
+    )
   })

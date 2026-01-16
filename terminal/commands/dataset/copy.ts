@@ -24,4 +24,9 @@ export const copyDatasetCommand = new Command("copy")
       const dataset = await loadDataset(path)
       await saveDataset(dataset, { target: options.toPath })
     })
+
+    session.renderTextResult(
+      "success",
+      `Copied dataset from ${pc.bold(path)} to ${pc.bold(options.toPath)}`,
+    )
   })

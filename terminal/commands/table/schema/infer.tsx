@@ -1,52 +1,45 @@
 import { inferSchemaFromTable, loadTable } from "@dpkit/library"
 import { Command } from "commander"
 import React from "react"
+import * as params from "../../../params/index.ts"
+import { Session } from "../../../session.ts"
 import { Schema } from "../../components/Schema/index.ts"
 import { createDialectFromOptions } from "../../helpers/dialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { isEmptyObject } from "../../helpers/object.ts"
 import { selectResource } from "../../helpers/resource.ts"
-import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
 
 export const inferTableSchemaCommand = new Command("infer")
   .configureHelp(helpConfiguration)
   .description("Infer a table schema from a table")
 
   .addArgument(params.positionalTablePath)
-  .addOption(params.fromPackage)
+  .addOption(params.fromDataset)
   .addOption(params.fromResource)
-  .addOption(params.json)
   .addOption(params.debug)
+  .addOption(params.json)
 
-  .optionsGroup("Table Dialect")
+  .optionsGroup("Format")
   .addOption(params.delimiter)
-  .addOption(params.header)
+  .addOption(params.lineTerminator)
+  .addOption(params.quoteChar)
+  .addOption(params.nullSequence)
   .addOption(params.headerRows)
   .addOption(params.headerJoin)
   .addOption(params.commentRows)
   .addOption(params.commentChar)
-  .addOption(params.quoteChar)
-  .addOption(params.doubleQuote)
-  .addOption(params.escapeChar)
-  .addOption(params.nullSequence)
-  .addOption(params.skipInitialSpace)
-  .addOption(params.property)
-  .addOption(params.itemType)
-  .addOption(params.itemKeys)
+  .addOption(params.columnNames)
+  .addOption(params.jsonPointer)
+  .addOption(params.rowType)
   .addOption(params.sheetNumber)
   .addOption(params.sheetName)
-  .addOption(params.table)
-  .addOption(params.sampleBytes)
+  .addOption(params.tableName)
 
   .optionsGroup("Table Schema")
-  .addOption(params.fieldNames)
-  .addOption(params.fieldTypes)
+  .addOption(params.columnTypes)
   .addOption(params.missingValues)
-  .addOption(params.stringFormat)
   .addOption(params.decimalChar)
   .addOption(params.groupChar)
-  .addOption(params.bareNumber)
   .addOption(params.trueValues)
   .addOption(params.falseValues)
   .addOption(params.datetimeFormat)
@@ -55,8 +48,6 @@ export const inferTableSchemaCommand = new Command("infer")
   .addOption(params.arrayType)
   .addOption(params.listDelimiter)
   .addOption(params.listItemType)
-  .addOption(params.geopointFormat)
-  .addOption(params.geojsonFormat)
   .addOption(params.sampleRows)
   .addOption(params.confidence)
   .addOption(params.commaDecimal)

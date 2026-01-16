@@ -1,44 +1,36 @@
-import type { TableSchemaOptions } from "@fairspec/library"
-
-// TODO: Find a better way to construct schema options
+import type { TableSchemaOptions } from "@fairspec/table"
 
 export function createTableSchemaOptionsFromParams(
-  options: any,
+  options: Record<string, unknown>,
 ): TableSchemaOptions {
   const result: TableSchemaOptions = {}
 
-  if (options.toFieldNames !== undefined)
-    result.fieldNames = options.toFieldNames
-  if (options.toFieldTypes !== undefined)
-    result.fieldTypes = options.toFieldTypes
+  if (options.toColumnNames !== undefined)
+    result.columnNames = options.toColumnNames as string[]
+  if (options.toColumnTypes !== undefined)
+    result.columnTypes = options.toColumnTypes as TableSchemaOptions["columnTypes"]
   if (options.toMissingValues !== undefined)
-    result.missingValues = options.toMissingValues
-  if (options.toStringFormat !== undefined)
-    result.stringFormat = options.toStringFormat
+    result.missingValues = options.toMissingValues as string[]
   if (options.toDecimalChar !== undefined)
-    result.decimalChar = options.toDecimalChar
-  if (options.toGroupChar !== undefined) result.groupChar = options.toGroupChar
-  if (options.toBareNumber !== undefined)
-    result.bareNumber = options.toBareNumber
+    result.decimalChar = options.toDecimalChar as string
+  if (options.toGroupChar !== undefined)
+    result.groupChar = options.toGroupChar as string
   if (options.toTrueValues !== undefined)
-    result.trueValues = options.toTrueValues
+    result.trueValues = options.toTrueValues as string[]
   if (options.toFalseValues !== undefined)
-    result.falseValues = options.toFalseValues
+    result.falseValues = options.toFalseValues as string[]
   if (options.toDatetimeFormat !== undefined)
-    result.datetimeFormat = options.toDatetimeFormat
+    result.datetimeFormat = options.toDatetimeFormat as string
   if (options.toDateFormat !== undefined)
-    result.dateFormat = options.toDateFormat
+    result.dateFormat = options.toDateFormat as string
   if (options.toTimeFormat !== undefined)
-    result.timeFormat = options.toTimeFormat
-  if (options.toArrayType !== undefined) result.arrayType = options.toArrayType
+    result.timeFormat = options.toTimeFormat as string
+  if (options.toArrayType !== undefined)
+    result.arrayType = options.toArrayType as "array" | "list"
   if (options.toListDelimiter !== undefined)
-    result.listDelimiter = options.toListDelimiter
+    result.listDelimiter = options.toListDelimiter as string
   if (options.toListItemType !== undefined)
-    result.listItemType = options.toListItemType
-  if (options.toGeopointFormat !== undefined)
-    result.geopointFormat = options.toGeopointFormat
-  if (options.toGeojsonFormat !== undefined)
-    result.geojsonFormat = options.toGeojsonFormat
+    result.listItemType = options.toListItemType as TableSchemaOptions["listItemType"]
 
   return result
 }

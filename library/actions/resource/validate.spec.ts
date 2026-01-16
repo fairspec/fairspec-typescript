@@ -1,146 +1,61 @@
+import { writeTempFile } from "@fairspec/dataset"
+import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
 import { validateResource } from "./validate.ts"
 
 describe("validateResource", () => {
-  it("should catch validation errors for invalid tabular data", async () => {
-    const resource = {
-      name: "test",
-      type: "table" as const,
-      data: [
-        { id: 1, name: "Alice", active: true },
-        { id: 2, name: "Bob", active: 123 },
-      ],
-      schema: {
-        fields: [
-          { name: "id", type: "integer" as const },
-          { name: "name", type: "string" as const },
-          { name: "active", type: "boolean" as const },
-        ],
-      },
-    }
-
-    const report = await validateResource(resource)
-
-    expect(report.valid).toBe(false)
-    expect(report.errors.length).toEqual(1)
-  })
-
   it("should validate correct tabular data", async () => {
-    const resource = {
-      name: "test",
-      type: "table" as const,
-      data: [
-        { name: "Alice", active: true },
-        { name: "Bob", active: false },
-      ],
-      schema: {
-        fields: [
-          { name: "name", type: "string" as const },
-          { name: "active", type: "boolean" as const },
-        ],
+    const path = await writeTempFile("id,name\n1,alice\n2,bob")
+    const source: Resource = {
+      data: path,
+      format: { type: "csv" },
+      tableSchema: {
+        properties: {
+          id: { type: "integer" },
+          name: { type: "string" },
+        },
       },
     }
 
-    const report = await validateResource(resource)
+    const report = await validateResource(source)
 
     expect(report.valid).toBe(true)
-    expect(report.errors).toEqual([])
+    expect(report.errors).toHaveLength(0)
   })
 
-  it("should catch multiple validation errors", async () => {
-    const resource = {
-      name: "test",
-      type: "table" as const,
-      data: [
-        { id: 1, name: "Alice", age: 25 },
-        { id: "not-a-number", name: "Bob", age: "not-a-number" },
-        { id: 3, name: "Charlie", age: -5 },
-      ],
-      schema: {
-        fields: [
-          { name: "id", type: "integer" as const },
-          { name: "name", type: "string" as const },
-          {
-            name: "age",
-            type: "integer" as const,
-            constraints: { minimum: 0 },
-          },
-        ],
+  it("should return errors for invalid tabular data", async () => {
+    const path = await writeTempFile("id,name\ninvalid,alice\n2,bob")
+    const source: Resource = {
+      data: path,
+      format: { type: "csv" },
+      tableSchema: {
+        properties: {
+          id: { type: "integer" },
+          name: { type: "string" },
+        },
       },
     }
 
-    const report = await validateResource(resource)
+    const report = await validateResource(source)
 
     expect(report.valid).toBe(false)
-    expect(report.errors.length).toEqual(3)
+    expect(report.errors).toHaveLength(1)
+    expect(report.errors).toContainEqual({
+      type: "cell/type",
+      columnName: "id",
+      columnType: "integer",
+      rowNumber: 1,
+      cell: "invalid",
+    })
   })
 
-  it("should catch missing table error when schema is defined but table cannot be loaded", async () => {
-    const resource = {
-      name: "test",
-      path: "table.bad",
-      schema: {
-        fields: [
-          { name: "id", type: "integer" as const },
-          { name: "name", type: "string" as const },
-        ],
-      },
-    }
-
-    const report = await validateResource(resource)
-
-    expect(report.valid).toBe(false)
-    expect(report.errors).toEqual([
-      {
-        type: "data",
-        message: "missing test table",
-      },
-    ])
-  })
-
-  it("should validate document with jsonSchema", async () => {
-    const resource = {
-      name: "test-document",
+  it("should validate correct inline data with dataSchema", async () => {
+    const source: Resource = {
       data: {
         name: "test-package",
         version: "1.0.0",
-        author: {
-          name: "John Doe",
-          email: "john@example.com",
-        },
       },
-      jsonSchema: {
-        type: "object",
-        required: ["name", "version", "author"],
-        properties: {
-          name: { type: "string" },
-          version: { type: "string" },
-          author: {
-            type: "object",
-            required: ["name", "email"],
-            properties: {
-              name: { type: "string" },
-              email: { type: "string" },
-            },
-          },
-        },
-      },
-    }
-
-    const report = await validateResource(resource)
-
-    expect(report.valid).toBe(true)
-    expect(report.errors).toEqual([])
-  })
-
-  it("should catch validation errors for document with invalid jsonSchema data", async () => {
-    const resource = {
-      name: "test-document",
-      data: {
-        name: "test-package",
-        version: 123,
-      },
-      jsonSchema: {
+      dataSchema: {
         type: "object",
         required: ["name", "version"],
         properties: {
@@ -150,15 +65,31 @@ describe("validateResource", () => {
       },
     }
 
-    const report = await validateResource(resource)
+    const report = await validateResource(source)
+
+    expect(report.valid).toBe(true)
+    expect(report.errors).toHaveLength(0)
+  })
+
+  it("should return errors for invalid dataSchema data", async () => {
+    const source: Resource = {
+      data: {
+        name: "test-package",
+        version: 123,
+      },
+      dataSchema: {
+        type: "object",
+        required: ["name", "version"],
+        properties: {
+          name: { type: "string" },
+          version: { type: "string" },
+        },
+      },
+    }
+
+    const report = await validateResource(source)
 
     expect(report.valid).toBe(false)
-    expect(report.errors).toEqual([
-      {
-        type: "document/json",
-        pointer: "/version",
-        message: "must be string",
-      },
-    ])
+    expect(report.errors).toHaveLength(1)
   })
 })

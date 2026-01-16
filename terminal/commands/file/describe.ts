@@ -1,11 +1,11 @@
 import { describeFile } from "@fairspec/library"
 import { Command } from "commander"
-import React from "react"
-import { Datagrid } from "../../components/Datagrid/index.ts"
+import * as pl from "nodejs-polars"
+import pc from "picocolors"
+import { selectFile } from "../../helpers/file.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
-import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const describeFileCommand = new Command("describe")
   .configureHelp(helpConfiguration)
@@ -15,31 +15,26 @@ export const describeFileCommand = new Command("describe")
   .addOption(params.fromPackage)
   .addOption(params.fromResource)
   .addOption(params.hashType)
-  .addOption(params.json)
+  .addOption(params.silent)
   .addOption(params.debug)
+  .addOption(params.json)
 
   .action(async (path, options) => {
-    const session = createSession({
-      title: "Describe file",
-      json: options.json,
+    const session = new Session({
+      silent: options.silent,
       debug: options.debug,
+      json: options.json,
     })
 
     if (!path) {
-      const resource = await selectResource(session, options)
-
-      if (typeof resource.path !== "string") {
-        session.terminate("Only single file resources are supported")
-        process.exit(1) // typescript ignore never return type above
-      }
-
-      path = resource.path
+      path = await selectFile(session, options)
     }
 
-    const stats = await session.task(
-      "Calculating stats",
-      describeFile(path, { hashType: options.hashType }),
-    )
+    await session.task(pc.bold("Describe file"), async () => {
+      const stats = await describeFile(path, {
+        hashType: options.hashType,
+      })
 
-    session.render(stats, <Datagrid records={[stats]} />)
+      console.log(JSON.stringify(stats, null, 2))
+    })
   })

@@ -1,35 +1,27 @@
-import { loadPackage, savePackage } from "@dpkit/library"
+import { loadDataset, saveDataset } from "@fairspec/library"
 import { Command } from "commander"
+import pc from "picocolors"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const copyDatasetCommand = new Command("copy")
   .configureHelp(helpConfiguration)
-  .description(
-    "Copy a local or remote Data Package to a local folder, a ZIP archive or a database",
-  )
+  .description("Copy a local or remote dataset to a local folder")
 
   .addArgument(params.positionalDescriptorPath)
   .addOption(params.toPathRequired)
-  .addOption(params.withRemote)
+  .addOption(params.silent)
   .addOption(params.debug)
 
   .action(async (path, options) => {
-    const session = createSession({
-      title: "Copy package",
+    const session = new Session({
+      silent: options.silent,
       debug: options.debug,
     })
 
-    const dp = await session.task("Loading package", loadPackage(path))
-
-    await session.task(
-      "Copying package",
-      savePackage(dp, {
-        target: options.toPath,
-        withRemote: options.withRemote,
-      }),
-    )
-
-    session.success(`Package from "${path}" copied to "${options.toPath}"`)
+    await session.task(pc.bold("Copy dataset"), async () => {
+      const dataset = await loadDataset(path)
+      await saveDataset(dataset, { target: options.toPath })
+    })
   })

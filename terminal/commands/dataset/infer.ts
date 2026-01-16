@@ -1,14 +1,12 @@
-import { inferPackage } from "@dpkit/library"
+import { inferDataset } from "@fairspec/library"
 import { Command } from "commander"
-import React from "react"
-import { Package } from "../../components/Package/index.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const inferDatasetCommand = new Command("infer")
   .configureHelp(helpConfiguration)
-  .description("Infer a data package from local or remote file paths")
+  .description("Infer a dataset from local or remote file paths")
 
   .addArgument(params.positionalFilePaths)
   .addOption(params.debug)
@@ -50,20 +48,18 @@ export const inferDatasetCommand = new Command("infer")
   .addOption(params.keepStrings)
 
   .action(async (paths, options) => {
-    const session = createSession({
-      title: "Infer package",
-      json: options.json,
+    const session = new Session({
       debug: options.debug,
+      json: options.json,
     })
 
-    const sourcePackage = {
-      resources: paths.map(path => ({ path })),
-    }
+    const dataset = await session.task("Infering dataset", async () => {
+      const dataset = {
+        resources: paths.map((path: string) => ({ data: path })),
+      }
 
-    const targetPackage = await session.task(
-      "Inferring package",
-      inferPackage(sourcePackage, options),
-    )
+      return await inferDataset(dataset, options)
+    })
 
-    await session.render(targetPackage, <Package dataPackage={targetPackage} />)
+    session.renderDataResult(dataset)
   })

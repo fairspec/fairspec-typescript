@@ -1,27 +1,37 @@
-import { loadPackage } from "@dpkit/library"
+import { loadDataset } from "@fairspec/library"
+import { inferResourceName } from "@fairspec/metadata"
 import { Command } from "commander"
-import React from "react"
-import { Package } from "../../components/Package/index.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
-export const listDatasetCommand = new Command("explore")
+export const listDatasetCommand = new Command("list")
   .configureHelp(helpConfiguration)
-  .description("Explore a Data Package descriptor")
+  .description("List Dataset resources")
 
   .addArgument(params.positionalDescriptorPath)
-  .addOption(params.json)
   .addOption(params.debug)
+  .addOption(params.json)
 
   .action(async (path, options) => {
-    const session = createSession({
-      title: "Explore package",
-      json: options.json,
+    const session = new Session({
       debug: options.debug,
+      json: options.json,
     })
 
-    const dataPackage = await session.task("Loading package", loadPackage(path))
+    const dataset = await session.task("Loading dataset", async () => {
+      const dataset = await loadDataset(path)
 
-    await session.render(dataPackage, <Package dataPackage={dataPackage} />)
+      if (!dataset) {
+        throw new Error("Could not load dataset")
+      }
+
+      return dataset
+    })
+
+    const resourceNames = (dataset.resources ?? []).map(
+      resource => resource.name ?? inferResourceName(resource),
+    )
+
+    session.renderDataResult(resourceNames)
   })

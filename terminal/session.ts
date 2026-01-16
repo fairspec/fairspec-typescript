@@ -48,7 +48,7 @@ export class Session implements SessionOptions {
     console.log(renderStatus(status), text)
   }
 
-  renderDataResult(data: Record<string, any>) {
+  renderDataResult(data: string | object) {
     if (this.silent) {
       return
     }

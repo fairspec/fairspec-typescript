@@ -22,7 +22,7 @@ export async function validateTable(
     tableSchema = await inferTableSchema(resource, options)
   }
 
-  if (!tableSchema) {
+  if (tableSchema) {
     const table = await loadTable(resource, { denormalized: true })
 
     if (table) {

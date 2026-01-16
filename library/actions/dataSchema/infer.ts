@@ -9,7 +9,7 @@ export async function inferDataSchema(resource: Partial<Resource>) {
   }
 
   try {
-    return generateSchema(data).toJSONSchema() as JsonSchema
+    return generateSchema(data) as JsonSchema
   } catch {
     return undefined
   }

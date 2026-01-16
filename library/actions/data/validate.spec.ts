@@ -37,8 +37,16 @@ describe("validateData", () => {
 
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(2)
-    expect(report.errors).toContainEqual({ type: "data", jsonPointer: "/name", message: "must be string" })
-    expect(report.errors).toContainEqual({ type: "data", jsonPointer: "/count", message: "must be integer" })
+    expect(report.errors).toContainEqual({
+      type: "data",
+      jsonPointer: "/name",
+      message: "must be string",
+    })
+    expect(report.errors).toContainEqual({
+      type: "data",
+      jsonPointer: "/count",
+      message: "must be integer",
+    })
   })
 
   it("should return error when no data but schema expected", async () => {
@@ -51,6 +59,9 @@ describe("validateData", () => {
 
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(1)
-    expect(report.errors).toContainEqual({ type: "resource/type", expectedResourceType: "data" })
+    expect(report.errors).toContainEqual({
+      type: "resource/type",
+      expectedResourceType: "data",
+    })
   })
 })

@@ -1,111 +1,52 @@
 import { writeTempFile } from "@fairspec/dataset"
+import type { Dataset } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { inferPackage } from "./infer.ts"
+import { inferDataset } from "./infer.ts"
 
-describe("inferPackage", () => {
-  it("should infer package with single resource", async () => {
-    const csvPath = await writeTempFile("id,name\n1,alice\n2,bob")
-    const dataPackage = {
-      name: "test-package",
-      resources: [{ path: csvPath, format: "csv" as const }],
+describe("inferDataset", () => {
+  it("should infer dataset with single resource", async () => {
+    const path = await writeTempFile("id,name\n1,alice\n2,bob")
+    const source: Dataset = {
+      language: "en",
+      resources: [{ data: path, format: { type: "csv" } }],
     }
 
-    const result = await inferPackage(dataPackage)
+    const target = await inferDataset(source)
 
-    expect(result.name).toBe("test-package")
-    expect(result.resources).toBeDefined()
-    expect(result.resources.length).toBe(1)
-    expect(result.resources?.[0]?.schema).toBeDefined()
+    expect(target.language).toBe("en")
+    expect(target.resources).toHaveLength(1)
+    expect(target.resources?.[0]?.tableSchema).toEqual({
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
+    })
   })
 
-  it("should infer package with multiple resources", async () => {
-    const csv1Path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const csv2Path = await writeTempFile("id,value\n1,100\n2,200")
-    const dataPackage = {
-      name: "test-package",
+  it("should infer dataset with multiple resources", async () => {
+    const path1 = await writeTempFile("id,name\n1,alice\n2,bob")
+    const path2 = await writeTempFile("id,value\n1,100\n2,200")
+    const source: Dataset = {
+      language: "en",
       resources: [
-        { path: csv1Path, format: "csv" as const },
-        { path: csv2Path, format: "csv" as const },
+        { data: path1, format: { type: "csv" } },
+        { data: path2, format: { type: "csv" } },
       ],
     }
 
-    const result = await inferPackage(dataPackage)
+    const target = await inferDataset(source)
 
-    expect(result.name).toBe("test-package")
-    expect(result.resources.length).toBe(2)
-    expect(result.resources?.[0]?.schema).toBeDefined()
-    expect(result.resources?.[1]?.schema).toBeDefined()
+    expect(target.language).toBe("en")
+    expect(target.resources).toHaveLength(2)
+    expect(target.resources?.[0]?.tableSchema).toBeDefined()
+    expect(target.resources?.[1]?.tableSchema).toBeDefined()
   })
 
-  it("should preserve package-level properties", async () => {
-    const csvPath = await writeTempFile("id,name\n1,alice\n2,bob")
-    const dataPackage = {
-      name: "test-package",
-      title: "Test Package",
-      description: "A test package",
-      version: "1.0.0",
-      resources: [{ path: csvPath, format: "csv" as const }],
-    }
-
-    const result = await inferPackage(dataPackage)
-
-    expect(result.name).toBe("test-package")
-    expect(result.title).toBe("Test Package")
-    expect(result.description).toBe("A test package")
-    expect(result.version).toBe("1.0.0")
-  })
-
-  it("should pass options to resource inference", async () => {
-    const csvPath = await writeTempFile("id|name\n1|alice\n2|bob")
-    const dataPackage = {
-      name: "test-package",
-      resources: [{ path: csvPath, format: "csv" as const }],
-    }
-
-    const result = await inferPackage(dataPackage, { delimiter: "|" })
-
-    expect(result.resources?.[0]?.dialect).toBeDefined()
-    expect(result.resources?.[0]?.schema).toBeDefined()
-  })
-
-  it("should handle empty resources array", async () => {
-    const dataPackage = {
-      name: "test-package",
-      resources: [],
-    }
-
-    const result = await inferPackage(dataPackage)
-
-    expect(result.name).toBe("test-package")
-    expect(result.resources).toEqual([])
-  })
-
-  it("should preserve existing resource properties", async () => {
-    const csvPath = await writeTempFile("id,name\n1,alice\n2,bob")
-    const dataPackage = {
-      name: "test-package",
+  it("should infer dataset with inline data resources", async () => {
+    const source: Dataset = {
+      language: "en",
       resources: [
         {
-          path: csvPath,
-          format: "csv" as const,
-          name: "custom-name",
-          title: "Custom Resource",
-        },
-      ],
-    }
-
-    const result = await inferPackage(dataPackage)
-
-    expect(result.resources?.[0]?.name).toBe("custom-name")
-    expect(result.resources?.[0]?.title).toBe("Custom Resource")
-  })
-
-  it("should infer package with inline data resources", async () => {
-    const dataPackage = {
-      name: "test-package",
-      resources: [
-        {
-          name: "test-resource",
           data: [
             { id: 1, name: "alice" },
             { id: 2, name: "bob" },
@@ -114,31 +55,43 @@ describe("inferPackage", () => {
       ],
     }
 
-    const result = await inferPackage(dataPackage)
+    const target = await inferDataset(source)
 
-    expect(result.name).toBe("test-package")
-    expect(result.resources.length).toBe(1)
-    expect(result.resources?.[0]?.name).toBe("test-resource")
-    expect(result.resources?.[0]?.data).toBeDefined()
+    expect(target.language).toBe("en")
+    expect(target.resources).toHaveLength(1)
+    expect(target.resources?.[0]?.tableSchema).toEqual({
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
+    })
   })
 
-  it("should handle mixed file and inline resources", async () => {
-    const csvPath = await writeTempFile("id,name\n1,alice\n2,bob")
-    const dataPackage = {
-      name: "test-package",
+  it("should preserve existing resource properties", async () => {
+    const path = await writeTempFile("id,name\n1,alice\n2,bob")
+    const source: Dataset = {
+      language: "en",
       resources: [
-        { path: csvPath, format: "csv" as const },
         {
-          name: "inline-resource",
-          data: [{ id: 1, value: 100 }],
+          data: path,
+          format: { type: "csv" },
+          tableSchema: {
+            properties: {
+              id: { type: "string" },
+              name: { type: "string" },
+            },
+          },
         },
       ],
     }
 
-    const result = await inferPackage(dataPackage)
+    const target = await inferDataset(source)
 
-    expect(result.resources.length).toBe(2)
-    expect(result.resources?.[0]?.path).toBe(csvPath)
-    expect(result.resources?.[1]?.data).toBeDefined()
+    expect(target.resources?.[0]?.tableSchema).toEqual({
+      properties: {
+        id: { type: "string" },
+        name: { type: "string" },
+      },
+    })
   })
 })

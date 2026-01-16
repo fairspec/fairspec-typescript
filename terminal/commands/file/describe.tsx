@@ -1,4 +1,4 @@
-import { describeFile } from "@dpkit/library"
+import { describeFile } from "@fairspec/library"
 import { Command } from "commander"
 import React from "react"
 import { Datagrid } from "../../components/Datagrid/index.ts"

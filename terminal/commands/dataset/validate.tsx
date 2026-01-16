@@ -7,7 +7,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const validatePackageCommand = new Command("validate")
+export const validateDatasetCommand = new Command("validate")
   .configureHelp(helpConfiguration)
   .description("Validate a data package from a local or remote path")
 
@@ -32,14 +32,14 @@ export const validatePackageCommand = new Command("validate")
     )
 
     if (report.errors.length) {
-      // @ts-ignore
+      // @ts-expect-error
       const name = await selectErrorResource(session, report.errors)
-      // @ts-ignore
+      // @ts-expect-error
       if (name) report.errors = report.errors.filter(e => e.resource === name)
 
-      // @ts-ignore
+      // @ts-expect-error
       const type = await selectErrorType(session, report.errors)
-      // @ts-ignore
+      // @ts-expect-error
       if (type) report.errors = report.errors.filter(e => e.type === type)
     }
 
@@ -50,7 +50,7 @@ export const validatePackageCommand = new Command("validate")
 
     session.render(
       report,
-      // @ts-ignore
+      // @ts-expect-error
       <Report errors={report.errors} quit={options.quit} />,
     )
   })

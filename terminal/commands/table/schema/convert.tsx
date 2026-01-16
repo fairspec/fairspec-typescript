@@ -4,8 +4,9 @@ import {
   convertSchemaToHtml,
   convertSchemaToJsonSchema,
   convertSchemaToMarkdown,
+  loadDescriptor,
+  saveDescriptor,
 } from "@dpkit/library"
-import { loadDescriptor, saveDescriptor } from "@dpkit/library"
 import { Command, Option } from "commander"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
@@ -25,7 +26,7 @@ const frontmatter = new Option(
   "use YAML frontmatter instead of H1 heading (markdown and html only)",
 )
 
-export const convertSchemaCommand = new Command("convert")
+export const convertTableSchemaCommand = new Command("convert")
   .configureHelp(helpConfiguration)
   .description("Convert schema between different formats")
 

@@ -1,30 +1,25 @@
-import { inferSchemaFromTable, resolveSchema } from "@dpkit/library"
-import { queryTable } from "@dpkit/library"
-import { loadSchema } from "@dpkit/library"
-import { loadDialect, loadTable, normalizeTable } from "@dpkit/library"
-import type { Resource } from "@dpkit/library"
+import { inferSchemaFromTable, loadTable } from "@dpkit/library"
 import { Command } from "commander"
 import React from "react"
-import { Table } from "../../components/Table/index.ts"
+import { Schema } from "../../components/Schema/index.ts"
 import { createDialectFromOptions } from "../../helpers/dialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
+import { isEmptyObject } from "../../helpers/object.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const exploreTableCommand = new Command("explore")
+export const inferTableSchemaCommand = new Command("infer")
   .configureHelp(helpConfiguration)
-  .description("Explore a table from a local or remote path")
+  .description("Infer a table schema from a table")
 
   .addArgument(params.positionalTablePath)
   .addOption(params.fromPackage)
   .addOption(params.fromResource)
+  .addOption(params.json)
   .addOption(params.debug)
-  .addOption(params.quit)
-  .addOption(params.query)
 
   .optionsGroup("Table Dialect")
-  .addOption(params.dialect)
   .addOption(params.delimiter)
   .addOption(params.header)
   .addOption(params.headerRows)
@@ -45,7 +40,6 @@ export const exploreTableCommand = new Command("explore")
   .addOption(params.sampleBytes)
 
   .optionsGroup("Table Schema")
-  .addOption(params.schema)
   .addOption(params.fieldNames)
   .addOption(params.fieldTypes)
   .addOption(params.missingValues)
@@ -71,23 +65,16 @@ export const exploreTableCommand = new Command("explore")
 
   .action(async (path, options) => {
     const session = Session.create({
-      title: "Explore table",
+      title: "Infer schema",
+      json: options.json,
       debug: options.debug,
     })
 
-    const dialect = options.dialect
-      ? await session.task("Loading dialect", loadDialect(options.dialect))
-      : createDialectFromOptions(options)
-
-    let schema = options.schema
-      ? await session.task("Loading schema", loadSchema(options.schema))
-      : undefined
-
-    const resource: Partial<Resource> = path
-      ? { path, dialect, schema }
+    const resource = path
+      ? { path, dialect: createDialectFromOptions(options) }
       : await selectResource(session, options)
 
-    let table = await session.task(
+    const table = await session.task(
       "Loading table",
       loadTable(resource, { denormalized: true }),
     )
@@ -97,32 +84,15 @@ export const exploreTableCommand = new Command("explore")
       process.exit(1)
     }
 
-    if (!schema && resource.schema) {
-      schema = await session.task(
-        "Loading schema",
-        resolveSchema(resource.schema),
-      )
-    }
-
-    if (!schema) {
-      schema = await session.task(
-        "Inferring schema",
-        inferSchemaFromTable(table, options),
-      )
-    }
-
-    table = await session.task(
-      "Normalizing table",
-      normalizeTable(table, schema),
+    const inferredSchema = await session.task(
+      "Inferring schema",
+      inferSchemaFromTable(table, options),
     )
 
-    if (options.query) {
-      table = queryTable(table, options.query)
-      schema = await inferSchemaFromTable(table)
+    if (isEmptyObject(inferredSchema)) {
+      session.terminate("Could not infer schema")
+      process.exit(1)
     }
 
-    await session.render(
-      table,
-      <Table table={table} schema={schema} withTypes quit={options.quit} />,
-    )
+    await session.render(inferredSchema, <Schema schema={inferredSchema} />)
   })

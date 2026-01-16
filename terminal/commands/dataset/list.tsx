@@ -6,7 +6,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const explorePackageCommand = new Command("explore")
+export const listDatasetCommand = new Command("explore")
   .configureHelp(helpConfiguration)
   .description("Explore a Data Package descriptor")
 

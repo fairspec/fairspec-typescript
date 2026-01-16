@@ -1,13 +1,13 @@
 import repl from "node:repl"
-import { loadPackage } from "@dpkit/library"
 import * as dpkit from "@dpkit/library"
+import { loadPackage } from "@dpkit/library"
 import { Command } from "commander"
 import pc from "picocolors"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const scriptPackageCommand = new Command("script")
+export const scriptDatasetCommand = new Command("script")
   .configureHelp(helpConfiguration)
   .description("Script a Data Package descriptor")
 

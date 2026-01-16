@@ -61,9 +61,12 @@ export async function validateDatasetIntegrity(
 
     for (const foreignKey of foreignKeys) {
       const left = tables[resourceName] as Table
-      const right = tables[
-        foreignKey.reference.resource ?? resourceName
-      ] as Table
+      const right = tables[foreignKey.reference.resource ?? resourceName]
+
+      // Missing resource error added in the previous step
+      if (!right) {
+        continue
+      }
 
       const foreignKeyCheckTable = left
         .select(...foreignKey.columns)

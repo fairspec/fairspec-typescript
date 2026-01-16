@@ -1,12 +1,12 @@
 import { writeTempFile } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { validateResource } from "./validate.ts"
+import { validateTable } from "./validate.ts"
 
-describe("validateResource", () => {
+describe("validateTable", () => {
   it("should validate correct tabular data", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const source: Resource = {
+    const resource: Resource = {
       data: path,
       format: { type: "csv" },
       tableSchema: {
@@ -17,7 +17,7 @@ describe("validateResource", () => {
       },
     }
 
-    const report = await validateResource(source)
+    const report = await validateTable(resource)
 
     expect(report.valid).toBe(true)
     expect(report.errors).toHaveLength(0)
@@ -25,7 +25,7 @@ describe("validateResource", () => {
 
   it("should return errors for invalid tabular data", async () => {
     const path = await writeTempFile("id,name\ninvalid,alice\n2,bob")
-    const source: Resource = {
+    const resource: Resource = {
       data: path,
       format: { type: "csv" },
       tableSchema: {
@@ -36,7 +36,7 @@ describe("validateResource", () => {
       },
     }
 
-    const report = await validateResource(source)
+    const report = await validateTable(resource)
 
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(1)
@@ -49,47 +49,23 @@ describe("validateResource", () => {
     })
   })
 
-  it("should validate correct inline data with dataSchema", async () => {
-    const source: Resource = {
-      data: {
-        name: "test-package",
-        version: "1.0.0",
-      },
-      dataSchema: {
-        type: "object",
-        required: ["name", "version"],
+  it("should return error when no tabular data", async () => {
+    const resource: Resource = {
+      name: "empty",
+      tableSchema: {
         properties: {
-          name: { type: "string" },
-          version: { type: "string" },
+          id: { type: "integer" },
         },
       },
     }
 
-    const report = await validateResource(source)
-
-    expect(report.valid).toBe(true)
-    expect(report.errors).toHaveLength(0)
-  })
-
-  it("should return errors for invalid dataSchema data", async () => {
-    const source: Resource = {
-      data: {
-        name: "test-package",
-        version: 123,
-      },
-      dataSchema: {
-        type: "object",
-        required: ["name", "version"],
-        properties: {
-          name: { type: "string" },
-          version: { type: "string" },
-        },
-      },
-    }
-
-    const report = await validateResource(source)
+    const report = await validateTable(resource)
 
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(1)
+    expect(report.errors).toContainEqual({
+      type: "resource/type",
+      expectedResourceType: "table",
+    })
   })
 })

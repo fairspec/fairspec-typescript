@@ -43,7 +43,9 @@ describe("inspectTable (cell/enum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(2)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/enum"),
+    ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/enum",
       columnName: "status",
@@ -77,7 +79,9 @@ describe("inspectTable (cell/enum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(0)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/enum"),
+    ).toHaveLength(0)
   })
 
   it("should handle case sensitivity correctly", async () => {
@@ -99,7 +103,9 @@ describe("inspectTable (cell/enum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(2)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/enum"),
+    ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/enum",
       columnName: "status",

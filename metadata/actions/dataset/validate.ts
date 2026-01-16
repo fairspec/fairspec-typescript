@@ -48,19 +48,17 @@ export async function validateDatasetDescriptor(
       const rootJsonPointer = `/resources/${index}`
 
       if (typeof resource.dataSchema === "string") {
-        const dataReport = await validateDataSchema(
-          resource.dataSchema,
-          { rootJsonPointer },
-        )
+        const dataReport = await validateDataSchema(resource.dataSchema, {
+          rootJsonPointer,
+        })
 
         report.errors.push(...dataReport.errors)
       }
 
       if (typeof resource.tableSchema === "string") {
-        const tableReport = await validateTableSchema(
-          resource.tableSchema,
-          { rootJsonPointer },
-        )
+        const tableReport = await validateTableSchema(resource.tableSchema, {
+          rootJsonPointer,
+        })
 
         report.errors.push(...tableReport.errors)
       }

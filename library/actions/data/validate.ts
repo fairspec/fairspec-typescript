@@ -10,6 +10,7 @@ export async function validateData(resource: Partial<Resource>) {
   const errors: GeneralError[] = []
 
   const dataSchema = await resolveDataSchema(resource.dataSchema)
+
   if (dataSchema) {
     const data = await loadData(resource)
 

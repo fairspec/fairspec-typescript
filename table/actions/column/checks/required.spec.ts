@@ -20,11 +20,13 @@ describe("inspectTable (cell/required)", () => {
 
     const errors = await inspectTable(table, { tableSchema })
 
-    expect(errors).toEqual([{
-      type: "cell/required",
-      columnName: "id",
-      rowNumber: 2,
-      cell: "",
-    }])
+    expect(errors).toEqual([
+      {
+        type: "cell/required",
+        columnName: "id",
+        rowNumber: 2,
+        cell: "",
+      },
+    ])
   })
 })

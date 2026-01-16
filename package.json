@@ -21,7 +21,7 @@
     "spec": "vitest run",
     "test": "pnpm lint && pnpm type && pnpm spec",
     "test:win": "pnpm spec",
-    "type": "tsc --noEmit",
+    "type": "pnpm -r type",
     "version:ci": "pnpm --include-workspace-root -r exec pnpm version --no-git-tag-version"
   },
   "devDependencies": {

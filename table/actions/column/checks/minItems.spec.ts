@@ -43,7 +43,9 @@ describe("inspectTable (cell/minItems)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/minItems")).toHaveLength(2)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/minItems"),
+    ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/minItems",
       columnName: "tags",
@@ -79,7 +81,9 @@ describe("inspectTable (cell/minItems)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/minItems")).toHaveLength(1)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/minItems"),
+    ).toHaveLength(1)
     expect(errors).toContainEqual({
       type: "cell/minItems",
       columnName: "tags",
@@ -107,7 +111,9 @@ describe("inspectTable (cell/minItems)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/minItems")).toHaveLength(0)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/minItems"),
+    ).toHaveLength(0)
   })
 
   it("should handle minItems of 1", async () => {
@@ -128,6 +134,8 @@ describe("inspectTable (cell/minItems)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/minItems")).toHaveLength(0)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/minItems"),
+    ).toHaveLength(0)
   })
 })

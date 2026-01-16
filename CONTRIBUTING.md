@@ -13,7 +13,7 @@ Project is a monorepo with the following packages:
 - `@faispec/metadata`: Core metadata functionality
 - `@faispec/dataset`: File-related functionality
 - `@faispec/table`: Table-related functionality
-- `@faispec/<name>`: Domain-specific functionality
+- `@faispec/extension`: Extensions related functionality
 - `@faispec/library`: All the above functionality
 - `@faispec/terminal`: Terminal interface
 - `faispec`: Meta-package that re-exports the underlying functionality
@@ -22,7 +22,7 @@ Project is a monorepo with the following packages:
 
 ### Prerequisites
 
-- **Node.js**: v24.0.0 or higher
+- **Node**: v24.0.0 or higher
 - **PNPM**: v10.0.0 or higher
 
 ### Setup

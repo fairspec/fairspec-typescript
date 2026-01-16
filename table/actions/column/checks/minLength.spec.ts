@@ -41,7 +41,9 @@ describe("inspectTable (cell/minLength)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(errors.filter((e: { type: string }) => e.type === "cell/minLength")).toHaveLength(2)
+    expect(
+      errors.filter((e: { type: string }) => e.type === "cell/minLength"),
+    ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/minLength",
       columnName: "username",

@@ -1,169 +1,103 @@
-import { access } from "node:fs/promises"
+import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { getTempFolderPath, writeTempFile } from "@fairspec/dataset"
 import { describe, expect, it } from "vitest"
-import { loadPackage } from "./load.ts"
-import { savePackage } from "./save.ts"
+import { loadDataset } from "./load.ts"
+import { saveDataset } from "./save.ts"
 
-describe("savePackage", () => {
-  it("should save package to datapackage.json file", async () => {
-    const packageContent = JSON.stringify({
-      name: "test-package",
+describe("saveDataset", () => {
+  it("should save dataset to datapackage.json file", async () => {
+    const content = JSON.stringify({
+      language: "en",
       resources: [
         {
-          name: "test-resource",
+          name: "test_resource",
           data: [{ id: 1, name: "alice" }],
         },
       ],
     })
 
-    const packagePath = await writeTempFile(packageContent, {
+    const path = await writeTempFile(content, {
       filename: "datapackage.json",
     })
 
-    const dataPackage = await loadPackage(packagePath)
+    const source = await loadDataset(path)
     const tempDir = getTempFolderPath()
     const targetPath = join(tempDir, "datapackage.json")
 
-    await savePackage(dataPackage, {
-      target: targetPath,
-    })
+    await saveDataset(source, { target: targetPath })
 
-    expect(
-      await access(targetPath)
-        .then(() => true)
-        .catch(() => false),
-    ).toBe(true)
+    const saved = await readFile(targetPath, "utf-8")
+    const parsed = JSON.parse(saved)
+
+    expect(parsed.language).toBe("en")
+    expect(parsed.resources).toHaveLength(1)
   })
 
-  it("should save package with multiple resources", async () => {
-    const packageContent = JSON.stringify({
-      name: "test-package",
+  it("should save dataset with multiple resources", async () => {
+    const content = JSON.stringify({
       resources: [
         {
-          name: "resource-1",
+          name: "resource_1",
           data: [{ id: 1, name: "alice" }],
         },
         {
-          name: "resource-2",
+          name: "resource_2",
           data: [{ id: 2, value: 100 }],
         },
       ],
     })
 
-    const packagePath = await writeTempFile(packageContent, {
+    const path = await writeTempFile(content, {
       filename: "datapackage.json",
     })
 
-    const dataPackage = await loadPackage(packagePath)
+    const source = await loadDataset(path)
     const tempDir = getTempFolderPath()
     const targetPath = join(tempDir, "datapackage.json")
 
-    await savePackage(dataPackage, {
-      target: targetPath,
-    })
+    await saveDataset(source, { target: targetPath })
 
-    expect(
-      await access(targetPath)
-        .then(() => true)
-        .catch(() => false),
-    ).toBe(true)
+    const saved = await readFile(targetPath, "utf-8")
+    const parsed = JSON.parse(saved)
+
+    expect(parsed.resources).toHaveLength(2)
   })
 
-  it("should save and reload package with same structure", async () => {
-    const packageContent = JSON.stringify({
-      name: "test-package",
-      title: "Test Package",
+  it("should save dataset with tableSchema", async () => {
+    const content = JSON.stringify({
       resources: [
         {
-          name: "test-resource",
+          name: "test_resource",
           data: [{ id: 1, name: "alice" }],
-        },
-      ],
-    })
-
-    const packagePath = await writeTempFile(packageContent, {
-      filename: "datapackage.json",
-    })
-
-    const originalPackage = await loadPackage(packagePath)
-    const tempDir = getTempFolderPath()
-    const targetPath = join(tempDir, "datapackage.json")
-
-    await savePackage(originalPackage, { target: targetPath })
-    const reloadedPackage = await loadPackage(targetPath)
-
-    expect(reloadedPackage).toBeDefined()
-    expect(reloadedPackage.name).toBe("test-package")
-    expect(reloadedPackage.title).toBe("Test Package")
-  })
-
-  it("should save package with metadata", async () => {
-    const packageContent = JSON.stringify({
-      name: "test-package",
-      title: "Test Package",
-      description: "A test package",
-      version: "1.0.0",
-      resources: [
-        {
-          name: "test-resource",
-          data: [{ id: 1 }],
-        },
-      ],
-    })
-
-    const packagePath = await writeTempFile(packageContent, {
-      filename: "datapackage.json",
-    })
-
-    const dataPackage = await loadPackage(packagePath)
-    const tempDir = getTempFolderPath()
-    const targetPath = join(tempDir, "datapackage.json")
-
-    await savePackage(dataPackage, {
-      target: targetPath,
-    })
-
-    expect(
-      await access(targetPath)
-        .then(() => true)
-        .catch(() => false),
-    ).toBe(true)
-  })
-
-  it("should save package with schema", async () => {
-    const packageContent = JSON.stringify({
-      name: "test-package",
-      resources: [
-        {
-          name: "test-resource",
-          data: [{ id: 1, name: "alice" }],
-          schema: {
-            fields: [
-              { name: "id", type: "integer" },
-              { name: "name", type: "string" },
-            ],
+          tableSchema: {
+            properties: {
+              id: { type: "integer" },
+              name: { type: "string" },
+            },
           },
         },
       ],
     })
 
-    const packagePath = await writeTempFile(packageContent, {
+    const path = await writeTempFile(content, {
       filename: "datapackage.json",
     })
 
-    const dataPackage = await loadPackage(packagePath)
+    const source = await loadDataset(path)
     const tempDir = getTempFolderPath()
     const targetPath = join(tempDir, "datapackage.json")
 
-    await savePackage(dataPackage, {
-      target: targetPath,
-    })
+    await saveDataset(source, { target: targetPath })
 
-    expect(
-      await access(targetPath)
-        .then(() => true)
-        .catch(() => false),
-    ).toBe(true)
+    const saved = await readFile(targetPath, "utf-8")
+    const parsed = JSON.parse(saved)
+
+    expect(parsed.resources?.[0]?.tableSchema).toEqual({
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
+    })
   })
 })

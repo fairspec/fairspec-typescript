@@ -1,36 +1,34 @@
 import repl from "node:repl"
-import * as dpkit from "@dpkit/library"
-import { loadPackage } from "@dpkit/library"
+import * as fairspec from "@fairspec/library"
+import { loadDataset } from "@fairspec/library"
 import { Command } from "commander"
 import pc from "picocolors"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const scriptDatasetCommand = new Command("script")
   .configureHelp(helpConfiguration)
-  .description("Script a Data Package descriptor")
+  .description("Script a dataset descriptor")
 
   .addArgument(params.positionalDescriptorPath)
-  .addOption(params.json)
   .addOption(params.debug)
 
   .action(async (path, options) => {
-    const session = createSession({
-      title: "Script package",
-      json: options.json,
+    const session = new Session({
       debug: options.debug,
     })
 
-    const dataPackage = await session.task("Loading package", loadPackage(path))
+    const dataset = await session.task("Loading dataset", async () => {
+      return await loadDataset(path)
+    })
 
-    console.log(
-      pc.dim(
-        "`dpkit` and `dataPackage` variables are available in the session",
-      ),
+    session.renderTextResult(
+      "warning",
+      pc.dim("`fairspec` and `dataset` variables are available in the session"),
     )
 
-    const replSession = repl.start({ prompt: "dp> " })
-    replSession.context.dpkit = dpkit
-    replSession.context.dataPackage = dataPackage
+    const replSession = repl.start({ prompt: "fairspec> " })
+    replSession.context.fairspec = fairspec
+    replSession.context.dataset = dataset
   })

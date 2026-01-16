@@ -16,7 +16,6 @@ describe("validateData", () => {
     }
 
     const report = await validateData(resource)
-
     expect(report.valid).toBe(true)
     expect(report.errors).toHaveLength(0)
   })
@@ -34,7 +33,6 @@ describe("validateData", () => {
     }
 
     const report = await validateData(resource)
-
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(2)
     expect(report.errors).toContainEqual({
@@ -56,7 +54,6 @@ describe("validateData", () => {
     }
 
     const report = await validateData(resource)
-
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(1)
     expect(report.errors).toContainEqual({

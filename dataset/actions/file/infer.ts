@@ -41,8 +41,11 @@ export async function inferTextual(
   return false
 }
 
-export async function inferIntegrity(resource: Partial<Resource>) {
-  const type: HashType = "sha256"
+export async function inferIntegrity(
+  resource: Partial<Resource>,
+  options?: { hashType?: HashType },
+) {
+  const type = options?.hashType ?? "sha256"
   const hash = await inferHash(resource, { hashType: type })
 
   if (!hash) {
@@ -56,7 +59,7 @@ export async function inferHash(
   resource: Partial<Resource>,
   options?: { hashType?: HashType },
 ) {
-  const algorithm = options?.hashType ?? "sha256"
+  const hashType = options?.hashType ?? "sha256"
   const localPaths = await prefetchFiles(resource)
 
   if (!localPaths.length) {
@@ -66,7 +69,7 @@ export async function inferHash(
   const streams = await pMap(localPaths, async path => loadFileStream(path))
   const stream = concatFileStreams(streams)
 
-  const hash = await hasha.hash(stream, { algorithm })
+  const hash = await hasha.hash(stream, { algorithm: hashType })
   return hash
 }
 

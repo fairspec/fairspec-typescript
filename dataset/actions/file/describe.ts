@@ -1,6 +1,6 @@
 import { prefetchFile } from "./fetch.ts"
 import type { HashType } from "./infer.ts"
-import { inferBytes, inferHash } from "./infer.ts"
+import { inferBytes, inferIntegrity, inferTextual } from "./infer.ts"
 
 export async function describeFile(
   path: string,
@@ -9,10 +9,8 @@ export async function describeFile(
   const localPath = await prefetchFile(path)
 
   const bytes = await inferBytes({ data: localPath })
-  const hash = await inferHash(
-    { data: localPath },
-    { hashType: options?.hashType },
-  )
+  const textual = await inferTextual({ data: localPath })
+  const integrity = await inferIntegrity({ data: localPath }, options)
 
-  return { bytes, hash }
+  return { bytes, textual, integrity }
 }

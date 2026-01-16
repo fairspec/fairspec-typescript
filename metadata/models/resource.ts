@@ -8,7 +8,7 @@ import { Path } from "./path.ts"
 import { TableSchema } from "./tableSchema.ts"
 
 export const Resource = Datacite.extend({
-  data: Data.describe(
+  data: Data.optional().describe(
     "Data or content of the resource. It must be a path to a file, array of paths to files, inline JSON object, or inline JSON array of objects.",
   ),
 

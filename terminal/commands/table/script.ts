@@ -1,14 +1,14 @@
 import repl from "node:repl"
-import type { Resource } from "@dpkit/library"
-import * as dpkit from "@dpkit/library"
-import { loadDialect, loadSchema, loadTable, queryTable } from "@dpkit/library"
+import type { Resource } from "@fairspec/library"
+import * as fairspec from "@fairspec/library"
+import { loadDialect, loadSchema, loadTable, queryTable } from "@fairspec/library"
 import { Command } from "commander"
 import pc from "picocolors"
 import { createDialectFromOptions } from "../../helpers/dialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const scriptTableCommand = new Command("script")
   .configureHelp(helpConfiguration)
@@ -59,30 +59,32 @@ export const scriptTableCommand = new Command("script")
   .addOption(params.keepStrings)
 
   .action(async (path, options) => {
-    const session = createSession({
-      title: "Script table",
+    const session = new Session({
       debug: options.debug,
     })
 
     const dialect = options.dialect
-      ? await session.task("Loading dialect", loadDialect(options.dialect))
+      ? await session.task("Loading dialect", async () => {
+          return await loadDialect(options.dialect)
+        })
       : createDialectFromOptions(options)
 
     const schema = options.schema
-      ? await session.task("Loading schema", loadSchema(options.schema))
+      ? await session.task("Loading schema", async () => {
+          return await loadSchema(options.schema)
+        })
       : undefined
 
     const resource: Partial<Resource> = path
       ? { path, dialect, schema }
       : await selectResource(session, options)
 
-    let table = await session.task(
-      "Loading table",
-      loadTable(resource, options),
-    )
+    let table = await session.task("Loading table", async () => {
+      return await loadTable(resource, options)
+    })
 
     if (!table) {
-      session.terminate("Could not load table")
+      session.renderTextResult("error", "Could not load table")
       process.exit(1)
     }
 
@@ -90,11 +92,12 @@ export const scriptTableCommand = new Command("script")
       table = queryTable(table, options.query)
     }
 
-    console.log(
-      pc.dim("`dpkit` and `table` variables are available in the session"),
+    session.renderTextResult(
+      "warning",
+      pc.dim("`fairspec` and `table` variables are available in the session"),
     )
 
-    const replSession = repl.start({ prompt: "dp> " })
-    replSession.context.dpkit = dpkit
+    const replSession = repl.start({ prompt: "fairspec> " })
+    replSession.context.fairspec = fairspec
     replSession.context.table = table
   })

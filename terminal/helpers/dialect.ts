@@ -1,8 +1,8 @@
-import type { Dialect } from "@dpkit/library"
+import type { Format } from "@fairspec/library"
 
 // TODO: Find a better way to construct dialects
 
-export function createDialectFromOptions(options: any) {
+export function createFormatFromOptions(options: any) {
   let dialect: Dialect | undefined
 
   if (options.delimiter) {

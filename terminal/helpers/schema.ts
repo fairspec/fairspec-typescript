@@ -1,6 +1,6 @@
-import type { TableSchemaOptions } from "@fairspec/table"
+import type { TableSchemaOptions } from "@fairspec/library"
 
-export function createTableSchemaOptionsFromParams(
+export function createTableSchemaOptions(
   options: Record<string, unknown>,
 ): TableSchemaOptions {
   const result: TableSchemaOptions = {}
@@ -8,7 +8,8 @@ export function createTableSchemaOptionsFromParams(
   if (options.toColumnNames !== undefined)
     result.columnNames = options.toColumnNames as string[]
   if (options.toColumnTypes !== undefined)
-    result.columnTypes = options.toColumnTypes as TableSchemaOptions["columnTypes"]
+    result.columnTypes =
+      options.toColumnTypes as TableSchemaOptions["columnTypes"]
   if (options.toMissingValues !== undefined)
     result.missingValues = options.toMissingValues as string[]
   if (options.toDecimalChar !== undefined)
@@ -30,7 +31,8 @@ export function createTableSchemaOptionsFromParams(
   if (options.toListDelimiter !== undefined)
     result.listDelimiter = options.toListDelimiter as string
   if (options.toListItemType !== undefined)
-    result.listItemType = options.toListItemType as TableSchemaOptions["listItemType"]
+    result.listItemType =
+      options.toListItemType as TableSchemaOptions["listItemType"]
 
   return result
 }

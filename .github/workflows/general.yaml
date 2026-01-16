@@ -30,33 +30,11 @@ jobs:
         run: pnpm build
       - name: Test Packages
         run: pnpm test
-        env:
-          FAIRSPEC_MYSQL_URL: mysql://test:test@localhost:3306/test
-          FAIRSPEC_POSTGRESQL_URL: postgresql://test:test@localhost:5432/test
       - name: Upload Coverage
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: fairspec/fairspec-typescript
-
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_PASSWORD: test
-          POSTGRES_USER: test
-          POSTGRES_DB: test
-        ports:
-          - 5432:5432
-      mysql:
-        image: mysql:8
-        env:
-          MYSQL_ROOT_PASSWORD: test
-          MYSQL_DATABASE: test
-          MYSQL_USER: test
-          MYSQL_PASSWORD: test
-        ports:
-          - 3306:3306
 
   test-macos:
     runs-on: macos-latest

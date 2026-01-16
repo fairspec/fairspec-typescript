@@ -235,6 +235,9 @@ importers:
       astro:
         specifier: 5.14.1
         version: 5.14.1(@types/node@24.2.0)(jiti@2.6.1)(rollup@4.52.4)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(typescript@5.9.2)(yaml@2.8.1)
+      fairspec:
+        specifier: workspace:*
+        version: link:../fairspec
       sharp:
         specifier: 0.34.2
         version: 0.34.2

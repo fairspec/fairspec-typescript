@@ -1,6 +1,5 @@
 import { describeFile } from "@fairspec/library"
 import { Command } from "commander"
-import * as pl from "nodejs-polars"
 import pc from "picocolors"
 import { selectFile } from "../../helpers/file.ts"
 import { helpConfiguration } from "../../helpers/help.ts"

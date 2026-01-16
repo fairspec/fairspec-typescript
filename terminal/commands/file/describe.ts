@@ -1,6 +1,5 @@
 import { describeFile } from "@fairspec/library"
 import { Command } from "commander"
-import pc from "picocolors"
 import { selectFile } from "../../helpers/file.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
@@ -29,11 +28,11 @@ export const describeFileCommand = new Command("describe")
       path = await selectFile(session, options)
     }
 
-    await session.task(pc.bold("Describe file"), async () => {
+    await session.task("Describing file", async () => {
       const stats = await describeFile(path, {
         hashType: options.hashType,
       })
 
-      console.log(JSON.stringify(stats, null, 2))
+      session.renderDataResult(stats)
     })
   })

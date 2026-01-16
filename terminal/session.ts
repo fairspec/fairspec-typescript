@@ -1,8 +1,12 @@
 import { setTimeout } from "node:timers/promises"
+import util from "node:util"
+import type { Frame } from "@fairspec/library"
+import pc from "picocolors"
 import type { TaskInnerAPI } from "tasuku"
 import tasuku from "tasuku"
 
 type TaskApi = Omit<TaskInnerAPI, "task">
+type Status = "success" | "warning" | "error"
 
 export interface SessionOptions {
   silent?: boolean
@@ -19,6 +23,46 @@ export class Session implements SessionOptions {
     this.silent = options.silent
     this.debug = options.debug
     this.json = options.json
+  }
+
+  renderText(status: Status, text: string) {
+    if (this.silent || this.json) {
+      return
+    }
+
+    console.log(renderStatus(status), text)
+  }
+
+  renderTextResult(status: Status, text: string) {
+    if (this.silent) {
+      return
+    }
+
+    if (this.json) {
+      text = util.stripVTControlCharacters(text)
+      console.log(JSON.stringify({ result: text }, null, 2))
+      return
+    }
+
+    console.log(renderStatus(status), text)
+  }
+
+  renderDataResult(data: Record<string, any>) {
+    if (this.silent) {
+      return
+    }
+
+    if (this.json) {
+      console.log(JSON.stringify(data, null, 2))
+      return
+    }
+
+    console.log(data)
+  }
+
+  renderTableResult(frame: Frame) {
+    console.log(frame)
+    // TODO: implement
   }
 
   async task<T>(title: string, func: (api: TaskApi) => Promise<T>) {
@@ -54,6 +98,19 @@ export class Session implements SessionOptions {
     }
 
     const response = await tasuku(title, runTask)
+    if (response.state === "success") response.clear()
     return response.result
+  }
+}
+
+// For some reason, biome replaces inline emojis
+function renderStatus(status: Status) {
+  switch (status) {
+    case "success":
+      return pc.green("\u2714")
+    case "warning":
+      return pc.yellow("\u26A0")
+    case "error":
+      return pc.red("\u00D7")
   }
 }

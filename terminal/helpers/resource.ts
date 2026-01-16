@@ -5,7 +5,7 @@ export async function selectResource(
   session: Session,
   options: { dataset?: string; resource?: string },
 ) {
-  const dataset = await session.task("Load dataset", async () => {
+  const dataset = await session.task("Loading dataset", async () => {
     if (!options.dataset) {
       throw new Error("Please provide a path argument or a dataset option")
     }
@@ -13,7 +13,7 @@ export async function selectResource(
     return await loadDataset(options.dataset)
   })
 
-  const resource = await session.task("Select resource", async () => {
+  const resource = await session.task("Selecting resource", async () => {
     if (!options.resource) {
       throw new Error("Please provide a resource option")
     }

@@ -8,7 +8,7 @@ export async function selectFile(
 ) {
   const resource = await selectResource(session, options)
 
-  const path = await session.task("Select file", async () => {
+  const path = await session.task("Selecting file", async () => {
     const firstPath = getDataFirstPath(resource)
     if (!firstPath) {
       throw new Error("Resource does not have files")

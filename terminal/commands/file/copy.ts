@@ -16,21 +16,28 @@ export const copyFileCommand = new Command("copy")
   .addOption(params.fromResource)
   .addOption(params.silent)
   .addOption(params.debug)
+  .addOption(params.json)
 
   .action(async (path, options) => {
     const session = new Session({
       silent: options.silent,
       debug: options.debug,
+      json: options.json,
     })
 
     if (!path) {
       path = await selectFile(session, options)
     }
 
-    await session.task(pc.bold("Copy file"), async () => {
+    await session.task("Copying file", async () => {
       await copyFile({
         sourcePath: path,
         targetPath: options.toPath,
       })
+
+      session.renderTextResult(
+        "success",
+        `Copied file from ${pc.bold(path)} to ${pc.bold(options.toPath)}`,
+      )
     })
   })

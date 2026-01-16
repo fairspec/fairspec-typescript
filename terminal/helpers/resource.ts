@@ -1,42 +1,33 @@
-import { loadPackage } from "@dpkit/library"
+import { inferResourceName, loadDataset } from "@fairspec/library"
 import type { Session } from "../session.ts"
 
 export async function selectResource(
   session: Session,
-  options: { package?: string; resource?: string },
+  options: { dataset?: string; resource?: string },
 ) {
-  if (!options.package) {
-    session.terminate("Please provide a path argument or a package option")
-  }
-
-  const dataPackage = await session.task(
-    "Loading package",
-    loadPackage(options.package),
-  )
-
-  const resourceName =
-    options.resource ??
-    (await session.select({
-      message: "Select resource",
-      options: dataPackage.resources.map(resource => ({
-        label: resource.name,
-        value: resource.name,
-      })),
-    }))
-
-  const resource = dataPackage.resources.find(
-    resource => resource.name === resourceName,
-  )
-
-  if (!resource) {
-    if (typeof resourceName !== "string") {
-      session.terminate("Resource selection cancelled")
+  const dataset = await session.task("Load dataset", async () => {
+    if (!options.dataset) {
+      throw new Error("Please provide a path argument or a dataset option")
     }
 
-    session.terminate(
-      `Resource "${resourceName}" is not found in the provided data package`,
+    return await loadDataset(options.dataset)
+  })
+
+  const resource = await session.task("Select resource", async () => {
+    if (!options.resource) {
+      throw new Error("Please provide a resource option")
+    }
+
+    const resource = dataset.resources?.find(
+      res => options.resource === (res.name ?? inferResourceName(res)),
     )
-  }
+
+    if (!resource) {
+      throw new Error(`Resource "${options.resource}" not found`)
+    }
+
+    return resource
+  })
 
   return resource
 }

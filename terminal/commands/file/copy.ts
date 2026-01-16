@@ -1,7 +1,8 @@
 import { copyFile } from "@fairspec/library"
 import { Command } from "commander"
+import pc from "picocolors"
+import { selectFile } from "../../helpers/file.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
-import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
@@ -23,17 +24,10 @@ export const copyFileCommand = new Command("copy")
     })
 
     if (!path) {
-      const resource = await selectResource(session, options)
-
-      if (typeof resource.path !== "string") {
-        session.terminate("Only single file resources are supported")
-        process.exit(1) // typescript ignore never return type above
-      }
-
-      path = resource.path
+      path = await selectFile(session, options)
     }
 
-    await session.task("Copying file", async () => {
+    await session.task(pc.bold("Copy file"), async () => {
       await copyFile({
         sourcePath: path,
         targetPath: options.toPath,

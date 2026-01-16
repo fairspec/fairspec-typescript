@@ -1,11 +1,11 @@
-import type { SchemaOptions } from "@dpkit/library"
+import type { TableSchemaOptions } from "@fairspec/library"
 
 // TODO: Find a better way to construct schema options
 
-export function createSchemaOptionsFromToSchemaOptions(
+export function createTableSchemaOptionsFromParams(
   options: any,
-): SchemaOptions {
-  const result: SchemaOptions = {}
+): TableSchemaOptions {
+  const result: TableSchemaOptions = {}
 
   if (options.toFieldNames !== undefined)
     result.fieldNames = options.toFieldNames

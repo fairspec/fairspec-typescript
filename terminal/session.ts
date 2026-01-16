@@ -1,3 +1,4 @@
+import { setTimeout } from "node:timers/promises"
 import type { TaskInnerAPI } from "tasuku"
 import tasuku from "tasuku"
 
@@ -21,7 +22,7 @@ export class Session implements SessionOptions {
   }
 
   async task<T>(title: string, func: (api: TaskApi) => Promise<T>) {
-    const runTask = async (api: TaskApi) => {
+    const runTask = async (api: TaskApi): Promise<T> => {
       try {
         return await func(api)
       } catch (error) {
@@ -29,10 +30,9 @@ export class Session implements SessionOptions {
           throw error
         }
 
-        if (error instanceof Error) {
-          api.setError(error)
-        }
-
+        // TODO: Find a better way to terminate the process
+        api.setError(error instanceof Error ? error : String(error))
+        await setTimeout(100)
         process.exit(1)
       }
     }

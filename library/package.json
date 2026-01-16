@@ -33,6 +33,7 @@
     "p-all": "^5.0.1"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "type": "tsc --noEmit"
   }
 }

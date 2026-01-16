@@ -1,5 +1,5 @@
 import type { JsonSchema, Resource } from "@fairspec/metadata"
-import { inferSchema } from "@jsonhero/schema-infer"
+import { generateSchema } from "json-schema-it"
 import { loadData } from "../../actions/data/load.ts"
 
 export async function inferDataSchema(resource: Partial<Resource>) {
@@ -9,7 +9,7 @@ export async function inferDataSchema(resource: Partial<Resource>) {
   }
 
   try {
-    return inferSchema(data).toJSONSchema() as JsonSchema
+    return generateSchema(data).toJSONSchema() as JsonSchema
   } catch {
     return undefined
   }

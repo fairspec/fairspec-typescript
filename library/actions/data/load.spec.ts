@@ -16,6 +16,7 @@ describe("loadData", () => {
   it("should load data from JSON file path", async () => {
     const text = JSON.stringify({ id: 1, name: "test" })
     const path = await writeTempFile(text, { format: "json" })
+
     const resource: Resource = { data: path }
 
     const data = await loadData(resource)
@@ -25,6 +26,7 @@ describe("loadData", () => {
   it("should load data from JSON format", async () => {
     const text = JSON.stringify({ id: 1, name: "test" })
     const path = await writeTempFile(text)
+
     const resource: Resource = { data: path, format: { type: "json" } }
 
     const data = await loadData(resource)

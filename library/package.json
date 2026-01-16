@@ -29,7 +29,7 @@
     "@fairspec/extension": "workspace:*",
     "@fairspec/metadata": "workspace:*",
     "@fairspec/table": "workspace:*",
-    "@jsonhero/schema-infer": "^0.1.5",
+    "json-schema-it": "^1.2.23",
     "p-all": "^5.0.1"
   },
   "scripts": {

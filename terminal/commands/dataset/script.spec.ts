@@ -60,7 +60,7 @@ describe("package script", () => {
       await command.parseAsync(["node", "test", "script", descriptorPath])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -93,7 +93,7 @@ describe("package script", () => {
       await command.parseAsync(["node", "test", "script", descriptorPath])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -123,7 +123,7 @@ describe("package script", () => {
       ])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()

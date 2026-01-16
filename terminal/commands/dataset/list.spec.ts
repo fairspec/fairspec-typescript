@@ -56,7 +56,7 @@ describe("package explore", () => {
       await command.parseAsync(["node", "test", "explore", descriptorPath])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -91,7 +91,7 @@ describe("package explore", () => {
       await command.parseAsync(["node", "test", "explore", descriptorPath])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -122,7 +122,7 @@ describe("package explore", () => {
       ])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -155,7 +155,7 @@ describe("package explore", () => {
       await command.parseAsync(["node", "test", "explore", descriptorPath])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()

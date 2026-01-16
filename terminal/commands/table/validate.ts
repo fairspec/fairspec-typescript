@@ -12,7 +12,7 @@ import { selectErrorType } from "../../helpers/error.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
+import { createSession, Session } from "../../session.ts"
 
 export const validateTableCommand = new Command("validate")
   .configureHelp(helpConfiguration)
@@ -75,7 +75,7 @@ export const validateTableCommand = new Command("validate")
   // TODO: Add schema options
 
   .action(async (path, options) => {
-    const session = Session.create({
+    const session = createSession({
       title: "Validate Table",
       json: options.json,
       debug: options.debug,

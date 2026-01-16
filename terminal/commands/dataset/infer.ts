@@ -4,7 +4,7 @@ import React from "react"
 import { Package } from "../../components/Package/index.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
+import { createSession, Session } from "../../session.ts"
 
 export const inferDatasetCommand = new Command("infer")
   .configureHelp(helpConfiguration)
@@ -59,7 +59,7 @@ export const inferDatasetCommand = new Command("infer")
   .addOption(params.keepStrings)
 
   .action(async (paths, options) => {
-    const session = Session.create({
+    const session = createSession({
       title: "Infer package",
       json: options.json,
       debug: options.debug,

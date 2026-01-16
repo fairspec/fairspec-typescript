@@ -10,7 +10,7 @@ import { createDialectFromOptions } from "../../helpers/dialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
+import { createSession, Session } from "../../session.ts"
 
 export const describeTableCommand = new Command("describe")
   .configureHelp(helpConfiguration)
@@ -70,7 +70,7 @@ export const describeTableCommand = new Command("describe")
   .addOption(params.keepStrings)
 
   .action(async (path, options) => {
-    const session = Session.create({
+    const session = createSession({
       title: "Describe table",
       json: options.json,
       debug: options.debug,

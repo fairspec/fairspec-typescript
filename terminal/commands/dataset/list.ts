@@ -4,7 +4,7 @@ import React from "react"
 import { Package } from "../../components/Package/index.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
+import { createSession, Session } from "../../session.ts"
 
 export const listDatasetCommand = new Command("explore")
   .configureHelp(helpConfiguration)
@@ -15,7 +15,7 @@ export const listDatasetCommand = new Command("explore")
   .addOption(params.debug)
 
   .action(async (path, options) => {
-    const session = Session.create({
+    const session = createSession({
       title: "Explore package",
       json: options.json,
       debug: options.debug,

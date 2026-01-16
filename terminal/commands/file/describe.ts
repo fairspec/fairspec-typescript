@@ -5,7 +5,7 @@ import { Datagrid } from "../../components/Datagrid/index.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
+import { createSession, Session } from "../../session.ts"
 
 export const describeFileCommand = new Command("describe")
   .configureHelp(helpConfiguration)
@@ -19,7 +19,7 @@ export const describeFileCommand = new Command("describe")
   .addOption(params.debug)
 
   .action(async (path, options) => {
-    const session = Session.create({
+    const session = createSession({
       title: "Describe file",
       json: options.json,
       debug: options.debug,

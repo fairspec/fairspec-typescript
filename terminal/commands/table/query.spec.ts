@@ -49,7 +49,7 @@ describe("table explore", () => {
       await command.parseAsync(["node", "test", "explore", csvPath, "--quit"])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -77,7 +77,7 @@ describe("table explore", () => {
       ])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -107,7 +107,7 @@ describe("table explore", () => {
       ])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()

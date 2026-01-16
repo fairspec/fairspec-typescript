@@ -47,7 +47,7 @@ describe("table script", () => {
       await command.parseAsync(["node", "test", "script", csvPath])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -74,7 +74,7 @@ describe("table script", () => {
       ])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()
@@ -103,7 +103,7 @@ describe("table script", () => {
       ])
     } catch (error) {}
 
-    const mockSession = vi.mocked(sessionModule.Session.create).mock.results[0]
+    const mockSession = vi.mocked(sessionModule.createSession).mock.results[0]
       ?.value
     expect(mockSession).toBeDefined()
     expect(mockSession.task).toHaveBeenCalled()

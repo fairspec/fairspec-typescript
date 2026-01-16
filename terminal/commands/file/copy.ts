@@ -17,8 +17,7 @@ export const copyFileCommand = new Command("copy")
   .addOption(params.debug)
 
   .action(async (path, options) => {
-    const session = Session.create({
-      title: "Copy file",
+    const session = new Session({
       silent: options.silent,
       debug: options.debug,
     })
@@ -34,13 +33,10 @@ export const copyFileCommand = new Command("copy")
       path = resource.path
     }
 
-    await session.task(
-      "Copying file",
-      copyFile({
+    await session.task("Copying file", async () => {
+      await copyFile({
         sourcePath: path,
         targetPath: options.toPath,
-      }),
-    )
-
-    session.success(`File from "${path}" copied to "${options.toPath}"`)
+      })
+    })
   })

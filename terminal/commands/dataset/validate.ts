@@ -5,7 +5,7 @@ import { Report } from "../../components/Report/index.ts"
 import { selectErrorResource, selectErrorType } from "../../helpers/error.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
+import { createSession, Session } from "../../session.ts"
 
 export const validateDatasetCommand = new Command("validate")
   .configureHelp(helpConfiguration)
@@ -18,7 +18,7 @@ export const validateDatasetCommand = new Command("validate")
   .addOption(params.all)
 
   .action(async (path, options) => {
-    const session = Session.create({
+    const session = createSession({
       title: "Validate package",
       json: options.json,
       debug: options.debug,

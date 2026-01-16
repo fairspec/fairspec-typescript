@@ -5,7 +5,7 @@ import { Command } from "commander"
 import pc from "picocolors"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
-import { Session } from "../../session.ts"
+import { createSession, Session } from "../../session.ts"
 
 export const scriptDatasetCommand = new Command("script")
   .configureHelp(helpConfiguration)
@@ -16,7 +16,7 @@ export const scriptDatasetCommand = new Command("script")
   .addOption(params.debug)
 
   .action(async (path, options) => {
-    const session = Session.create({
+    const session = createSession({
       title: "Script package",
       json: options.json,
       debug: options.debug,

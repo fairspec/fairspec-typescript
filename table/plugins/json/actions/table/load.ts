@@ -14,11 +14,11 @@ export async function loadJsonTable(
   options?: LoadTableOptions,
 ) {
 
-  const jsonFormat = resource.format?.type === "json" ? resource.format : undefined
-  const jsonlFormat = resource.format?.type === "jsonl" ? resource.format : undefined
+  const jsonFormat = resource.format?.name === "json" ? resource.format : undefined
+  const jsonlFormat = resource.format?.name === "jsonl" ? resource.format : undefined
   const format = jsonFormat ?? jsonlFormat
 
-  const isLines = format?.type === "jsonl"
+  const isLines = format?.name === "jsonl"
   const isDefault = Object.keys(format ?? {})
     .filter(key => !['type', 'title', 'description'].includes(key)).length === 0
 
@@ -59,7 +59,7 @@ export async function loadJsonTable(
 
 // TODO: Make data unkonwn not any!
 function processData(data: any, format?: JsonFormat | JsonlFormat) {
-  if (format?.type === 'json' && format?.jsonPointer) {
+  if (format?.name === 'json' && format?.jsonPointer) {
     data = data[format.jsonPointer]
   }
 

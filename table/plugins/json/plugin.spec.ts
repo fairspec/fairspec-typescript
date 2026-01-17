@@ -36,7 +36,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { type: "json" } },
+        { ...resource, format: { name: "json" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -52,7 +52,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { type: "jsonl" } },
+        { ...resource, format: { name: "jsonl" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -68,7 +68,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { type: "jsonl" } },
+        { ...resource, format: { name: "jsonl" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -88,7 +88,7 @@ describe("JsonPlugin", () => {
     it("should handle explicit format specification", async () => {
       const resource: Partial<Resource> = {
         data: "test.txt",
-        format: { type: "json" },
+        format: { name: "json" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadJsonTable.mockResolvedValue(mockTable)
@@ -96,7 +96,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { type: "json" } },
+        { ...resource, format: { name: "json" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -113,7 +113,7 @@ describe("JsonPlugin", () => {
       await plugin.loadTable(resource, options)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { type: "json" } },
+        { ...resource, format: { name: "json" } },
         options,
       )
     })
@@ -128,7 +128,7 @@ describe("JsonPlugin", () => {
       await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { type: "json" } },
+        { ...resource, format: { name: "json" } },
         undefined,
       )
     })
@@ -144,7 +144,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { type: "json" },
+        format: { name: "json" },
       })
       expect(result).toEqual({ path: "output.json" })
     })
@@ -158,7 +158,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { type: "jsonl" },
+        format: { name: "jsonl" },
       })
       expect(result).toEqual({ path: "output.jsonl" })
     })
@@ -172,7 +172,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { type: "jsonl" },
+        format: { name: "jsonl" },
       })
       expect(result).toEqual({ path: "output.ndjson" })
     })
@@ -189,14 +189,14 @@ describe("JsonPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: { type: "json" } as const }
+      const options = { path: "output.txt", format: { name: "json" } as const }
       mockSaveJsonTable.mockResolvedValue({ path: "output.txt" })
 
       const result = await plugin.saveTable(table, options)
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { type: "json" },
+        format: { name: "json" },
       })
       expect(result).toEqual({ path: "output.txt" })
     })
@@ -210,7 +210,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { type: "json" },
+        format: { name: "json" },
       })
     })
 

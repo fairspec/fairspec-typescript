@@ -19,7 +19,7 @@ export async function loadOdsTable(
     throw new Error("Resource data is not defined")
   }
 
-  const format = resource.format?.type === "ods" ? resource.format : undefined
+  const format = resource.format?.name === "ods" ? resource.format : undefined
 
   const tables: Table[] = []
   for (const path of paths) {

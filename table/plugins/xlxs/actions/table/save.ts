@@ -11,7 +11,7 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const format = options.format?.type === "xlsx" ? options.format : undefined
+  const format = options.format?.name === "xlsx" ? options.format : undefined
 
   const tableSchema =
     options.tableSchema ??

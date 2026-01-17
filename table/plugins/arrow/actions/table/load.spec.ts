@@ -12,7 +12,11 @@ describe("loadArrowTable", () => {
       const path = getTempFilePath()
       pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeIPC(path)
 
-      const table = await loadArrowTable({ data: path })
+      const table = await loadArrowTable({
+        data: path,
+        format: { name: "arrow" },
+      })
+
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
         { id: 2, name: "中文" },

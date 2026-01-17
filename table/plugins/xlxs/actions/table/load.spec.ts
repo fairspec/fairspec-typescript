@@ -73,7 +73,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", sheetNumber: 2 },
+        format: { name: "xlsx", sheetNumber: 2 },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -85,7 +85,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", sheetName: "Sheet2" },
+        format: { name: "xlsx", sheetName: "Sheet2" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -97,7 +97,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", headerRows: false },
+        format: { name: "xlsx", headerRows: false },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -112,7 +112,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", headerRows: [2] },
+        format: { name: "xlsx", headerRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -126,7 +126,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", headerRows: [1, 2] },
+        format: { name: "xlsx", headerRows: [1, 2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -140,7 +140,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", headerRows: [1, 2], headerJoin: "-" },
+        format: { name: "xlsx", headerRows: [1, 2], headerJoin: "-" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -154,7 +154,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", commentRows: [2] },
+        format: { name: "xlsx", commentRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record2])
@@ -166,7 +166,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", commentChar: "#" },
+        format: { name: "xlsx", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -178,7 +178,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", commentChar: "#" },
+        format: { name: "xlsx", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -194,7 +194,7 @@ describe("loadXlsxTable", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { type: "xlsx", commentChar: "#" },
+        format: { name: "xlsx", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

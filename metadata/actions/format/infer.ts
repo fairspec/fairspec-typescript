@@ -26,13 +26,13 @@ export function inferFormatName(
       return "xlsx"
     case "ods":
       return "ods"
-    case "sqlite":
-      return "sqlite"
     case "parquet":
       return "parquet"
     case "arrow":
     case "feather":
       return "arrow"
+    case "sqlite":
+      return "sqlite"
     default:
       return undefined
   }

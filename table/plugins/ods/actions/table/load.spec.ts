@@ -73,7 +73,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", sheetNumber: 2 },
+        format: { name: "ods", sheetNumber: 2 },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -85,7 +85,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", sheetName: "Sheet2" },
+        format: { name: "ods", sheetName: "Sheet2" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -97,7 +97,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", headerRows: false },
+        format: { name: "ods", headerRows: false },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -112,7 +112,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", headerRows: [2] },
+        format: { name: "ods", headerRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -126,7 +126,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", headerRows: [1, 2] },
+        format: { name: "ods", headerRows: [1, 2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -140,7 +140,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", headerRows: [1, 2], headerJoin: "-" },
+        format: { name: "ods", headerRows: [1, 2], headerJoin: "-" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -154,7 +154,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", commentRows: [2] },
+        format: { name: "ods", commentRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record2])
@@ -166,7 +166,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", commentChar: "#" },
+        format: { name: "ods", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -178,7 +178,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", commentChar: "#" },
+        format: { name: "ods", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -194,7 +194,7 @@ describe("loadOdsTable", () => {
 
       const table = await loadOdsTable({
         data: path,
-        format: { type: "ods", commentChar: "#" },
+        format: { name: "ods", commentChar: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

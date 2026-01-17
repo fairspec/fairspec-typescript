@@ -53,7 +53,7 @@ describe("OdsPlugin", () => {
     it("should handle explicit format specification", async () => {
       const resource: Partial<Resource> = {
         data: "test.txt",
-        format: { type: "ods" },
+        format: { name: "ods" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadOdsTable.mockResolvedValue(mockTable)
@@ -136,7 +136,7 @@ describe("OdsPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: { type: "ods" as const } }
+      const options = { path: "output.txt", format: { name: "ods" as const } }
       mockSaveOdsTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

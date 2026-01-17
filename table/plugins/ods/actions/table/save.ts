@@ -8,7 +8,7 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 export async function saveOdsTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const format = options.format?.type === "ods" ? options.format : undefined
+  const format = options.format?.name === "ods" ? options.format : undefined
 
   const tableSchema =
     options.tableSchema ??

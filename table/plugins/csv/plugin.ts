@@ -1,4 +1,4 @@
-import type { CsvFormat, Resource, TsvFormat } from "@fairspec/metadata"
+import type { Resource } from "@fairspec/metadata"
 import { getSupportedFormat } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {

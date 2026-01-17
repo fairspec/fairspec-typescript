@@ -40,7 +40,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       headerRows: false,
     })
 
@@ -59,7 +59,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       headerRows: [2],
     })
 
@@ -78,7 +78,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       headerRows: [1, 2],
     })
 
@@ -105,7 +105,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       headerRows: [1, 2],
       headerJoin: "_",
     })
@@ -125,7 +125,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       commentRows: [3],
     })
 
@@ -145,7 +145,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       commentChar: "#",
     })
 
@@ -166,7 +166,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       commentChar: "#",
     })
 
@@ -185,7 +185,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       commentChar: "#",
     })
 
@@ -286,7 +286,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       headerRows: [1, 2],
     })
 
@@ -305,7 +305,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       headerRows: [2],
       commentRows: [3],
     })
@@ -326,7 +326,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       commentRows: [4],
       commentChar: "#",
     })
@@ -345,7 +345,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      type: "json",
+      name: "json",
       headerRows: false,
     })
 

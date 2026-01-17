@@ -53,7 +53,7 @@ describe("XlsxPlugin", () => {
     it("should handle explicit format specification", async () => {
       const resource: Partial<Resource> = {
         data: "test.txt",
-        format: { type: "xlsx" },
+        format: { name: "xlsx" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadXlsxTable.mockResolvedValue(mockTable)
@@ -136,7 +136,7 @@ describe("XlsxPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: { type: "xlsx" as const } }
+      const options = { path: "output.txt", format: { name: "xlsx" as const } }
       mockSaveXlsxTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

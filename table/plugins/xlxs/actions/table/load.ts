@@ -22,7 +22,7 @@ export async function loadXlsxTable(
     throw new Error("Resource path is not defined")
   }
 
-  const format = resource.format?.type === "xlsx" ? resource.format : undefined
+  const format = resource.format?.name === "xlsx" ? resource.format : undefined
 
   const tables: Table[] = []
   for (const path of paths) {

@@ -66,7 +66,7 @@ describe("ArrowPlugin", () => {
     it("should handle explicit arrow format specification", async () => {
       const resource: Partial<Resource> = {
         data: "test.txt",
-        format: { type: "arrow" },
+        format: { name: "arrow" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadArrowTable.mockResolvedValue(mockTable)
@@ -149,7 +149,7 @@ describe("ArrowPlugin", () => {
 
     it("should handle explicit arrow format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: { type: "arrow" } as const }
+      const options = { path: "output.txt", format: { name: "arrow" } as const }
       mockSaveArrowTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)

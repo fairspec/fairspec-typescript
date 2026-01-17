@@ -32,7 +32,7 @@ describe("saveCsvTable", () => {
 
     await saveCsvTable(table, {
       path,
-      format: { type: "csv", delimiter: ";" },
+      format: { name: "csv", delimiter: ";" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -50,7 +50,7 @@ describe("saveCsvTable", () => {
 
     await saveCsvTable(table, {
       path,
-      format: { type: "csv", headerRows: false },
+      format: { name: "csv", headerRows: false },
     })
 
     const content = await readFile(path, "utf-8")
@@ -68,7 +68,7 @@ describe("saveCsvTable", () => {
 
     await saveCsvTable(table, {
       path,
-      format: { type: "csv", quoteChar: "'" },
+      format: { name: "csv", quoteChar: "'" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -117,7 +117,7 @@ describe("saveCsvTable (format=tsv)", () => {
       })
       .lazy()
 
-    await saveCsvTable(table, { path, format: { type: "tsv" } })
+    await saveCsvTable(table, { path, format: { name: "tsv" } })
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual("id\tname\n1.0\tAlice\n2.0\tBob\n3.0\tCharlie\n")

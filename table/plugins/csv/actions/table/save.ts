@@ -8,11 +8,11 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 export async function saveCsvTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const csvFormat = options.format?.type === "csv" ? options.format : undefined
-  const tsvFormat = options.format?.type === "tsv" ? options.format : undefined
+  const csvFormat = options.format?.name === "csv" ? options.format : undefined
+  const tsvFormat = options.format?.name === "tsv" ? options.format : undefined
   const format = csvFormat ?? tsvFormat
 
-  const isTabs = format?.type === "tsv"
+  const isTabs = format?.name === "tsv"
   const headerRows = getHeaderRows(format)
 
   if (!overwrite) {

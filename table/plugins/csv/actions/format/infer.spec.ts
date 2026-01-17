@@ -9,7 +9,7 @@ describe("inferCsvFormat", () => {
     const format = await inferCsvFormat({ data: path })
 
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       lineTerminator: "\n",
     })
@@ -20,7 +20,7 @@ describe("inferCsvFormat", () => {
     const format = await inferCsvFormat({ data: path })
 
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       quoteChar: '"',
       lineTerminator: "\n",
@@ -32,7 +32,7 @@ describe("inferCsvFormat", () => {
     const format = await inferCsvFormat({ data: path })
 
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       quoteChar: "'",
       lineTerminator: "\n",
@@ -45,7 +45,7 @@ describe("inferCsvFormat", () => {
     const format = await inferCsvFormat({ data: path })
 
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       headerRows: false,
     })
@@ -56,7 +56,7 @@ describe("inferCsvFormat", () => {
     const format = await inferCsvFormat({ data: path })
 
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       lineTerminator: "\n",
     })
@@ -70,7 +70,7 @@ describe("inferCsvFormat", () => {
 
     const format = await inferCsvFormat({ data: path })
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       quoteChar: '"',
     })
@@ -78,11 +78,11 @@ describe("inferCsvFormat", () => {
 
   it("should infer format from CSV file with comma delimiter", async () => {
     const path = await writeTempFile("id,name,age\n1,alice,25\n2,bob,30")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       lineTerminator: "\n",
     })
@@ -90,11 +90,11 @@ describe("inferCsvFormat", () => {
 
   it("should infer format from CSV file with pipe delimiter", async () => {
     const path = await writeTempFile("id|name|age\n1|alice|25\n2|bob|30")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: "|",
       lineTerminator: "\n",
     })
@@ -102,11 +102,11 @@ describe("inferCsvFormat", () => {
 
   it("should infer format from CSV file with semicolon delimiter", async () => {
     const path = await writeTempFile("id;name;age\n1;alice;25\n2;bob;30")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ";",
       lineTerminator: "\n",
     })
@@ -114,11 +114,11 @@ describe("inferCsvFormat", () => {
 
   it("should infer format from TSV file with tab delimiter", async () => {
     const path = await writeTempFile("id\tname\tage\n1\talice\t25\n2\tbob\t30")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "tsv",
+      name: "tsv",
       lineTerminator: "\n",
     })
   })
@@ -128,11 +128,11 @@ describe("inferCsvFormat", () => {
       'id,name,description\n1,"alice","Description with, comma"\n2,"bob","Normal text"',
     )
 
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       quoteChar: '"',
       lineTerminator: "\n",
@@ -144,11 +144,11 @@ describe("inferCsvFormat", () => {
       "id,name,description\n1,'alice','Description text'\n2,'bob','Normal text'",
     )
 
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       quoteChar: "'",
       lineTerminator: "\n",
@@ -169,7 +169,7 @@ describe("inferCsvFormat", () => {
 
   it("should return empty object for non-CSV resources", async () => {
     const resource: Resource = {
-      format: { type: "json" },
+      format: { name: "json" },
       data: [{ id: 1 }],
     }
 
@@ -179,11 +179,11 @@ describe("inferCsvFormat", () => {
 
   it("should handle CSV with custom line terminator", async () => {
     const path = await writeTempFile("id,name\r\n1,alice\r\n2,bob\r\n")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
       delimiter: ",",
       lineTerminator: "\r\n",
     })
@@ -191,21 +191,21 @@ describe("inferCsvFormat", () => {
 
   it("should handle CSV with header row only", async () => {
     const path = await writeTempFile("id,name,age")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
     })
   })
 
   it("should handle empty CSV file", async () => {
     const path = await writeTempFile("")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const format = await inferCsvFormat(resource)
     expect(format).toEqual({
-      type: "csv",
+      name: "csv",
     })
   })
 })

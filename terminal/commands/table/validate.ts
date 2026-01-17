@@ -1,18 +1,17 @@
-import { inspectTable, loadTable } from "@dpkit/library"
-import { createReport } from "@dpkit/library"
-import { loadSchema } from "@dpkit/library"
-import { inferSchemaFromTable, resolveSchema } from "@dpkit/library"
-import { loadDialect } from "@dpkit/library"
-import type { Resource } from "@dpkit/library"
+import type { Resource } from "@fairspec/library"
+import {
+  createReport,
+  inferTableSchemaFromTable,
+  inspectTable,
+  loadTable,
+  resolveTableSchema,
+} from "@fairspec/library"
 import { Command } from "commander"
-import React from "react"
-import { Report } from "../../components/Report/index.ts"
-import { createDialectFromOptions } from "../../helpers/dialect.ts"
-import { selectErrorType } from "../../helpers/error.ts"
+import { createMergedFormat } from "../../helpers/format.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const validateTableCommand = new Command("validate")
   .configureHelp(helpConfiguration)
@@ -25,6 +24,7 @@ export const validateTableCommand = new Command("validate")
   .addOption(params.json)
 
   .optionsGroup("Format")
+  .addOption(params.format)
   .addOption(params.delimiter)
   .addOption(params.lineTerminator)
   .addOption(params.quoteChar)
@@ -41,7 +41,7 @@ export const validateTableCommand = new Command("validate")
   .addOption(params.tableName)
 
   .optionsGroup("Table Schema")
-  .addOption(params.schema)
+  .addOption(params.tableSchema)
   .addOption(params.columnTypes)
   .addOption(params.missingValues)
   .addOption(params.decimalChar)
@@ -63,67 +63,37 @@ export const validateTableCommand = new Command("validate")
   // TODO: Add schema options
 
   .action(async (path, options) => {
-    const session = createSession({
-      title: "Validate Table",
-      json: options.json,
+    const session = new Session({
       debug: options.debug,
-      quit: options.quit,
-      all: options.all,
+      json: options.json,
     })
 
-    const dialect = options.dialect
-      ? await session.task("Loading dialect", loadDialect(options.dialect))
-      : createDialectFromOptions(options)
-
-    let schema = options.schema
-      ? await session.task("Loading schema", loadSchema(options.schema))
-      : undefined
-
     const resource: Resource = path
-      ? { path, dialect, schema }
+      ? { data: path, tableSchema: options.schema }
       : await selectResource(session, options)
 
-    const table = await session.task(
-      "Loading table",
-      loadTable(resource, { denormalized: true }),
+    resource.format = createMergedFormat(resource, options)
+
+    const table = await session.task("Loading table", async () => {
+      const table = await loadTable(resource, { denormalized: true })
+      if (!table) throw new Error("Could not load table")
+      return table
+    })
+
+    let tableSchema = await session.task("Loading schema", () =>
+      resolveTableSchema(resource.tableSchema),
     )
 
-    if (!table) {
-      session.terminate("Could not load table")
-      process.exit(1)
-    }
-
-    if (!schema && resource.schema) {
-      schema = await session.task(
-        "Loading schema",
-        resolveSchema(options.schema ?? resource.schema),
+    if (!tableSchema) {
+      tableSchema = await session.task("Inferring schema", () =>
+        inferTableSchemaFromTable(table),
       )
     }
 
-    if (!schema) {
-      schema = await session.task(
-        "Inferring schema",
-        inferSchemaFromTable(table, options),
-      )
-    }
+    const report = await session.task("Validating table", async () => {
+      const errors = await inspectTable(table, { tableSchema })
+      return createReport(errors)
+    })
 
-    let errors = await session.task(
-      "Inspecting table",
-      inspectTable(table, { schema }),
-    )
-
-    if (errors.length) {
-      const type = await selectErrorType(session, errors)
-      if (type) errors = errors.filter(e => e.type === type)
-    }
-
-    if (!errors.length) {
-      session.success("Table is valid")
-      return
-    }
-
-    session.render(
-      createReport(errors),
-      <Report errors={errors} quit={options.quit} />,
-    )
+    session.renderDataResult(report)
   })

@@ -21,7 +21,6 @@ export const describeTableCommand = new Command("describe")
   .addOption(params.fromResource)
   .addOption(params.json)
   .addOption(params.debug)
-  .addOption(params.query)
 
   .optionsGroup("Format")
   .addOption(params.delimiter)
@@ -86,10 +85,6 @@ export const describeTableCommand = new Command("describe")
     if (!table) {
       session.terminate("Could not load table")
       process.exit(1)
-    }
-
-    if (options.query) {
-      table = queryTable(table, options.query)
     }
 
     const frame = await session.task("Calculating stats", table.collect())

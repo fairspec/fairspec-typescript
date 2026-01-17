@@ -3,7 +3,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 // import { describeTableCommand } from "./describe.ts"
 // import { queryTableCommand } from "./query.ts"
 // import { tableSchemaCommand } from "./schema/index.ts"
-// import { scriptTableCommand } from "./script.ts"
+import { scriptTableCommand } from "./script.ts"
 import { validateTableCommand } from "./validate.ts"
 
 export const tableCommand = new Command("table")
@@ -12,6 +12,6 @@ export const tableCommand = new Command("table")
 
   // .addCommand(describeTableCommand)
   // .addCommand(queryTableCommand)
-  // .addCommand(scriptTableCommand)
+  .addCommand(scriptTableCommand)
   .addCommand(validateTableCommand)
 // .addCommand(tableSchemaCommand)

@@ -14,8 +14,7 @@ export function createMergedFormat(resource: Resource, options: FormatOptions) {
   if (format?.name === "csv" || format?.name === "tsv") {
     if (options.lineTerminator) format.lineTerminator = options.lineTerminator
     if (options.nullSequence) format.nullSequence = options.nullSequence
-    if (options.headerRows !== false)
-      format.headerRows = options.headerRows ?? []
+    if (options.headerRows) format.headerRows = options.headerRows
     if (options.headerJoin) format.headerJoin = options.headerJoin
     if (options.commentRows) format.commentRows = options.commentRows
     if (options.commentChar) format.commentChar = options.commentChar
@@ -30,14 +29,17 @@ export function createMergedFormat(resource: Resource, options: FormatOptions) {
   if (format?.name === "xlsx" || format?.name === "ods") {
     if (options.sheetNumber) format.sheetNumber = options.sheetNumber
     if (options.sheetName) format.sheetName = options.sheetName
-    if (options.headerRows !== false)
-      format.headerRows = options.headerRows ?? []
+    if (options.headerRows) format.headerRows = options.headerRows
     if (options.headerJoin) format.headerJoin = options.headerJoin
     if (options.commentRows) format.commentRows = options.commentRows
     if (options.commentChar) format.commentChar = options.commentChar
   }
 
   if (format?.name === "json" || format?.name === "jsonl") {
+    if (options.headerRows) format.headerRows = options.headerRows
+    if (options.headerJoin) format.headerJoin = options.headerJoin
+    if (options.commentRows) format.commentRows = options.commentRows
+    if (options.commentChar) format.commentChar = options.commentChar
     if (options.rowType) format.rowType = options.rowType
   }
 

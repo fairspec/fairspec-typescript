@@ -23,7 +23,7 @@ export const scriptDatasetCommand = new Command("script")
       return await loadDataset(path)
     })
 
-    session.renderTextResult(
+    session.renderText(
       "warning",
       pc.dim("`fairspec` and `dataset` variables are available in the session"),
     )

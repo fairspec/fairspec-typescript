@@ -1,10 +1,10 @@
 import repl from "node:repl"
 import type { Resource } from "@fairspec/library"
 import * as fairspec from "@fairspec/library"
-import { loadDialect, loadSchema, loadTable, queryTable } from "@fairspec/library"
+import { loadTable } from "@fairspec/library"
 import { Command } from "commander"
 import pc from "picocolors"
-import { createDialectFromOptions } from "../../helpers/dialect.ts"
+import { createMergedFormat } from "../../helpers/format.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
@@ -20,9 +20,9 @@ export const scriptTableCommand = new Command("script")
   .addOption(params.fromDataset)
   .addOption(params.fromResource)
   .addOption(params.debug)
-  .addOption(params.query)
 
   .optionsGroup("Format")
+  .addOption(params.format)
   .addOption(params.delimiter)
   .addOption(params.lineTerminator)
   .addOption(params.quoteChar)
@@ -39,7 +39,7 @@ export const scriptTableCommand = new Command("script")
   .addOption(params.tableName)
 
   .optionsGroup("Table Schema")
-  .addOption(params.schema)
+  .addOption(params.tableSchema)
   .addOption(params.columnTypes)
   .addOption(params.missingValues)
   .addOption(params.decimalChar)
@@ -63,36 +63,19 @@ export const scriptTableCommand = new Command("script")
       debug: options.debug,
     })
 
-    const dialect = options.dialect
-      ? await session.task("Loading dialect", async () => {
-          return await loadDialect(options.dialect)
-        })
-      : createDialectFromOptions(options)
-
-    const schema = options.schema
-      ? await session.task("Loading schema", async () => {
-          return await loadSchema(options.schema)
-        })
-      : undefined
-
     const resource: Resource = path
-      ? { path, dialect, schema }
+      ? { data: path, tableSchema: options.schema }
       : await selectResource(session, options)
 
-    let table = await session.task("Loading table", async () => {
-      return await loadTable(resource, options)
+    resource.format = createMergedFormat(resource, options)
+
+    const table = await session.task("Loading table", async () => {
+      const table = await loadTable(resource, { denormalized: true })
+      if (!table) throw new Error("Could not load table")
+      return table
     })
 
-    if (!table) {
-      session.renderTextResult("error", "Could not load table")
-      process.exit(1)
-    }
-
-    if (options.query) {
-      table = queryTable(table, options.query)
-    }
-
-    session.renderTextResult(
+    session.renderText(
       "warning",
       pc.dim("`fairspec` and `table` variables are available in the session"),
     )

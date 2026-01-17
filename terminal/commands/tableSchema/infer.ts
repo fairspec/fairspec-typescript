@@ -1,13 +1,11 @@
-import { inferSchemaFromTable, loadTable } from "@dpkit/library"
+import type { Resource } from "@fairspec/library"
+import { inferTableSchema } from "@fairspec/library"
 import { Command } from "commander"
-import React from "react"
-import * as params from "../../../params/index.ts"
-import { Session } from "../../../session.ts"
-import { Schema } from "../../components/Schema/index.ts"
-import { createDialectFromOptions } from "../../helpers/dialect.ts"
+import { createMergedFormat } from "../../helpers/format.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
-import { isEmptyObject } from "../../helpers/object.ts"
 import { selectResource } from "../../helpers/resource.ts"
+import * as params from "../../params/index.ts"
+import { Session } from "../../session.ts"
 
 export const inferTableSchemaCommand = new Command()
   .configureHelp(helpConfiguration)
@@ -20,6 +18,7 @@ export const inferTableSchemaCommand = new Command()
   .addOption(params.json)
 
   .optionsGroup("Format")
+  .addOption(params.format)
   .addOption(params.delimiter)
   .addOption(params.lineTerminator)
   .addOption(params.quoteChar)
@@ -55,35 +54,26 @@ export const inferTableSchemaCommand = new Command()
   .addOption(params.keepStrings)
 
   .action(async (path, options) => {
-    const session = Session.create({
-      title: "Infer schema",
-      json: options.json,
+    const session = new Session({
       debug: options.debug,
+      json: options.json,
     })
 
-    const resource = path
-      ? { path, dialect: createDialectFromOptions(options) }
+    const resource: Resource = path
+      ? { data: path }
       : await selectResource(session, options)
 
-    const table = await session.task(
-      "Loading table",
-      loadTable(resource, { denormalized: true }),
-    )
+    resource.format = createMergedFormat(resource, options)
 
-    if (!table) {
-      session.terminate("Could not load table")
-      process.exit(1)
-    }
+    const tableSchema = await session.task("Inferring schema", async () => {
+      const tableSchema = await inferTableSchema(resource, options)
 
-    const inferredSchema = await session.task(
-      "Inferring schema",
-      inferSchemaFromTable(table, options),
-    )
+      if (!tableSchema) {
+        throw new Error("Could not infer table schema")
+      }
 
-    if (isEmptyObject(inferredSchema)) {
-      session.terminate("Could not infer schema")
-      process.exit(1)
-    }
+      return tableSchema
+    })
 
-    await session.render(inferredSchema, <Schema schema={inferredSchema} />)
+    session.renderDataResult(tableSchema)
   })

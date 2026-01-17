@@ -14,7 +14,7 @@ export async function readTestData(path: string) {
 export async function writeTestData(
   path: string,
   rows: unknown[][],
-  options?: { sheetNumber?: number; sheetName?: string },
+  options?: { sheetNumber?: number; sheetName?: string; format?: "xlsx" | "ods" },
 ) {
   const book = utils.book_new()
   const sheet = utils.aoa_to_sheet(rows)
@@ -25,6 +25,7 @@ export async function writeTestData(
     utils.book_append_sheet(book, sheet, sheetName)
   }
 
-  const buffer = write(book, { type: "buffer", bookType: "xlsx" })
+  const bookType = options?.format ?? "xlsx"
+  const buffer = write(book, { type: "buffer", bookType })
   await writeFile(path, buffer)
 }

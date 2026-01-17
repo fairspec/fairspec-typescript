@@ -11,18 +11,18 @@ import { saveXlsxTable } from "./actions/table/save.ts"
 
 export class XlsxPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const format = getSupportedFormat(resource, ["xlsx"])
+    const format = getSupportedFormat(resource, ["xlsx", "ods"])
     if (!format) return undefined
 
-    return await loadXlsxTable(resource, options)
+    return await loadXlsxTable({ ...resource, format }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const format = getSupportedFormat(resource, ["xlsx"])
+    const format = getSupportedFormat(resource, ["xlsx", "ods"])
     if (!format) return undefined
 
-    return await saveXlsxTable(table, options)
+    return await saveXlsxTable(table, { ...options, format })
   }
 }

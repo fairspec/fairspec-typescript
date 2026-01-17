@@ -11,7 +11,6 @@ import {
   CsvPlugin,
   InlinePlugin,
   JsonPlugin,
-  OdsPlugin,
   ParquetPlugin,
   XlsxPlugin,
 } from "@fairspec/table"
@@ -42,6 +41,5 @@ system.register(ArrowPlugin)
 system.register(CsvPlugin)
 system.register(InlinePlugin)
 system.register(JsonPlugin)
-system.register(OdsPlugin)
 system.register(ParquetPlugin)
 system.register(XlsxPlugin)

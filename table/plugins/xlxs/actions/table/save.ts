@@ -11,7 +11,10 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const format = options.format?.name === "xlsx" ? options.format : undefined
+  const format =
+    options.format?.name === "xlsx" || options.format?.name === "ods"
+      ? options.format
+      : undefined
 
   const tableSchema =
     options.tableSchema ??
@@ -31,7 +34,8 @@ export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   const book = utils.book_new()
   utils.book_append_sheet(book, sheet, sheetName)
 
-  const buffer = write(book, { type: "buffer", bookType: "xlsx" })
+  const bookType = format?.name === "ods" ? "ods" : "xlsx"
+  const buffer = write(book, { type: "buffer", bookType })
   await saveFile(path, buffer, { overwrite })
 
   return path

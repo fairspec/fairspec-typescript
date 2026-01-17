@@ -168,7 +168,7 @@
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
@@ -182,7 +182,7 @@
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
@@ -196,7 +196,7 @@
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
@@ -209,7 +209,7 @@
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
@@ -223,7 +223,7 @@
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
@@ -237,7 +237,7 @@
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
@@ -293,7 +293,8 @@
         { "const": false },
         {
           "type": "array",
-          "items": { "type": "integer", "minimum": 1 }
+          "items": { "type": "integer", "minimum": 1 },
+          "minItems": 1
         }
       ]
     },
@@ -302,14 +303,16 @@
     },
     "CommentRows": {
       "type": "array",
-      "items": { "type": "integer", "minimum": 1 }
+      "items": { "type": "integer", "minimum": 1 },
+      "minItems": 1
     },
-    "CommentChar": {
+    "CommentPrefix": {
       "type": "string"
     },
     "ColumnNames": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": { "type": "string" },
+      "minItems": 1
     },
     "JsonPointer": {
       "type": "string",

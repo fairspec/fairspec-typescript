@@ -43,7 +43,7 @@ export const commentRows = new Option(
   "comma-separated row numbers (1-indexed) to exclude from data",
 ).argParser((value: string) => value.split(",").map(Number))
 
-export const commentChar = new Option(
+export const commentPrefix = new Option(
   "--comment-char <char>",
   "character sequence denoting the start of a comment line",
 )

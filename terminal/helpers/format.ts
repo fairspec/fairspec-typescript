@@ -17,7 +17,7 @@ export function createMergedFormat(resource: Resource, options: FormatOptions) {
     if (options.headerRows) format.headerRows = options.headerRows
     if (options.headerJoin) format.headerJoin = options.headerJoin
     if (options.commentRows) format.commentRows = options.commentRows
-    if (options.commentChar) format.commentChar = options.commentChar
+    if (options.commentPrefix) format.commentPrefix = options.commentPrefix
     if (options.columnNames) format.columnNames = options.columnNames
   }
 
@@ -32,14 +32,14 @@ export function createMergedFormat(resource: Resource, options: FormatOptions) {
     if (options.headerRows) format.headerRows = options.headerRows
     if (options.headerJoin) format.headerJoin = options.headerJoin
     if (options.commentRows) format.commentRows = options.commentRows
-    if (options.commentChar) format.commentChar = options.commentChar
+    if (options.commentPrefix) format.commentPrefix = options.commentPrefix
   }
 
   if (format?.name === "json" || format?.name === "jsonl") {
     if (options.headerRows) format.headerRows = options.headerRows
     if (options.headerJoin) format.headerJoin = options.headerJoin
     if (options.commentRows) format.commentRows = options.commentRows
-    if (options.commentChar) format.commentChar = options.commentChar
+    if (options.commentPrefix) format.commentPrefix = options.commentPrefix
     if (options.rowType) format.rowType = options.rowType
   }
 

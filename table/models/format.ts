@@ -6,6 +6,6 @@ export type FormatWithHeaderAndCommentRows = Extract<
     headerRows?: any
     headerJoin?: any
     commentRows?: any
-    commentChar?: any
+    commentPrefix?: any
   }
 >

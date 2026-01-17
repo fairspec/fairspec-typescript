@@ -22,7 +22,7 @@ export const FrictionlessDialect = z.object({
     .array(z.number())
     .optional()
     .describe("Specific rows to be excluded from the data (zero-based)"),
-  commentChar: z
+  commentPrefix: z
     .string()
     .optional()
     .describe("Character sequence denoting the start of a comment line"),

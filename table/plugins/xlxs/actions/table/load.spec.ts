@@ -160,13 +160,13 @@ describe("loadXlsxTable (format=xlsx)", () => {
       expect((await table.collect()).toRecords()).toEqual([record2])
     })
 
-    it("should support commentChar", async () => {
+    it("should support commentPrefix", async () => {
       const path = getTempFilePath()
       await writeTestData(path, [row1, row2, row3, ["#comment"]])
 
       const table = await loadXlsxTable({
         data: path,
-        format: { name: "xlsx", commentChar: "#" },
+        format: { name: "xlsx", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -178,7 +178,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { name: "xlsx", commentChar: "#" },
+        format: { name: "xlsx", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -194,7 +194,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { name: "xlsx", commentChar: "#" },
+        format: { name: "xlsx", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -367,7 +367,7 @@ describe("loadXlsxTable (format=ods)", () => {
       expect((await table.collect()).toRecords()).toEqual([record2])
     })
 
-    it("should support commentChar", async () => {
+    it("should support commentPrefix", async () => {
       const path = getTempFilePath()
       await writeTestData(path, [row1, row2, row3, ["#comment"]], {
         format: "ods",
@@ -375,7 +375,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { name: "ods", commentChar: "#" },
+        format: { name: "ods", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -389,7 +389,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { name: "ods", commentChar: "#" },
+        format: { name: "ods", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -405,7 +405,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        format: { name: "ods", commentChar: "#" },
+        format: { name: "ods", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

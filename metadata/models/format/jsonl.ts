@@ -2,7 +2,7 @@ import { z } from "zod"
 import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
-  CommentChar,
+  CommentPrefix,
   CommentRows,
   HeaderJoin,
   HeaderRows,
@@ -15,7 +15,7 @@ export const JsonlFormat = BaseFormat.extend({
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),
   commentRows: CommentRows.optional(),
-  commentChar: CommentChar.optional(),
+  commentPrefix: CommentPrefix.optional(),
   columnNames: ColumnNames.optional(),
 })
 

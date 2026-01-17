@@ -114,8 +114,8 @@ function getIsCommentedRow(
   row: unknown[],
   format?: FormatWithHeaderAndCommentRows,
 ) {
-  const commentChar = format?.commentChar
-  if (!commentChar) {
+  const commentPrefix = format?.commentPrefix
+  if (!commentPrefix) {
     return false
   }
 
@@ -123,5 +123,5 @@ function getIsCommentedRow(
     return false
   }
 
-  return row[0].startsWith(commentChar)
+  return row[0].startsWith(commentPrefix)
 }

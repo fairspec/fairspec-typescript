@@ -31,8 +31,8 @@ export function createFormatFromOptions(options: any) {
     }
   }
 
-  if (options.commentChar) {
-    dialect = { ...dialect, commentChar: options.commentChar }
+  if (options.commentPrefix) {
+    dialect = { ...dialect, commentPrefix: options.commentPrefix }
   }
 
   if (options.quoteChar) {
@@ -111,8 +111,8 @@ export function createToDialectFromOptions(options: any) {
     }
   }
 
-  if (options.toCommentChar) {
-    dialect = { ...dialect, commentChar: options.toCommentChar }
+  if (options.toCommentPrefix) {
+    dialect = { ...dialect, commentPrefix: options.toCommentPrefix }
   }
 
   if (options.toQuoteChar) {

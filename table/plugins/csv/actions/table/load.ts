@@ -13,7 +13,7 @@ import * as pl from "nodejs-polars"
 import { inferCsvFormat } from "../../actions/format/infer.ts"
 
 // TODO: Condier using sample to extract header first
-// for better commentChar + headerRows/commentRows support
+// for better commentPrefix + headerRows/commentRows support
 // (consult with the Data Package Working Group)
 
 export async function loadCsvTable(
@@ -79,7 +79,7 @@ function getScanOptions(format?: TsvFormat | CsvFormat) {
   options.sep = format?.name === "csv" ? (format?.delimiter ?? ",") : "\t"
   options.quoteChar = format?.name === "csv" ? format?.quoteChar ?? '"' : undefined
   options.nullValues = format?.nullSequence
-  options.commentPrefix = format?.commentChar
+  options.commentPrefix = format?.commentPrefix
 
   return options
 }

@@ -17,7 +17,7 @@ export const HeaderJoin = z.string()
 
 export const CommentRows = z.array(z.number().int().min(1))
 
-export const CommentChar = z.string()
+export const CommentPrefix = z.string()
 
 export const ColumnNames = z.array(z.string())
 
@@ -38,7 +38,7 @@ export type NullSequence = z.infer<typeof NullSequence>
 export type HeaderRows = z.infer<typeof HeaderRows>
 export type HeaderJoin = z.infer<typeof HeaderJoin>
 export type CommentRows = z.infer<typeof CommentRows>
-export type CommentChar = z.infer<typeof CommentChar>
+export type CommentPrefix = z.infer<typeof CommentPrefix>
 export type ColumnNames = z.infer<typeof ColumnNames>
 export type JsonPointer = z.infer<typeof JsonPointer>
 export type RowType = z.infer<typeof RowType>

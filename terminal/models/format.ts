@@ -7,7 +7,7 @@ export type FormatOptions = {
   headerRows?: false | number[]
   headerJoin?: string
   commentRows?: number[]
-  commentChar?: string
+  commentPrefix?: string
   columnNames?: string[]
   jsonPointer?: string
   rowType?: "array" | "object"

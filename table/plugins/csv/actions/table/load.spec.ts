@@ -131,7 +131,7 @@ describe("loadCsvTable", () => {
 
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", commentChar: "#" },
+      format: { name: "csv", commentPrefix: "#" },
     })
 
     const records = (await table.collect()).toRecords()
@@ -253,7 +253,7 @@ describe("loadCsvTable", () => {
         name: "csv",
         delimiter: "|",
         quoteChar: "'",
-        commentChar: "#",
+        commentPrefix: "#",
         headerRows: [1],
       },
     })

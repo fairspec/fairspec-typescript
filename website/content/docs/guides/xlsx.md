@@ -139,7 +139,7 @@ const table = await loadXlsxTable({
 const table = await loadXlsxTable({
   path: "data.xlsx",
   dialect: {
-    commentChar: "#"  // Skip rows starting with #
+    commentPrefix: "#"  // Skip rows starting with #
   }
 })
 ```

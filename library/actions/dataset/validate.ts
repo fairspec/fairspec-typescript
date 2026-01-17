@@ -12,7 +12,7 @@ import { system } from "../../system.ts"
 import { validateDatasetIntegrity } from "./integrity.ts"
 
 export async function validateDataset(
-  source: string | Descriptor | Partial<Dataset>,
+  source: string | Descriptor | Dataset,
   options?: { basepath?: string },
 ) {
   let descriptor: Descriptor | undefined

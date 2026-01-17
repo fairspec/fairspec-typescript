@@ -27,7 +27,7 @@ describe("ArrowPlugin", () => {
 
   describe("loadTable", () => {
     it("should load table from arrow file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.arrow",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -43,7 +43,7 @@ describe("ArrowPlugin", () => {
     })
 
     it("should load table from feather file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.feather",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -59,7 +59,7 @@ describe("ArrowPlugin", () => {
     })
 
     it("should return undefined for non-arrow files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.csv",
       }
 
@@ -70,7 +70,7 @@ describe("ArrowPlugin", () => {
     })
 
     it("should handle explicit arrow format specification", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.txt",
         format: { name: "arrow" },
       }
@@ -84,7 +84,7 @@ describe("ArrowPlugin", () => {
     })
 
     it("should pass through load options", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.arrow",
       }
       const options = { denormalized: true }
@@ -100,7 +100,7 @@ describe("ArrowPlugin", () => {
     })
 
     it("should handle paths with directories", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "/path/to/data.arrow",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -115,7 +115,7 @@ describe("ArrowPlugin", () => {
     })
 
     it("should return undefined for parquet files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.parquet",
       }
 

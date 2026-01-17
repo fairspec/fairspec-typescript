@@ -10,7 +10,7 @@ import { loadXlsxTable } from "./actions/table/load.ts"
 import { saveXlsxTable } from "./actions/table/save.ts"
 
 export class XlsxPlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
     const format = getSupportedFormat(resource, ["xlsx"])
     if (!format) return undefined
 

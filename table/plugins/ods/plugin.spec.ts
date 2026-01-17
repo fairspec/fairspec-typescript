@@ -27,7 +27,7 @@ describe("OdsPlugin", () => {
 
   describe("loadTable", () => {
     it("should load table from ods file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.ods",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -40,7 +40,7 @@ describe("OdsPlugin", () => {
     })
 
     it("should return undefined for non-ods files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.csv",
       }
 
@@ -51,7 +51,7 @@ describe("OdsPlugin", () => {
     })
 
     it("should handle explicit format specification", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.txt",
         format: { name: "ods" },
       }
@@ -65,7 +65,7 @@ describe("OdsPlugin", () => {
     })
 
     it("should pass through load options", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.ods",
       }
       const options = { denormalized: true }
@@ -78,7 +78,7 @@ describe("OdsPlugin", () => {
     })
 
     it("should handle paths with directories", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "/path/to/data.ods",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -90,7 +90,7 @@ describe("OdsPlugin", () => {
     })
 
     it("should return undefined for json files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.json",
       }
 
@@ -101,7 +101,7 @@ describe("OdsPlugin", () => {
     })
 
     it("should return undefined for xlsx files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.xlsx",
       }
 

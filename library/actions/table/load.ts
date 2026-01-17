@@ -3,7 +3,7 @@ import type { LoadTableOptions } from "@fairspec/table"
 import { system } from "../../system.ts"
 
 export async function loadTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: LoadTableOptions,
 ) {
   for (const plugin of system.plugins) {

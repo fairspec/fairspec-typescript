@@ -13,7 +13,7 @@ import { prefetchFiles } from "./fetch.ts"
 export type HashType = NonNullable<Resource["integrity"]>["type"]
 
 export async function inferTextual(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: { sampleBytes?: number; confidencePercent?: number },
 ) {
   const maxBytes = options?.sampleBytes ?? 10_000
@@ -42,7 +42,7 @@ export async function inferTextual(
 }
 
 export async function inferIntegrity(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: { hashType?: HashType },
 ) {
   const type = options?.hashType ?? "sha256"
@@ -56,7 +56,7 @@ export async function inferIntegrity(
 }
 
 export async function inferHash(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: { hashType?: HashType },
 ) {
   const hashType = options?.hashType ?? "sha256"
@@ -73,7 +73,7 @@ export async function inferHash(
   return hash
 }
 
-export async function inferBytes(resource: Partial<Resource>) {
+export async function inferBytes(resource: Resource) {
   const localPaths = await prefetchFiles(resource)
 
   let bytes = 0

@@ -10,7 +10,7 @@ import { loadJsonTable } from "./actions/table/load.ts"
 import { saveJsonTable } from "./actions/table/save.ts"
 
 export class JsonPlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
     const format = getSupportedFormat(resource, ["json", "jsonl"])
     if (!format) return undefined
 

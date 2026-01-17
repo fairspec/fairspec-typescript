@@ -79,7 +79,7 @@ export const validateTableCommand = new Command("validate")
       ? await session.task("Loading schema", loadSchema(options.schema))
       : undefined
 
-    const resource: Partial<Resource> = path
+    const resource: Resource = path
       ? { path, dialect, schema }
       : await selectResource(session, options)
 

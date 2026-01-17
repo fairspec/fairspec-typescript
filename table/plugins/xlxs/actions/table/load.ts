@@ -14,7 +14,7 @@ import { read, utils } from "xlsx"
 // polars-rust might be able to provide a faster native implementation
 
 export async function loadXlsxTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: LoadTableOptions,
 ) {
   const paths = await prefetchFiles(resource)

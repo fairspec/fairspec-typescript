@@ -74,7 +74,7 @@ export const describeTableCommand = new Command("describe")
       ? await session.task("Loading schema", loadSchema(options.schema))
       : undefined
 
-    const resource: Partial<Resource> = path
+    const resource: Resource = path
       ? { path, dialect, schema }
       : await selectResource(session, options)
 

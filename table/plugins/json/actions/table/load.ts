@@ -10,7 +10,7 @@ import * as pl from "nodejs-polars"
 import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
 
 export async function loadJsonTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: LoadTableOptions,
 ) {
 

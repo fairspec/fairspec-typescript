@@ -7,7 +7,7 @@ import { default as CsvSnifferFactory } from "csv-sniffer"
 const DELIMITERS = [",", ";", ":", "|", "\t", "^", "*", "&"]
 
 export async function inferCsvFormat(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: {
     sampleBytes?: number
   },

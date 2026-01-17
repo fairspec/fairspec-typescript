@@ -1,7 +1,7 @@
 import type { ResourceDataValue } from "../../models/data.ts"
 import type { Resource } from "../../models/resource.ts"
 
-export function getDataPath(resource: Partial<Resource>) {
+export function getDataPath(resource: Resource) {
   if (typeof resource.data === "string") {
     return resource.data
   }
@@ -15,7 +15,7 @@ export function getDataPath(resource: Partial<Resource>) {
   return undefined
 }
 
-export function getDataValue(resource: Partial<Resource>) {
+export function getDataValue(resource: Resource) {
   const dataPath = getDataPath(resource)
 
   if (!dataPath) {
@@ -26,20 +26,20 @@ export function getDataValue(resource: Partial<Resource>) {
   return undefined
 }
 
-export function getDataRecords(resource: Partial<Resource>) {
+export function getDataRecords(resource: Resource) {
   const dataValue = getDataValue(resource)
   if (!dataValue) return undefined
 
   return Array.isArray(dataValue) ? dataValue : undefined
 }
 
-export function getDataPaths(resource: Partial<Resource>) {
+export function getDataPaths(resource: Resource) {
   const dataPath = getDataPath(resource)
   if (!dataPath) return []
   return Array.isArray(dataPath) ? dataPath : [dataPath]
 }
 
-export function getDataFirstPath(resource: Partial<Resource>) {
+export function getDataFirstPath(resource: Resource) {
   const dataPath = getDataPath(resource)
   if (!dataPath) return undefined
   return Array.isArray(dataPath) ? dataPath[0] : dataPath

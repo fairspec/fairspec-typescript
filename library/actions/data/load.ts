@@ -3,7 +3,7 @@ import { getSupportedFormat, getDataFirstPath, getDataValue } from "@fairspec/me
 import { loadDescriptor } from "@fairspec/metadata"
 
 export async function loadData(
-  resource: Partial<Resource>,
+  resource: Resource,
 ) {
   const dataValue = getDataValue(resource)
   if (dataValue) return dataValue

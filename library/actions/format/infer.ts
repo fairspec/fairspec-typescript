@@ -5,7 +5,7 @@ import { system } from "../../system.ts"
 // TODO: review default values being {} vs undefined
 
 export async function inferFormat(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: InferFormatOptions,
 ) {
   for (const plugin of system.plugins) {

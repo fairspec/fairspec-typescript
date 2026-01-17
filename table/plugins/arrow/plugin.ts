@@ -10,7 +10,7 @@ import { loadArrowTable } from "./actions/table/load.ts"
 import { saveArrowTable } from "./actions/table/save.ts"
 
 export class ArrowPlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
     const format = getSupportedFormat(resource, ["arrow"])
     if (!format) return undefined
 

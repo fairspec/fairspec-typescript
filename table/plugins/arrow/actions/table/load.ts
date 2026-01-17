@@ -7,7 +7,7 @@ import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import * as pl from "nodejs-polars"
 
 export async function loadArrowTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: LoadTableOptions,
 ) {
   const [firstPath, ...restPaths] = await prefetchFiles(resource)

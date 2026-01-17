@@ -10,7 +10,7 @@ import { loadParquetTable } from "./actions/table/load.ts"
 import { saveParquetTable } from "./actions/table/save.ts"
 
 export class ParquetPlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
     const format = getSupportedFormat(resource, ["parquet"])
     if (!format) return undefined
 

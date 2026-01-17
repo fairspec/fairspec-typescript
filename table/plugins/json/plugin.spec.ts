@@ -27,7 +27,7 @@ describe("JsonPlugin", () => {
 
   describe("loadTable", () => {
     it("should load table from json file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.json",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -43,7 +43,7 @@ describe("JsonPlugin", () => {
     })
 
     it("should load table from jsonl file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.jsonl",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -59,7 +59,7 @@ describe("JsonPlugin", () => {
     })
 
     it("should load table from ndjson file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.ndjson",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -75,7 +75,7 @@ describe("JsonPlugin", () => {
     })
 
     it("should return undefined for non-json files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.csv",
       }
 
@@ -86,7 +86,7 @@ describe("JsonPlugin", () => {
     })
 
     it("should handle explicit format specification", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.txt",
         format: { name: "json" },
       }
@@ -103,7 +103,7 @@ describe("JsonPlugin", () => {
     })
 
     it("should pass through load options", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.json",
       }
       const options = { denormalized: true }
@@ -119,7 +119,7 @@ describe("JsonPlugin", () => {
     })
 
     it("should handle paths with directories", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "/path/to/data.json",
       }
       const mockTable = pl.DataFrame().lazy()

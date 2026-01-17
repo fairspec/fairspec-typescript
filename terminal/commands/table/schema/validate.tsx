@@ -28,7 +28,7 @@ export const validateTableSchemaCommand = new Command("validate")
       all: options.all,
     })
 
-    const resource: Partial<Resource> | undefined = !path
+    const resource: Resource | undefined = !path
       ? await selectResource(session, options)
       : undefined
 

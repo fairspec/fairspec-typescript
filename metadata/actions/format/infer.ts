@@ -4,7 +4,7 @@ import { getFileExtension } from "../path/general.ts"
 import { getDataFirstPath } from "../resource/data.ts"
 
 export function inferFormatName(
-  resource: Partial<Resource>,
+  resource: Resource,
 ): Format["name"] | undefined {
   const path = getDataFirstPath(resource)
   if (!path) return undefined

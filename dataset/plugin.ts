@@ -23,7 +23,7 @@ export interface DatasetPlugin extends MetadataPlugin {
   ): Promise<{ path?: string } | undefined>
 
   inferFormat?(
-    resource: Partial<Resource>,
+    resource: Resource,
     options?: InferFormatOptions,
   ): Promise<Format | undefined>
 }

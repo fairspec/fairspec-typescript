@@ -17,7 +17,7 @@ import { inferCsvFormat } from "../../actions/format/infer.ts"
 // (consult with the Data Package Working Group)
 
 export async function loadCsvTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: LoadTableOptions,
 ) {
   const paths = await prefetchFiles(resource)

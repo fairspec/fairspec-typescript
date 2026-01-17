@@ -75,7 +75,7 @@ export const scriptTableCommand = new Command("script")
         })
       : undefined
 
-    const resource: Partial<Resource> = path
+    const resource: Resource = path
       ? { path, dialect, schema }
       : await selectResource(session, options)
 

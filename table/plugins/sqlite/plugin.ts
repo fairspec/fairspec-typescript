@@ -10,7 +10,7 @@ import { loadSqliteTable } from "./actions/table/load.ts"
 import { saveSqliteTable } from "./actions/table/save.ts"
 
 export class SqlitePlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
     const format = getSupportedFormat(resource, ["sqlite"])
     if (!format) return undefined
 

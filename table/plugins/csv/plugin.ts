@@ -14,7 +14,7 @@ import { saveCsvTable } from "./actions/table/save.ts"
 // TODO: improve nameing loadCsvTable/saveCsvTable (tsv?)
 
 export class CsvPlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
     const format = getSupportedFormat(resource, ["csv", "tsv"])
     if (!format) return undefined
 
@@ -30,7 +30,7 @@ export class CsvPlugin implements TablePlugin {
     return await saveCsvTable(table, { ...options, format })
   }
 
-  async inferFormat(resource: Partial<Resource>) {
+  async inferFormat(resource: Resource) {
     const format = getSupportedFormat(resource, ["csv", "tsv"])
     if (!format) return undefined
 

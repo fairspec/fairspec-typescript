@@ -27,7 +27,7 @@ describe("CsvPlugin", () => {
 
   describe("loadTable", () => {
     it("should load table from csv file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.csv",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -43,7 +43,7 @@ describe("CsvPlugin", () => {
     })
 
     it("should load table from tsv file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.tsv",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -59,7 +59,7 @@ describe("CsvPlugin", () => {
     })
 
     it("should return undefined for non-csv files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.json",
       }
 
@@ -70,7 +70,7 @@ describe("CsvPlugin", () => {
     })
 
     it("should handle explicit format specification", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.txt",
         format: { name: "csv" },
       }
@@ -87,7 +87,7 @@ describe("CsvPlugin", () => {
     })
 
     it("should pass through load options", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.csv",
       }
       const options = { denormalized: true }
@@ -103,7 +103,7 @@ describe("CsvPlugin", () => {
     })
 
     it("should handle paths with directories", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "/path/to/data.csv",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -118,7 +118,7 @@ describe("CsvPlugin", () => {
     })
 
     it("should handle explicit tsv format specification", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.txt",
         format: { name: "tsv" },
       }

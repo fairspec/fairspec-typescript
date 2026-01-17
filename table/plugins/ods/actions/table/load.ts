@@ -11,7 +11,7 @@ import * as pl from "nodejs-polars"
 import { read, utils } from "xlsx"
 
 export async function loadOdsTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: LoadTableOptions,
 ) {
   const paths = await prefetchFiles(resource)

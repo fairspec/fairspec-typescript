@@ -2,7 +2,7 @@ import { isRemotePath } from "../../actions/path/general.ts"
 import type { Resource } from "../../models/resource.ts"
 import { getDataPath } from "./data.ts"
 
-export function isRemoteResource(resource: Partial<Resource>) {
+export function isRemoteResource(resource: Resource) {
   const dataPath = getDataPath(resource)
   if (!dataPath) return false
 

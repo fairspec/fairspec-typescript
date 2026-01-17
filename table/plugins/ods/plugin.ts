@@ -12,7 +12,7 @@ import { saveOdsTable } from "./actions/table/save.ts"
 // TODO: merge into xlxs plugin as it is very similar?
 
 export class OdsPlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
     const format = getSupportedFormat(resource, ["ods"])
     if (!format) return undefined
 

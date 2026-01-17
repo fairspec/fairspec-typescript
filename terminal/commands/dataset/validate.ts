@@ -4,7 +4,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const validateDatasetCommand = new Command("validate")
+export const validateDatasetCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Validate a dataset from a local or remote path")
 

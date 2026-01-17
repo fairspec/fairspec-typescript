@@ -26,7 +26,7 @@ const frontmatter = new Option(
   "use YAML frontmatter instead of H1 heading (markdown and html only)",
 )
 
-export const convertTableSchemaCommand = new Command("convert")
+export const renderTableSchemaCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Convert schema between different formats")
 

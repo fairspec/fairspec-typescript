@@ -1,11 +1,11 @@
 import { inferFormat } from "@fairspec/library"
 import { Command } from "commander"
-import { selectFile } from "../../../helpers/file.ts"
-import { helpConfiguration } from "../../../helpers/help.ts"
-import * as params from "../../../params/index.ts"
-import { Session } from "../../../session.ts"
+import { selectFile } from "../../helpers/file.ts"
+import { helpConfiguration } from "../../helpers/help.ts"
+import * as params from "../../params/index.ts"
+import { Session } from "../../session.ts"
 
-export const inferFileFormatCommand = new Command("infer")
+export const inferFormatCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Infer the format of a file")
 

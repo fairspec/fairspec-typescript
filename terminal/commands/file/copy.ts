@@ -6,7 +6,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const copyFileCommand = new Command("copy")
+export const copyFileCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Copy a local or remote file to a local path")
 

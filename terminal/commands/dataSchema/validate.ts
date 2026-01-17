@@ -1,11 +1,11 @@
 import { validateDataSchema } from "@fairspec/library"
 import { Command } from "commander"
 import { omit } from "es-toolkit"
-import { helpConfiguration } from "../../../helpers/help.ts"
-import * as params from "../../../params/index.ts"
-import { Session } from "../../../session.ts"
+import { helpConfiguration } from "../../helpers/help.ts"
+import * as params from "../../params/index.ts"
+import { Session } from "../../session.ts"
 
-export const validateDataSchemaCommand = new Command("validate")
+export const validateDataSchemaCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Validate a Data Schema")
 

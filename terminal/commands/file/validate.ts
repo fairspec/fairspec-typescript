@@ -4,7 +4,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const validateFileCommand = new Command("validate")
+export const validateFileCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Validate a file from a local or remote path")
 

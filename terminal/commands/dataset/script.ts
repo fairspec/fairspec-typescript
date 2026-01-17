@@ -7,7 +7,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const scriptDatasetCommand = new Command("script")
+export const scriptDatasetCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Script a dataset descriptor")
 

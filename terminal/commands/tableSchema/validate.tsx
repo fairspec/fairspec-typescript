@@ -9,7 +9,7 @@ import { selectErrorType } from "../../helpers/error.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 
-export const validateTableSchemaCommand = new Command("validate")
+export const validateTableSchemaCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Validate a table schema from a local or remote path")
 

@@ -9,7 +9,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import { isEmptyObject } from "../../helpers/object.ts"
 import { selectResource } from "../../helpers/resource.ts"
 
-export const inferTableSchemaCommand = new Command("infer")
+export const inferTableSchemaCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Infer a table schema from a table")
 

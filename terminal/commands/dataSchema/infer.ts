@@ -1,8 +1,8 @@
 import { inferDataSchema } from "@fairspec/library"
 import { Command } from "commander"
-import { helpConfiguration } from "../../../helpers/help.ts"
-import * as params from "../../../params/index.ts"
-import { Session } from "../../../session.ts"
+import { helpConfiguration } from "../../helpers/help.ts"
+import * as params from "../../params/index.ts"
+import { Session } from "../../session.ts"
 
 export const inferDataSchemaCommand = new Command("infer")
   .configureHelp(helpConfiguration)

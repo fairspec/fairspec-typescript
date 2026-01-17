@@ -5,7 +5,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const listDatasetCommand = new Command("list")
+export const listDatasetCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("List Dataset resources")
 

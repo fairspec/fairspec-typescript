@@ -44,7 +44,7 @@ export const commentRows = new Option(
 ).argParser((value: string) => value.split(",").map(Number))
 
 export const commentPrefix = new Option(
-  "--comment-char <char>",
+  "--comment-prefix <prefix>",
   "character sequence denoting the start of a comment line",
 )
 

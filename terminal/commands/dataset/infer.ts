@@ -4,7 +4,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const inferDatasetCommand = new Command("infer")
+export const inferDatasetCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Infer a dataset from local or remote file paths")
 

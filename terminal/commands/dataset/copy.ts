@@ -5,7 +5,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const copyDatasetCommand = new Command("copy")
+export const copyDatasetCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Copy a local or remote dataset to a local folder")
 

@@ -5,7 +5,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const describeFileCommand = new Command("describe")
+export const describeFileCommand = new Command()
   .configureHelp(helpConfiguration)
   .description("Show stats for a local or remote file")
 

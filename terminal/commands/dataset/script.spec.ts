@@ -1,5 +1,5 @@
 import repl from "node:repl"
-import { writeTempFile } from "@dpkit/dataset"
+import { writeTempFile } from "@fairspec/dataset"
 import { Command } from "commander"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import * as sessionModule from "../../session.ts"

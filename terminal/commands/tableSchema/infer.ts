@@ -7,7 +7,7 @@ import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const inferTableSchemaCommand = new Command()
+export const inferTableSchemaCommand = new Command("infer")
   .configureHelp(helpConfiguration)
   .description("Infer a table schema from a table")
 

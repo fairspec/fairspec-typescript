@@ -5,7 +5,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const validateTableSchemaCommand = new Command()
+export const validateTableSchemaCommand = new Command("validate")
   .configureHelp(helpConfiguration)
   .description("Validate a Table Schema")
 

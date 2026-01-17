@@ -1,4 +1,4 @@
-import { writeTempFile } from "@dpkit/dataset"
+import { writeTempFile } from "@fairspec/dataset"
 import { Command } from "commander"
 import { describe, expect, it, vi } from "vitest"
 import { useRecording } from "vitest-polly"

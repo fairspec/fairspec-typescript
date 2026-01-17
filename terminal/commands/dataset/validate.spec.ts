@@ -1,9 +1,9 @@
 import { basename } from "node:path"
-import { writeTempFile } from "@dpkit/dataset"
+import { writeTempFile } from "@fairspec/dataset"
 import { Command } from "commander"
 import { describe, expect, it, vi } from "vitest"
 import { useRecording } from "vitest-polly"
-import { validatePackageCommand } from "./validate.ts"
+import { validateDatasetCommand } from "./validate.ts"
 
 useRecording()
 
@@ -36,7 +36,7 @@ describe("package validate", () => {
       .spyOn(process.stderr, "write")
       .mockImplementation(() => true)
     const command = new Command()
-      .addCommand(validatePackageCommand)
+      .addCommand(validateDatasetCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -73,7 +73,7 @@ describe("package validate", () => {
       outputs.push(msg)
     })
     const command = new Command()
-      .addCommand(validatePackageCommand)
+      .addCommand(validateDatasetCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -123,7 +123,7 @@ describe("package validate", () => {
       .spyOn(process.stderr, "write")
       .mockImplementation(() => true)
     const command = new Command()
-      .addCommand(validatePackageCommand)
+      .addCommand(validateDatasetCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},

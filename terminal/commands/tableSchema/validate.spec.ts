@@ -1,8 +1,9 @@
-import { writeTempFile } from "@dpkit/dataset"
+import { writeFile } from "node:fs/promises"
+import { getTempFilePath } from "@fairspec/dataset"
 import { Command } from "commander"
 import { describe, expect, it, vi } from "vitest"
 import { useRecording } from "vitest-polly"
-import { validateSchemaCommand } from "./validate.ts"
+import { validateTableSchemaCommand } from "./validate.ts"
 
 useRecording()
 
@@ -11,7 +12,8 @@ describe("schema validate", () => {
     const schemaContent = JSON.stringify({
       fields: [],
     })
-    const schemaPath = await writeTempFile(schemaContent)
+    const schemaPath = getTempFilePath()
+    await writeFile(schemaPath, schemaContent)
 
     const outputs: string[] = []
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
@@ -28,7 +30,7 @@ describe("schema validate", () => {
       .mockImplementation(() => true)
 
     const command = new Command()
-      .addCommand(validateSchemaCommand)
+      .addCommand(validateTableSchemaCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -41,7 +43,6 @@ describe("schema validate", () => {
         "validate",
         schemaPath,
         "--json",
-        "--quit",
       ])
     } catch (error) {}
 
@@ -59,7 +60,8 @@ describe("schema validate", () => {
     const schemaContent = JSON.stringify({
       fields: [{ name: 123, type: "not-a-valid-type" }],
     })
-    const schemaPath = await writeTempFile(schemaContent)
+    const schemaPath = getTempFilePath()
+    await writeFile(schemaPath, schemaContent)
 
     const outputs: string[] = []
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
@@ -76,7 +78,7 @@ describe("schema validate", () => {
       .mockImplementation(() => true)
 
     const command = new Command()
-      .addCommand(validateSchemaCommand)
+      .addCommand(validateTableSchemaCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -89,7 +91,6 @@ describe("schema validate", () => {
         "validate",
         schemaPath,
         "--json",
-        "--quit",
       ])
     } catch (error) {}
 
@@ -113,7 +114,8 @@ describe("schema validate", () => {
         },
       ],
     })
-    const schemaPath = await writeTempFile(schemaContent)
+    const schemaPath = getTempFilePath()
+    await writeFile(schemaPath, schemaContent)
 
     const outputs: string[] = []
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
@@ -130,7 +132,7 @@ describe("schema validate", () => {
       .mockImplementation(() => true)
 
     const command = new Command()
-      .addCommand(validateSchemaCommand)
+      .addCommand(validateTableSchemaCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -143,7 +145,6 @@ describe("schema validate", () => {
         "validate",
         schemaPath,
         "--json",
-        "--quit",
       ])
     } catch (error) {}
 

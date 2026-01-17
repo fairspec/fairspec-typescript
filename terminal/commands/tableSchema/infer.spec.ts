@@ -1,8 +1,8 @@
-import { writeTempFile } from "@dpkit/dataset"
+import { writeTempFile } from "@fairspec/dataset"
 import { Command } from "commander"
 import { describe, expect, it, vi } from "vitest"
 import { useRecording } from "vitest-polly"
-import { inferSchemaCommand } from "./infer.ts"
+import { inferTableSchemaCommand } from "./infer.ts"
 
 useRecording()
 
@@ -25,7 +25,7 @@ describe("schema infer", () => {
       .mockImplementation(() => true)
 
     const command = new Command()
-      .addCommand(inferSchemaCommand)
+      .addCommand(inferTableSchemaCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -65,7 +65,7 @@ describe("schema infer", () => {
       .mockImplementation(() => true)
 
     const command = new Command()
-      .addCommand(inferSchemaCommand)
+      .addCommand(inferTableSchemaCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -105,7 +105,7 @@ describe("schema infer", () => {
       .mockImplementation(() => true)
 
     const command = new Command()
-      .addCommand(inferSchemaCommand)
+      .addCommand(inferTableSchemaCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},

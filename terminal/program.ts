@@ -16,9 +16,9 @@ import { describeTableCommand } from "./commands/table/describe.ts"
 import { queryTableCommand } from "./commands/table/query.ts"
 import { scriptTableCommand } from "./commands/table/script.ts"
 import { validateTableCommand } from "./commands/table/validate.ts"
-// import { inferTableSchemaCommand } from "./commands/tableSchema/infer.tsx"
-// import { renderTableSchemaCommand } from "./commands/tableSchema/render.tsx"
-// import { validateTableSchemaCommand } from "./commands/tableSchema/validate.tsx"
+// import { inferTableSchemaCommand } from "./commands/tableSchema/infer.ts"
+// import { renderTableSchemaCommand } from "./commands/tableSchema/render.ts"
+import { validateTableSchemaCommand } from "./commands/tableSchema/validate.ts"
 import { helpConfiguration } from "./helpers/help.ts"
 import metadata from "./package.json" with { type: "json" }
 
@@ -40,9 +40,7 @@ const tableCommand = new commander.Command()
   .addCommand(queryTableCommand.name("query"))
   .addCommand(scriptTableCommand.name("script"))
   .addCommand(validateTableCommand.name("validate"))
-// .addCommand(inferTableSchemaCommand.name("infer-schema"))
-// .addCommand(renderTableSchemaCommand.name("render-schema"))
-// .addCommand(validateTableSchemaCommand.name("validate-schema"))
+  .addCommand(validateTableSchemaCommand.name("validate-schema"))
 
 const dataCommand = new commander.Command()
   .configureHelp(helpConfiguration)

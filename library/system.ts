@@ -6,6 +6,7 @@ import {
   ZenodoPlugin,
   ZipPlugin,
 } from "@fairspec/dataset"
+import { ExtensionPlugin } from "@fairspec/extension"
 import {
   ArrowPlugin,
   CsvPlugin,
@@ -25,6 +26,10 @@ export class System {
 }
 
 export const system = new System()
+
+// Extension
+
+system.register(ExtensionPlugin)
 
 // Dataset
 

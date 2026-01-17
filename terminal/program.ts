@@ -17,7 +17,7 @@ import { queryTableCommand } from "./commands/table/query.ts"
 import { scriptTableCommand } from "./commands/table/script.ts"
 import { validateTableCommand } from "./commands/table/validate.ts"
 import { inferTableSchemaCommand } from "./commands/tableSchema/infer.ts"
-// import { renderTableSchemaCommand } from "./commands/tableSchema/render.ts"
+import { renderTableSchemaCommand } from "./commands/tableSchema/render.ts"
 import { validateTableSchemaCommand } from "./commands/tableSchema/validate.ts"
 import { helpConfiguration } from "./helpers/help.ts"
 import metadata from "./package.json" with { type: "json" }
@@ -41,6 +41,7 @@ const tableCommand = new commander.Command()
   .addCommand(scriptTableCommand.name("script"))
   .addCommand(validateTableCommand.name("validate"))
   .addCommand(inferTableSchemaCommand.name("infer-schema"))
+  .addCommand(renderTableSchemaCommand.name("render-schema"))
   .addCommand(validateTableSchemaCommand.name("validate-schema"))
 
 const dataCommand = new commander.Command()
@@ -72,6 +73,4 @@ export const program = commander.program
   .addCommand(dataCommand.name("data"))
   .addCommand(fileCommand.name("file"))
 
-// Add tab completion
-// https://github.com/bombshell-dev/tab?tab=readme-ov-file#commanderjs-integration
 tab(program)

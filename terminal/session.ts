@@ -62,8 +62,16 @@ export class Session implements SessionOptions {
   }
 
   renderTableResult(frame: Frame) {
-    console.log(frame)
-    // TODO: implement
+    if (this.silent) {
+      return
+    }
+
+    if (this.json) {
+      console.log(JSON.stringify(frame.toRecords(), null, 2))
+      return
+    }
+
+    console.log(frame.toString())
   }
 
   async task<T>(title: string, func: (api: TaskApi) => Promise<T>) {

@@ -13,7 +13,7 @@ import { describeFileCommand } from "./commands/file/describe.ts"
 import { validateFileCommand } from "./commands/file/validate.ts"
 import { inferFormatCommand } from "./commands/format/infer.ts"
 import { describeTableCommand } from "./commands/table/describe.ts"
-// import { queryTableCommand } from "./commands/table/query.ts"
+import { queryTableCommand } from "./commands/table/query.ts"
 import { scriptTableCommand } from "./commands/table/script.ts"
 import { validateTableCommand } from "./commands/table/validate.ts"
 // import { inferTableSchemaCommand } from "./commands/tableSchema/infer.tsx"
@@ -37,7 +37,7 @@ const tableCommand = new commander.Command()
   .description("Table related commands")
 
   .addCommand(describeTableCommand.name("describe"))
-  // .addCommand(queryTableCommand.name("query"))
+  .addCommand(queryTableCommand.name("query"))
   .addCommand(scriptTableCommand.name("script"))
   .addCommand(validateTableCommand.name("validate"))
 // .addCommand(inferTableSchemaCommand.name("infer-schema"))

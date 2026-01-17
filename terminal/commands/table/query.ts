@@ -1,33 +1,26 @@
-import type { Resource } from "@dpkit/library"
-import {
-  inferSchemaFromTable,
-  loadDialect,
-  loadSchema,
-  loadTable,
-  normalizeTable,
-  queryTable,
-  resolveSchema,
-} from "@dpkit/library"
+import assert from "node:assert"
+import type { Resource } from "@fairspec/library"
+import { loadTable, queryTable } from "@fairspec/library"
 import { Command } from "commander"
-import React from "react"
-import { Table } from "../../components/Table/index.ts"
-import { createDialectFromOptions } from "../../helpers/dialect.ts"
+import { createMergedFormat } from "../../helpers/format.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const queryTableCommand = new Command()
   .configureHelp(helpConfiguration)
-  .description("Explore a table from a local or remote path")
+  .description("Query a table from a local or remote path")
 
   .addArgument(params.positionalTablePath)
+  .addArgument(params.query)
   .addOption(params.fromDataset)
   .addOption(params.fromResource)
-  .addOption(params.query)
   .addOption(params.debug)
+  .addOption(params.json)
 
   .optionsGroup("Format")
+  .addOption(params.format)
   .addOption(params.delimiter)
   .addOption(params.lineTerminator)
   .addOption(params.quoteChar)
@@ -44,7 +37,7 @@ export const queryTableCommand = new Command()
   .addOption(params.tableName)
 
   .optionsGroup("Table Schema")
-  .addOption(params.schema)
+  .addOption(params.tableSchema)
   .addOption(params.columnTypes)
   .addOption(params.missingValues)
   .addOption(params.decimalChar)
@@ -63,60 +56,34 @@ export const queryTableCommand = new Command()
   .addOption(params.monthFirst)
   .addOption(params.keepStrings)
 
-  .action(async (path, options) => {
-    const session = createSession({
-      title: "Explore table",
+  .action(async (path, query, options) => {
+    const session = new Session({
       debug: options.debug,
+      json: options.json,
     })
 
-    const dialect = options.dialect
-      ? await session.task("Loading dialect", loadDialect(options.dialect))
-      : createDialectFromOptions(options)
-
-    let schema = options.schema
-      ? await session.task("Loading schema", loadSchema(options.schema))
-      : undefined
-
     const resource: Resource = path
-      ? { path, dialect, schema }
+      ? { data: path, tableSchema: options.schema }
       : await selectResource(session, options)
 
-    let table = await session.task(
-      "Loading table",
-      loadTable(resource, { denormalized: true }),
-    )
+    resource.format = createMergedFormat(resource, options)
 
-    if (!table) {
-      session.terminate("Could not load table")
-      process.exit(1)
+    let table = await session.task("Loading table", async () => {
+      const table = await loadTable(resource)
+      if (!table) throw new Error("Could not load table")
+      return table
+    })
+
+    if (query) {
+      table = await session.task("Executing query", async () => {
+        assert(query)
+        return queryTable(table, query)
+      })
     }
 
-    if (!schema && resource.schema) {
-      schema = await session.task(
-        "Loading schema",
-        resolveSchema(resource.schema),
-      )
-    }
+    const frame = await session.task("Collecting results", async () => {
+      return await table.collect()
+    })
 
-    if (!schema) {
-      schema = await session.task(
-        "Inferring schema",
-        inferSchemaFromTable(table, options),
-      )
-    }
-
-    table = await session.task(
-      "Normalizing table",
-      normalizeTable(table, schema),
-    )
-
-    if (options.query) {
-      table = queryTable(table, options.query)
-      schema = await inferSchemaFromTable(table)
-    }
-
-    await session.render(
-      table,
-      <Table table={table} schema={schema} withTypes quit={options.quit} />,
-    )
+    session.renderTableResult(frame)
   })

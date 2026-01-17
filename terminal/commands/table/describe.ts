@@ -67,7 +67,7 @@ export const describeTableCommand = new Command()
     resource.format = createMergedFormat(resource, options)
 
     const table = await session.task("Loading table", async () => {
-      const table = await loadTable(resource, { denormalized: true })
+      const table = await loadTable(resource)
       if (!table) throw new Error("Could not load table")
       return table
     })
@@ -77,6 +77,5 @@ export const describeTableCommand = new Command()
       return frame.describe().rename({ describe: "#" })
     })
 
-    // TODO: Visualize as frame
-    session.renderDataResult(stats.toRecords())
+    session.renderTableResult(stats)
   })

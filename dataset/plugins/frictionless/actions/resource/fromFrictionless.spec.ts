@@ -16,7 +16,7 @@ describe("convertResourceFromFrictionless", () => {
     const resource: Resource = {
       data: "data.csv",
       name: "data",
-      format: { type: "csv" },
+      format: { name: "csv" },
       titles: [{ title: "Sample Data" }],
       descriptions: [
         {
@@ -75,7 +75,7 @@ describe("convertResourceFromFrictionless", () => {
     const resource: Resource = {
       data: "file.json",
       name: "file",
-      format: { type: "json" },
+      format: { name: "json" },
       integrity: {
         type: "md5",
         hash: "5d41402abc4b2a76b9719d911017c592",

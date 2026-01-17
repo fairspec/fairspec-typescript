@@ -16,7 +16,7 @@ export function convertResourceToFrictionless(
   }
 
   if (resource.format) {
-    frictionlessResource.format = resource.format.type
+    frictionlessResource.format = resource.format.name
   }
 
   if (resource.integrity) {

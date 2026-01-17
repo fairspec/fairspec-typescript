@@ -1,5 +1,5 @@
 import type { CsvFormat, Resource, TsvFormat } from "@fairspec/metadata"
-import { getDataFirstPath, getFileExtension } from "@fairspec/metadata"
+import { getSupportedFormat } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -15,40 +15,25 @@ import { saveCsvTable } from "./actions/table/save.ts"
 
 export class CsvPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const format = getSupportedFormat(resource)
+    const format = getSupportedFormat(resource, ["csv", "tsv"])
     if (!format) return undefined
 
     return await loadCsvTable({ ...resource, format }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path } = options
+    const resource = { data: options.path, ...options }
 
-    const format = getSupportedFormat({ data: path, ...options })
+    const format = getSupportedFormat(resource, ["csv", "tsv"])
     if (!format) return undefined
 
     return await saveCsvTable(table, { ...options, format })
   }
 
   async inferFormat(resource: Partial<Resource>) {
-    const format = getSupportedFormat(resource)
+    const format = getSupportedFormat(resource, ["csv", "tsv"])
     if (!format) return undefined
 
     return await inferCsvFormat(resource)
   }
-}
-
-function getSupportedFormat(resource: Partial<Resource>) {
-  if (resource.format?.type === "csv" || resource.format?.type === "tsv") {
-    return resource.format
-  }
-
-  const firstPath = getDataFirstPath(resource)
-  if (!firstPath) return undefined
-
-  const extension = getFileExtension(firstPath)
-  const format: CsvFormat | TsvFormat | undefined =
-    extension === "csv" || extension === "tsv" ? { type: extension } : undefined
-
-  return format
 }

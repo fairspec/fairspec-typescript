@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getDataFirstPath, getFileExtension } from "@fairspec/metadata"
+import { getSupportedFormat } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -13,28 +13,18 @@ import { saveOdsTable } from "./actions/table/save.ts"
 
 export class OdsPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const isOds = getIsOds(resource)
-    if (!isOds) return undefined
+    const format = getSupportedFormat(resource, ["ods"])
+    if (!format) return undefined
 
     return await loadOdsTable(resource, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path, format } = options
+    const resource = { data: options.path, ...options }
 
-    const isOds = getIsOds({ data: path, format })
-    if (!isOds) return undefined
+    const format = getSupportedFormat(resource, ["ods"])
+    if (!format) return undefined
 
     return await saveOdsTable(table, options)
   }
-}
-
-function getIsOds(resource: Partial<Resource>) {
-  if (resource.format?.type === "ods") return true
-
-  const firstPath = getDataFirstPath(resource)
-  if (!firstPath) return false
-
-  const extension = getFileExtension(firstPath)
-  return extension === "ods"
 }

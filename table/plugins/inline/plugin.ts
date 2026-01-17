@@ -5,14 +5,9 @@ import { loadInlineTable } from "./actions/table/load.ts"
 
 export class InlinePlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const isInline = getIsInline(resource)
-    if (!isInline) return undefined
+    const records = getDataRecords(resource)
+    if (!records) return undefined
 
     return await loadInlineTable(resource, options)
   }
-}
-
-function getIsInline(resource: Resource) {
-  const records = getDataRecords(resource)
-  return !!records
 }

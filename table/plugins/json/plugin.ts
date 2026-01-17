@@ -1,10 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import {
-  getDataFirstPath,
-  getFileExtension,
-  type JsonFormat,
-  type JsonlFormat,
-} from "@fairspec/metadata"
+import { getSupportedFormat } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -16,39 +11,18 @@ import { saveJsonTable } from "./actions/table/save.ts"
 
 export class JsonPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const format = getSupportedFormat(resource)
+    const format = getSupportedFormat(resource, ["json", "jsonl"])
     if (!format) return undefined
 
     return await loadJsonTable({ ...resource, format }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path } = options
+    const resource = { data: options.path, ...options }
 
-    const format = getSupportedFormat({ data: path, ...options })
+    const format = getSupportedFormat(resource, ["json", "jsonl"])
     if (!format) return undefined
 
     return await saveJsonTable(table, { ...options, format })
   }
-}
-
-function getSupportedFormat(resource: Partial<Resource>) {
-  if (resource.format?.type === "json" || resource.format?.type === "jsonl") {
-    return resource.format
-  }
-
-  const firstPath = getDataFirstPath(resource)
-  if (!firstPath) return undefined
-
-  const extension = getFileExtension(firstPath)
-  let format: JsonFormat | JsonlFormat | undefined =
-    extension === "json" || extension === "jsonl"
-      ? { type: extension }
-      : undefined
-
-  if (extension === "ndjson") {
-    format = { type: "jsonl" }
-  }
-
-  return format
 }

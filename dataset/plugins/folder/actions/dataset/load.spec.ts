@@ -79,7 +79,7 @@ describe("loadDatasetFromFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { type: "csv" },
+          format: { name: "csv" },
         },
       ],
     }
@@ -91,7 +91,7 @@ describe("loadDatasetFromFolder", () => {
     expect.assert(loadedDataset.resources)
     expect(loadedDataset.resources).toHaveLength(1)
     expect(loadedDataset.resources[0]?.name).toBe("test_resource")
-    expect(loadedDataset.resources[0]?.format?.type).toBe("csv")
+    expect(loadedDataset.resources[0]?.format?.name).toBe("csv")
   })
 
   it("should load dataset with tableSchema", async () => {
@@ -131,7 +131,7 @@ describe("loadDatasetFromFolder", () => {
         {
           name: "resource1",
           data: csvPath,
-          format: { type: "csv" },
+          format: { name: "csv" },
         },
         {
           name: "resource2",
@@ -159,7 +159,7 @@ describe("loadDatasetFromFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { type: "csv", delimiter: ";" },
+          format: { name: "csv", delimiter: ";" },
         },
       ],
     }

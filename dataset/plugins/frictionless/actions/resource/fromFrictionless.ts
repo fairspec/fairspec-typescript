@@ -81,38 +81,38 @@ export function convertResourceFromFrictionless(
 function convertFormatString(
   formatString: string,
 ):
-  | { type: "csv" }
-  | { type: "tsv" }
-  | { type: "json" }
-  | { type: "jsonl" }
-  | { type: "xlsx" }
-  | { type: "ods" }
-  | { type: "sqlite" }
-  | { type: "parquet" }
-  | { type: "arrow" }
+  | { name: "csv" }
+  | { name: "tsv" }
+  | { name: "json" }
+  | { name: "jsonl" }
+  | { name: "xlsx" }
+  | { name: "ods" }
+  | { name: "sqlite" }
+  | { name: "parquet" }
+  | { name: "arrow" }
   | undefined {
   const normalized = formatString.toLowerCase()
   switch (normalized) {
     case "csv":
-      return { type: "csv" }
+      return { name: "csv" }
     case "tsv":
-      return { type: "tsv" }
+      return { name: "tsv" }
     case "json":
-      return { type: "json" }
+      return { name: "json" }
     case "jsonl":
     case "ndjson":
-      return { type: "jsonl" }
+      return { name: "jsonl" }
     case "xlsx":
-      return { type: "xlsx" }
+      return { name: "xlsx" }
     case "ods":
-      return { type: "ods" }
+      return { name: "ods" }
     case "sqlite":
     case "sqlite3":
-      return { type: "sqlite" }
+      return { name: "sqlite" }
     case "parquet":
-      return { type: "parquet" }
+      return { name: "parquet" }
     case "arrow":
-      return { type: "arrow" }
+      return { name: "arrow" }
     default:
       return undefined
   }

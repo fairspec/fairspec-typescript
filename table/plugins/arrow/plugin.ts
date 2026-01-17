@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getDataPaths, getFileExtension } from "@fairspec/metadata"
+import { getSupportedFormat } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -11,29 +11,18 @@ import { saveArrowTable } from "./actions/table/save.ts"
 
 export class ArrowPlugin implements TablePlugin {
   async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const isArrow = getIsArrow(resource)
-    if (!isArrow) return undefined
+    const format = getSupportedFormat(resource, ["arrow"])
+    if (!format) return undefined
 
-    return await loadArrowTable(resource, options)
+    return await loadArrowTable({ ...resource, format }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path, format } = options
+    const resource = { data: options.path, ...options }
 
-    const isArrow = getIsArrow({ data: path, format })
-    if (!isArrow) return undefined
+    const format = getSupportedFormat(resource, ["arrow"])
+    if (!format) return undefined
 
-    return await saveArrowTable(table, options)
+    return await saveArrowTable(table, { ...options, format })
   }
-}
-
-function getIsArrow(resource: Partial<Resource>) {
-  if (resource.format?.type === "arrow") return true
-
-  const paths = getDataPaths(resource)
-  const firstPath = paths[0]
-  if (!firstPath) return false
-
-  const extension = getFileExtension(firstPath)
-  return extension === "arrow" || extension === "feather"
 }

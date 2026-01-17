@@ -10,7 +10,7 @@ export function convertResourceToCkan(resource: Resource) {
   }
 
   if (resource.format) {
-    ckanResource.format = resource.format?.type?.toUpperCase()
+    ckanResource.format = resource.format?.name?.toUpperCase()
   }
 
   if (resource.descriptions?.[0]?.description) {

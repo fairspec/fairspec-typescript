@@ -53,7 +53,7 @@
     "TableSchema": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
-        { "$ref": "https://fairspec.org/profiles/latest/schema.json" }
+        { "$ref": "https://fairspec.org/profiles/latest/table.json" }
       ]
     },
     "PathData": {
@@ -158,9 +158,9 @@
     },
     "CsvFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "csv" },
+        "name": { "const": "csv" },
         "delimiter": { "$ref": "#/$defs/Delimiter" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
         "quoteChar": { "$ref": "#/$defs/QuoteChar" },
@@ -174,9 +174,9 @@
     },
     "TsvFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "tsv" },
+        "name": { "const": "tsv" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
         "nullSequence": { "$ref": "#/$defs/NullSequence" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
@@ -188,9 +188,9 @@
     },
     "JsonFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "json" },
+        "name": { "const": "json" },
         "jsonPointer": { "$ref": "#/$defs/JsonPointer" },
         "rowType": { "$ref": "#/$defs/RowType" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
@@ -202,9 +202,9 @@
     },
     "JsonlFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "jsonl" },
+        "name": { "const": "jsonl" },
         "rowType": { "$ref": "#/$defs/RowType" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
@@ -215,9 +215,9 @@
     },
     "XlsxFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "xlxs" },
+        "name": { "const": "xlxs" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
         "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
@@ -229,9 +229,9 @@
     },
     "OdsFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "ods" },
+        "name": { "const": "ods" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
         "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
@@ -243,23 +243,23 @@
     },
     "ParquetFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "parquet" }
+        "name": { "const": "parquet" }
       }
     },
     "ArrowFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "arrow" }
+        "name": { "const": "arrow" }
       }
     },
     "SqliteFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "sqlite" },
+        "name": { "const": "sqlite" },
         "tableName": { "$ref": "#/$defs/TableName" }
       }
     },

@@ -11,7 +11,7 @@ import {
 } from "./common.ts"
 
 export const JsonFormat = BaseFormat.extend({
-  type: z.literal("json"),
+  name: z.literal("json"),
   jsonPointer: JsonPointer.optional(),
   rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),

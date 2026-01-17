@@ -10,7 +10,7 @@ import {
 } from "./common.ts"
 
 export const JsonlFormat = BaseFormat.extend({
-  type: z.literal("jsonl"),
+  name: z.literal("jsonl"),
   rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),

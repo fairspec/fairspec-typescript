@@ -13,7 +13,7 @@ import {
 } from "./common.ts"
 
 export const CsvFormat = BaseFormat.extend({
-  type: z.literal("csv"),
+  name: z.literal("csv"),
   delimiter: Delimiter.optional(),
   lineTerminator: LineTerminator.optional(),
   quoteChar: QuoteChar.optional(),

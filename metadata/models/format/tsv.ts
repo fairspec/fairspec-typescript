@@ -11,7 +11,7 @@ import {
 } from "./common.ts"
 
 export const TsvFormat = BaseFormat.extend({
-  type: z.literal("tsv"),
+  name: z.literal("tsv"),
   lineTerminator: LineTerminator.optional(),
   nullSequence: NullSequence.optional(),
   headerRows: HeaderRows.optional(),

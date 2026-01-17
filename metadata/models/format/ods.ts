@@ -11,7 +11,7 @@ import {
 } from "./common.ts"
 
 export const OdsFormat = BaseFormat.extend({
-  type: z.literal("ods"),
+  name: z.literal("ods"),
   sheetName: SheetName.optional(),
   sheetNumber: SheetNumber.optional(),
   headerRows: HeaderRows.optional(),

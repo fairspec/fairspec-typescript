@@ -3,7 +3,7 @@ import { BaseFormat } from "./base.ts"
 import { TableName } from "./common.ts"
 
 export const SqliteFormat = BaseFormat.extend({
-  type: z.literal("sqlite"),
+  name: z.literal("sqlite"),
   tableName: TableName.optional(),
 })
 

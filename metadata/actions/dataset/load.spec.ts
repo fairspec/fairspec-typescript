@@ -23,7 +23,7 @@ describe("loadDatasetDescriptor", async () => {
     if (resource) {
       expect(resource.name).toBe("name")
       expect(resource.data).toBe(getFixturePath("table.csv"))
-      expect(resource.format).toEqual({ type: "csv" })
+      expect(resource.format).toEqual({ name: "csv" })
       expect(resource.tableSchema).toBe(getFixturePath("schema.json"))
     }
   })

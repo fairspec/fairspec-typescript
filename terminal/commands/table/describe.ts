@@ -1,16 +1,11 @@
-import { loadTable } from "@dpkit/library"
-import { queryTable } from "@dpkit/library"
-import { loadSchema } from "@dpkit/library"
-import type { Resource } from "@dpkit/library"
-import { loadDialect } from "@dpkit/library"
+import type { Resource } from "@fairspec/library"
+import { loadTable } from "@fairspec/library"
 import { Command } from "commander"
-import React from "react"
-import { Datagrid } from "../../components/Datagrid/index.ts"
-import { createDialectFromOptions } from "../../helpers/dialect.ts"
+import { createMergedFormat } from "../../helpers/format.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
-import { createSession, Session } from "../../session.ts"
+import { Session } from "../../session.ts"
 
 export const describeTableCommand = new Command("describe")
   .configureHelp(helpConfiguration)
@@ -19,10 +14,11 @@ export const describeTableCommand = new Command("describe")
   .addArgument(params.positionalTablePath)
   .addOption(params.fromDataset)
   .addOption(params.fromResource)
-  .addOption(params.json)
   .addOption(params.debug)
+  .addOption(params.json)
 
   .optionsGroup("Format")
+  .addOption(params.format)
   .addOption(params.delimiter)
   .addOption(params.lineTerminator)
   .addOption(params.quoteChar)
@@ -39,7 +35,7 @@ export const describeTableCommand = new Command("describe")
   .addOption(params.tableName)
 
   .optionsGroup("Table Schema")
-  .addOption(params.schema)
+  .addOption(params.tableSchema)
   .addOption(params.columnTypes)
   .addOption(params.missingValues)
   .addOption(params.decimalChar)
@@ -59,38 +55,27 @@ export const describeTableCommand = new Command("describe")
   .addOption(params.keepStrings)
 
   .action(async (path, options) => {
-    const session = createSession({
-      title: "Describe table",
-      json: options.json,
+    const session = new Session({
       debug: options.debug,
+      json: options.json,
     })
 
-    const dialect = options.dialect
-      ? await session.task("Loading dialect", loadDialect(options.dialect))
-      : createDialectFromOptions(options)
-
-    const schema = options.schema
-      ? await session.task("Loading schema", loadSchema(options.schema))
-      : undefined
-
     const resource: Resource = path
-      ? { path, dialect, schema }
+      ? { data: path, tableSchema: options.schema }
       : await selectResource(session, options)
 
-    let table = await session.task(
-      "Loading table",
-      loadTable(resource, options),
-    )
+    resource.format = createMergedFormat(resource, options)
 
-    if (!table) {
-      session.terminate("Could not load table")
-      process.exit(1)
-    }
+    const table = await session.task("Loading table", async () => {
+      const table = await loadTable(resource, { denormalized: true })
+      if (!table) throw new Error("Could not load table")
+      return table
+    })
 
-    const frame = await session.task("Calculating stats", table.collect())
+    const stats = await session.task("Calculating stats", async () => {
+      const frame = await table.collect()
+      return frame.describe().rename({ describe: "#" })
+    })
 
-    const stats = frame.describe().rename({ describe: "#" })
-    const records = stats.toRecords()
-
-    session.render(records, <Datagrid records={records} />)
+    session.renderDataResult(stats.toRecords())
   })

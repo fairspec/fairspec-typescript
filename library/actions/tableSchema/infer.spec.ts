@@ -6,7 +6,7 @@ import { inferTableSchema } from "./infer.ts"
 describe("inferTableSchema", () => {
   it("should infer schema from CSV file", async () => {
     const path = await writeTempFile("id,name,age\n1,alice,25\n2,bob,30")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
     expect(tableSchema).toEqual({
@@ -20,7 +20,7 @@ describe("inferTableSchema", () => {
 
   it("should infer field types correctly", async () => {
     const path = await writeTempFile("id,name,score\n1,alice,95.5\n2,bob,87.3")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
     expect(tableSchema).toEqual({
@@ -53,7 +53,7 @@ describe("inferTableSchema", () => {
     const path = await writeTempFile("id|name|value\n1|alice|100\n2|bob|200")
     const resource: Resource = {
       data: path,
-      format: { type: "csv", delimiter: "|" },
+      format: { name: "csv", delimiter: "|" },
     }
 
     const tableSchema = await inferTableSchema(resource)
@@ -68,7 +68,7 @@ describe("inferTableSchema", () => {
 
   it("should handle boolean fields", async () => {
     const path = await writeTempFile("id,active\n1,true\n2,false")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
     expect(tableSchema).toEqual({
@@ -81,7 +81,7 @@ describe("inferTableSchema", () => {
 
   it("should handle date fields", async () => {
     const path = await writeTempFile("id,created\n1,2024-01-01\n2,2024-01-02")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
     expect(tableSchema).toEqual({
@@ -94,7 +94,7 @@ describe("inferTableSchema", () => {
 
   it.skip("should handle mixed numeric types", async () => {
     const path = await writeTempFile("id,value\n1,100\n2,200.5")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
     expect(tableSchema).toEqual({
@@ -107,7 +107,7 @@ describe("inferTableSchema", () => {
 
   it("should infer schema from single row", async () => {
     const path = await writeTempFile("id,name\n1,alice")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
     expect(tableSchema).toEqual({
@@ -122,7 +122,7 @@ describe("inferTableSchema", () => {
     const path = await writeTempFile(
       "id,name,email\n1,alice,\n2,bob,bob@example.com",
     )
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
     expect(tableSchema).toEqual({
@@ -138,7 +138,7 @@ describe("inferTableSchema", () => {
     const path = await writeTempFile(
       "id,name\n1,alice\n2,bob\n3,charlie\n4,david\n5,eve",
     )
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource, { sampleRows: 2 })
     expect(tableSchema).toEqual({
@@ -151,7 +151,7 @@ describe("inferTableSchema", () => {
 
   it.skip("should handle resources with headers only", async () => {
     const path = await writeTempFile("id,name,age")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
     expect(tableSchema).toEqual({

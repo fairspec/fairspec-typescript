@@ -8,12 +8,12 @@ import { saveTable } from "./save.ts"
 describe("saveTable", () => {
   it("should save table to CSV file", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
     const table = await loadTable(resource)
     const outputPath = getTempFilePath()
 
     expect.assert(table)
-    await saveTable(table, { path: outputPath, format: { type: "csv" } })
+    await saveTable(table, { path: outputPath, format: { name: "csv" } })
 
     const content = await readFile(outputPath, "utf-8")
     expect(content).toBe("id,name\n1,alice\n2,bob\n")
@@ -30,8 +30,8 @@ describe("saveTable", () => {
     const outputPath = getTempFilePath()
 
     assert(table)
-    await saveTable(table, { path: outputPath, format: { type: "csv" } })
-    const reloaded: Resource = { data: outputPath, format: { type: "csv" } }
+    await saveTable(table, { path: outputPath, format: { name: "csv" } })
+    const reloaded: Resource = { data: outputPath, format: { name: "csv" } }
     const reloadedTable = await loadTable(reloaded)
     const frame = await reloadedTable?.collect()
 
@@ -43,14 +43,14 @@ describe("saveTable", () => {
 
   it("should save table with custom delimiter", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
     const table = await loadTable(resource)
     const outputPath = getTempFilePath()
 
     expect.assert(table)
     await saveTable(table, {
       path: outputPath,
-      format: { type: "csv", delimiter: "|" },
+      format: { name: "csv", delimiter: "|" },
     })
 
     const content = await readFile(outputPath, "utf-8")
@@ -68,7 +68,7 @@ describe("saveTable", () => {
     const outputPath = getTempFilePath({ format: "json" })
 
     expect.assert(table)
-    await saveTable(table, { path: outputPath, format: { type: "json" } })
+    await saveTable(table, { path: outputPath, format: { name: "json" } })
 
     const content = await readFile(outputPath, "utf-8")
     expect(JSON.parse(content)).toEqual([

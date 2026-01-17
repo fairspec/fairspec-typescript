@@ -35,7 +35,10 @@ describe("ArrowPlugin", () => {
 
       const result = await plugin.loadTable(resource)
 
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, undefined)
+      expect(mockLoadArrowTable).toHaveBeenCalledWith(
+        { ...resource, format: { name: "arrow" } },
+        undefined,
+      )
       expect(result).toEqual(mockTable)
     })
 
@@ -48,7 +51,10 @@ describe("ArrowPlugin", () => {
 
       const result = await plugin.loadTable(resource)
 
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, undefined)
+      expect(mockLoadArrowTable).toHaveBeenCalledWith(
+        { ...resource, format: { name: "arrow" } },
+        undefined,
+      )
       expect(result).toEqual(mockTable)
     })
 
@@ -87,7 +93,10 @@ describe("ArrowPlugin", () => {
 
       await plugin.loadTable(resource, options)
 
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, options)
+      expect(mockLoadArrowTable).toHaveBeenCalledWith(
+        { ...resource, format: { name: "arrow" } },
+        options,
+      )
     })
 
     it("should handle paths with directories", async () => {
@@ -99,7 +108,10 @@ describe("ArrowPlugin", () => {
 
       await plugin.loadTable(resource)
 
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, undefined)
+      expect(mockLoadArrowTable).toHaveBeenCalledWith(
+        { ...resource, format: { name: "arrow" } },
+        undefined,
+      )
     })
 
     it("should return undefined for parquet files", async () => {
@@ -122,7 +134,10 @@ describe("ArrowPlugin", () => {
 
       const result = await plugin.saveTable(table, options)
 
-      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, options)
+      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
+        ...options,
+        format: { name: "arrow" },
+      })
       expect(result).toBe("output.arrow")
     })
 
@@ -133,7 +148,10 @@ describe("ArrowPlugin", () => {
 
       const result = await plugin.saveTable(table, options)
 
-      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, options)
+      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
+        ...options,
+        format: { name: "arrow" },
+      })
       expect(result).toBe("output.feather")
     })
 
@@ -165,7 +183,10 @@ describe("ArrowPlugin", () => {
 
       await plugin.saveTable(table, options)
 
-      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, options)
+      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
+        ...options,
+        format: { name: "arrow" },
+      })
     })
 
     it("should return undefined for files without extension", async () => {

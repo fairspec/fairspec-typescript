@@ -1,4 +1,3 @@
-import assert from "node:assert"
 import { writeFile } from "node:fs/promises"
 import { renderTableSchemaAs } from "@fairspec/library"
 import { resolveTableSchema } from "@fairspec/metadata"

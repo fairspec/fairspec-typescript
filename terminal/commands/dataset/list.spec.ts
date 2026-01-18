@@ -38,7 +38,13 @@ describe("dataset list", () => {
       })
 
     try {
-      await command.parseAsync(["node", "test", "list", descriptorPath, "--json"])
+      await command.parseAsync([
+        "node",
+        "test",
+        "list",
+        descriptorPath,
+        "--json",
+      ])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -75,7 +81,13 @@ describe("dataset list", () => {
       })
 
     try {
-      await command.parseAsync(["node", "test", "list", descriptorPath, "--json"])
+      await command.parseAsync([
+        "node",
+        "test",
+        "list",
+        descriptorPath,
+        "--json",
+      ])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -109,7 +121,13 @@ describe("dataset list", () => {
       })
 
     try {
-      await command.parseAsync(["node", "test", "list", descriptorPath, "--json"])
+      await command.parseAsync([
+        "node",
+        "test",
+        "list",
+        descriptorPath,
+        "--json",
+      ])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)

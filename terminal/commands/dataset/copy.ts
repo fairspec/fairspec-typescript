@@ -29,7 +29,7 @@ export const copyDatasetCommand = new Command()
     })
 
     session.renderTextResult(
-      "success",
       `Copied dataset from ${pc.bold(path)} to ${pc.bold(options.toPath)}`,
+      { status: "success" },
     )
   })

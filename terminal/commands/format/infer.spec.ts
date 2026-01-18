@@ -24,10 +24,12 @@ describe("format infer", () => {
       text.push(msg)
     })
 
-    const command = new Command().addCommand(inferFormatCommand).configureOutput({
-      writeOut: () => {},
-      writeErr: () => {},
-    })
+    const command = new Command()
+      .addCommand(inferFormatCommand)
+      .configureOutput({
+        writeOut: () => {},
+        writeErr: () => {},
+      })
 
     try {
       await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
@@ -50,10 +52,12 @@ describe("format infer", () => {
       text.push(msg)
     })
 
-    const command = new Command().addCommand(inferFormatCommand).configureOutput({
-      writeOut: () => {},
-      writeErr: () => {},
-    })
+    const command = new Command()
+      .addCommand(inferFormatCommand)
+      .configureOutput({
+        writeOut: () => {},
+        writeErr: () => {},
+      })
 
     try {
       await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
@@ -67,19 +71,24 @@ describe("format infer", () => {
   })
 
   it("should infer TSV format", async () => {
-    const tsvPath = await writeTempFile("id\tname\tage\n1\talice\t25\n2\tbob\t30", {
-      format: "tsv",
-    })
+    const tsvPath = await writeTempFile(
+      "id\tname\tage\n1\talice\t25\n2\tbob\t30",
+      {
+        format: "tsv",
+      },
+    )
 
     const text: string[] = []
     vi.spyOn(console, "log").mockImplementation(msg => {
       text.push(msg)
     })
 
-    const command = new Command().addCommand(inferFormatCommand).configureOutput({
-      writeOut: () => {},
-      writeErr: () => {},
-    })
+    const command = new Command()
+      .addCommand(inferFormatCommand)
+      .configureOutput({
+        writeOut: () => {},
+        writeErr: () => {},
+      })
 
     try {
       await command.parseAsync(["node", "test", "infer", tsvPath, "--json"])

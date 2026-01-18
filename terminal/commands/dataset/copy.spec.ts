@@ -1,11 +1,12 @@
-import { writeTempFile } from "@fairspec/dataset"
-import { Command } from "commander"
 import { existsSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
+import { writeTempFile } from "@fairspec/dataset"
+import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { copyDatasetCommand } from "./copy.ts"
 
+// TODO: recover
 describe.skip("dataset copy", () => {
   beforeEach(() => {
     vi.spyOn(process, "exit").mockImplementation((() => {}) as () => never)
@@ -17,7 +18,6 @@ describe.skip("dataset copy", () => {
     vi.restoreAllMocks()
   })
 
-  // Skipped: saveDataset requires plugin configuration for local directories
   it("should copy a dataset with a single resource", async () => {
     const csvPath = await writeTempFile("id,name\n1,alice\n2,bob", {
       format: "csv",
@@ -28,7 +28,10 @@ describe.skip("dataset copy", () => {
     const descriptorPath = await writeTempFile(JSON.stringify(descriptor), {
       format: "json",
     })
-    const targetPath = join(tmpdir(), `dataset-copy-${Math.random().toString(36).slice(2)}`)
+    const targetPath = join(
+      tmpdir(),
+      `dataset-copy-${Math.random().toString(36).slice(2)}`,
+    )
 
     const text: string[] = []
     vi.spyOn(console, "log").mockImplementation(msg => {
@@ -70,7 +73,10 @@ describe.skip("dataset copy", () => {
     const descriptorPath = await writeTempFile(JSON.stringify(descriptor), {
       format: "json",
     })
-    const targetPath = join(tmpdir(), `dataset-copy-${Math.random().toString(36).slice(2)}`)
+    const targetPath = join(
+      tmpdir(),
+      `dataset-copy-${Math.random().toString(36).slice(2)}`,
+    )
 
     const text: string[] = []
     vi.spyOn(console, "log").mockImplementation(msg => {
@@ -114,7 +120,10 @@ describe.skip("dataset copy", () => {
     const descriptorPath = await writeTempFile(JSON.stringify(descriptor), {
       format: "json",
     })
-    const targetPath = join(tmpdir(), `dataset-copy-${Math.random().toString(36).slice(2)}`)
+    const targetPath = join(
+      tmpdir(),
+      `dataset-copy-${Math.random().toString(36).slice(2)}`,
+    )
 
     const text: string[] = []
     vi.spyOn(console, "log").mockImplementation(msg => {
@@ -140,6 +149,6 @@ describe.skip("dataset copy", () => {
       ])
     } catch {}
 
-    expect(existsSync(`${targetPath}/datapackage.json`)).toBe(true)
+    expect(existsSync(`${targetPath}/dataset.json`)).toBe(true)
   })
 })

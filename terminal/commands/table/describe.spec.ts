@@ -66,7 +66,8 @@ describe("table describe", () => {
   })
 
   it("should describe a TSV table", async () => {
-    const tsvContent = "id\tname\tvalue\n1\talice\t100\n2\tbob\t200\n3\tcarol\t300"
+    const tsvContent =
+      "id\tname\tvalue\n1\talice\t100\n2\tbob\t200\n3\tcarol\t300"
     const tsvPath = await writeTempFile(tsvContent, { format: "tsv" })
 
     const text: string[] = []

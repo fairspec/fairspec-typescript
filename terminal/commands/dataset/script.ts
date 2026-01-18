@@ -8,8 +8,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const scriptDatasetCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("script")
   .description("Script a dataset descriptor")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalDescriptorPath)
   .addOption(params.debug)

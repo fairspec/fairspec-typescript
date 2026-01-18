@@ -47,7 +47,8 @@ describe("table query", () => {
   })
 
   it("should query table with column selection", async () => {
-    const csvContent = "id,name,age,city\n1,alice,25,NYC\n2,bob,30,LA\n3,carol,28,SF"
+    const csvContent =
+      "id,name,age,city\n1,alice,25,NYC\n2,bob,30,LA\n3,carol,28,SF"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
 
     const text: string[] = []

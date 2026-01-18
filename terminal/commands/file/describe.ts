@@ -6,8 +6,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const describeFileCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("describe")
   .description("Show stats for a local or remote file")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalFilePath)
   .addOption(params.fromDataset)

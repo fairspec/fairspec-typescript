@@ -10,11 +10,10 @@ import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const scriptTableCommand = new Command("script")
+export const scriptTableCommand = new Command()
+  .name("script")
+  .description("Start a scripting session for a table")
   .configureHelp(helpConfiguration)
-  .description(
-    "Start a scripting session for a table from a local or remote path",
-  )
 
   .addArgument(params.positionalTablePath)
   .addOption(params.fromDataset)

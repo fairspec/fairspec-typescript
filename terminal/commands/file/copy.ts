@@ -7,8 +7,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const copyFileCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("copy")
   .description("Copy a local or remote file to a local path")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalFilePath)
   .addOption(params.toPathRequired)

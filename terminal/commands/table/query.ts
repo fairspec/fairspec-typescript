@@ -8,9 +8,10 @@ import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const queryTableCommand = new Command("query")
-  .configureHelp(helpConfiguration)
+export const queryTableCommand = new Command()
+  .name("query")
   .description("Query a table from a local or remote path")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalTablePath)
   .addArgument(params.query)

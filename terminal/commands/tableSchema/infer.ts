@@ -7,9 +7,10 @@ import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const inferTableSchemaCommand = new Command("infer")
-  .configureHelp(helpConfiguration)
+export const inferTableSchemaCommand = new Command()
+  .name("infer")
   .description("Infer a table schema from a table")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalTablePath)
   .addOption(params.fromDataset)

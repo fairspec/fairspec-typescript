@@ -5,8 +5,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const validateFileCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("validate")
   .description("Validate a file from a local or remote path")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.requiredPositionalFilePath)
   .addOption(params.hash)

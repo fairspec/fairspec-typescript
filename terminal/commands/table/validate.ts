@@ -14,8 +14,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const validateTableCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("validate")
   .description("Validate a table from a local or remote path")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalTablePath)
   .addOption(params.fromDataset)

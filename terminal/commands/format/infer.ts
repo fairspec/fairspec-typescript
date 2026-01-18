@@ -5,9 +5,10 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const inferFormatCommand = new Command("infer")
-  .configureHelp(helpConfiguration)
+export const inferFormatCommand = new Command()
+  .name("infer")
   .description("Infer the format of a file")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalFilePath)
   .addOption(params.fromDataset)

@@ -10,7 +10,7 @@ const toFormat = new Option("--to-format <format>", "target schema format")
   .choices(["markdown", "html"])
   .makeOptionMandatory()
 
-export const renderTableSchemaCommand = new Command()
+export const renderTableSchemaCommand = new Command("render")
   .configureHelp(helpConfiguration)
   .description("Render a Table Schema as HTML or Markdown")
 

@@ -4,9 +4,10 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const inferDataSchemaCommand = new Command("infer")
-  .configureHelp(helpConfiguration)
+export const inferDataSchemaCommand = new Command()
+  .name("infer")
   .description("Infer a Data Schema")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.requiredPositionalFilePath)
   .addOption(params.silent)

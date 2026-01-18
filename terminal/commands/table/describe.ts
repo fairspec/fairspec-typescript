@@ -7,7 +7,7 @@ import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const describeTableCommand = new Command()
+export const describeTableCommand = new Command("describe")
   .configureHelp(helpConfiguration)
   .description("Show stats for a table from a local or remote path")
 

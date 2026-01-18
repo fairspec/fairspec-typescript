@@ -6,8 +6,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const validateDataSchemaCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("validate")
   .description("Validate a Data Schema")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.requiredPositionalFilePath)
   .addOption(params.silent)

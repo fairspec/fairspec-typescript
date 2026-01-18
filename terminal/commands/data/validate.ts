@@ -5,8 +5,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const validateDataCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("validate")
   .description("Validate a JSON Data from a local or remote path")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.requiredPositionalFilePath)
   .addOption(params.dataSchema)

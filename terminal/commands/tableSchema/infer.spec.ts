@@ -15,10 +15,9 @@ describe("schema infer", () => {
   })
 
   it("should infer schema from csv table", async () => {
-    const csvPath = await writeTempFile(
-      "id,name,age\n1,alice,25\n2,bob,30",
-      { format: "csv" },
-    )
+    const csvPath = await writeTempFile("id,name,age\n1,alice,25\n2,bob,30", {
+      format: "csv",
+    })
 
     const text: string[] = []
     vi.spyOn(console, "log").mockImplementation(msg => {
@@ -33,13 +32,7 @@ describe("schema infer", () => {
       })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "infer",
-        csvPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -69,13 +62,7 @@ describe("schema infer", () => {
       })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "infer",
-        csvPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -105,13 +92,7 @@ describe("schema infer", () => {
       })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "infer",
-        csvPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -122,4 +103,3 @@ describe("schema infer", () => {
     expect(data.properties.count.type).toBe("integer")
   })
 })
-

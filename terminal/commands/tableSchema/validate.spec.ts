@@ -1,5 +1,5 @@
-import type { TableSchema } from "@fairspec/library"
 import { writeTempFile } from "@fairspec/dataset"
+import type { TableSchema } from "@fairspec/library"
 import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { validateTableSchemaCommand } from "./validate.ts"
@@ -37,7 +37,13 @@ describe("schema validate", () => {
       })
 
     try {
-      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
+      await command.parseAsync([
+        "node",
+        "test",
+        "validate",
+        schemaPath,
+        "--json",
+      ])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -67,7 +73,13 @@ describe("schema validate", () => {
       })
 
     try {
-      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
+      await command.parseAsync([
+        "node",
+        "test",
+        "validate",
+        schemaPath,
+        "--json",
+      ])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -98,7 +110,13 @@ describe("schema validate", () => {
       })
 
     try {
-      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
+      await command.parseAsync([
+        "node",
+        "test",
+        "validate",
+        schemaPath,
+        "--json",
+      ])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)

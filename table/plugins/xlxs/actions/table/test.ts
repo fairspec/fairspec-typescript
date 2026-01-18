@@ -14,7 +14,11 @@ export async function readTestData(path: string) {
 export async function writeTestData(
   path: string,
   rows: unknown[][],
-  options?: { sheetNumber?: number; sheetName?: string; format?: "xlsx" | "ods" },
+  options?: {
+    sheetNumber?: number
+    sheetName?: string
+    format?: "xlsx" | "ods"
+  },
 ) {
   const book = utils.book_new()
   const sheet = utils.aoa_to_sheet(rows)

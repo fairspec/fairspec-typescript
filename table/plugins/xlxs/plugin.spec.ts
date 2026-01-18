@@ -199,7 +199,10 @@ describe("XlsxPlugin", () => {
 
       it("should handle explicit format specification", async () => {
         const table = pl.DataFrame().lazy()
-        const options = { path: "output.txt", format: { name: "xlsx" as const } }
+        const options = {
+          path: "output.txt",
+          format: { name: "xlsx" as const },
+        }
         mockSaveXlsxTable.mockResolvedValue("output.txt")
 
         const result = await plugin.saveTable(table, options)

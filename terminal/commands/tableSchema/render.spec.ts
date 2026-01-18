@@ -1,13 +1,22 @@
-import { writeTempFile } from "@fairspec/dataset"
+import { existsSync } from "node:fs"
+import { readFile } from "node:fs/promises"
+import { getTempFilePath, writeTempFile } from "@fairspec/dataset"
 import { Command } from "commander"
-import { describe, expect, it, vi } from "vitest"
-import { useRecording } from "vitest-polly"
-import { convertSchemaCommand } from "./convert.tsx"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { renderTableSchemaCommand } from "./render.ts"
 
-useRecording()
+describe("schema render", () => {
+  beforeEach(() => {
+    vi.spyOn(process, "exit").mockImplementation((() => {}) as () => never)
+    vi.spyOn(process.stdout, "write").mockImplementation(() => true)
+    vi.spyOn(process.stderr, "write").mockImplementation(() => true)
+  })
 
-describe("schema convert", () => {
-  it("should convert schema to jsonschema", async () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it("should render table schema as markdown", async () => {
     const schemaContent = JSON.stringify({
       fields: [
         { name: "id", type: "integer" },
@@ -17,21 +26,12 @@ describe("schema convert", () => {
     const schemaPath = await writeTempFile(schemaContent)
 
     const outputs: string[] = []
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
+    vi.spyOn(console, "log").mockImplementation(msg => {
       outputs.push(msg)
     })
-    const exitSpy = vi
-      .spyOn(process, "exit")
-      .mockImplementation((() => {}) as () => never)
-    const stdoutSpy = vi
-      .spyOn(process.stdout, "write")
-      .mockImplementation(() => true)
-    const stderrSpy = vi
-      .spyOn(process.stderr, "write")
-      .mockImplementation(() => true)
 
     const command = new Command()
-      .addCommand(convertSchemaCommand)
+      .addCommand(renderTableSchemaCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -41,125 +41,94 @@ describe("schema convert", () => {
       await command.parseAsync([
         "node",
         "test",
-        "convert",
-        schemaPath,
-        "--to-format",
-        "jsonschema",
-        "--json",
-      ])
-    } catch (error) {}
-
-    consoleSpy.mockRestore()
-    exitSpy.mockRestore()
-    stdoutSpy.mockRestore()
-    stderrSpy.mockRestore()
-
-    expect(outputs.length).toBeGreaterThan(0)
-    const result = JSON.parse(outputs?.[0] ?? "")
-    expect(result).toBeDefined()
-  })
-
-  it("should convert jsonschema to table schema", async () => {
-    const jsonSchemaContent = JSON.stringify({
-      type: "object",
-      properties: {
-        id: { type: "integer" },
-        name: { type: "string" },
-      },
-    })
-    const schemaPath = await writeTempFile(jsonSchemaContent)
-
-    const outputs: string[] = []
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
-      outputs.push(msg)
-    })
-    const exitSpy = vi
-      .spyOn(process, "exit")
-      .mockImplementation((() => {}) as () => never)
-    const stdoutSpy = vi
-      .spyOn(process.stdout, "write")
-      .mockImplementation(() => true)
-    const stderrSpy = vi
-      .spyOn(process.stderr, "write")
-      .mockImplementation(() => true)
-
-    const command = new Command()
-      .addCommand(convertSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
-
-    try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "convert",
-        schemaPath,
-        "--format",
-        "jsonschema",
-        "--json",
-      ])
-    } catch (error) {}
-
-    consoleSpy.mockRestore()
-    exitSpy.mockRestore()
-    stdoutSpy.mockRestore()
-    stderrSpy.mockRestore()
-
-    expect(outputs.length).toBeGreaterThan(0)
-    const result = JSON.parse(outputs?.[0] ?? "")
-    expect(result).toBeDefined()
-  })
-
-  it("should convert schema to markdown", async () => {
-    const schemaContent = JSON.stringify({
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
-    })
-    const schemaPath = await writeTempFile(schemaContent)
-
-    const outputs: string[] = []
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
-      outputs.push(msg)
-    })
-    const exitSpy = vi
-      .spyOn(process, "exit")
-      .mockImplementation((() => {}) as () => never)
-    const stdoutSpy = vi
-      .spyOn(process.stdout, "write")
-      .mockImplementation(() => true)
-    const stderrSpy = vi
-      .spyOn(process.stderr, "write")
-      .mockImplementation(() => true)
-
-    const command = new Command()
-      .addCommand(convertSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
-
-    try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "convert",
+        "render",
         schemaPath,
         "--to-format",
         "markdown",
+        "--json",
       ])
-    } catch (error) {}
-
-    consoleSpy.mockRestore()
-    exitSpy.mockRestore()
-    stdoutSpy.mockRestore()
-    stderrSpy.mockRestore()
+    } catch {}
 
     expect(outputs.length).toBeGreaterThan(0)
     expect(outputs[0]).toContain("id")
     expect(outputs[0]).toContain("name")
+  })
+
+  it("should render table schema as HTML and save to file", async () => {
+    const schemaContent = JSON.stringify({
+      fields: [
+        { name: "id", type: "integer" },
+        { name: "email", type: "string", format: "email" },
+      ],
+    })
+    const schemaPath = await writeTempFile(schemaContent)
+    const outputPath = getTempFilePath()
+
+    vi.spyOn(console, "log").mockImplementation(() => {})
+
+    const command = new Command()
+      .addCommand(renderTableSchemaCommand)
+      .configureOutput({
+        writeOut: () => {},
+        writeErr: () => {},
+      })
+
+    try {
+      await command.parseAsync([
+        "node",
+        "test",
+        "render",
+        schemaPath,
+        "--to-format",
+        "html",
+        "--to-path",
+        outputPath,
+        "--json",
+      ])
+    } catch {}
+
+    expect(existsSync(outputPath)).toBe(true)
+    const content = await readFile(outputPath, "utf-8")
+    expect(content).toContain("id")
+    expect(content).toContain("email")
+    expect(console.log).not.toHaveBeenCalled()
+  })
+
+  it("should render table schema as HTML to console", async () => {
+    const schemaContent = JSON.stringify({
+      fields: [
+        { name: "age", type: "integer" },
+        { name: "active", type: "boolean" },
+      ],
+    })
+    const schemaPath = await writeTempFile(schemaContent)
+
+    const outputs: string[] = []
+    vi.spyOn(console, "log").mockImplementation(msg => {
+      outputs.push(msg)
+    })
+
+    const command = new Command()
+      .addCommand(renderTableSchemaCommand)
+      .configureOutput({
+        writeOut: () => {},
+        writeErr: () => {},
+      })
+
+    try {
+      await command.parseAsync([
+        "node",
+        "test",
+        "render",
+        schemaPath,
+        "--to-format",
+        "html",
+        "--json",
+      ])
+    } catch {}
+
+    expect(outputs.length).toBeGreaterThan(0)
+    expect(outputs[0]).toContain("age")
+    expect(outputs[0]).toContain("active")
   })
 })

@@ -1,10 +1,12 @@
 import { setTimeout } from "node:timers/promises"
 import util from "node:util"
-import type { Frame } from "@fairspec/library"
+import type { Frame, Report } from "@fairspec/library"
+import exitHook from "exit-hook"
 import { colorize } from "json-colorizer"
 import pc from "picocolors"
 import type { TaskInnerAPI } from "tasuku"
 import tasuku from "tasuku"
+import { renderError } from "./helpers/error.ts"
 
 type TaskApi = Omit<TaskInnerAPI, "task">
 type Status = "success" | "warning" | "error"
@@ -24,6 +26,14 @@ export class Session implements SessionOptions {
     this.silent = options.silent
     this.debug = options.debug
     this.json = options.json
+
+    // Have empty line before/after output
+    if (!this.silent && !this.json) {
+      console.log()
+      exitHook(() => {
+        console.log()
+      })
+    }
   }
 
   renderText(text: string, options?: { status?: Status }) {
@@ -71,7 +81,7 @@ export class Session implements SessionOptions {
     console.log(colorize(data))
   }
 
-  renderTableResult(frame: Frame) {
+  renderFrameResult(frame: Frame) {
     if (this.silent) {
       return
     }
@@ -82,6 +92,26 @@ export class Session implements SessionOptions {
     }
 
     console.log(frame.toString())
+  }
+
+  renderReportResult(report: Report) {
+    if (this.silent) {
+      return
+    }
+
+    if (this.json) {
+      console.log(JSON.stringify(report, null, 2))
+      return
+    }
+
+    if (report.valid) {
+      this.renderText("Validation passed", { status: "success" })
+      return
+    }
+
+    for (const error of report.errors) {
+      this.renderText(renderError(error), { status: "error" })
+    }
   }
 
   async task<T>(title: string, func: (api: TaskApi) => Promise<T>) {
@@ -130,6 +160,6 @@ function renderStatus(status: Status) {
     case "warning":
       return pc.yellow("\u26A0")
     case "error":
-      return pc.red("\u00D7")
+      return pc.red("\u2716")
   }
 }

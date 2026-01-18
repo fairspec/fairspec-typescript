@@ -61,8 +61,6 @@ export const validateTableCommand = new Command()
   .addOption(params.monthFirst)
   .addOption(params.keepStrings)
 
-  // TODO: Add schema options
-
   .action(async (path, options) => {
     const session = new Session({
       debug: options.debug,
@@ -96,5 +94,5 @@ export const validateTableCommand = new Command()
       return createReport(errors)
     })
 
-    session.renderDataResult(report)
+    session.renderReportResult(report)
   })

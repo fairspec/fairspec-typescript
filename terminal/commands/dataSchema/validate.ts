@@ -1,6 +1,5 @@
 import { validateDataSchema } from "@fairspec/library"
 import { Command } from "commander"
-import { omit } from "es-toolkit"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
@@ -23,8 +22,9 @@ export const validateDataSchemaCommand = new Command()
     })
 
     const report = await session.task("Validating data", async () => {
-      return await validateDataSchema(path)
+      const { valid, errors } = await validateDataSchema(path)
+      return { valid, errors }
     })
 
-    session.renderDataResult(omit(report, ["dataSchema"]))
+    session.renderReportResult(report)
   })

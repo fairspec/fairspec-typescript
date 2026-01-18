@@ -32,5 +32,5 @@ export const validateFileCommand = new Command()
       })
     })
 
-    session.renderDataResult(report)
+    session.renderReportResult(report)
   })

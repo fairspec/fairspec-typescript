@@ -78,5 +78,5 @@ export const describeTableCommand = new Command()
       return frame.describe().rename({ describe: "#" })
     })
 
-    session.renderTableResult(stats)
+    session.renderFrameResult(stats)
   })

@@ -1,6 +1,5 @@
 import { validateTableSchema } from "@fairspec/library"
 import { Command } from "commander"
-import { omit } from "es-toolkit"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
@@ -23,8 +22,9 @@ export const validateTableSchemaCommand = new Command()
     })
 
     const report = await session.task("Validating table schema", async () => {
-      return await validateTableSchema(path)
+      const { valid, errors } = await validateTableSchema(path)
+      return { valid, errors }
     })
 
-    session.renderDataResult(omit(report, ["tableSchema"]))
+    session.renderReportResult(report)
   })

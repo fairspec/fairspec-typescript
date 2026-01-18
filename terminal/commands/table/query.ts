@@ -86,5 +86,5 @@ export const queryTableCommand = new Command()
       return await table.collect()
     })
 
-    session.renderTableResult(frame)
+    session.renderFrameResult(frame)
   })

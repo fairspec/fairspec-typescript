@@ -38,7 +38,7 @@
     "@commander-js/extra-typings": "^14.0.0",
     "@fairspec/library": "workspace:*",
     "commander": "^14.0.0",
-    "es-toolkit": "^1.44.0",
+    "exit-hook": "^4.0.0",
     "json-colorizer": "^3.0.1",
     "picocolors": "^1.1.1",
     "tasuku": "^2.0.5"

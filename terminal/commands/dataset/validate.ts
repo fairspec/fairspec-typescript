@@ -23,7 +23,5 @@ export const validateDatasetCommand = new Command()
       return await validateDataset(path)
     })
 
-    // TODO: Support error rendering
-
-    session.renderDataResult(report)
+    session.renderReportResult(report)
   })

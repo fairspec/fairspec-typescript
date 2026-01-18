@@ -37,5 +37,5 @@ export const validateDataCommand = new Command()
       })
     })
 
-    session.renderDataResult(report)
+    session.renderReportResult(report)
   })

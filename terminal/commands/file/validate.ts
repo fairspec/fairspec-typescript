@@ -22,14 +22,14 @@ export const validateFileCommand = new Command()
       json: options.json,
     })
 
-    await session.task("Validating file", async () => {
-      const report = await validateFile({
+    const report = await session.task("Validating file", async () => {
+      return await validateFile({
         data: path,
         integrity: options.hash
           ? { hash: options.hash, type: options.hashType ?? "md5" }
           : undefined,
       })
-
-      session.renderDataResult(report)
     })
+
+    session.renderDataResult(report)
   })

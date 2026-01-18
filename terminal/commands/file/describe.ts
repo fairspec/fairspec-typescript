@@ -28,11 +28,9 @@ export const describeFileCommand = new Command()
       path = await selectFile(session, options)
     }
 
-    await session.task("Describing file", async () => {
-      const stats = await describeFile(path, {
-        hashType: options.hashType,
-      })
-
-      session.renderDataResult(stats)
+    const stats = await session.task("Describing file", async () => {
+      return await describeFile(path, { hashType: options.hashType })
     })
+
+    session.renderDataResult(stats)
   })

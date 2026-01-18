@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs"
 import { readFile } from "node:fs/promises"
 import { getTempFilePath, writeTempFile } from "@fairspec/dataset"
+import type { TableSchema } from "@fairspec/library"
 import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { renderTableSchemaCommand } from "./render.ts"
@@ -17,17 +18,17 @@ describe("schema render", () => {
   })
 
   it("should render table schema as markdown", async () => {
-    const schemaContent = JSON.stringify({
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "name", type: "string" },
-      ],
-    })
-    const schemaPath = await writeTempFile(schemaContent)
+    const schema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
+    }
+    const schemaPath = await writeTempFile(JSON.stringify(schema))
 
-    const outputs: string[] = []
+    const text: string[] = []
     vi.spyOn(console, "log").mockImplementation(msg => {
-      outputs.push(msg)
+      text.push(msg)
     })
 
     const command = new Command()
@@ -49,19 +50,21 @@ describe("schema render", () => {
       ])
     } catch {}
 
-    expect(outputs.length).toBeGreaterThan(0)
-    expect(outputs[0]).toContain("id")
-    expect(outputs[0]).toContain("name")
+    expect(text.length).toBeGreaterThan(0)
+    const data = JSON.parse(text[0] ?? "")
+    expect(data).toHaveProperty("result")
+    expect(data.result).toContain("id")
+    expect(data.result).toContain("name")
   })
 
   it("should render table schema as HTML and save to file", async () => {
-    const schemaContent = JSON.stringify({
-      fields: [
-        { name: "id", type: "integer" },
-        { name: "email", type: "string", format: "email" },
-      ],
-    })
-    const schemaPath = await writeTempFile(schemaContent)
+    const schema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        email: { type: "string", format: "email" },
+      },
+    }
+    const schemaPath = await writeTempFile(JSON.stringify(schema))
     const outputPath = getTempFilePath()
 
     vi.spyOn(console, "log").mockImplementation(() => {})
@@ -83,7 +86,7 @@ describe("schema render", () => {
         "html",
         "--to-path",
         outputPath,
-        "--json",
+        "--silent",
       ])
     } catch {}
 
@@ -95,17 +98,17 @@ describe("schema render", () => {
   })
 
   it("should render table schema as HTML to console", async () => {
-    const schemaContent = JSON.stringify({
-      fields: [
-        { name: "age", type: "integer" },
-        { name: "active", type: "boolean" },
-      ],
-    })
-    const schemaPath = await writeTempFile(schemaContent)
+    const schema: TableSchema = {
+      properties: {
+        age: { type: "integer" },
+        active: { type: "boolean" },
+      },
+    }
+    const schemaPath = await writeTempFile(JSON.stringify(schema))
 
-    const outputs: string[] = []
+    const text: string[] = []
     vi.spyOn(console, "log").mockImplementation(msg => {
-      outputs.push(msg)
+      text.push(msg)
     })
 
     const command = new Command()
@@ -127,8 +130,10 @@ describe("schema render", () => {
       ])
     } catch {}
 
-    expect(outputs.length).toBeGreaterThan(0)
-    expect(outputs[0]).toContain("age")
-    expect(outputs[0]).toContain("active")
+    expect(text.length).toBeGreaterThan(0)
+    const data = JSON.parse(text[0] ?? "")
+    expect(data).toHaveProperty("result")
+    expect(data.result).toContain("age")
+    expect(data.result).toContain("active")
   })
 })

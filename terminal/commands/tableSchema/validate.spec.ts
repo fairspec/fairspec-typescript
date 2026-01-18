@@ -1,135 +1,33 @@
-import { writeFile } from "node:fs/promises"
-import { getTempFilePath } from "@fairspec/dataset"
+import type { TableSchema } from "@fairspec/library"
+import { writeTempFile } from "@fairspec/dataset"
 import { Command } from "commander"
-import { describe, expect, it, vi } from "vitest"
-import { useRecording } from "vitest-polly"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { validateTableSchemaCommand } from "./validate.ts"
 
-useRecording()
-
 describe("schema validate", () => {
-  it("should detect missing fields in schema", async () => {
-    const schemaContent = JSON.stringify({
-      fields: [],
-    })
-    const schemaPath = getTempFilePath()
-    await writeFile(schemaPath, schemaContent)
-
-    const outputs: string[] = []
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
-      outputs.push(msg)
-    })
-    const exitSpy = vi
-      .spyOn(process, "exit")
-      .mockImplementation((() => {}) as () => never)
-    const stdoutSpy = vi
-      .spyOn(process.stdout, "write")
-      .mockImplementation(() => true)
-    const stderrSpy = vi
-      .spyOn(process.stderr, "write")
-      .mockImplementation(() => true)
-
-    const command = new Command()
-      .addCommand(validateTableSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
-
-    try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "validate",
-        schemaPath,
-        "--json",
-      ])
-    } catch (error) {}
-
-    consoleSpy.mockRestore()
-    exitSpy.mockRestore()
-    stdoutSpy.mockRestore()
-    stderrSpy.mockRestore()
-
-    const result = JSON.parse(outputs?.[0] ?? "")
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+  beforeEach(() => {
+    vi.spyOn(process, "exit").mockImplementation((() => {}) as () => never)
+    vi.spyOn(process.stdout, "write").mockImplementation(() => true)
+    vi.spyOn(process.stderr, "write").mockImplementation(() => true)
   })
 
-  it("should detect validation errors in invalid schema", async () => {
-    const schemaContent = JSON.stringify({
-      fields: [{ name: 123, type: "not-a-valid-type" }],
-    })
-    const schemaPath = getTempFilePath()
-    await writeFile(schemaPath, schemaContent)
-
-    const outputs: string[] = []
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
-      outputs.push(msg)
-    })
-    const exitSpy = vi
-      .spyOn(process, "exit")
-      .mockImplementation((() => {}) as () => never)
-    const stdoutSpy = vi
-      .spyOn(process.stdout, "write")
-      .mockImplementation(() => true)
-    const stderrSpy = vi
-      .spyOn(process.stderr, "write")
-      .mockImplementation(() => true)
-
-    const command = new Command()
-      .addCommand(validateTableSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
-
-    try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "validate",
-        schemaPath,
-        "--json",
-      ])
-    } catch (error) {}
-
-    consoleSpy.mockRestore()
-    exitSpy.mockRestore()
-    stdoutSpy.mockRestore()
-    stderrSpy.mockRestore()
-
-    const result = JSON.parse(outputs?.[0] ?? "")
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
-  it("should detect invalid field format", async () => {
-    const schemaContent = JSON.stringify({
-      fields: [
-        {
-          name: "id",
-          type: "integer",
-          format: "invalid-format",
-        },
-      ],
-    })
-    const schemaPath = getTempFilePath()
-    await writeFile(schemaPath, schemaContent)
+  it("should validate a valid table schema", async () => {
+    const schema: TableSchema = {
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+      },
+    }
+    const schemaPath = await writeTempFile(JSON.stringify(schema))
 
-    const outputs: string[] = []
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(msg => {
-      outputs.push(msg)
+    const text: string[] = []
+    vi.spyOn(console, "log").mockImplementation(msg => {
+      text.push(msg)
     })
-    const exitSpy = vi
-      .spyOn(process, "exit")
-      .mockImplementation((() => {}) as () => never)
-    const stdoutSpy = vi
-      .spyOn(process.stdout, "write")
-      .mockImplementation(() => true)
-    const stderrSpy = vi
-      .spyOn(process.stderr, "write")
-      .mockImplementation(() => true)
 
     const command = new Command()
       .addCommand(validateTableSchemaCommand)
@@ -139,22 +37,74 @@ describe("schema validate", () => {
       })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "validate",
-        schemaPath,
-        "--json",
-      ])
-    } catch (error) {}
+      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
+    } catch {}
 
-    consoleSpy.mockRestore()
-    exitSpy.mockRestore()
-    stdoutSpy.mockRestore()
-    stderrSpy.mockRestore()
+    expect(text.length).toBeGreaterThan(0)
+    const data = JSON.parse(text[0] ?? "")
+    expect(data).toHaveProperty("valid")
+    expect(data.valid).toBe(true)
+  })
 
-    const result = JSON.parse(outputs?.[0] ?? "")
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+  it("should detect invalid property structure", async () => {
+    const schema = {
+      properties: {
+        id: "invalid-structure",
+      },
+    }
+    const schemaPath = await writeTempFile(JSON.stringify(schema))
+
+    const text: string[] = []
+    vi.spyOn(console, "log").mockImplementation(msg => {
+      text.push(msg)
+    })
+
+    const command = new Command()
+      .addCommand(validateTableSchemaCommand)
+      .configureOutput({
+        writeOut: () => {},
+        writeErr: () => {},
+      })
+
+    try {
+      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
+    } catch {}
+
+    expect(text.length).toBeGreaterThan(0)
+    const data = JSON.parse(text[0] ?? "")
+    expect(data).toHaveProperty("valid")
+    expect(data.valid).toBe(false)
+    expect(data.errors.length).toBeGreaterThan(0)
+  })
+
+  it("should detect invalid property types", async () => {
+    const schema = {
+      properties: {
+        id: { type: "invalid-type" },
+      },
+    }
+    const schemaPath = await writeTempFile(JSON.stringify(schema))
+
+    const text: string[] = []
+    vi.spyOn(console, "log").mockImplementation(msg => {
+      text.push(msg)
+    })
+
+    const command = new Command()
+      .addCommand(validateTableSchemaCommand)
+      .configureOutput({
+        writeOut: () => {},
+        writeErr: () => {},
+      })
+
+    try {
+      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
+    } catch {}
+
+    expect(text.length).toBeGreaterThan(0)
+    const data = JSON.parse(text[0] ?? "")
+    expect(data).toHaveProperty("valid")
+    expect(data.valid).toBe(false)
+    expect(data.errors.length).toBeGreaterThan(0)
   })
 })

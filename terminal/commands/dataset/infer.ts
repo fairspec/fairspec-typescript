@@ -5,8 +5,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const inferDatasetCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("infer")
   .description("Infer a dataset from local or remote file paths")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalFilePaths)
   .addOption(params.debug)

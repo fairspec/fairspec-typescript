@@ -5,8 +5,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const validateDatasetCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("validate")
   .description("Validate a dataset from a local or remote path")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalDescriptorPath)
   .addOption(params.json)

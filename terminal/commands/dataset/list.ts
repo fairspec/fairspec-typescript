@@ -6,8 +6,9 @@ import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
 export const listDatasetCommand = new Command()
-  .configureHelp(helpConfiguration)
+  .name("list")
   .description("List Dataset resources")
+  .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalDescriptorPath)
   .addOption(params.debug)

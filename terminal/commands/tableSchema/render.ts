@@ -2,6 +2,7 @@ import { writeFile } from "node:fs/promises"
 import { renderTableSchemaAs } from "@fairspec/library"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { Command, Option } from "commander"
+import pc from "picocolors"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
@@ -57,7 +58,8 @@ export const renderTableSchemaCommand = new Command("render")
       return
     }
 
-    session.renderTextResult(`Saved rendered schema to ${options.toPath}`, {
-      status: "success",
-    })
+    session.renderTextResult(
+      `Saved rendered schema to ${pc.bold(options.toPath)}`,
+      { status: "success" },
+    )
   })

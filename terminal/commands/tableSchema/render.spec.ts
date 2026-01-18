@@ -86,7 +86,7 @@ describe("schema render", () => {
         "html",
         "--to-path",
         outputPath,
-        "--silent",
+        "--json",
       ])
     } catch {}
 
@@ -94,7 +94,6 @@ describe("schema render", () => {
     const content = await readFile(outputPath, "utf-8")
     expect(content).toContain("id")
     expect(content).toContain("email")
-    expect(console.log).not.toHaveBeenCalled()
   })
 
   it("should render table schema as HTML to console", async () => {

@@ -54,10 +54,7 @@ export const inferDatasetCommand = new Command()
     })
 
     const dataset = await session.task("Infering dataset", async () => {
-      const dataset = {
-        resources: paths.map((path: string) => ({ data: path })),
-      }
-
+      const dataset = { resources: paths.map((data: string) => ({ data })) }
       return await inferDataset(dataset, options)
     })
 

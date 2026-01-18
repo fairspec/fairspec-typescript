@@ -76,8 +76,8 @@ export const scriptTableCommand = new Command("script")
     })
 
     session.renderText(
-      "warning",
       pc.dim("`fairspec` and `table` variables are available in the session"),
+      { status: "warning" },
     )
 
     const replSession = repl.start({ prompt: "fairspec> " })

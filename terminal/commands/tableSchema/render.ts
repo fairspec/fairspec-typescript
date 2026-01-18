@@ -53,6 +53,11 @@ export const renderTableSchemaCommand = new Command("render")
     })
 
     if (!isSaved) {
-      console.log(rendered)
+      session.renderTextResult(rendered)
+      return
     }
+
+    session.renderTextResult(`Saved rendered schema to ${options.toPath}`, {
+      status: "success",
+    })
   })

@@ -24,8 +24,8 @@ export const scriptDatasetCommand = new Command()
     })
 
     session.renderText(
-      "warning",
       pc.dim("`fairspec` and `dataset` variables are available in the session"),
+      { status: "warning" },
     )
 
     const replSession = repl.start({ prompt: "fairspec> " })

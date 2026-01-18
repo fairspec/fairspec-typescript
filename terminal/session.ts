@@ -26,15 +26,20 @@ export class Session implements SessionOptions {
     this.json = options.json
   }
 
-  renderText(status: Status, text: string) {
+  renderText(text: string, options?: { status?: Status }) {
     if (this.silent || this.json) {
       return
     }
 
-    console.log(renderStatus(status), text)
+    if (!options?.status) {
+      console.log(text)
+      return
+    }
+
+    console.log(renderStatus(options.status), text)
   }
 
-  renderTextResult(status: Status, text: string) {
+  renderTextResult(text: string, options?: { status?: Status }) {
     if (this.silent) {
       return
     }
@@ -45,7 +50,12 @@ export class Session implements SessionOptions {
       return
     }
 
-    console.log(renderStatus(status), text)
+    if (!options?.status) {
+      console.log(text)
+      return
+    }
+
+    console.log(renderStatus(options.status), text)
   }
 
   renderDataResult(data: string | object) {

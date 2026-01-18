@@ -37,7 +37,7 @@ export const copyFileCommand = new Command()
     })
 
     session.renderTextResult(
-      "success",
       `Copied file from ${pc.bold(path)} to ${pc.bold(options.toPath)}`,
+      { status: "success" },
     )
   })

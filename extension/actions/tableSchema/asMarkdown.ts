@@ -46,7 +46,9 @@ export function renderTableSchemaAsMarkdown(
   if (options?.frontmatter) {
     const header: string[] = []
     header.push("---")
-    header.push("title: Table Schema")
+    if (schema.title) {
+      header.push(`title: ${schema.title}`)
+    }
     header.push("---")
     header.push("")
     markdown = header.join("\n") + markdown

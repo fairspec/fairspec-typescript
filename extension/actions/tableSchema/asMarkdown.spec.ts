@@ -104,6 +104,7 @@ describe("renderTableSchemaAsMarkdown", () => {
   it("uses frontmatter when frontmatter option is true", () => {
     const schema: TableSchema = {
       $schema: "https://fairspec.org/profiles/latest/table.json",
+      title: "Table Schema",
       properties: {
         field1: {
           type: "string",

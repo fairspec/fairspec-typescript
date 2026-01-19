@@ -10,7 +10,9 @@ export function renderTableSchemaAsHtml(
   let html = prettify(renderToStaticMarkup(<SchemaTable schema={schema} />))
 
   if (options?.frontmatter) {
-    html = `---\ntitle: Table Schema\n---\n\n${html}`
+    if (schema.title) {
+      html = `---\ntitle: ${schema.title}\n---\n\n${html}`
+    }
   }
 
   return html

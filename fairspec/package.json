@@ -7,6 +7,9 @@
   "files": [
     "build"
   ],
+  "bin": {
+    "fairspec": "./build/entrypoints/run.js"
+  },
   "license": "MIT",
   "author": "Evgeny Karev",
   "repository": "https://github.com/fairspec/fairspec-typescript",

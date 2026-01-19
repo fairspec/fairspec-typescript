@@ -9,10 +9,10 @@ const row1 = { id: 1, name: "english" }
 const row2 = { id: 2, name: "中文" }
 const table = pl.readRecords([row1, row2]).lazy()
 
-describe("saveXlsxTable", () => {
+describe("saveXlsxTable (format=xlsx)", () => {
   it("should save table to file", async () => {
     const path = getTempFilePath()
-    await saveXlsxTable(table, { path })
+    await saveXlsxTable(table, { path, format: { name: "xlsx" } })
 
     const data = await readTestData(path)
     expect(data).toEqual([row1, row2])
@@ -32,9 +32,54 @@ describe("saveXlsxTable", () => {
       ])
       .lazy()
 
-    await saveXlsxTable(source, { path })
+    await saveXlsxTable(source, { path, format: { name: "xlsx" } })
 
-    const target = await loadXlsxTable({ data: path }, { denormalized: true })
+    const target = await loadXlsxTable(
+      { data: path, format: { name: "xlsx" } },
+      { denormalized: true },
+    )
+    expect((await target.collect()).toRecords()).toEqual([
+      {
+        boolean: true,
+        date: "2025-01-01",
+        datetime: "2025-01-01T00:00:00",
+        integer: 1,
+        number: 1.1,
+        string: "string",
+      },
+    ])
+  })
+})
+
+describe("saveXlsxTable (format=ods)", () => {
+  it("should save table to file", async () => {
+    const path = getTempFilePath()
+    await saveXlsxTable(table, { path, format: { name: "ods" } })
+
+    const data = await readTestData(path)
+    expect(data).toEqual([row1, row2])
+  })
+
+  it("should save and load various data types", async () => {
+    const path = getTempFilePath()
+
+    const source = pl
+      .DataFrame([
+        pl.Series("boolean", [true], pl.Bool),
+        pl.Series("date", [new Date(Date.UTC(2025, 0, 1))], pl.Date),
+        pl.Series("datetime", [new Date(Date.UTC(2025, 0, 1))], pl.Datetime),
+        pl.Series("integer", [1], pl.Int32),
+        pl.Series("number", [1.1], pl.Float64),
+        pl.Series("string", ["string"], pl.String),
+      ])
+      .lazy()
+
+    await saveXlsxTable(source, { path, format: { name: "ods" } })
+
+    const target = await loadXlsxTable(
+      { data: path, format: { name: "ods" } },
+      { denormalized: true },
+    )
     expect((await target.collect()).toRecords()).toEqual([
       {
         boolean: true,

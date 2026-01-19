@@ -5,7 +5,7 @@ import { loadTable } from "../../actions/table/load.ts"
 import { system } from "../../system.ts"
 
 export async function inferTableSchema(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: InferTableSchemaOptions,
 ) {
   for (const plugin of system.plugins) {

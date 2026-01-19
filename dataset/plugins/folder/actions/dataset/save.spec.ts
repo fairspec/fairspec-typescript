@@ -81,7 +81,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test-resource",
           data: csvPath,
-          format: { type: "csv" },
+          format: { name: "csv" },
         },
       ],
     }
@@ -101,7 +101,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "resource-1",
           data: csvPath,
-          format: { type: "csv" },
+          format: { name: "csv" },
         },
         {
           name: "resource-2",
@@ -147,7 +147,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test-resource",
           data: csvPath,
-          format: { type: "csv", delimiter: ";" },
+          format: { name: "csv", delimiter: ";" },
         },
       ],
     }
@@ -244,7 +244,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { type: "csv" },
+          format: { name: "csv" },
         },
       ],
     }
@@ -254,7 +254,7 @@ describe("saveDatasetToFolder", () => {
 
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
-    expect(reloadedDataset.resources?.[0]?.format?.type).toBe("csv")
+    expect(reloadedDataset.resources?.[0]?.format?.name).toBe("csv")
   })
 
   it("should throw error when saving to existing folder", async () => {
@@ -304,12 +304,12 @@ describe("saveDatasetToFolder", () => {
         {
           name: "resource1",
           data: csv1Path,
-          format: { type: "csv" },
+          format: { name: "csv" },
         },
         {
           name: "resource2",
           data: csv2Path,
-          format: { type: "csv" },
+          format: { name: "csv" },
         },
       ],
     }
@@ -350,7 +350,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { type: "csv" },
+          format: { name: "csv" },
         },
       ],
     }

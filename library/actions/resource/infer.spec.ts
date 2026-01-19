@@ -6,7 +6,7 @@ import { inferResource } from "./infer.ts"
 describe("inferResource", () => {
   it("should infer name from path", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const source: Resource = { data: path, format: { type: "csv" } }
+    const source: Resource = { data: path, format: { name: "csv" } }
 
     const target = await inferResource(source)
 
@@ -22,12 +22,12 @@ describe("inferResource", () => {
 
     const target = await inferResource(source)
 
-    expect(target.format?.type).toBe("csv")
+    expect(target.format?.name).toBe("csv")
   })
 
   it("should infer tableSchema for CSV data", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const source: Resource = { data: path, format: { type: "csv" } }
+    const source: Resource = { data: path, format: { name: "csv" } }
 
     const target = await inferResource(source)
 
@@ -61,7 +61,7 @@ describe("inferResource", () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
     const source: Resource = {
       data: path,
-      format: { type: "csv" },
+      format: { name: "csv" },
       name: "custom-name",
     }
 
@@ -74,7 +74,7 @@ describe("inferResource", () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
     const source: Resource = {
       data: path,
-      format: { type: "csv" },
+      format: { name: "csv" },
       tableSchema: {
         properties: {
           id: { type: "string" },

@@ -2,7 +2,7 @@ import { z } from "zod"
 import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
-  CommentChar,
+  CommentPrefix,
   CommentRows,
   Delimiter,
   HeaderJoin,
@@ -13,7 +13,7 @@ import {
 } from "./common.ts"
 
 export const CsvFormat = BaseFormat.extend({
-  type: z.literal("csv"),
+  name: z.literal("csv"),
   delimiter: Delimiter.optional(),
   lineTerminator: LineTerminator.optional(),
   quoteChar: QuoteChar.optional(),
@@ -21,7 +21,7 @@ export const CsvFormat = BaseFormat.extend({
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),
   commentRows: CommentRows.optional(),
-  commentChar: CommentChar.optional(),
+  commentPrefix: CommentPrefix.optional(),
   columnNames: ColumnNames.optional(),
 })
 

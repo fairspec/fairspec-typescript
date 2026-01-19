@@ -2,7 +2,7 @@ import type { FileError, Resource } from "@fairspec/metadata"
 import { createReport } from "@fairspec/metadata"
 import { inferHash, inferTextual } from "./infer.ts"
 
-export async function validateFile(resource: Partial<Resource>) {
+export async function validateFile(resource: Resource) {
   const errors: FileError[] = []
 
   if (resource.textual) {

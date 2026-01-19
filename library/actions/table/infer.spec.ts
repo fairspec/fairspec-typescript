@@ -6,10 +6,10 @@ import { inferTable } from "./infer.ts"
 describe("inferTable", () => {
   it("should infer table from CSV file", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const resource: Resource = { data: path, format: { type: "csv" } }
+    const resource: Resource = { data: path, format: { name: "csv" } }
 
     const result = await inferTable(resource)
-    expect(result?.format).toEqual({ type: "csv" })
+    expect(result?.format).toEqual({ name: "csv" })
     expect(result?.tableSchema).toEqual({
       properties: {
         id: { type: "integer" },
@@ -39,7 +39,7 @@ describe("inferTable", () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
     const resource: Resource = {
       data: path,
-      format: { type: "csv" },
+      format: { name: "csv" },
       tableSchema: {
         properties: {
           id: { type: "string" },
@@ -49,7 +49,7 @@ describe("inferTable", () => {
     }
 
     const result = await inferTable(resource)
-    expect(result?.format).toEqual({ type: "csv" })
+    expect(result?.format).toEqual({ name: "csv" })
     expect(result?.tableSchema).toEqual({
       properties: {
         id: { type: "string" },

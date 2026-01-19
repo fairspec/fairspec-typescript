@@ -7,7 +7,7 @@ import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import * as pl from "nodejs-polars"
 
 export async function loadInlineTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: LoadTableOptions,
 ) {
   const dataRecords = getDataRecords(resource)

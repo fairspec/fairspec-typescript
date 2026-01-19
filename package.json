@@ -25,7 +25,7 @@
     "version:ci": "pnpm --include-workspace-root -r exec pnpm version --no-git-tag-version"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.10",
+    "@biomejs/biome": "2.3.11",
     "@semantic-release/exec": "7.1.0",
     "@types/node": "24.2.0",
     "@vitest/coverage-v8": "4.0.16",

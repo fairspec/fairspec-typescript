@@ -11,7 +11,7 @@ export type ValidateTableOptions = LoadTableOptions & {
 }
 
 export async function validateTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: ValidateTableOptions,
 ) {
   const { maxErrors } = options ?? {}

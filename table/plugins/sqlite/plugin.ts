@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getDataFirstPath, getFileExtension } from "@fairspec/metadata"
+import { getSupportedFormat } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -10,29 +10,19 @@ import { loadSqliteTable } from "./actions/table/load.ts"
 import { saveSqliteTable } from "./actions/table/save.ts"
 
 export class SqlitePlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const isSqlite = getIsSqlite(resource)
-    if (!isSqlite) return undefined
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
+    const format = getSupportedFormat(resource, ["sqlite"])
+    if (!format) return undefined
 
     return await loadSqliteTable(resource, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path, format } = options
+    const resource = { data: options.path, ...options }
 
-    const isSqlite = getIsSqlite({ data: path, format })
-    if (!isSqlite) return undefined
+    const format = getSupportedFormat(resource, ["sqlite"])
+    if (!format) return undefined
 
     return await saveSqliteTable(table, options)
   }
-}
-
-function getIsSqlite(resource: Partial<Resource>) {
-  if (resource.format?.type === "sqlite") return true
-
-  const firstPath = getDataFirstPath(resource)
-  if (!firstPath) return false
-
-  const extension = getFileExtension(firstPath)
-  return extension === "sqlite"
 }

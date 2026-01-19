@@ -8,7 +8,7 @@ describe("inferDataset", () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
     const source: Dataset = {
       language: "en",
-      resources: [{ data: path, format: { type: "csv" } }],
+      resources: [{ data: path, format: { name: "csv" } }],
     }
 
     const target = await inferDataset(source)
@@ -29,8 +29,8 @@ describe("inferDataset", () => {
     const source: Dataset = {
       language: "en",
       resources: [
-        { data: path1, format: { type: "csv" } },
-        { data: path2, format: { type: "csv" } },
+        { data: path1, format: { name: "csv" } },
+        { data: path2, format: { name: "csv" } },
       ],
     }
 
@@ -74,7 +74,7 @@ describe("inferDataset", () => {
       resources: [
         {
           data: path,
-          format: { type: "csv" },
+          format: { name: "csv" },
           tableSchema: {
             properties: {
               id: { type: "string" },

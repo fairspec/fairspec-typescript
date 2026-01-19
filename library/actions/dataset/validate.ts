@@ -11,8 +11,10 @@ import { validateResource } from "../../actions/resource/validate.ts"
 import { system } from "../../system.ts"
 import { validateDatasetIntegrity } from "./integrity.ts"
 
+// TODO: review this function
+
 export async function validateDataset(
-  source: string | Descriptor | Partial<Dataset>,
+  source: string | Descriptor | Dataset,
   options?: { basepath?: string },
 ) {
   let descriptor: Descriptor | undefined

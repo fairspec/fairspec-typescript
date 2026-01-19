@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getDataFirstPath, getFileExtension } from "@fairspec/metadata"
+import { getSupportedFormat } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -10,29 +10,19 @@ import { loadXlsxTable } from "./actions/table/load.ts"
 import { saveXlsxTable } from "./actions/table/save.ts"
 
 export class XlsxPlugin implements TablePlugin {
-  async loadTable(resource: Partial<Resource>, options?: LoadTableOptions) {
-    const isXlsx = getIsXlsx(resource)
-    if (!isXlsx) return undefined
+  async loadTable(resource: Resource, options?: LoadTableOptions) {
+    const format = getSupportedFormat(resource, ["xlsx", "ods"])
+    if (!format) return undefined
 
-    return await loadXlsxTable(resource, options)
+    return await loadXlsxTable({ ...resource, format }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
-    const { path, format } = options
+    const resource = { data: options.path, ...options }
 
-    const isXlsx = getIsXlsx({ data: path, format })
-    if (!isXlsx) return undefined
+    const format = getSupportedFormat(resource, ["xlsx", "ods"])
+    if (!format) return undefined
 
-    return await saveXlsxTable(table, options)
+    return await saveXlsxTable(table, { ...options, format })
   }
-}
-
-function getIsXlsx(resource: Partial<Resource>) {
-  if (resource.format?.type === "xlsx") return true
-
-  const firstPath = getDataFirstPath(resource)
-  if (!firstPath) return false
-
-  const extension = getFileExtension(firstPath)
-  return extension === "xlsx"
 }

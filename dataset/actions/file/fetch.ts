@@ -5,7 +5,7 @@ import pAll from "p-all"
 import { copyFile } from "../../actions/file/copy.ts"
 import { getTempFilePath } from "../../actions/file/temp.ts"
 
-export async function prefetchFiles(resource: Partial<Resource>) {
+export async function prefetchFiles(resource: Resource) {
   const paths = getDataPaths(resource)
   if (!paths.length) return []
 

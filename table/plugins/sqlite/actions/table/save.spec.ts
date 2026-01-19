@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest"
 import { loadSqliteTable } from "./load.ts"
 import { saveSqliteTable } from "./save.ts"
 
-const format: SqliteFormat = { type: "sqlite", tableName: "fairspec" }
+const format: SqliteFormat = { name: "sqlite", tableName: "fairspec" }
 const record1 = { id: 1, name: "english" }
 const record2 = { id: 2, name: "中文" }
 
@@ -81,7 +81,7 @@ describe("saveSqliteTable", () => {
     await expect(
       saveSqliteTable(mockTable, {
         path: "test.db",
-        format: { type: "sqlite" },
+        format: { name: "sqlite" },
       }),
     ).rejects.toThrow("Table name is not defined")
   })

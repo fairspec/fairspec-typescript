@@ -10,7 +10,7 @@ import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
 export type InferResourceOptions = InferFormatOptions & InferTableSchemaOptions
 
 export async function inferResource(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: InferResourceOptions,
 ) {
   resource = copyDescriptor(resource)

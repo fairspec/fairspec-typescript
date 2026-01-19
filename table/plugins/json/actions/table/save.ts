@@ -11,12 +11,12 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
   const jsonFormat =
-    options.format?.type === "json" ? options.format : undefined
+    options.format?.name === "json" ? options.format : undefined
   const jsonlFormat =
-    options.format?.type === "jsonl" ? options.format : undefined
+    options.format?.name === "jsonl" ? options.format : undefined
 
   const format = jsonFormat ?? jsonlFormat
-  const isLines = format?.type === "jsonl"
+  const isLines = format?.name === "jsonl"
 
   const tableSchema =
     options.tableSchema ??
@@ -64,7 +64,7 @@ function processData(
     ]
   }
 
-  if (format.type === "json") {
+  if (format.name === "json") {
     if (format.jsonPointer) {
       // TODO: cover more jsonPointer cases
       data = { [format.jsonPointer]: data }

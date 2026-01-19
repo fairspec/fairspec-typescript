@@ -6,12 +6,12 @@ import {
   ZenodoPlugin,
   ZipPlugin,
 } from "@fairspec/dataset"
+import { ExtensionPlugin } from "@fairspec/extension"
 import {
   ArrowPlugin,
   CsvPlugin,
   InlinePlugin,
   JsonPlugin,
-  OdsPlugin,
   ParquetPlugin,
   XlsxPlugin,
 } from "@fairspec/table"
@@ -26,6 +26,10 @@ export class System {
 }
 
 export const system = new System()
+
+// Extension
+
+system.register(ExtensionPlugin)
 
 // Dataset
 
@@ -42,6 +46,5 @@ system.register(ArrowPlugin)
 system.register(CsvPlugin)
 system.register(InlinePlugin)
 system.register(JsonPlugin)
-system.register(OdsPlugin)
 system.register(ParquetPlugin)
 system.register(XlsxPlugin)

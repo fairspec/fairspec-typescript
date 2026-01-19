@@ -6,7 +6,7 @@ import {
 } from "@fairspec/metadata"
 import { loadData } from "./load.ts"
 
-export async function validateData(resource: Partial<Resource>) {
+export async function validateData(resource: Resource) {
   const errors: GeneralError[] = []
 
   const dataSchema = await resolveDataSchema(resource.dataSchema)

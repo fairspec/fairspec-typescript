@@ -23,7 +23,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      format: { type: "json", jsonPointer: "key" },
+      format: { name: "json", jsonPointer: "key" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -35,7 +35,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      format: { type: "json", columnNames: ["name"] },
+      format: { name: "json", columnNames: ["name"] },
     })
 
     const content = await readFile(path, "utf-8")
@@ -49,7 +49,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      format: { type: "json", rowType: "array" },
+      format: { name: "json", rowType: "array" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -98,7 +98,7 @@ describe("saveJsonTable (format=jsonl)", () => {
   it("should save table to file", async () => {
     const path = getTempFilePath()
 
-    await saveJsonTable(table, { path, format: { type: "jsonl" } })
+    await saveJsonTable(table, { path, format: { name: "jsonl" } })
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual(
@@ -110,7 +110,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      format: { type: "jsonl", columnNames: ["name"] },
+      format: { name: "jsonl", columnNames: ["name"] },
     })
 
     const content = await readFile(path, "utf-8")
@@ -126,7 +126,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      format: { type: "jsonl", rowType: "array" },
+      format: { name: "jsonl", rowType: "array" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -143,7 +143,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      format: { type: "jsonl", rowType: "object" },
+      format: { name: "jsonl", rowType: "object" },
     })
 
     const content = await readFile(path, "utf-8")

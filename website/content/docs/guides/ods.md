@@ -139,7 +139,7 @@ const table = await loadOdsTable({
 const table = await loadOdsTable({
   path: "data.ods",
   dialect: {
-    commentChar: "#"  // Skip rows starting with #
+    commentPrefix: "#"  // Skip rows starting with #
   }
 })
 ```

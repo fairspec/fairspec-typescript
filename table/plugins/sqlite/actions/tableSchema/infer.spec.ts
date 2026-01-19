@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest"
 import { saveSqliteTable } from "../../actions/table/save.ts"
 import { inferTableSchemaFromSqlite } from "./infer.ts"
 
-const format: SqliteFormat = { type: "sqlite", tableName: "fairspec" }
+const format: SqliteFormat = { name: "sqlite", tableName: "fairspec" }
 
 describe("inferTableSchemaFromSqlite", () => {
   it("should infer schema", async () => {
@@ -43,7 +43,7 @@ describe("inferTableSchemaFromSqlite", () => {
   it("throws error when resource path is not defined", async () => {
     await expect(
       inferTableSchemaFromSqlite({
-        format: { type: "sqlite", tableName: "fairspec" },
+        format: { name: "sqlite", tableName: "fairspec" },
       }),
     ).rejects.toThrow("Database is not defined")
   })
@@ -52,7 +52,7 @@ describe("inferTableSchemaFromSqlite", () => {
     await expect(
       inferTableSchemaFromSqlite({
         data: "path",
-        format: { type: "sqlite" },
+        format: { name: "sqlite" },
       }),
     ).rejects.toThrow("Table name is not defined")
   })

@@ -2,7 +2,7 @@ import { z } from "zod"
 import { BaseFormat } from "./base.ts"
 import {
   ColumnNames,
-  CommentChar,
+  CommentPrefix,
   CommentRows,
   HeaderJoin,
   HeaderRows,
@@ -11,13 +11,13 @@ import {
 } from "./common.ts"
 
 export const XlsxFormat = BaseFormat.extend({
-  type: z.literal("xlsx"),
+  name: z.literal("xlsx"),
   sheetName: SheetName.optional(),
   sheetNumber: SheetNumber.optional(),
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),
   commentRows: CommentRows.optional(),
-  commentChar: CommentChar.optional(),
+  commentPrefix: CommentPrefix.optional(),
   columnNames: ColumnNames.optional(),
 })
 

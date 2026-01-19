@@ -4,7 +4,7 @@ import { inferTableSchemaFromTable } from "@fairspec/table"
 import { inferFormat } from "../../actions/format/infer.ts"
 import { loadTable } from "./load.ts"
 
-export async function inferTable(resource: Partial<Resource>) {
+export async function inferTable(resource: Resource) {
   let format = resource.format
 
   if (!format) {

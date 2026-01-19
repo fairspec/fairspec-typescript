@@ -27,7 +27,7 @@ describe("ArrowPlugin", () => {
 
   describe("loadTable", () => {
     it("should load table from arrow file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.arrow",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -35,12 +35,15 @@ describe("ArrowPlugin", () => {
 
       const result = await plugin.loadTable(resource)
 
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, undefined)
+      expect(mockLoadArrowTable).toHaveBeenCalledWith(
+        { ...resource, format: { name: "arrow" } },
+        undefined,
+      )
       expect(result).toEqual(mockTable)
     })
 
     it("should load table from feather file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.feather",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -48,12 +51,15 @@ describe("ArrowPlugin", () => {
 
       const result = await plugin.loadTable(resource)
 
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, undefined)
+      expect(mockLoadArrowTable).toHaveBeenCalledWith(
+        { ...resource, format: { name: "arrow" } },
+        undefined,
+      )
       expect(result).toEqual(mockTable)
     })
 
     it("should return undefined for non-arrow files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.csv",
       }
 
@@ -64,9 +70,9 @@ describe("ArrowPlugin", () => {
     })
 
     it("should handle explicit arrow format specification", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.txt",
-        format: { type: "arrow" },
+        format: { name: "arrow" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadArrowTable.mockResolvedValue(mockTable)
@@ -78,7 +84,7 @@ describe("ArrowPlugin", () => {
     })
 
     it("should pass through load options", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.arrow",
       }
       const options = { denormalized: true }
@@ -87,11 +93,14 @@ describe("ArrowPlugin", () => {
 
       await plugin.loadTable(resource, options)
 
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, options)
+      expect(mockLoadArrowTable).toHaveBeenCalledWith(
+        { ...resource, format: { name: "arrow" } },
+        options,
+      )
     })
 
     it("should handle paths with directories", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "/path/to/data.arrow",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -99,11 +108,14 @@ describe("ArrowPlugin", () => {
 
       await plugin.loadTable(resource)
 
-      expect(mockLoadArrowTable).toHaveBeenCalledWith(resource, undefined)
+      expect(mockLoadArrowTable).toHaveBeenCalledWith(
+        { ...resource, format: { name: "arrow" } },
+        undefined,
+      )
     })
 
     it("should return undefined for parquet files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.parquet",
       }
 
@@ -122,7 +134,10 @@ describe("ArrowPlugin", () => {
 
       const result = await plugin.saveTable(table, options)
 
-      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, options)
+      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
+        ...options,
+        format: { name: "arrow" },
+      })
       expect(result).toBe("output.arrow")
     })
 
@@ -133,7 +148,10 @@ describe("ArrowPlugin", () => {
 
       const result = await plugin.saveTable(table, options)
 
-      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, options)
+      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
+        ...options,
+        format: { name: "arrow" },
+      })
       expect(result).toBe("output.feather")
     })
 
@@ -149,7 +167,7 @@ describe("ArrowPlugin", () => {
 
     it("should handle explicit arrow format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: { type: "arrow" } as const }
+      const options = { path: "output.txt", format: { name: "arrow" } as const }
       mockSaveArrowTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)
@@ -165,7 +183,10 @@ describe("ArrowPlugin", () => {
 
       await plugin.saveTable(table, options)
 
-      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, options)
+      expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
+        ...options,
+        format: { name: "arrow" },
+      })
     })
 
     it("should return undefined for files without extension", async () => {

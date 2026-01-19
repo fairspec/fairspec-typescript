@@ -29,7 +29,7 @@ export interface TablePlugin extends DatasetPlugin {
   ): Promise<{ path?: string } | undefined>
 
   loadTable?(
-    resource: Partial<Resource>,
+    resource: Resource,
     options?: LoadTableOptions,
   ): Promise<Table | undefined>
 
@@ -39,7 +39,7 @@ export interface TablePlugin extends DatasetPlugin {
   ): Promise<string | undefined>
 
   inferTableSchema?(
-    resource: Partial<Resource>,
+    resource: Resource,
     options?: InferTableSchemaOptions,
   ): Promise<TableSchema | undefined>
 }

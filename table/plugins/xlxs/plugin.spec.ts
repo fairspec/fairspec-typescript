@@ -26,21 +26,140 @@ describe("XlsxPlugin", () => {
   })
 
   describe("loadTable", () => {
-    it("should load table from xlsx file", async () => {
-      const resource: Partial<Resource> = {
-        data: "test.xlsx",
-      }
-      const mockTable = pl.DataFrame().lazy()
-      mockLoadXlsxTable.mockResolvedValue(mockTable)
+    describe("xlsx format", () => {
+      it("should load table from xlsx file", async () => {
+        const resource: Resource = {
+          data: "test.xlsx",
+        }
+        const mockTable = pl.DataFrame().lazy()
+        mockLoadXlsxTable.mockResolvedValue(mockTable)
 
-      const result = await plugin.loadTable(resource)
+        const result = await plugin.loadTable(resource)
 
-      expect(mockLoadXlsxTable).toHaveBeenCalledWith(resource, undefined)
-      expect(result).toEqual(mockTable)
+        expect(mockLoadXlsxTable).toHaveBeenCalledWith(
+          { ...resource, format: { name: "xlsx" } },
+          undefined,
+        )
+        expect(result).toEqual(mockTable)
+      })
+
+      it("should handle explicit format specification", async () => {
+        const resource: Resource = {
+          data: "test.txt",
+          format: { name: "xlsx" },
+        }
+        const mockTable = pl.DataFrame().lazy()
+        mockLoadXlsxTable.mockResolvedValue(mockTable)
+
+        const result = await plugin.loadTable(resource)
+
+        expect(mockLoadXlsxTable).toHaveBeenCalledWith(
+          { ...resource, format: { name: "xlsx" } },
+          undefined,
+        )
+        expect(result).toEqual(mockTable)
+      })
+
+      it("should pass through load options", async () => {
+        const resource: Resource = {
+          data: "test.xlsx",
+        }
+        const options = { denormalized: true }
+        const mockTable = pl.DataFrame().lazy()
+        mockLoadXlsxTable.mockResolvedValue(mockTable)
+
+        await plugin.loadTable(resource, options)
+
+        expect(mockLoadXlsxTable).toHaveBeenCalledWith(
+          { ...resource, format: { name: "xlsx" } },
+          options,
+        )
+      })
+
+      it("should handle paths with directories", async () => {
+        const resource: Resource = {
+          data: "/path/to/data.xlsx",
+        }
+        const mockTable = pl.DataFrame().lazy()
+        mockLoadXlsxTable.mockResolvedValue(mockTable)
+
+        await plugin.loadTable(resource)
+
+        expect(mockLoadXlsxTable).toHaveBeenCalledWith(
+          { ...resource, format: { name: "xlsx" } },
+          undefined,
+        )
+      })
     })
 
-    it("should return undefined for non-xlsx files", async () => {
-      const resource: Partial<Resource> = {
+    describe("ods format", () => {
+      it("should load table from ods file", async () => {
+        const resource: Resource = {
+          data: "test.ods",
+        }
+        const mockTable = pl.DataFrame().lazy()
+        mockLoadXlsxTable.mockResolvedValue(mockTable)
+
+        const result = await plugin.loadTable(resource)
+
+        expect(mockLoadXlsxTable).toHaveBeenCalledWith(
+          { ...resource, format: { name: "ods" } },
+          undefined,
+        )
+        expect(result).toEqual(mockTable)
+      })
+
+      it("should handle explicit format specification", async () => {
+        const resource: Resource = {
+          data: "test.txt",
+          format: { name: "ods" },
+        }
+        const mockTable = pl.DataFrame().lazy()
+        mockLoadXlsxTable.mockResolvedValue(mockTable)
+
+        const result = await plugin.loadTable(resource)
+
+        expect(mockLoadXlsxTable).toHaveBeenCalledWith(
+          { ...resource, format: { name: "ods" } },
+          undefined,
+        )
+        expect(result).toEqual(mockTable)
+      })
+
+      it("should pass through load options", async () => {
+        const resource: Resource = {
+          data: "test.ods",
+        }
+        const options = { denormalized: true }
+        const mockTable = pl.DataFrame().lazy()
+        mockLoadXlsxTable.mockResolvedValue(mockTable)
+
+        await plugin.loadTable(resource, options)
+
+        expect(mockLoadXlsxTable).toHaveBeenCalledWith(
+          { ...resource, format: { name: "ods" } },
+          options,
+        )
+      })
+
+      it("should handle paths with directories", async () => {
+        const resource: Resource = {
+          data: "/path/to/data.ods",
+        }
+        const mockTable = pl.DataFrame().lazy()
+        mockLoadXlsxTable.mockResolvedValue(mockTable)
+
+        await plugin.loadTable(resource)
+
+        expect(mockLoadXlsxTable).toHaveBeenCalledWith(
+          { ...resource, format: { name: "ods" } },
+          undefined,
+        )
+      })
+    })
+
+    it("should return undefined for non-xlsx/ods files", async () => {
+      const resource: Resource = {
         data: "test.csv",
       }
 
@@ -50,58 +169,8 @@ describe("XlsxPlugin", () => {
       expect(result).toBeUndefined()
     })
 
-    it("should handle explicit format specification", async () => {
-      const resource: Partial<Resource> = {
-        data: "test.txt",
-        format: { type: "xlsx" },
-      }
-      const mockTable = pl.DataFrame().lazy()
-      mockLoadXlsxTable.mockResolvedValue(mockTable)
-
-      const result = await plugin.loadTable(resource)
-
-      expect(mockLoadXlsxTable).toHaveBeenCalledWith(resource, undefined)
-      expect(result).toEqual(mockTable)
-    })
-
-    it("should pass through load options", async () => {
-      const resource: Partial<Resource> = {
-        data: "test.xlsx",
-      }
-      const options = { denormalized: true }
-      const mockTable = pl.DataFrame().lazy()
-      mockLoadXlsxTable.mockResolvedValue(mockTable)
-
-      await plugin.loadTable(resource, options)
-
-      expect(mockLoadXlsxTable).toHaveBeenCalledWith(resource, options)
-    })
-
-    it("should handle paths with directories", async () => {
-      const resource: Partial<Resource> = {
-        data: "/path/to/data.xlsx",
-      }
-      const mockTable = pl.DataFrame().lazy()
-      mockLoadXlsxTable.mockResolvedValue(mockTable)
-
-      await plugin.loadTable(resource)
-
-      expect(mockLoadXlsxTable).toHaveBeenCalledWith(resource, undefined)
-    })
-
-    it("should return undefined for ods files", async () => {
-      const resource: Partial<Resource> = {
-        data: "test.ods",
-      }
-
-      const result = await plugin.loadTable(resource)
-
-      expect(mockLoadXlsxTable).not.toHaveBeenCalled()
-      expect(result).toBeUndefined()
-    })
-
     it("should return undefined for json files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.json",
       }
 
@@ -113,18 +182,96 @@ describe("XlsxPlugin", () => {
   })
 
   describe("saveTable", () => {
-    it("should save table to xlsx file", async () => {
-      const table = pl.DataFrame().lazy()
-      const options = { path: "output.xlsx" }
-      mockSaveXlsxTable.mockResolvedValue("output.xlsx")
+    describe("xlsx format", () => {
+      it("should save table to xlsx file", async () => {
+        const table = pl.DataFrame().lazy()
+        const options = { path: "output.xlsx" }
+        mockSaveXlsxTable.mockResolvedValue("output.xlsx")
 
-      const result = await plugin.saveTable(table, options)
+        const result = await plugin.saveTable(table, options)
 
-      expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, options)
-      expect(result).toBe("output.xlsx")
+        expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
+          ...options,
+          format: { name: "xlsx" },
+        })
+        expect(result).toBe("output.xlsx")
+      })
+
+      it("should handle explicit format specification", async () => {
+        const table = pl.DataFrame().lazy()
+        const options = {
+          path: "output.txt",
+          format: { name: "xlsx" as const },
+        }
+        mockSaveXlsxTable.mockResolvedValue("output.txt")
+
+        const result = await plugin.saveTable(table, options)
+
+        expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
+          ...options,
+          format: { name: "xlsx" },
+        })
+        expect(result).toBe("output.txt")
+      })
+
+      it("should handle paths with directories", async () => {
+        const table = pl.DataFrame().lazy()
+        const options = { path: "/path/to/output.xlsx" }
+        mockSaveXlsxTable.mockResolvedValue("/path/to/output.xlsx")
+
+        await plugin.saveTable(table, options)
+
+        expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
+          ...options,
+          format: { name: "xlsx" },
+        })
+      })
     })
 
-    it("should return undefined for non-xlsx files", async () => {
+    describe("ods format", () => {
+      it("should save table to ods file", async () => {
+        const table = pl.DataFrame().lazy()
+        const options = { path: "output.ods" }
+        mockSaveXlsxTable.mockResolvedValue("output.ods")
+
+        const result = await plugin.saveTable(table, options)
+
+        expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
+          ...options,
+          format: { name: "ods" },
+        })
+        expect(result).toBe("output.ods")
+      })
+
+      it("should handle explicit format specification", async () => {
+        const table = pl.DataFrame().lazy()
+        const options = { path: "output.txt", format: { name: "ods" as const } }
+        mockSaveXlsxTable.mockResolvedValue("output.txt")
+
+        const result = await plugin.saveTable(table, options)
+
+        expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
+          ...options,
+          format: { name: "ods" },
+        })
+        expect(result).toBe("output.txt")
+      })
+
+      it("should handle paths with directories", async () => {
+        const table = pl.DataFrame().lazy()
+        const options = { path: "/path/to/output.ods" }
+        mockSaveXlsxTable.mockResolvedValue("/path/to/output.ods")
+
+        await plugin.saveTable(table, options)
+
+        expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
+          ...options,
+          format: { name: "ods" },
+        })
+      })
+    })
+
+    it("should return undefined for non-xlsx/ods files", async () => {
       const table = pl.DataFrame().lazy()
       const options = { path: "output.csv" }
 
@@ -134,40 +281,9 @@ describe("XlsxPlugin", () => {
       expect(result).toBeUndefined()
     })
 
-    it("should handle explicit format specification", async () => {
-      const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: { type: "xlsx" as const } }
-      mockSaveXlsxTable.mockResolvedValue("output.txt")
-
-      const result = await plugin.saveTable(table, options)
-
-      expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, options)
-      expect(result).toBe("output.txt")
-    })
-
-    it("should handle paths with directories", async () => {
-      const table = pl.DataFrame().lazy()
-      const options = { path: "/path/to/output.xlsx" }
-      mockSaveXlsxTable.mockResolvedValue("/path/to/output.xlsx")
-
-      await plugin.saveTable(table, options)
-
-      expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, options)
-    })
-
     it("should return undefined for files without extension", async () => {
       const table = pl.DataFrame().lazy()
       const options = { path: "output" }
-
-      const result = await plugin.saveTable(table, options)
-
-      expect(mockSaveXlsxTable).not.toHaveBeenCalled()
-      expect(result).toBeUndefined()
-    })
-
-    it("should return undefined for ods files", async () => {
-      const table = pl.DataFrame().lazy()
-      const options = { path: "output.ods" }
 
       const result = await plugin.saveTable(table, options)
 

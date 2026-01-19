@@ -91,45 +91,60 @@
       "type": "boolean"
     },
     "Format": {
+      "properties": {
+        "name": {
+          "enum": [
+            "csv",
+            "tsv",
+            "json",
+            "jsonl",
+            "xlsx",
+            "ods",
+            "parquet",
+            "arrow",
+            "sqlite"
+          ]
+        }
+      },
       "allOf": [
         {
-          "if": { "properties": { "type": { "const": "csv" } } },
+          "if": { "properties": { "name": { "const": "csv" } } },
           "then": { "$ref": "#/$defs/CsvFormat" }
         },
         {
-          "if": { "properties": { "type": { "const": "tsv" } } },
+          "if": { "properties": { "name": { "const": "tsv" } } },
           "then": { "$ref": "#/$defs/TsvFormat" }
         },
         {
-          "if": { "properties": { "type": { "const": "json" } } },
+          "if": { "properties": { "name": { "const": "json" } } },
           "then": { "$ref": "#/$defs/JsonFormat" }
         },
         {
-          "if": { "properties": { "type": { "const": "jsonl" } } },
+          "if": { "properties": { "name": { "const": "jsonl" } } },
           "then": { "$ref": "#/$defs/JsonlFormat" }
         },
         {
-          "if": { "properties": { "type": { "const": "xlsx" } } },
+          "if": { "properties": { "name": { "const": "xlsx" } } },
           "then": { "$ref": "#/$defs/XlsxFormat" }
         },
         {
-          "if": { "properties": { "type": { "const": "ods" } } },
+          "if": { "properties": { "name": { "const": "ods" } } },
           "then": { "$ref": "#/$defs/OdsFormat" }
         },
         {
-          "if": { "properties": { "type": { "const": "sqlite" } } },
-          "then": { "$ref": "#/$defs/SqliteFormat" }
-        },
-        {
-          "if": { "properties": { "type": { "const": "parquet" } } },
+          "if": { "properties": { "name": { "const": "parquet" } } },
           "then": { "$ref": "#/$defs/ParquetFormat" }
         },
         {
-          "if": { "properties": { "type": { "const": "arrow" } } },
+          "if": { "properties": { "name": { "const": "arrow" } } },
           "then": { "$ref": "#/$defs/ArrowFormat" }
         },
         {
-          "if": { "not": { "required": ["type"] } },
+          "if": { "properties": { "name": { "const": "sqlite" } } },
+          "then": { "$ref": "#/$defs/SqliteFormat" }
+        },
+        {
+          "if": { "not": { "required": ["name"] } },
           "then": { "$ref": "#/$defs/CustomFormat" }
         }
       ]
@@ -143,9 +158,9 @@
     },
     "CsvFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "csv" },
+        "name": { "const": "csv" },
         "delimiter": { "$ref": "#/$defs/Delimiter" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
         "quoteChar": { "$ref": "#/$defs/QuoteChar" },
@@ -153,99 +168,99 @@
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
     "TsvFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "tsv" },
+        "name": { "const": "tsv" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
         "nullSequence": { "$ref": "#/$defs/NullSequence" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
     "JsonFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "json" },
+        "name": { "const": "json" },
         "jsonPointer": { "$ref": "#/$defs/JsonPointer" },
         "rowType": { "$ref": "#/$defs/RowType" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
     "JsonlFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "jsonl" },
+        "name": { "const": "jsonl" },
         "rowType": { "$ref": "#/$defs/RowType" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
     "XlsxFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "xlxs" },
+        "name": { "const": "xlxs" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
         "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
       }
     },
     "OdsFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "ods" },
+        "name": { "const": "ods" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
         "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },
         "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
         "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentChar": { "$ref": "#/$defs/CommentChar" },
+        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
         "columnNames": { "$ref": "#/$defs/ColumnNames" }
-      }
-    },
-    "SqliteFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
-      "properties": {
-        "type": { "const": "sqlite" },
-        "tableName": { "$ref": "#/$defs/TableName" }
       }
     },
     "ParquetFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "parquet" }
+        "name": { "const": "parquet" }
       }
     },
     "ArrowFormat": {
       "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["type"],
+      "required": ["name"],
       "properties": {
-        "type": { "const": "arrow" }
+        "name": { "const": "arrow" }
+      }
+    },
+    "SqliteFormat": {
+      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
+      "required": ["name"],
+      "properties": {
+        "name": { "const": "sqlite" },
+        "tableName": { "$ref": "#/$defs/TableName" }
       }
     },
     "CustomFormat": {
@@ -278,7 +293,8 @@
         { "const": false },
         {
           "type": "array",
-          "items": { "type": "integer", "minimum": 1 }
+          "items": { "type": "integer", "minimum": 1 },
+          "minItems": 1
         }
       ]
     },
@@ -287,14 +303,16 @@
     },
     "CommentRows": {
       "type": "array",
-      "items": { "type": "integer", "minimum": 1 }
+      "items": { "type": "integer", "minimum": 1 },
+      "minItems": 1
     },
-    "CommentChar": {
+    "CommentPrefix": {
       "type": "string"
     },
     "ColumnNames": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": { "type": "string" },
+      "minItems": 1
     },
     "JsonPointer": {
       "type": "string",

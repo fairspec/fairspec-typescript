@@ -13,11 +13,11 @@ import * as pl from "nodejs-polars"
 import { inferCsvFormat } from "../../actions/format/infer.ts"
 
 // TODO: Condier using sample to extract header first
-// for better commentChar + headerRows/commentRows support
+// for better commentPrefix + headerRows/commentRows support
 // (consult with the Data Package Working Group)
 
 export async function loadCsvTable(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: LoadTableOptions,
 ) {
   const paths = await prefetchFiles(resource)
@@ -25,8 +25,8 @@ export async function loadCsvTable(
     throw new Error("Resource path is not defined")
   }
 
-  const csvFormat = resource.format?.type === "csv" ? resource.format : undefined
-  const tsvFormat = resource.format?.type === "tsv" ? resource.format : undefined
+  const csvFormat = resource.format?.name === "csv" ? resource.format : undefined
+  const tsvFormat = resource.format?.name === "tsv" ? resource.format : undefined
   let format = csvFormat ?? tsvFormat
 
   if (!format) {
@@ -76,10 +76,10 @@ function getScanOptions(format?: TsvFormat | CsvFormat) {
   options.skipRows = headerRows[0] ? headerRows[0] - 1 : 0
   options.hasHeader = headerRows.length > 0
   options.eolChar = format?.lineTerminator ?? "\n"
-  options.sep = format?.type === "csv" ? (format?.delimiter ?? ",") : "\t"
-  options.quoteChar = format?.type === "csv" ? format?.quoteChar ?? '"' : undefined
+  options.sep = format?.name === "csv" ? (format?.delimiter ?? ",") : "\t"
+  options.quoteChar = format?.name === "csv" ? format?.quoteChar ?? '"' : undefined
   options.nullValues = format?.nullSequence
-  options.commentPrefix = format?.commentChar
+  options.commentPrefix = format?.commentPrefix
 
   return options
 }

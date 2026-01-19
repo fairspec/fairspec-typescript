@@ -28,7 +28,6 @@ export {
   loadJsonTable,
   saveJsonTable,
 } from "./plugins/json/index.ts"
-export { loadOdsTable, OdsPlugin, saveOdsTable } from "./plugins/ods/index.ts"
 export {
   loadParquetTable,
   ParquetPlugin,

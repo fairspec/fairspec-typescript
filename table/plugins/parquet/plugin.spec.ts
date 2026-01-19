@@ -27,7 +27,7 @@ describe("ParquetPlugin", () => {
 
   describe("loadTable", () => {
     it("should load table from parquet file", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.parquet",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -40,7 +40,7 @@ describe("ParquetPlugin", () => {
     })
 
     it("should return undefined for non-parquet files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.csv",
       }
 
@@ -51,9 +51,9 @@ describe("ParquetPlugin", () => {
     })
 
     it("should handle explicit format specification", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.txt",
-        format: { type: "parquet" },
+        format: { name: "parquet" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadParquetTable.mockResolvedValue(mockTable)
@@ -65,7 +65,7 @@ describe("ParquetPlugin", () => {
     })
 
     it("should pass through load options", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.parquet",
       }
       const options = { denormalized: true }
@@ -78,7 +78,7 @@ describe("ParquetPlugin", () => {
     })
 
     it("should handle paths with directories", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "/path/to/data.parquet",
       }
       const mockTable = pl.DataFrame().lazy()
@@ -90,7 +90,7 @@ describe("ParquetPlugin", () => {
     })
 
     it("should return undefined for arrow files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.arrow",
       }
 
@@ -101,7 +101,7 @@ describe("ParquetPlugin", () => {
     })
 
     it("should return undefined for json files", async () => {
-      const resource: Partial<Resource> = {
+      const resource: Resource = {
         data: "test.json",
       }
 
@@ -138,7 +138,7 @@ describe("ParquetPlugin", () => {
       const table = pl.DataFrame().lazy()
       const options = {
         path: "output.txt",
-        format: { type: "parquet" } as const,
+        format: { name: "parquet" } as const,
       }
       mockSaveParquetTable.mockResolvedValue("output.txt")
 

@@ -2,7 +2,7 @@ import type { Resource } from "@fairspec/metadata"
 import { getDataFirstPath } from "@fairspec/metadata"
 import { SqliteDriver } from "../../drivers/sqlite.ts"
 
-export async function inferTableSchemaFromSqlite(resource: Partial<Resource>) {
+export async function inferTableSchemaFromSqlite(resource: Resource) {
   const firstPath = getDataFirstPath(resource)
   if (!firstPath) {
     throw new Error("Database is not defined")
@@ -10,7 +10,7 @@ export async function inferTableSchemaFromSqlite(resource: Partial<Resource>) {
 
   // TODO: Use first table if not defined
   const format =
-    resource.format?.type === "sqlite" ? resource.format : undefined
+    resource.format?.name === "sqlite" ? resource.format : undefined
   if (!format?.tableName) {
     throw new Error("Table name is not defined")
   }

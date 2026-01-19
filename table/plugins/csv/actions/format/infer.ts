@@ -7,7 +7,7 @@ import { default as CsvSnifferFactory } from "csv-sniffer"
 const DELIMITERS = [",", ";", ":", "|", "\t", "^", "*", "&"]
 
 export async function inferCsvFormat(
-  resource: Partial<Resource>,
+  resource: Resource,
   options?: {
     sampleBytes?: number
   },
@@ -26,17 +26,17 @@ export async function inferCsvFormat(
   const sample = await text(stream)
   const result = sniffSample(sample, DELIMITERS)
 
-  let format: CsvFormat | TsvFormat = { type: "csv" }
+  let format: CsvFormat | TsvFormat = { name: "csv" }
 
   if (result?.delimiter) {
     if (result.delimiter === "\t") {
-      format = { type: "tsv" }
+      format = { name: "tsv" }
     } else {
       format.delimiter = result.delimiter
     }
   }
 
-  if (format.type === "csv") {
+  if (format.name === "csv") {
     if (result?.quoteChar) {
       format.quoteChar = result.quoteChar
     }

@@ -113,38 +113,3 @@ jobs:
         id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  deploy:
-    needs: [release]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    permissions:
-      id-token: write
-      pages: write
-
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v5
-      - name: Setup Pnpm
-        uses: pnpm/action-setup@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          cache: pnpm
-          node-version-file: package.json
-      - name: Install Dependencies
-        run: pnpm install:ci
-      - name: Build Website
-        run: pnpm -F website build
-      - name: Upload Website
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: website/build
-      - name: Deploy Website
-        id: deployment
-        uses: actions/deploy-pages@v4

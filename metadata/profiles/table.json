@@ -4,6 +4,7 @@
   "$defs": {
     "TableSchema": {
       "type": "object",
+      "allOf": [{ "$ref": "#/$defs/JsonSchema" }],
       "properties": {
         "$schema": { "$ref": "#/$defs/Profile" },
         "title": { "$ref": "#/$defs/Title" },
@@ -15,6 +16,9 @@
         "uniqueKeys": { "$ref": "#/$defs/UniqueKeys" },
         "foreignKeys": { "$ref": "#/$defs/ForeignKeys" }
       }
+    },
+    "JsonSchema": {
+      "$ref": "https://json-schema.org/draft/2020-12/schema"
     },
     "Profile": {
       "$ref": "#/$defs/ExternalPath"
@@ -36,39 +40,30 @@
       }
     },
     "ColumnProperty": {
-      "properties": {
-        "type": {
-          "enum": ["boolean", "integer", "number", "string", "array", "object"]
-        }
-      },
       "allOf": [
         {
-          "if": { "properties": { "type": { "const": "boolean" } } },
+          "if": { "properties": { "type": { "$ref": "#/$defs/BooleanType" } } },
           "then": { "$ref": "#/$defs/BooleanColumnProperty" }
         },
         {
-          "if": { "properties": { "type": { "const": "integer" } } },
+          "if": { "properties": { "type": { "$ref": "#/$defs/IntegerType" } } },
           "then": { "$ref": "#/$defs/IntegerColumnPropertyGroup" }
         },
         {
-          "if": { "properties": { "type": { "const": "number" } } },
+          "if": { "properties": { "type": { "$ref": "#/$defs/NumberType" } } },
           "then": { "$ref": "#/$defs/NumberColumnProperty" }
         },
         {
-          "if": { "properties": { "type": { "const": "string" } } },
+          "if": { "properties": { "type": { "$ref": "#/$defs/StringType" } } },
           "then": { "$ref": "#/$defs/StringColumnPropertyGroup" }
         },
         {
-          "if": { "properties": { "type": { "const": "array" } } },
+          "if": { "properties": { "type": { "$ref": "#/$defs/ArrayType" } } },
           "then": { "$ref": "#/$defs/ArrayColumnProperty" }
         },
         {
-          "if": { "properties": { "type": { "const": "object" } } },
+          "if": { "properties": { "type": { "$ref": "#/$defs/ObjectType" } } },
           "then": { "$ref": "#/$defs/ObjectColumnPropertyGroup" }
-        },
-        {
-          "if": { "not": { "required": ["type"] } },
-          "then": { "$ref": "#/$defs/UnknownColumnProperty" }
         }
       ]
     },
@@ -88,18 +83,19 @@
       "properties": {
         "format": {
           "enum": [
-            "list",
+            "categorical",
             "decimal",
-            "hex",
-            "base64",
-            "email",
+            "list",
             "url",
-            "date-time",
+            "email",
             "date",
             "time",
+            "date-time",
             "duration",
             "wkt",
-            "wkb"
+            "wkb",
+            "hex",
+            "base64"
           ]
         }
       },
@@ -194,7 +190,7 @@
     "BooleanColumnProperty": {
       "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
-        "type": { "const": "boolean" },
+        "type": { "$ref": "#/$defs/BooleanType" },
         "enum": { "$ref": "#/$defs/BooleanEnum" },
         "const": { "$ref": "#/$defs/BooleanConst" },
         "default": { "$ref": "#/$defs/BooleanDefault" },
@@ -207,7 +203,7 @@
     "BaseIntegerColumnProperty": {
       "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
-        "type": { "const": "integer" },
+        "type": { "$ref": "#/$defs/IntegerType" },
         "enum": { "$ref": "#/$defs/IntegerEnum" },
         "const": { "$ref": "#/$defs/IntegerConst" },
         "default": { "$ref": "#/$defs/IntegerDefault" },
@@ -238,7 +234,7 @@
     "NumberColumnProperty": {
       "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
-        "type": { "const": "number" },
+        "type": { "$ref": "#/$defs/NumberType" },
         "enum": { "$ref": "#/$defs/NumberEnum" },
         "const": { "$ref": "#/$defs/NumberConst" },
         "default": { "$ref": "#/$defs/NumberDefault" },
@@ -257,7 +253,7 @@
     "BaseStringColumnProperty": {
       "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
-        "type": { "const": "string" },
+        "type": { "$ref": "#/$defs/StringType" },
         "enum": { "$ref": "#/$defs/StringEnum" },
         "const": { "$ref": "#/$defs/StringConst" },
         "default": { "$ref": "#/$defs/StringDefault" },
@@ -373,10 +369,10 @@
     "ArrayColumnProperty": {
       "allOf": [
         { "$ref": "#/$defs/BaseColumnProperty" },
-        { "$ref": "https://json-schema.org/draft/2020-12/schema" }
+        { "$ref": "#/$defs/JsonSchema" }
       ],
-      "type": "array",
       "properties": {
+        "type": { "$ref": "#/$defs/ArrayType" },
         "enum": { "$ref": "#/$defs/ArrayEnum" },
         "const": { "$ref": "#/$defs/ArrayConst" },
         "default": { "$ref": "#/$defs/ArrayDefault" },
@@ -387,10 +383,10 @@
     "BaseObjectColumnProperty": {
       "allOf": [
         { "$ref": "#/$defs/BaseColumnProperty" },
-        { "$ref": "https://json-schema.org/draft/2020-12/schema" }
+        { "$ref": "#/$defs/JsonSchema" }
       ],
-      "type": "object",
       "properties": {
+        "type": { "$ref": "#/$defs/ObjectType" },
         "enum": { "$ref": "#/$defs/ObjectEnum" },
         "const": { "$ref": "#/$defs/ObjectConst" },
         "default": { "$ref": "#/$defs/ObjectDefault" },
@@ -411,15 +407,6 @@
       "allOf": [{ "$ref": "#/$defs/BaseObjectColumnProperty" }],
       "properties": {
         "format": { "const": "topojson" }
-      }
-    },
-    "UnknownColumnProperty": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
-      "properties": {
-        "enum": { "$ref": "#/$defs/UnknownEnum" },
-        "const": { "$ref": "#/$defs/UnknownConst" },
-        "examples": { "$ref": "#/$defs/UnknownExamples" },
-        "missingValues": { "$ref": "#/$defs/MissingValues" }
       }
     },
     "ExternalPath": {
@@ -555,6 +542,24 @@
     "ForeignKeyColumns": {
       "type": "array",
       "items": { "type": "string" }
+    },
+    "BooleanType": {
+      "enum": ["boolean", ["boolean", "null"], ["null", "boolean"]]
+    },
+    "IntegerType": {
+      "enum": ["integer", ["integer", "null"], ["null", "integer"]]
+    },
+    "NumberType": {
+      "enum": ["number", ["number", "null"], ["null", "number"]]
+    },
+    "StringType": {
+      "const": ["string", ["string", "null"], ["null", "string"]]
+    },
+    "ArrayType": {
+      "const": ["array", ["array", "null"], ["null", "array"]]
+    },
+    "ObjectType": {
+      "const": ["object", ["object", "null"], ["null", "object"]]
     },
     "MissingValues": {
       "type": "array",

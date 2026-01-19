@@ -1,4 +1,4 @@
-import type { Column, ListColumn } from "@fairspec/metadata"
+import type { Column, ListColumn } from "@fairspec/library"
 import { Option } from "commander"
 
 export const tableSchema = new Option(

@@ -1,5 +1,5 @@
-import { writeTempFile } from "@fairspec/dataset"
 import type { TableSchema } from "@fairspec/library"
+import { writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { validateTableSchemaCommand } from "./validate.ts"

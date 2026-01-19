@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs"
 import { readFile } from "node:fs/promises"
-import { getTempFilePath, writeTempFile } from "@fairspec/dataset"
 import type { TableSchema } from "@fairspec/library"
+import { getTempFilePath, writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { renderTableSchemaCommand } from "./render.ts"

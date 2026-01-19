@@ -1,6 +1,5 @@
 import { writeFile } from "node:fs/promises"
-import { renderTableSchemaAs } from "@fairspec/library"
-import { resolveTableSchema } from "@fairspec/metadata"
+import { renderTableSchemaAs, resolveTableSchema } from "@fairspec/library"
 import { Command, Option } from "commander"
 import pc from "picocolors"
 import { helpConfiguration } from "../../helpers/help.ts"

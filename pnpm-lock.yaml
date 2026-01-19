@@ -241,10 +241,6 @@ importers:
       tasuku:
         specifier: ^2.0.5
         version: 2.0.5
-    devDependencies:
-      '@types/prettyjson':
-        specifier: ^0.0.33
-        version: 0.0.33
 
   website:
     devDependencies:
@@ -1200,9 +1196,6 @@ packages:
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
-
-  '@types/prettyjson@0.0.33':
-    resolution: {integrity: sha512-hHZMkavT9OXFq8p6pTCiaREtPxMRfy9NMp+Qa4PWH0RINQjyh0crOhoqUFA/cvIZncpjBpdvxkoe7nmVbyBJXw==}
 
   '@types/react-dom@19.2.0':
     resolution: {integrity: sha512-brtBs0MnE9SMx7px208g39lRmC5uHZs96caOJfTjFcYSLHNamvaSMfJNagChVNkup2SdtOxKX1FDBkRSJe1ZAg==}
@@ -5203,8 +5196,6 @@ snapshots:
       undici-types: 7.10.0
 
   '@types/normalize-package-data@2.4.4': {}
-
-  '@types/prettyjson@0.0.33': {}
 
   '@types/react-dom@19.2.0(@types/react@19.2.2)':
     dependencies:

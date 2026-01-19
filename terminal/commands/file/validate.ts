@@ -1,4 +1,4 @@
-import { validateFile } from "@fairspec/dataset"
+import { validateFile } from "@fairspec/library"
 import { Command } from "commander"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"

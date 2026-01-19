@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { writeTempFile } from "@fairspec/dataset"
+import { writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { copyDatasetCommand } from "./copy.ts"

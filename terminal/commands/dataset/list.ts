@@ -1,5 +1,4 @@
-import { loadDataset } from "@fairspec/library"
-import { inferResourceName } from "@fairspec/metadata"
+import { inferResourceName, loadDataset } from "@fairspec/library"
 import { Command } from "commander"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"

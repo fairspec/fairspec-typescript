@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs"
 import { readFile } from "node:fs/promises"
-import { getTempFilePath, writeTempFile } from "@fairspec/dataset"
+import { getTempFilePath, writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { copyFileCommand } from "./copy.ts"

@@ -1,5 +1,4 @@
-import { writeTempFile } from "@fairspec/dataset"
-import { describeFile } from "@fairspec/library"
+import { describeFile, writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { validateFileCommand } from "./validate.ts"

@@ -1,5 +1,5 @@
 ---
-title: Data Commands
+title: Working with JSON data in Terminal
 sidebar:
   order: 3
   label: Data

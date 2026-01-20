@@ -1,5 +1,5 @@
 ---
-title: Dataset Commands
+title: Working with datasets in Terminal
 sidebar:
   order: 1
   label: Dataset

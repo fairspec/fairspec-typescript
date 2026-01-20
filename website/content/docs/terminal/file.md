@@ -1,5 +1,5 @@
 ---
-title: File Commands
+title: Working with files in Terminal
 sidebar:
   order: 4
   label: File

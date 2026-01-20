@@ -5,38 +5,82 @@ sidebar:
   order: 7
 ---
 
-The `@fairspec/table` package provides efficient support for loading and saving data in Apache Arrow format. It uses Polars DataFrames for high-performance columnar data processing.
+Apache Arrow IPC file handling with high-performance columnar data processing.
 
 ## Installation
 
 ```bash
-npm install @fairspec/table
+npm install fairspec
+```
+
+## Getting Started
+
+The Arrow plugin provides:
+
+- `loadArrowTable` - Load Arrow IPC files into tables
+- `saveArrowTable` - Save tables to Arrow IPC files
+- `ArrowPlugin` - Plugin for framework integration
+
+For example:
+
+```typescript
+import { loadArrowTable } from "fairspec"
+
+const table = await loadArrowTable({ data: "table.arrow" })
+// High-performance columnar format
 ```
 
 ## Basic Usage
 
-> [!TIP]
-> You can use `loadTable` and `saveTable` from `fairspec` instead of `@fairspec/table` to load and save ARROW files if the framework can infer that files are in the `arrow/feather` format.
-
-### Loading Data
+### Loading Arrow Files
 
 ```typescript
-import { loadArrowTable } from "@fairspec/table"
+import { loadArrowTable } from "fairspec"
 
 // Load from local file
-const table = await loadArrowTable({ path: "data.arrow" })
+const table = await loadArrowTable({ data: "data.arrow" })
+
+// Load from remote URL
+const table = await loadArrowTable({
+  data: "https://example.com/data.arrow"
+})
 
 // Load multiple files (concatenated)
 const table = await loadArrowTable({
-  path: ["file1.arrow", "file2.arrow"]
+  data: ["file1.arrow", "file2.arrow"]
 })
 ```
 
-### Saving Data
+### Saving Arrow Files
 
 ```typescript
-import { saveArrowTable } from "@fairspec/table"
+import { saveArrowTable } from "fairspec"
 
-// Save as Arrow format
+// Save with default options
 await saveArrowTable(table, { path: "output.arrow" })
+
+// Save with explicit format
+await saveArrowTable(table, {
+  path: "output.arrow",
+  format: { name: "arrow" }
+})
+```
+
+## Advanced Features
+
+### Remote File Loading
+
+```typescript
+// Load from URL
+const table = await loadArrowTable({
+  data: "https://example.com/data.arrow"
+})
+
+// Load multiple remote files
+const table = await loadArrowTable({
+  data: [
+    "https://api.example.com/data-2023.arrow",
+    "https://api.example.com/data-2024.arrow"
+  ]
+})
 ```

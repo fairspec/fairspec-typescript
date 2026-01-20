@@ -1,5 +1,5 @@
 ---
-title: Table Commands
+title: Working with tables in Terminal
 sidebar:
   order: 2
   label: Table

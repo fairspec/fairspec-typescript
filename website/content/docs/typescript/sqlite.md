@@ -1,107 +1,146 @@
 ---
-title: Working with Sqlite in TypeScript
+title: Working with SQLite in TypeScript
 sidebar:
-  label: Sqlite
-  order: 8
+  label: SQLite
+  order: 9
 ---
 
-Database connectivity and operations with support for SQLite, PostgreSQL, and MySQL through Kysely query builder integration.
+SQLite database file handling with table loading and saving capabilities.
 
-## Introduction
+## Installation
 
-> [!TIP]
-> You can use `loadTable` and `saveTable` from `fairspec` instead of `@fairspec/database` to load and save database tables if the framework can infer the database connection format.
+```bash
+npm install fairspec
+```
 
-The Database plugin provides these capabilities:
+## Getting Started
 
-- `loadDatabaseTable`
-- `saveDatabaseTable`
-- `inferDatabaseSchema`
-- `loadPackageFromDatabase`
+The SQLite plugin provides:
+
+- `loadSqliteTable` - Load tables from SQLite databases
+- `saveSqliteTable` - Save tables to SQLite databases
+- `SqlitePlugin` - Plugin for framework integration
 
 For example:
 
 ```typescript
-import { loadDatabaseTable } from "@fairspec/database"
+import { loadSqliteTable } from "fairspec"
 
-const table = await loadDatabaseTable({
-  path: "sqlite://database.db",
-  dialect: { table: "users" }
+const table = await loadSqliteTable({
+  data: "database.db",
+  format: {
+    name: "sqlite",
+    tableName: "users"
+  }
 })
 // field types will be automatically inferred from database schema
-// or you can provide a Table Schema
 ```
 
-> [!TIP]
-> The ouput of `loadDatabaseTable` is a Polars LazyDataFrame, allowing you to use all of the power of Polars for data processing.
+## Basic Usage
 
-## Supported Databases
-
-The plugin supports three database types:
-
-- **SQLite** - File-based database (`sqlite://path/to/file.db`)
-- **PostgreSQL** - Network database (`postgresql://user:pass@host:port/db`)
-- **MySQL** - Network database (`mysql://user:pass@host:port/db`)
-
-## Connection Formats
-
-Database connections are specified using standard connection strings:
+### Loading SQLite Tables
 
 ```typescript
-// SQLite
-const sqliteTable = await loadDatabaseTable({
-  path: "sqlite://data.db",
-  dialect: { table: "products" }
+import { loadSqliteTable } from "fairspec"
+
+// Load a table from SQLite database
+const table = await loadSqliteTable({
+  data: "data.db",
+  format: {
+    name: "sqlite",
+    tableName: "products"
+  }
 })
 
-// PostgreSQL
-const pgTable = await loadDatabaseTable({
-  path: "postgresql://user:password@localhost:5432/mydb",
-  dialect: { table: "orders" }
-})
-
-// MySQL
-const mysqlTable = await loadDatabaseTable({
-  path: "mysql://user:password@localhost:3306/mydb",
-  dialect: { table: "customers" }
+// Load from a specific path
+const table = await loadSqliteTable({
+  data: "/path/to/database.db",
+  format: {
+    name: "sqlite",
+    tableName: "orders"
+  }
 })
 ```
 
-## Schema Inference
-
-The database adapter automatically infers Table Schema from database table definitions:
+### Saving SQLite Tables
 
 ```typescript
-import { inferDatabaseSchema } from "@fairspec/database"
+import { saveSqliteTable } from "fairspec"
 
-const schema = await inferDatabaseSchema({
-  path: "sqlite://shop.db",
-  dialect: { table: "products" }
+// Save table to SQLite database
+await saveSqliteTable(table, {
+  path: "output.db",
+  format: {
+    name: "sqlite",
+    tableName: "results"
+  }
 })
-// Returns a Table Schema with field types matching database columns
+
+// Overwrite existing table
+await saveSqliteTable(table, {
+  path: "output.db",
+  format: {
+    name: "sqlite",
+    tableName: "results"
+  },
+  overwrite: true
+})
 ```
 
-## Package Loading
+## Advanced Features
 
-Load entire Data Packages from databases:
+### Schema Inference
+
+Table schemas are automatically inferred from SQLite table definitions:
 
 ```typescript
-import { loadPackageFromDatabase } from "@fairspec/database"
-
-const package = await loadPackageFromDatabase("sqlite://catalog.db")
-// Loads all tables as package resources
+// Field types are automatically detected from database schema
+const table = await loadSqliteTable({
+  data: "shop.db",
+  format: {
+    name: "sqlite",
+    tableName: "products"
+  }
+})
+// Types like INTEGER, TEXT, REAL are mapped to appropriate Table Schema types
 ```
 
-## Database Adapters
+### Creating New Tables
 
-The plugin uses database-specific adapters built on Kysely:
+When saving, the plugin automatically creates the table structure:
 
-- **BaseAdapter** - Common functionality for all databases
-- **SqliteAdapter** - SQLite-specific operations using better-sqlite3
-- **PostgreSQLAdapter** - PostgreSQL operations using pg driver
-- **MySQLAdapter** - MySQL operations using mysql2 driver
+```typescript
+import { saveSqliteTable } from "fairspec"
 
-Each adapter handles:
-- Type normalization between database and Table Schema types
-- Connection management with LRU caching
-- Database-specific SQL dialect handling
+// Creates a new database file with the specified table
+await saveSqliteTable(table, {
+  path: "new-database.db",
+  format: {
+    name: "sqlite",
+    tableName: "my_data"
+  }
+})
+```
+
+### Working with Table Schema
+
+You can provide a custom Table Schema when saving:
+
+```typescript
+import { saveSqliteTable } from "fairspec"
+
+await saveSqliteTable(table, {
+  path: "output.db",
+  format: {
+    name: "sqlite",
+    tableName: "customers"
+  },
+  tableSchema: {
+    properties: {
+      id: { type: "integer" },
+      name: { type: "string" },
+      email: { type: "string" }
+    }
+  }
+})
+```

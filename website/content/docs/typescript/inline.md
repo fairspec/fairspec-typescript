@@ -1,100 +1,142 @@
 ---
-title: Working with inline data in TypeScript
+title: Working with Inline Data in TypeScript
 sidebar:
   label: Inline Data
-  order: 9
+  order: 10
 ---
 
-Fairspec TypeScript provides a package for reading inline data tables embedded directly in data package resources.
+Inline data handling for tables embedded directly in resource definitions.
 
-## Array Format Data
+## Installation
 
-```typescript
-import { readInlineTable } from "@fairspec/table"
-
-const resource = {
-  name: "languages",
-  type: "table",
-  data: [
-    ["id", "name"],
-    [1, "english"],
-    [2, "中文"]
-  ]
-}
-
-const table = await readInlineTable(resource)
+```bash
+npm install fairspec
 ```
 
-## Object Format Data
+## Getting Started
+
+The Inline plugin provides:
+
+- `loadInlineTable` - Load tables from inline data
+- `InlinePlugin` - Plugin for framework integration
+
+For example:
 
 ```typescript
-const resource = {
+import { loadInlineTable } from "fairspec"
+
+const table = await loadInlineTable({
+  data: [
+    { id: 1, name: "Alice" },
+    { id: 2, name: "Bob" }
+  ]
+})
+```
+
+## Basic Usage
+
+### Object Format Data
+
+The most common format is an array of objects:
+
+```typescript
+import { loadInlineTable } from "fairspec"
+
+const table = await loadInlineTable({
+  data: [
+    { id: 1, name: "english", native: "English" },
+    { id: 2, name: "chinese", native: "中文" },
+    { id: 3, name: "spanish", native: "Español" }
+  ]
+})
+```
+
+### Array Format Data
+
+You can also use array-of-arrays format with the first row as headers:
+
+```typescript
+import { loadInlineTable } from "fairspec"
+
+const table = await loadInlineTable({
+  data: [
+    ["id", "name", "native"],
+    [1, "english", "English"],
+    [2, "chinese", "中文"],
+    [3, "spanish", "Español"]
+  ]
+})
+```
+
+## Advanced Features
+
+### With Table Schema
+
+Provide a Table Schema for type validation and conversion:
+
+```typescript
+import { loadInlineTable } from "fairspec"
+
+const table = await loadInlineTable({
+  data: [
+    { id: 1, name: "english", active: true },
+    { id: 2, name: "chinese", active: false }
+  ],
+  tableSchema: {
+    properties: {
+      id: { type: "integer" },
+      name: { type: "string" },
+      active: { type: "boolean" }
+    }
+  }
+})
+```
+
+### Mixed with File Data
+
+Inline data can be used alongside file-based resources in datasets:
+
+```typescript
+import { loadInlineTable, loadCsvTable } from "fairspec"
+
+// Load inline reference data
+const languages = await loadInlineTable({
   name: "languages",
-  type: "table",
   data: [
     { id: 1, name: "english" },
-    { id: 2, name: "中文" }
+    { id: 2, name: "chinese" }
   ]
-}
+})
 
-const table = await readInlineTable(resource)
+// Load main data from file
+const users = await loadCsvTable({
+  name: "users",
+  data: "users.csv"
+})
 ```
 
-## With Processing Based on Schema
+### Resource Metadata
+
+You can include metadata with inline data resources:
 
 ```typescript
-const resource = {
-  name: "languages",
-  type: "table",
+import { loadInlineTable } from "fairspec"
+
+const table = await loadInlineTable({
+  name: "countries",
+  title: "Country Reference Data",
+  description: "ISO country codes and names",
   data: [
-    ["id", "name"],
-    [1, "english"],
-    [2, "中文"]
+    { code: "US", name: "United States" },
+    { code: "CN", name: "China" },
+    { code: "ES", name: "Spain" }
   ],
-  schema: {
-    fields: [
-      { name: "id", type: "integer" },
-      { name: "name", type: "string" }
-    ]
+  tableSchema: {
+    properties: {
+      code: { type: "string" },
+      name: { type: "string" }
+    }
   }
-}
-
-const table = await readInlineTable(resource)
-```
-
-## Inline Resource Validation
-
-```typescript
-import { validateInlineTable } from "@fairspec/table"
-
-const resource = {
-  name: "languages",
-  type: "table",
-  data: [
-    ["id", "name"],
-    [1, "english"],
-    [2, "中文"]
-  ],
-  schema: {
-    fields: [
-      { name: "id", type: "integer" },
-      { name: "name", type: "integer" }
-    ]
-  }
-}
-
-const {valid, errors} = await validateInlineTable(resource)
-//{
-//  type: "cell/type",
-//  fieldName: "name",
-//  rowNumber: 1,
-//  cell: "english",
-//}
-//{
-//  type: "cell/type",
-//  fieldName: "name",
-//  rowNumber: 2,
-//  cell: "中文",
-//}
+})
 ```
 

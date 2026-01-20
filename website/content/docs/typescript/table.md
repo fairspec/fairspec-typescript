@@ -2,7 +2,7 @@
 title: Working with tabular data in TypeScript
 sidebar:
   label: Tabular Data
-  order: 10
+  order: 11
 ---
 
 The `@fairspec/table` package provides high-performance data validation and processing capabilities for tabular data. Built on top of **nodejs-polars** (a Rust-based DataFrame library), it offers robust schema validation, type inference, and error handling for CSV, Excel, and other tabular data formats.

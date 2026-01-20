@@ -28,7 +28,7 @@ fairspec file copy data.csv --to-path output.csv
 fairspec file copy https://example.com/data.csv --to-path local-data.csv
 
 # Copy from a dataset resource
-fairspec file copy --from-dataset datapackage.json --from-resource users --to-path users.csv
+fairspec file copy --from-dataset dataset.json --from-resource users --to-path users.csv
 ```
 
 ### Options
@@ -55,7 +55,7 @@ fairspec file describe data.csv --hash-type sha256
 fairspec file describe https://example.com/data.csv
 
 # Describe from a dataset
-fairspec file describe --from-dataset datapackage.json --from-resource users
+fairspec file describe --from-dataset dataset.json --from-resource users
 ```
 
 ### Output
@@ -171,13 +171,13 @@ All file commands support loading files from dataset descriptors:
 
 ```bash
 # Describe a resource from a dataset
-fairspec file describe --from-dataset datapackage.json --from-resource sales-data
+fairspec file describe --from-dataset dataset.json --from-resource sales-data
 
 # Copy a resource from a dataset
-fairspec file copy --from-dataset datapackage.json --from-resource users --to-path users.csv
+fairspec file copy --from-dataset dataset.json --from-resource users --to-path users.csv
 
 # Validate a resource from a dataset
-fairspec file validate --from-dataset datapackage.json --from-resource products --hash abc123
+fairspec file validate --from-dataset dataset.json --from-resource products --hash abc123
 ```
 
 ## Output Formats
@@ -223,10 +223,10 @@ fairspec file validate local-data.csv --hash <hash-from-describe> --hash-type sh
 
 ```bash
 # Describe all details of a dataset resource
-fairspec file describe --from-dataset datapackage.json --from-resource sales
+fairspec file describe --from-dataset dataset.json --from-resource sales
 
 # Copy the resource locally
-fairspec file copy --from-dataset datapackage.json --from-resource sales --to-path sales.csv
+fairspec file copy --from-dataset dataset.json --from-resource sales --to-path sales.csv
 
 # Infer its format
 fairspec file infer-format sales.csv

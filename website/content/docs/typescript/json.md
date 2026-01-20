@@ -5,115 +5,136 @@ sidebar:
   order: 3
 ---
 
-The `@fairspec/table` package provides comprehensive support for loading and saving data in JSON and JSONL (JSON Lines) formats. It leverages Polars DataFrames for efficient data processing and supports flexible data transformations through dialect configurations.
+JSON file handling with automatic format detection and high-performance data operations.
 
 ## Installation
 
 ```bash
-npm install @fairspec/table
+npm install fairspec
+```
+
+## Getting Started
+
+The JSON plugin provides:
+
+- `loadJsonTable` - Load JSON files into tables
+- `saveJsonTable` - Save tables to JSON files
+- `JsonPlugin` - Plugin for framework integration
+
+For example:
+
+```typescript
+import { loadJsonTable } from "fairspec"
+
+const table = await loadJsonTable({ data: "table.json" })
+// Standard JSON array of objects format
 ```
 
 ## Basic Usage
 
-> [!TIP]
-> You can use `loadTable` and `saveTable` from `fairspec` instead of `@fairspec/table` to load and save JSON files if the framework can infer that files are in the `json/jsonl` format.
-
-### Loading JSON Data
+### Loading JSON Files
 
 ```typescript
-import { loadJsonTable } from "@fairspec/table"
+import { loadJsonTable } from "fairspec"
 
 // Load from local file
-const table = await loadJsonTable({ path: "data.json" })
+const table = await loadJsonTable({ data: "data.json" })
 
 // Load from remote URL
 const table = await loadJsonTable({
-  path: "https://example.com/data.json"
+  data: "https://example.com/data.json"
 })
 
 // Load multiple files (concatenated)
 const table = await loadJsonTable({
-  path: ["file1.json", "file2.json"]
+  data: ["file1.json", "file2.json"]
 })
 ```
 
-### Loading JSONL Data
+### Saving JSON Files
 
 ```typescript
-import { loadJsonTable } from "@fairspec/table"
+import { saveJsonTable } from "fairspec"
 
-// Load JSONL (JSON Lines) format
-const table = await loadJsonTable({ path: "data.jsonl", format: 'jsonl' })
-```
-
-### Saving Data
-
-```typescript
-import { saveJsonTable } from "@fairspec/table"
-
-// Save as JSON
+// Save with default options
 await saveJsonTable(table, { path: "output.json" })
 
-// Save as JSONL
-await saveJsonTable(table, { path: "output.jsonl", format: 'jsonl' })
+// Save with explicit format
+await saveJsonTable(table, {
+  path: "output.json",
+  format: { name: "json" }
+})
 ```
 
-## Data Formats
+## Standard Format
 
-The package supports two main JSON formats:
+JSON tables use an array of objects format:
 
-### JSON Format
-Standard JSON arrays of objects:
 ```json
 [
-  {"id": 1, "name": "Alice"},
-  {"id": 2, "name": "Bob"}
+  {"id": 1, "name": "Alice", "age": 30},
+  {"id": 2, "name": "Bob", "age": 25}
 ]
 ```
 
-### JSONL Format
-Newline-delimited JSON objects:
-```jsonl
-{"id": 1, "name": "Alice"}
-{"id": 2, "name": "Bob"}
-```
+## Advanced Features
 
-## Dialect Support
+### JSON Pointer Extraction
 
-Dialects provide flexible data transformation capabilities:
-
-### Property Extraction
-
-Extract data from nested objects using the `property` option:
+Extract data from nested objects using `jsonPointer`:
 
 ```typescript
 // Input: {"users": [{"id": 1, "name": "Alice"}]}
 const table = await loadJsonTable({
-  path: "data.json",
-  dialect: { property: "users" }
+  data: "data.json",
+  format: {
+    name: "json",
+    jsonPointer: "users"
+  }
 })
 ```
 
-### Item Keys Filtering
+### Column Selection
 
-Select specific fields using `itemKeys`:
+Select specific fields using `columnNames`:
 
 ```typescript
-// Only load 'name' field from each record
+// Only load specific columns
 const table = await loadJsonTable({
-  path: "data.json",
-  dialect: { itemKeys: ["name"] }
+  data: "data.json",
+  format: {
+    name: "json",
+    columnNames: ["name", "age"]
+  }
 })
 ```
 
 ### Array Format Handling
 
-Handle CSV-style array data with `itemType: "array"`:
+Handle CSV-style array data with `rowType: "array"`:
 
 ```typescript
 // Input: [["id", "name"], [1, "Alice"], [2, "Bob"]]
 const table = await loadJsonTable({
-  path: "data.json",
-  dialect: { itemType: "array" }
+  data: "data.json",
+  format: {
+    name: "json",
+    rowType: "array"
+  }
+})
+```
+
+### Saving with JSON Pointer
+
+Wrap data in a nested structure when saving:
+
+```typescript
+// Output: {"users": [{"id": 1, "name": "Alice"}]}
+await saveJsonTable(table, {
+  path: "output.json",
+  format: {
+    name: "json",
+    jsonPointer: "users"
+  }
 })
 ```

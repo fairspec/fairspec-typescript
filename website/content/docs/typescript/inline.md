@@ -1,5 +1,5 @@
 ---
-title: Working with Inline Data in TypeScript
+title: Working with Inline Data tables in TypeScript
 sidebar:
   label: Inline Data
   order: 10

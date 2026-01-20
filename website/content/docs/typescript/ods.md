@@ -1,5 +1,5 @@
 ---
-title: Working with ODS
+title: Working with ODS in TypeScript
 sidebar:
   label: ODS
   order: 6

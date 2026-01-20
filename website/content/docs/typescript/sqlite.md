@@ -1,5 +1,5 @@
 ---
-title: Working with Sqlite
+title: Working with Sqlite in TypeScript
 sidebar:
   label: Sqlite
   order: 8

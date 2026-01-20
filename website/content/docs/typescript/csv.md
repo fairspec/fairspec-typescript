@@ -1,15 +1,18 @@
 ---
-title: Working with CSV
+title: Working with CSV in TypeScript
 sidebar:
   label: CSV
   order: 1
 ---
-Comprehensive CSV and TSV file handling with automatic format detection, advanced header processing, and high-performance data operations.
+Comprehensive CSV file handling with automatic format detection, advanced header processing, and high-performance data operations.
 
-## Introduction
+## Installation
 
-> [!TIP]
-> You can use `loadTable` and `saveTable` from `fairspec`instead of `@fairspec/table` to load and save CSV files if the framework can infer that files are in the `csv/tsv` format.
+```bash
+npm install fairspec
+```
+
+## Getting Started
 
 The CSV plugin provides these capabilities:
 
@@ -20,7 +23,7 @@ The CSV plugin provides these capabilities:
 For example:
 
 ```typescript
-import { loadCsvTable } from "@fairspec/table"
+import { loadCsvTable } from "fairspec"
 
 const table = await loadCsvTable({ data: "table.csv" })
 // the field types will be automatically inferred
@@ -32,7 +35,7 @@ const table = await loadCsvTable({ data: "table.csv" })
 ### Loading CSV Files
 
 ```typescript
-import { loadCsvTable } from "@fairspec/table"
+import { loadCsvTable } from "fairspec"
 
 // Load a simple CSV file
 const table = await loadCsvTable({ data: "data.csv" })
@@ -56,7 +59,7 @@ const table = await loadCsvTable({
 ### Saving CSV Files
 
 ```typescript
-import { saveCsvTable } from "@fairspec/table"
+import { saveCsvTable } from "fairspec"
 
 // Save with default options
 await saveCsvTable(table, { path: "output.csv" })
@@ -81,7 +84,7 @@ await saveCsvTable(table, {
 ### Automatic Format Detection
 
 ```typescript
-import { loadCsvTable } from "@fairspec/table"
+import { loadCsvTable } from "fairspec"
 
 // Format is automatically detected when not specified
 const table = await loadCsvTable({ data: "unknown-dialect.csv" })

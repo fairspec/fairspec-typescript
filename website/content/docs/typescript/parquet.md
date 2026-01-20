@@ -1,5 +1,5 @@
 ---
-title: Working with Parquet
+title: Working with Parquet in TypeScript
 sidebar:
   label: Parquet
   order: 6

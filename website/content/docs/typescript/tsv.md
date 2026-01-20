@@ -1,15 +1,18 @@
 ---
-title: Working with TSV
+title: Working with TSV in TypeScript
 sidebar:
   label: TSV
   order: 2
 ---
 Tab-separated values (TSV) file handling with automatic format detection and high-performance data operations.
 
-## Introduction
+## Installation
 
-> [!TIP]
-> You can use `loadTable` and `saveTable` from `fairspec` instead of `@fairspec/table` to load and save TSV files if the framework can infer that files are in the `tsv` format.
+```bash
+npm install fairspec
+```
+
+## Getting Started
 
 The TSV format is handled by the CSV plugin, which provides:
 
@@ -20,7 +23,7 @@ The TSV format is handled by the CSV plugin, which provides:
 For example:
 
 ```typescript
-import { loadCsvTable } from "@fairspec/table"
+import { loadCsvTable } from "fairspec"
 
 const table = await loadCsvTable({ data: "table.tsv" })
 // the field types will be automatically inferred
@@ -31,7 +34,7 @@ const table = await loadCsvTable({ data: "table.tsv" })
 ### Loading TSV Files
 
 ```typescript
-import { loadCsvTable } from "@fairspec/table"
+import { loadCsvTable } from "fairspec"
 
 // Load a simple TSV file
 const table = await loadCsvTable({ data: "data.tsv" })
@@ -54,7 +57,7 @@ const table = await loadCsvTable({
 ### Saving TSV Files
 
 ```typescript
-import { saveCsvTable } from "@fairspec/table"
+import { saveCsvTable } from "fairspec"
 
 // Save with default options
 await saveCsvTable(table, {

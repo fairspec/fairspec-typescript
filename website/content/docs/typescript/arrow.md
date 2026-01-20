@@ -1,5 +1,5 @@
 ---
-title: Working with Arrow
+title: Working with Arrow in TypeScript
 sidebar:
   label: Arrow
   order: 7

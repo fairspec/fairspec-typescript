@@ -1,5 +1,5 @@
 ---
-title: Working with JSON
+title: Working with JSON tables in TypeScript
 sidebar:
   label: JSON
   order: 3

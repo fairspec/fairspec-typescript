@@ -1,5 +1,5 @@
 ---
-title: Working with tabular data
+title: Working with tabular data in TypeScript
 sidebar:
   label: Tabular Data
   order: 10

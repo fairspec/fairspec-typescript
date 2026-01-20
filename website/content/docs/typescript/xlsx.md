@@ -1,5 +1,5 @@
 ---
-title: Working with XLSX
+title: Working with XLSX in TypeScript
 sidebar:
   label: XLSX
   order: 5

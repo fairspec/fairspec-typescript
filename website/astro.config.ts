@@ -6,26 +6,33 @@ import starlightChangelogs, {
 import starlightGitHubAlerts from "starlight-github-alerts"
 import starlightScrollToTop from "starlight-scroll-to-top"
 import starlightTypeDoc from "starlight-typedoc"
+import packageJson from "./package.json" with { type: "json" }
+
+const { origin, hostname, pathname } = new URL(packageJson.homepage)
+const basedir = import.meta.env.PROD ? pathname : "/"
 
 const PACKAGES = {
   fairspec: "../fairspec",
   "@fairspec/library": "../library",
   "@fairspec/dataset": "../dataset",
-  "@fairspec/document": "../document",
+  "@fairspec/extension": "../extension",
   "@fairspec/metadata": "../metadata",
   "@fairspec/table": "../table",
 }
 
 export default defineConfig({
-  site: "https://typescript.fairspec.org",
+  site: origin,
+  base: basedir,
   srcDir: ".",
   outDir: "build",
   integrations: [
     starlight({
-      title: "Fairspec TypeScript",
-      description:
-        "Fairspec Typescript is a fast data management framework built on top of the Fairspec standard and Polars DataFrames. It supports various formats like CSV, JSON, and Parquet and integrates with data platforms such as CKAN, Zenodo, and GitHub",
-      customCss: ["/styles/custom.css"],
+      title: packageJson.title,
+      description: packageJson.description,
+      customCss: ["/styles/general.css"],
+      components: {
+        SocialIcons: "./components/builtin/SocialIcons.astro",
+      },
       logo: {
         src: "/assets/fairspec-logo.svg",
         alt: "Fairspec Logo",
@@ -34,12 +41,12 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/fairspec/fairspec-typescript",
+          href: packageJson.repository,
         },
       ],
       favicon: "fairspec-logo.png",
       editLink: {
-        baseUrl: "https://github.com/fairspec/fairspec-typescript/edit/main/",
+        baseUrl: `${packageJson.repository}/edit/main`,
       },
       lastUpdated: true,
       tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 4 },
@@ -85,6 +92,16 @@ export default defineConfig({
               count: 10,
             },
           ]),
+        },
+      ],
+      head: [
+        {
+          tag: "script",
+          attrs: {
+            src: "https://plausible.io/js/script.js",
+            "data-domain": hostname.split(".").slice(-2).join("."),
+            defer: true,
+          },
         },
       ],
     }),

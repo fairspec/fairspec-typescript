@@ -177,8 +177,8 @@ fairspec table infer-schema data.csv --sample-rows 1000 --confidence 0.95
 
 The inferred schema automatically detects:
 - Column types (string, integer, number, boolean, date, datetime, etc.)
-- Required fields based on presence
-- Enum values for fields with limited distinct values
+- Required columns based on presence
+- Enum values for columns with limited distinct values
 - Numeric constraints (minimum, maximum)
 - String patterns
 - Missing value indicators

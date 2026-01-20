@@ -111,8 +111,8 @@ The inferred schema will automatically detect:
 - Data types (string, number, integer, boolean, null)
 - Object structures and nested properties
 - Array items and their types
-- Required fields based on presence
-- Enum values for fields with limited options
+- Required properties based on presence
+- Enum values for properties with limited options
 
 ### Example
 
@@ -421,7 +421,7 @@ fairspec data validate output.json --schema output-schema.json
 # Start with inferred schema from v1 data
 fairspec data infer-schema data-v1.json --json > schema-v1.json
 
-# Manually update schema for v2 (add optional fields)
+# Manually update schema for v2 (add optional properties)
 # Edit schema-v1.json -> schema-v2.json
 
 # Validate that v2 schema is still valid

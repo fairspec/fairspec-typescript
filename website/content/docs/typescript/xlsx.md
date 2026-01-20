@@ -27,7 +27,7 @@ For example:
 import { loadXlsxTable } from "fairspec"
 
 const table = await loadXlsxTable({ data: "table.xlsx" })
-// the field types will be automatically inferred
+// the column types will be automatically inferred
 ```
 
 ## Basic Usage

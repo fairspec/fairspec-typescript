@@ -473,10 +473,10 @@ cat > dataset.json << 'EOF'
         "properties": { ... },
         "foreignKeys": [
           {
-            "fields": ["customer_id"],
+            "columns": ["customer_id"],
             "reference": {
               "resource": "customers",
-              "fields": ["id"]
+              "columns": ["id"]
             }
           }
         ]

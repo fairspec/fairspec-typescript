@@ -33,7 +33,7 @@ const table = await loadSqliteTable({
     tableName: "users"
   }
 })
-// field types will be automatically inferred from database schema
+// column types will be automatically inferred from database schema
 ```
 
 ## Basic Usage

@@ -78,7 +78,7 @@ JSONL uses newline-delimited JSON objects:
 
 ### Column Selection
 
-Select specific fields using `columnNames`:
+Select specific columns using `columnNames`:
 
 ```typescript
 // Only load specific columns

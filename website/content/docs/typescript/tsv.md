@@ -26,7 +26,7 @@ For example:
 import { loadCsvTable } from "fairspec"
 
 const table = await loadCsvTable({ data: "table.tsv" })
-// the field types will be automatically inferred
+// the column types will be automatically inferred
 ```
 
 ## Basic Usage

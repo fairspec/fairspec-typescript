@@ -14,7 +14,7 @@ This guide will help you get started with Fairspec TypeScript. If you are new to
 
 Fairspec TypeScript and all its packages support all the prominent TypeScript runtimes:
 
-- **Node v22+**
+- **Node v20+**
 - **Deno v2+**
 - **Bun v1+**
 
@@ -33,7 +33,7 @@ The core package `@fairspec/metadata` additionally supports browser environments
 The framework can be installed as one package:
 
 ```bash
-npm install fairspect
+npm install fairspec
 ```
 
 You car cherry-pick from individual packages:
@@ -45,7 +45,7 @@ npm install @fairspec/metadata @fairspec/table
 In the browser, the core package can be just imported using NPM CDNs:
 
 ```js
-import { loadPackageDescriptor } from "https://esm.sh/@fairspec/metadata"
+import { loadDatasetDescriptor } from "https://esm.sh/@fairspec/metadata"
 ```
 
 ## TypeScript
@@ -57,62 +57,58 @@ Fairspec TypeScript is built with type safety in mind. It uses TypeScript to pro
 
 ## Examples
 
-Loading a Data Package from Zenodo merging system Zenodo metadata into a user data package and validating its metadata:
+Loading a Dataset from Zenodo merging system Zenodo metadata into a user dataset and validating its metadata:
 
 ```ts
-import { loadPackage } from "fairspec"
+import { loadDataset } from "fairspec"
 
-const { dataPackage } = await loadPackage("https://zenodo.org/records/10053903")
+const { dataset } = await loadDataset("https://zenodo.org/records/10053903")
 
-console.log(dataPackage)
+console.log(dataset)
 //{
 //  id: 'https://doi.org/10.5281/zenodo.10053903',
-//  profile: 'tabular-data-package',
 //  ...
 //}
 
 ```
 
-Validating an in-memory package descriptor:
+Validating an in-memory dataset descriptor:
 
 ```ts
-import { validatePackageDescriptor } from "fairspec"
+import { validateDatasetDescriptor } from "fairspec"
 
-const { valid, errors } = await validatePackageDescriptor({ name: "package" })
+const report = await validateDatasetDescriptor({ resources: "bad" })
 
-console.log(valid)
+console.log(report.valid)
 // false
-console.log(errors)
+console.log(report.errors)
 //[
 //  {
-//    instancePath: '',
-//    schemaPath: '#/required',
-//    keyword: 'required',
-//    params: { missingProperty: 'resources' },
-//    message: "must have required property 'resources'",
-//    type: 'descriptor'
+//    type: "metadata",
+//    message: "must have type array",
+//    jsonPointer: '/resources',
 //  }
 //]
 ```
 
-Loading a package from a remote descriptor and saving it locally as a zip archive, and then using it as a local data package:
+Loading a dataset from a remote descriptor and saving it locally as a zip archive, and then using it as a local dataset:
 
 ```ts
 import {
-  loadPackageDescriptor,
-  loadPackageFromZip,
-  savePackageToZip,
+  loadDatasetDescriptor,
+  loadDatasetFromZip,
+  saveDatasetToZip,
   getTempFilePath,
 } from "fairspec"
 
 const archivePath = getTempFilePath()
-const sourcePath = await loadPackageDescriptor(
+const sourcePath = await loadDatasetDescriptor(
   "https://raw.githubusercontent.com/roll/currency-codes/refs/heads/master/datapackage.json",
 )
 
-await savePackageToZip(sourcePackage, { archivePath })
-const targetPackage = await loadPackageFromZip(archivePath)
-console.log(targetPackage)
+await saveDatasetToZip(sourceDataset, { archivePath })
+const targetDataset = await loadDatasetFromZip(archivePath)
+console.log(targetDataset)
 ```
 
 Reading a CSV table:
@@ -120,19 +116,19 @@ Reading a CSV table:
 ```ts
 import { loadTable } from "fairspec"
 
-const table = await loadTable({ path: "data.csv" })
+const table = await loadTable({ data: "data.csv" })
 
-// Load with custom dialect
+// Load with custom format
 const table = await loadTable({
   path: "data.csv",
-  dialect: {
+  format: {
+    name: "csv",
     delimiter: ";",
-    header: true,
-    skipInitialSpace: true
+    headerRows: false,
   }
 })
 ```
 
 ## Reference
 
-See **API Reference** of each individual package for more details. Note, that `fairspec` package re-export most of the functionality.
+See **Reference** of each individual package for more details. Note, that `fairspec` and `@fairspec/library` packages re-export most of the functionality.

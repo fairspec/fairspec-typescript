@@ -19,6 +19,7 @@
     "prepare": "husky",
     "publish:ci": "pnpm -r publish --access public --ignore-scripts --no-git-checks",
     "spec": "vitest run",
+    "start": "pnpm -F website start",
     "test": "pnpm lint && pnpm type && pnpm spec",
     "test:win": "pnpm spec",
     "type": "pnpm -r type",

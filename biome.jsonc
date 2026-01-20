@@ -7,7 +7,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!**/*d.ts", "!**/pnpm-lock.yaml"],
+    "includes": ["**", "!**/*d.ts", "!**/*.astro", "!**/pnpm-lock.yaml"],
     "ignoreUnknown": true
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },

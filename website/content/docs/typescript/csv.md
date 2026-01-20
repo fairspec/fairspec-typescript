@@ -13,16 +13,16 @@ Comprehensive CSV and TSV file handling with automatic format detection, advance
 
 The CSV plugin provides these capabilities:
 
-- `loadCsvTable`
-- `saveCsvTable`
-- `inferCsvDialect`
+- `loadCsvTable` - Load CSV/TSV files into tables
+- `saveCsvTable` - Save tables to CSV/TSV files
+- `CsvPlugin` - Plugin for framework integration
 
 For example:
 
 ```typescript
 import { loadCsvTable } from "@fairspec/table"
 
-const table = await loadCsvTable({path: "table.csv"})
+const table = await loadCsvTable({ data: "table.csv" })
 // the field types will be automatically inferred
 // or you can provide a Table Schema
 ```
@@ -35,21 +35,21 @@ const table = await loadCsvTable({path: "table.csv"})
 import { loadCsvTable } from "@fairspec/table"
 
 // Load a simple CSV file
-const table = await loadCsvTable({ path: "data.csv" })
+const table = await loadCsvTable({ data: "data.csv" })
 
-// Load with custom dialect
+// Load with custom format
 const table = await loadCsvTable({
-  path: "data.csv",
-  dialect: {
+  data: "data.csv",
+  format: {
+    name: "csv",
     delimiter: ";",
-    header: true,
-    skipInitialSpace: true
+    headerRows: [1]
   }
 })
 
 // Load multiple CSV files (concatenated)
 const table = await loadCsvTable({
-  path: ["part1.csv", "part2.csv", "part3.csv"]
+  data: ["part1.csv", "part2.csv", "part3.csv"]
 })
 ```
 
@@ -61,29 +61,41 @@ import { saveCsvTable } from "@fairspec/table"
 // Save with default options
 await saveCsvTable(table, { path: "output.csv" })
 
-// Save with custom dialect
+// Save with custom format
 await saveCsvTable(table, {
   path: "output.csv",
-  dialect: {
+  format: {
+    name: "csv",
     delimiter: "\t",
     quoteChar: "'"
   }
 })
+
+// Save as TSV
+await saveCsvTable(table, {
+  path: "output.tsv",
+  format: { name: "tsv" }
+})
 ```
 
-### Dialect Detection
+### Automatic Format Detection
 
 ```typescript
-import { inferCsvDialect } from "@fairspec/table"
+import { loadCsvTable } from "@fairspec/table"
 
-// Automatically detect CSV format
-const dialect = await inferCsvDialect({ path: "unknown-dialect.csv" })
-console.log(dialect) // { delimiter: ",", header: true, quoteChar: '"' }
+// Format is automatically detected when not specified
+const table = await loadCsvTable({ data: "unknown-dialect.csv" })
+// The CSV plugin will automatically infer delimiter, quote characters, etc.
 
-// Use detected dialect to load
+// You can also explicitly specify the format if detection isn't accurate
 const table = await loadCsvTable({
-  path: "unknown-dialect.csv",
-  dialect
+  data: "data.csv",
+  format: {
+    name: "csv",
+    delimiter: ",",
+    quoteChar: '"',
+    headerRows: [1]
+  }
 })
 ```
 
@@ -98,8 +110,9 @@ const table = await loadCsvTable({
 // Revenue,100,120,110,130
 
 const table = await loadCsvTable({
-  path: "multi-header.csv",
-  dialect: {
+  data: "multi-header.csv",
+  format: {
+    name: "csv",
     headerRows: [1, 2],
     headerJoin: "_"
   }
@@ -117,10 +130,21 @@ const table = await loadCsvTable({
 // John,25,NYC
 
 const table = await loadCsvTable({
-  path: "with-comments.csv",
-  dialect: {
+  data: "with-comments.csv",
+  format: {
+    name: "csv",
     commentRows: [1, 2],
-    header: true
+    headerRows: [3]
+  }
+})
+
+// Or use commentPrefix to skip lines starting with a specific character
+const table = await loadCsvTable({
+  data: "with-comments.csv",
+  format: {
+    name: "csv",
+    commentPrefix: "#",
+    headerRows: [1]
   }
 })
 ```
@@ -130,12 +154,12 @@ const table = await loadCsvTable({
 ```typescript
 // Load from URL
 const table = await loadCsvTable({
-  path: "https://example.com/data.csv"
+  data: "https://example.com/data.csv"
 })
 
 // Load multiple remote files
 const table = await loadCsvTable({
-  path: [
+  data: [
     "https://api.example.com/data-2023.csv",
     "https://api.example.com/data-2024.csv"
   ]

@@ -76,9 +76,10 @@ export default defineConfig({
             { label: "Contributing", slug: "overview/contributing" },
           ],
         },
-        { label: "Guides", autogenerate: { directory: "guides" } },
+        { label: "Terminal", autogenerate: { directory: "terminal" } },
+        { label: "TypeScript", autogenerate: { directory: "typescript" } },
         {
-          label: "API Reference",
+          label: "Reference",
           collapsed: true,
           items: generatePackageSidebars(),
         },

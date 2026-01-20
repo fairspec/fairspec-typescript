@@ -2,7 +2,7 @@
 title: Working with Arrow
 sidebar:
   label: Arrow
-  order: 3
+  order: 7
 ---
 
 The `@fairspec/table` package provides efficient support for loading and saving data in Apache Arrow format. It uses Polars DataFrames for high-performance columnar data processing.

@@ -2,7 +2,7 @@
 title: Working with Parquet
 sidebar:
   label: Parquet
-  order: 4
+  order: 6
 ---
 
 The `@fairspec/table` package provides efficient support for loading and saving data in Apache Parquet format. It uses Polars DataFrames for high-performance columnar data processing.

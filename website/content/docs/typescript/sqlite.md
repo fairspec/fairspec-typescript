@@ -2,7 +2,7 @@
 title: Working with Sqlite
 sidebar:
   label: Sqlite
-  order: 5
+  order: 8
 ---
 
 Database connectivity and operations with support for SQLite, PostgreSQL, and MySQL through Kysely query builder integration.

@@ -2,7 +2,7 @@
 title: Working with XLSX
 sidebar:
   label: XLSX
-  order: 1
+  order: 5
 ---
 Comprehensive Excel (.xlsx) file handling with sheet selection, advanced header processing, and high-performance data operations.
 

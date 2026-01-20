@@ -2,7 +2,7 @@
 title: Working with JSON
 sidebar:
   label: JSON
-  order: 2
+  order: 3
 ---
 
 The `@fairspec/table` package provides comprehensive support for loading and saving data in JSON and JSONL (JSON Lines) formats. It leverages Polars DataFrames for efficient data processing and supports flexible data transformations through dialect configurations.

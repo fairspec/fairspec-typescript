@@ -2,7 +2,7 @@
 title: Working with inline data
 sidebar:
   label: Inline Data
-  order: 6
+  order: 9
 ---
 
 Fairspec TypeScript provides a package for reading inline data tables embedded directly in data package resources.

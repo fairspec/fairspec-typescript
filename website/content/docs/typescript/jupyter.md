@@ -2,7 +2,7 @@
 title: Using Fairspec TypeScript in Jupyter Notebooks
 sidebar:
   label: Jupyter Notebooks
-  order: 10
+  order: 11
 ---
 
 For data scientists and data engineers, [Jupyter Notebooks](https://docs.jupyter.org/en/latest/) provide a powerful and flexible environment for exploring, visualizing, and analyzing data.

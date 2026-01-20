@@ -4,66 +4,61 @@ sidebar:
   label: XLSX
   order: 5
 ---
-Comprehensive Excel (.xlsx) file handling with sheet selection, advanced header processing, and high-performance data operations.
 
-## Introduction
+Excel (.xlsx) file handling with sheet selection, advanced header processing, and high-performance data operations.
 
-> [!TIP]
-> You can use `loadTable` and `saveTable` from `fairspec` instead of `@fairspec/table` to load and save XLSX files if the framework can infer that files are in the `xlsx` format.
+## Installation
 
-The XLSX plugin provides these capabilities:
+```bash
+npm install fairspec
+```
 
-- `loadXlsxTable`
-- `saveXlsxTable`
+## Getting Started
+
+The XLSX plugin provides:
+
+- `loadXlsxTable` - Load Excel files into tables
+- `saveXlsxTable` - Save tables to Excel files
+- `XlsxPlugin` - Plugin for framework integration
 
 For example:
 
 ```typescript
-import { loadXlsxTable, saveXlsxTable } from "@fairspec/table"
+import { loadXlsxTable } from "fairspec"
 
-const table = await loadXlsxTable({path: "table.xlsx"})
+const table = await loadXlsxTable({ data: "table.xlsx" })
 // the field types will be automatically inferred
-// or you can provide a Table Schema
-
-await saveXlsxTable(table, {path: "output.xlsx"})
 ```
 
 ## Basic Usage
 
-### Reading XLSX Files
-
-> [!TIP]
-> The ouput of `loadXlsxTable` is a Polars LazyDataFrame, allowing you to use all of the power of Polars for data processing.
+### Loading XLSX Files
 
 ```typescript
-import { loadXlsxTable } from "@fairspec/table"
+import { loadXlsxTable } from "fairspec"
 
 // Load a simple XLSX file
-const table = await loadXlsxTable({ path: "data.xlsx" })
+const table = await loadXlsxTable({ data: "data.xlsx" })
 
-// Load with custom dialect (specify sheet)
+// Load with custom format (specify sheet)
 const table = await loadXlsxTable({
-  path: "data.xlsx",
-  dialect: {
-    sheetName: "Sheet2",
-    header: true
+  data: "data.xlsx",
+  format: {
+    name: "xlsx",
+    sheetName: "Sheet2"
   }
 })
 
 // Load multiple XLSX files (concatenated)
 const table = await loadXlsxTable({
-  path: ["part1.xlsx", "part2.xlsx", "part3.xlsx"]
+  data: ["part1.xlsx", "part2.xlsx", "part3.xlsx"]
 })
-
-// Table is a Polars LazyDataFrame
-const frame = table.collect()
-frame.describe()
 ```
 
 ### Saving XLSX Files
 
 ```typescript
-import { saveXlsxTable } from "@fairspec/table"
+import { saveXlsxTable } from "fairspec"
 
 // Save with default options
 await saveXlsxTable(table, { path: "output.xlsx" })
@@ -71,7 +66,8 @@ await saveXlsxTable(table, { path: "output.xlsx" })
 // Save with custom sheet name
 await saveXlsxTable(table, {
   path: "output.xlsx",
-  dialect: {
+  format: {
+    name: "xlsx",
     sheetName: "Data"
   }
 })
@@ -82,20 +78,20 @@ await saveXlsxTable(table, {
 ### Sheet Selection
 
 ```typescript
-import { loadXlsxTable } from "@fairspec/table"
-
 // Select by sheet number (1-indexed)
 const table = await loadXlsxTable({
-  path: "workbook.xlsx",
-  dialect: {
+  data: "workbook.xlsx",
+  format: {
+    name: "xlsx",
     sheetNumber: 2  // Load second sheet
   }
 })
 
 // Select by sheet name
 const table = await loadXlsxTable({
-  path: "workbook.xlsx",
-  dialect: {
+  data: "workbook.xlsx",
+  format: {
+    name: "xlsx",
     sheetName: "Sales Data"
   }
 })
@@ -104,16 +100,11 @@ const table = await loadXlsxTable({
 ### Multi-Header Row Processing
 
 ```typescript
-import { loadXlsxTable } from "@fairspec/table"
-
-// XLSX with multiple header rows:
-// Year | 2023 | 2023 | 2024 | 2024
-// Quarter | Q1 | Q2 | Q1 | Q2
-// Revenue | 100 | 120 | 110 | 130
-
+// XLSX with multiple header rows
 const table = await loadXlsxTable({
-  path: "multi-header.xlsx",
-  dialect: {
+  data: "multi-header.xlsx",
+  format: {
+    name: "xlsx",
     headerRows: [1, 2],
     headerJoin: "_"
   }
@@ -124,22 +115,23 @@ const table = await loadXlsxTable({
 ### Comment Row Handling
 
 ```typescript
-import { loadXlsxTable } from "@fairspec/table"
-
-// XLSX with comment rows
+// Skip specific comment rows
 const table = await loadXlsxTable({
-  path: "with-comments.xlsx",
-  dialect: {
-    commentRows: [1, 2],  // Skip first two rows
-    header: true
+  data: "with-comments.xlsx",
+  format: {
+    name: "xlsx",
+    commentRows: [1, 2],
+    headerRows: [3]
   }
 })
 
-// Skip rows with comment character
+// Skip rows with comment prefix
 const table = await loadXlsxTable({
-  path: "data.xlsx",
-  dialect: {
-    commentPrefix: "#"  // Skip rows starting with #
+  data: "data.xlsx",
+  format: {
+    name: "xlsx",
+    commentPrefix: "#",
+    headerRows: [1]
   }
 })
 ```
@@ -147,41 +139,29 @@ const table = await loadXlsxTable({
 ### Remote File Loading
 
 ```typescript
-import { loadXlsxTable } from "@fairspec/table"
-
 // Load from URL
 const table = await loadXlsxTable({
-  path: "https://example.com/data.xlsx"
+  data: "https://example.com/data.xlsx"
 })
 
 // Load multiple remote files
 const table = await loadXlsxTable({
-  path: [
+  data: [
     "https://api.example.com/data-2023.xlsx",
     "https://api.example.com/data-2024.xlsx"
   ]
 })
 ```
 
-### Header Options
+### Column Selection
 
 ```typescript
-import { loadXlsxTable } from "@fairspec/table"
-
-// No header row (use generated column names)
+// Select specific columns
 const table = await loadXlsxTable({
-  path: "data.xlsx",
-  dialect: {
-    header: false
-  }
-})
-// Columns will be: field1, field2, field3, etc.
-
-// Custom header row offset
-const table = await loadXlsxTable({
-  path: "data.xlsx",
-  dialect: {
-    headerRows: [3]  // Use third row as header
+  data: "data.xlsx",
+  format: {
+    name: "xlsx",
+    columnNames: ["name", "age", "city"]
   }
 })
 ```

@@ -5,74 +5,72 @@ sidebar:
   order: 6
 ---
 
-Comprehensive OpenDocument Spreadsheet (ODS) file handling with sheet selection, advanced header processing, and high-performance data operations.
+OpenDocument Spreadsheet (ODS) file handling with sheet selection, advanced header processing, and high-performance data operations.
 
-## Introduction
+## Installation
 
-> [!TIP]
-> You can use `loadTable` and `saveTable` from `fairspec` instead of `@fairspec/table` to load and save ODS files if the framework can infer that files are in the `ods` format.
+```bash
+npm install fairspec
+```
 
-The ODS plugin provides these capabilities:
+## Getting Started
 
-- `loadOdsTable`
-- `saveOdsTable`
+ODS format is handled by the XLSX plugin, which provides:
+
+- `loadXlsxTable` - Load ODS files into tables
+- `saveXlsxTable` - Save tables to ODS files
+- `XlsxPlugin` - Plugin for framework integration
 
 For example:
 
 ```typescript
-import { loadOdsTable, saveOdsTable } from "@fairspec/table"
+import { loadXlsxTable } from "fairspec"
 
-const table = await loadOdsTable({path: "table.ods"})
+const table = await loadXlsxTable({ data: "table.ods" })
 // the field types will be automatically inferred
-// or you can provide a Table Schema
-
-await saveOdsTable(table, {path: "output.ods"})
 ```
 
 ## Basic Usage
 
-### Reading ODS Files
-
-> [!TIP]
-> The ouput of `loadOdsTable` is a Polars LazyDataFrame, allowing you to use all of the power of Polars for data processing.
+### Loading ODS Files
 
 ```typescript
-import { loadOdsTable } from "@fairspec/table"
+import { loadXlsxTable } from "fairspec"
 
 // Load a simple ODS file
-const table = await loadOdsTable({ path: "data.ods" })
+const table = await loadXlsxTable({ data: "data.ods" })
 
-// Load with custom dialect (specify sheet)
-const table = await loadOdsTable({
-  path: "data.ods",
-  dialect: {
-    sheetName: "Sheet2",
-    header: true
+// Load with custom format (specify sheet)
+const table = await loadXlsxTable({
+  data: "data.ods",
+  format: {
+    name: "ods",
+    sheetName: "Sheet2"
   }
 })
 
 // Load multiple ODS files (concatenated)
-const table = await loadOdsTable({
-  path: ["part1.ods", "part2.ods", "part3.ods"]
+const table = await loadXlsxTable({
+  data: ["part1.ods", "part2.ods", "part3.ods"]
 })
-
-// Table is a Polars LazyDataFrame
-const frame = table.collect()
-frame.describe()
 ```
 
 ### Saving ODS Files
 
 ```typescript
-import { saveOdsTable } from "@fairspec/table"
+import { saveXlsxTable } from "fairspec"
 
 // Save with default options
-await saveOdsTable(table, { path: "output.ods" })
+await saveXlsxTable(table, {
+  path: "output.ods",
+  format: { name: "ods" }
+})
 
 // Save with custom sheet name
-await saveOdsTable(table, {
+await saveXlsxTable(table, {
   path: "output.ods",
-  dialect: {
+  format: {
+    name: "ods",
     sheetName: "Data"
   }
 })
@@ -83,20 +81,20 @@ await saveOdsTable(table, {
 ### Sheet Selection
 
 ```typescript
-import { loadOdsTable } from "@fairspec/table"
-
 // Select by sheet number (1-indexed)
-const table = await loadOdsTable({
-  path: "workbook.ods",
-  dialect: {
+const table = await loadXlsxTable({
+  data: "workbook.ods",
+  format: {
+    name: "ods",
     sheetNumber: 2  // Load second sheet
   }
 })
 
 // Select by sheet name
-const table = await loadOdsTable({
-  path: "workbook.ods",
-  dialect: {
+const table = await loadXlsxTable({
+  data: "workbook.ods",
+  format: {
+    name: "ods",
     sheetName: "Sales Data"
   }
 })
@@ -105,16 +103,11 @@ const table = await loadOdsTable({
 ### Multi-Header Row Processing
 
 ```typescript
-import { loadOdsTable } from "@fairspec/table"
-
-// ODS with multiple header rows:
-// Year | 2023 | 2023 | 2024 | 2024
-// Quarter | Q1 | Q2 | Q1 | Q2
-// Revenue | 100 | 120 | 110 | 130
-
-const table = await loadOdsTable({
-  path: "multi-header.ods",
-  dialect: {
+// ODS with multiple header rows
+const table = await loadXlsxTable({
+  data: "multi-header.ods",
+  format: {
+    name: "ods",
     headerRows: [1, 2],
     headerJoin: "_"
   }
@@ -125,22 +118,23 @@ const table = await loadOdsTable({
 ### Comment Row Handling
 
 ```typescript
-import { loadOdsTable } from "@fairspec/table"
-
-// ODS with comment rows
-const table = await loadOdsTable({
-  path: "with-comments.ods",
-  dialect: {
-    commentRows: [1, 2],  // Skip first two rows
-    header: true
+// Skip specific comment rows
+const table = await loadXlsxTable({
+  data: "with-comments.ods",
+  format: {
+    name: "ods",
+    commentRows: [1, 2],
+    headerRows: [3]
   }
 })
 
-// Skip rows with comment character
-const table = await loadOdsTable({
-  path: "data.ods",
-  dialect: {
-    commentPrefix: "#"  // Skip rows starting with #
+// Skip rows with comment prefix
+const table = await loadXlsxTable({
+  data: "data.ods",
+  format: {
+    name: "ods",
+    commentPrefix: "#",
+    headerRows: [1]
   }
 })
 ```
@@ -148,41 +142,29 @@ const table = await loadOdsTable({
 ### Remote File Loading
 
 ```typescript
-import { loadOdsTable } from "@fairspec/table"
-
 // Load from URL
-const table = await loadOdsTable({
-  path: "https://example.com/data.ods"
+const table = await loadXlsxTable({
+  data: "https://example.com/data.ods"
 })
 
 // Load multiple remote files
-const table = await loadOdsTable({
-  path: [
+const table = await loadXlsxTable({
+  data: [
     "https://api.example.com/data-2023.ods",
     "https://api.example.com/data-2024.ods"
   ]
 })
 ```
 
-### Header Options
+### Column Selection
 
 ```typescript
-import { loadOdsTable } from "@fairspec/table"
-
-// No header row (use generated column names)
-const table = await loadOdsTable({
-  path: "data.ods",
-  dialect: {
-    header: false
-  }
-})
-// Columns will be: field1, field2, field3, etc.
-
-// Custom header row offset
-const table = await loadOdsTable({
-  path: "data.ods",
-  dialect: {
-    headerRows: [3]  // Use third row as header
+// Select specific columns
+const table = await loadXlsxTable({
+  data: "data.ods",
+  format: {
+    name: "ods",
+    columnNames: ["name", "age", "city"]
   }
 })
 ```

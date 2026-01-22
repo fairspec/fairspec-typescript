@@ -6,7 +6,7 @@ import { loadTable } from "../../actions/table/load.ts"
 // TODO: foreign key columns definition should be validated as well (metadata/here?)
 // TODO: review temporary files creation from validateDataset call
 
-export async function validateDatasetIntegrity(
+export async function validateDatasetForeignKeys(
   dataset: Dataset,
   options?: { maxErrors?: number },
 ) {

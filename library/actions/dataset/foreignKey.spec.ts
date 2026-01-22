@@ -1,8 +1,8 @@
 import type { Dataset } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { validateDatasetIntegrity } from "./integrity.ts"
+import { validateDatasetForeignKeys } from "./foreignKey.ts"
 
-describe("validateDatasetIntegrity", () => {
+describe("validateDatasetForeignKeys", () => {
   it("should validate dataset with valid foreign keys", async () => {
     const source: Dataset = {
       resources: [
@@ -45,7 +45,7 @@ describe("validateDatasetIntegrity", () => {
       ],
     }
 
-    const report = await validateDatasetIntegrity(source)
+    const report = await validateDatasetForeignKeys(source)
 
     expect(report.valid).toBe(true)
     expect(report.errors).toHaveLength(0)
@@ -93,7 +93,7 @@ describe("validateDatasetIntegrity", () => {
       ],
     }
 
-    const report = await validateDatasetIntegrity(source)
+    const report = await validateDatasetForeignKeys(source)
 
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(1)
@@ -140,7 +140,7 @@ describe("validateDatasetIntegrity", () => {
       ],
     }
 
-    const report = await validateDatasetIntegrity(source)
+    const report = await validateDatasetForeignKeys(source)
 
     expect(report.valid).toBe(true)
     expect(report.errors).toHaveLength(0)
@@ -172,7 +172,7 @@ describe("validateDatasetIntegrity", () => {
       ],
     }
 
-    const report = await validateDatasetIntegrity(source)
+    const report = await validateDatasetForeignKeys(source)
 
     expect(report.valid).toBe(false)
     expect(report.errors).toHaveLength(1)

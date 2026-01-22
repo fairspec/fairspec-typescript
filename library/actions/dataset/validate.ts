@@ -9,7 +9,7 @@ import {
 import pAll from "p-all"
 import { validateResource } from "../../actions/resource/validate.ts"
 import { system } from "../../system.ts"
-import { validateDatasetIntegrity } from "./integrity.ts"
+import { validateDatasetForeignKeys } from "./foreignKey.ts"
 
 // TODO: review this function
 
@@ -55,11 +55,11 @@ export async function validateDataset(
     descriptorReport.dataset,
   )
 
-  const integrityReport = await validateDatasetIntegrity(
+  const foreignKeyReport = await validateDatasetForeignKeys(
     descriptorReport.dataset,
   )
 
-  const errors = [...resourcesReport.errors, ...integrityReport.errors]
+  const errors = [...resourcesReport.errors, ...foreignKeyReport.errors]
   return createReport(errors)
 }
 

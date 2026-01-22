@@ -1,4 +1,3 @@
-import { inferDialectFormat } from "@fairspec/library"
 import type {
   CsvDialect,
   JsonDialect,
@@ -7,7 +6,8 @@ import type {
   SqliteDialect,
   TsvDialect,
   XlsxDialect,
-} from "@fairspec/metadata"
+} from "@fairspec/library"
+import { inferDialectFormat } from "@fairspec/library"
 import type { DialectOptions } from "../models/dialect.ts"
 
 export function createDialectFromPathAndOptions(

@@ -2,7 +2,7 @@ import { z } from "zod"
 import { Data } from "./data.ts"
 import { Datacite } from "./datacite/datacite.ts"
 import { DataSchema } from "./dataSchema.ts"
-import { Format } from "./format/format.ts"
+import { Dialect } from "./dialect/dialect.ts"
 import { Integrity } from "./integrity.ts"
 import { Path } from "./path.ts"
 import { TableSchema } from "./tableSchema.ts"
@@ -20,14 +20,17 @@ export const Resource = Datacite.extend({
       "An optional name for the resource consisting of alphanumeric characters and underscores. If provided, it can be used to reference resource within a dataset context.",
     ),
 
-  format: Format.optional().describe(
-    "The format definition of the file. For multiple files the format property defines the format for all the files.",
-  ),
-
   textual: z
     .boolean()
     .optional()
     .describe("Whether the resource is text-based."),
+
+  dialect: z
+    .union([Path, Dialect])
+    .optional()
+    .describe(
+      "A path to dialect or an object with the dialect of the file. For multiple files the format property defines the dialect for all the files.",
+    ),
 
   integrity: Integrity.optional().describe(
     "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",

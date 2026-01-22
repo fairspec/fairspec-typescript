@@ -1,16 +1,17 @@
 import type { Resource } from "@fairspec/metadata"
-import { getHeaderRows } from "../../../../helpers/format.ts"
-import type {CsvFormat, TsvFormat} from "@fairspec/metadata"
+import { getHeaderRows } from "../../../../helpers/dialect.ts"
+import type {CsvDialect, TsvDialect} from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../../plugin.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
-import { joinHeaderRows } from "../../../../actions/table/format.ts"
+import { joinHeaderRows } from "../../../../actions/table/dialect.ts"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
-import { skipCommentRows } from "../../../../actions/table/format.ts"
+import { skipCommentRows } from "../../../../actions/table/dialect.ts"
 import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
-import { inferCsvFormat } from "../../actions/format/infer.ts"
+import { inferCsvDialect } from "../../actions/dialect/infer.ts"
+import { getSupportedDialect } from "@fairspec/metadata"
 
 // TODO: Condier using sample to extract header first
 // for better commentPrefix + headerRows/commentRows support
@@ -25,15 +26,16 @@ export async function loadCsvTable(
     throw new Error("Resource path is not defined")
   }
 
-  const csvFormat = resource.format?.name === "csv" ? resource.format : undefined
-  const tsvFormat = resource.format?.name === "tsv" ? resource.format : undefined
-  let format = csvFormat ?? tsvFormat
-
-  if (!format) {
-    format = await inferCsvFormat({ ...resource, data: paths[0] }, options)
+  let dialect = await getSupportedDialect(resource, ["csv", "tsv"])
+  if (!dialect) {
+    throw new Error("Resource data is not compatible")
   }
 
-  const scanOptions = getScanOptions(format)
+  if (!resource.dialect) {
+    dialect = await inferCsvDialect({ ...resource, data: paths[0] }, options)
+  }
+
+  const scanOptions = getScanOptions(dialect)
   const tables: Table[] = []
   for (const path of paths) {
     const table = pl.scanCSV(path, scanOptions)
@@ -51,9 +53,9 @@ export async function loadCsvTable(
     )
   }
 
-  if (format) {
-    table = await joinHeaderRows(table, format)
-    table = skipCommentRows(table, format)
+  if (dialect) {
+    table = await joinHeaderRows(table, dialect)
+    table = skipCommentRows(table, dialect)
   }
 
   if (!options?.denormalized) {
@@ -65,8 +67,8 @@ export async function loadCsvTable(
   return table
 }
 
-function getScanOptions(format?: TsvFormat | CsvFormat) {
-  const headerRows = getHeaderRows(format)
+function getScanOptions(dialect?: TsvDialect | CsvDialect) {
+  const headerRows = getHeaderRows(dialect)
 
   const options: Partial<pl.ScanCsvOptions> = {
     inferSchemaLength: 0,
@@ -75,11 +77,11 @@ function getScanOptions(format?: TsvFormat | CsvFormat) {
 
   options.skipRows = headerRows[0] ? headerRows[0] - 1 : 0
   options.hasHeader = headerRows.length > 0
-  options.eolChar = format?.lineTerminator ?? "\n"
-  options.sep = format?.name === "csv" ? (format?.delimiter ?? ",") : "\t"
-  options.quoteChar = format?.name === "csv" ? format?.quoteChar ?? '"' : undefined
-  options.nullValues = format?.nullSequence
-  options.commentPrefix = format?.commentPrefix
+  options.eolChar = dialect?.lineTerminator ?? "\n"
+  options.sep = dialect?.format === "csv" ? (dialect?.delimiter ?? ",") : "\t"
+  options.quoteChar = dialect?.format === "csv" ? dialect?.quoteChar ?? '"' : undefined
+  options.nullValues = dialect?.nullSequence
+  options.commentPrefix = dialect?.commentPrefix
 
   return options
 }

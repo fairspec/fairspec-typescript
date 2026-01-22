@@ -1,3 +1,4 @@
+import { getSupportedDialect } from "@fairspec/metadata"
 import type { Kysely } from "kysely"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
@@ -12,10 +13,10 @@ import type { SqliteSchema } from "../../models/schema.ts"
 export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  // TODO: Use first table if not defined
-  const format = options.format?.name === "sqlite" ? options.format : undefined
-  if (!format?.tableName) {
-    throw new Error("Table name is not defined")
+  const resource = { data: path, dialect: options.dialect }
+  const dialect = await getSupportedDialect(resource, ["sqlite"])
+  if (!dialect) {
+    throw new Error("Saving options is not compatible")
   }
 
   const tableSchema =
@@ -31,13 +32,23 @@ export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
   })
 
   const database = await driver.connectDatabase(path, { create: true })
+  const databaseSchemas = await database.introspection.getTables()
+
+  const tableName =
+    dialect?.tableName ??
+    databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
+
+  if (!tableName) {
+    throw new Error("Table name is not defined")
+  }
+
   const sqliteSchema = driver.convertTableSchemaToDatabase(
     tableSchema,
-    format.tableName,
+    tableName,
   )
 
   await defineTable(database, sqliteSchema, { overwrite })
-  await populateTable(database, format.tableName, table)
+  await populateTable(database, tableName, table)
 
   return path
 }

@@ -3,10 +3,6 @@ import { saveDescriptor } from "../../actions/descriptor/save.ts"
 import type { TableSchema } from "../../models/tableSchema.ts"
 import * as settings from "../../settings.ts"
 
-/**
- * Save a Schema to a file path
- * Works in Node.js environments
- */
 export async function saveTableSchema(
   tableSchema: TableSchema,
   options: {
@@ -18,7 +14,7 @@ export async function saveTableSchema(
 
   descriptor.$schema =
     descriptor.$schema ??
-    `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/table.json`
+    `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/schema.json`
 
   await saveDescriptor(descriptor, {
     path: options.path,

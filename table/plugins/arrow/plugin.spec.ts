@@ -36,7 +36,7 @@ describe("ArrowPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadArrowTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "arrow" } },
+        { ...resource, dialect: { format: "arrow" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -52,7 +52,7 @@ describe("ArrowPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadArrowTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "arrow" } },
+        { ...resource, dialect: { format: "arrow" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -72,7 +72,7 @@ describe("ArrowPlugin", () => {
     it("should handle explicit arrow format specification", async () => {
       const resource: Resource = {
         data: "test.txt",
-        format: { name: "arrow" },
+        dialect: { format: "arrow" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadArrowTable.mockResolvedValue(mockTable)
@@ -94,7 +94,7 @@ describe("ArrowPlugin", () => {
       await plugin.loadTable(resource, options)
 
       expect(mockLoadArrowTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "arrow" } },
+        { ...resource, dialect: { format: "arrow" } },
         options,
       )
     })
@@ -109,7 +109,7 @@ describe("ArrowPlugin", () => {
       await plugin.loadTable(resource)
 
       expect(mockLoadArrowTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "arrow" } },
+        { ...resource, dialect: { format: "arrow" } },
         undefined,
       )
     })
@@ -136,7 +136,7 @@ describe("ArrowPlugin", () => {
 
       expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { name: "arrow" },
+        dialect: { format: "arrow" },
       })
       expect(result).toBe("output.arrow")
     })
@@ -150,7 +150,7 @@ describe("ArrowPlugin", () => {
 
       expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { name: "arrow" },
+        dialect: { format: "arrow" },
       })
       expect(result).toBe("output.feather")
     })
@@ -167,7 +167,10 @@ describe("ArrowPlugin", () => {
 
     it("should handle explicit arrow format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: { name: "arrow" } as const }
+      const options = {
+        path: "output.txt",
+        dialect: { format: "arrow" } as const,
+      }
       mockSaveArrowTable.mockResolvedValue("output.txt")
 
       const result = await plugin.saveTable(table, options)
@@ -185,7 +188,7 @@ describe("ArrowPlugin", () => {
 
       expect(mockSaveArrowTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { name: "arrow" },
+        dialect: { format: "arrow" },
       })
     })
 

@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedFormat } from "@fairspec/metadata"
+import { getSupportedDialect } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -9,10 +9,12 @@ import type {
 import { loadSqliteTable } from "./actions/table/load.ts"
 import { saveSqliteTable } from "./actions/table/save.ts"
 
+// TODO: Add inferTableSchema
+
 export class SqlitePlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const format = getSupportedFormat(resource, ["sqlite"])
-    if (!format) return undefined
+    const dialect = await getSupportedDialect(resource, ["sqlite"])
+    if (!dialect) return undefined
 
     return await loadSqliteTable(resource, options)
   }
@@ -20,8 +22,8 @@ export class SqlitePlugin implements TablePlugin {
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const format = getSupportedFormat(resource, ["sqlite"])
-    if (!format) return undefined
+    const dialect = await getSupportedDialect(resource, ["sqlite"])
+    if (!dialect) return undefined
 
     return await saveSqliteTable(table, options)
   }

@@ -1,5 +1,6 @@
 import { saveFile } from "@fairspec/dataset"
-import type { JsonFormat, JsonlFormat } from "@fairspec/metadata"
+import type { JsonDialect, JsonlDialect } from "@fairspec/metadata"
+import { getSupportedDialect } from "@fairspec/metadata"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { Table } from "../../../../models/table.ts"
@@ -10,13 +11,13 @@ import { encodeJsonBuffer } from "../../actions/buffer/encode.ts"
 export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const jsonFormat =
-    options.format?.name === "json" ? options.format : undefined
-  const jsonlFormat =
-    options.format?.name === "jsonl" ? options.format : undefined
+  const resource = { data: path, dialect: options.dialect }
+  const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
+  if (!dialect) {
+    throw new Error("Saving options is not compatible")
+  }
 
-  const format = jsonFormat ?? jsonlFormat
-  const isLines = format?.name === "jsonl"
+  const isLines = dialect?.format === "jsonl"
 
   const tableSchema =
     options.tableSchema ??
@@ -33,8 +34,8 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   let buffer = frame.writeJSON({ format: isLines ? "lines" : "json" })
   let data = decodeJsonBuffer(buffer, { isLines })
 
-  if (format) {
-    data = processData(data, format)
+  if (dialect) {
+    data = processData(data, dialect)
   }
 
   buffer = encodeJsonBuffer(data, { isLines })
@@ -45,29 +46,29 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
 
 function processData(
   records: Record<string, any>[],
-  format: JsonFormat | JsonlFormat,
+  dialect: JsonDialect | JsonlDialect,
 ) {
   let data: any = records
 
-  if (format.columnNames) {
-    const names = format.columnNames
+  if (dialect.columnNames) {
+    const names = dialect.columnNames
     data = data.map((row: any) =>
       Object.fromEntries(names.map((name: any) => [name, row[name]])),
     )
   }
 
-  if (format.rowType === "array") {
-    const names = format.columnNames ?? Object.keys(data[0])
+  if (dialect.rowType === "array") {
+    const names = dialect.columnNames ?? Object.keys(data[0])
     data = [
       names,
       ...data.map((row: any) => names.map((nmae: any) => row[nmae])),
     ]
   }
 
-  if (format.name === "json") {
-    if (format.jsonPointer) {
+  if (dialect.format === "json") {
+    if (dialect.jsonPointer) {
       // TODO: cover more jsonPointer cases
-      data = { [format.jsonPointer]: data }
+      data = { [dialect.jsonPointer]: data }
     }
   }
 

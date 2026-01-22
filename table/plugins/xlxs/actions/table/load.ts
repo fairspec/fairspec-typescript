@@ -1,8 +1,9 @@
 import type { Resource } from "@fairspec/metadata"
+import { getSupportedDialect } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
 import type { DataRow } from "../../../../models/data.ts"
-import { getRecordsFromRows } from "../../../../actions/data/format.ts"
+import { getRecordsFromRows } from "../../../../actions/data/dialect.ts"
 import type { LoadTableOptions } from "../../../../plugin.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
@@ -22,18 +23,18 @@ export async function loadXlsxTable(
     throw new Error("Resource path is not defined")
   }
 
-  const format =
-    resource.format?.name === "xlsx" || resource.format?.name === "ods"
-      ? resource.format
-      : undefined
+  let dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
+  if (!dialect) {
+    throw new Error("Resource data is not compatible")
+  }
 
   const tables: Table[] = []
   for (const path of paths) {
     const buffer = await loadFile(path)
 
     const book = read(buffer, { type: "buffer" })
-    const sheetIndex = format?.sheetNumber ? format.sheetNumber - 1 : 0
-    const sheetName = format?.sheetName ?? book.SheetNames[sheetIndex]
+    const sheetIndex = dialect?.sheetNumber ? dialect.sheetNumber - 1 : 0
+    const sheetName = dialect?.sheetName ?? book.SheetNames[sheetIndex]
     const sheet = sheetName ? book.Sheets[sheetName] : undefined
 
     if (sheet) {
@@ -42,7 +43,7 @@ export async function loadXlsxTable(
         raw: true,
       }) as DataRow[]
 
-      const records = getRecordsFromRows(rows, format)
+      const records = getRecordsFromRows(rows, dialect)
       const table = pl.DataFrame(records).lazy()
 
       tables.push(table)

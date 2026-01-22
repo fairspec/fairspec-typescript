@@ -1,5 +1,5 @@
 {
-  "$schema": "https://fairspec.org/profiles/latest/table.json",
+  "$schema": "https://fairspec.org/profiles/latest/schema.json",
   "required": ["id", "email"],
   "properties": {
     "id": {

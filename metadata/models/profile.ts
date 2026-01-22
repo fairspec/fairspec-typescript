@@ -3,7 +3,7 @@ import { JsonSchema } from "./jsonSchema.ts"
 
 export const Profile = JsonSchema
 
-export const ProfileType = z.enum(["catalog", "dataset", "table"])
+export const ProfileType = z.enum(["catalog", "dataset", "schema", "dialect"])
 
 export const ProfileRegistry = z.array(
   z.object({

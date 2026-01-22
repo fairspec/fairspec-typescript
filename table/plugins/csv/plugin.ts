@@ -1,12 +1,12 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedFormat } from "@fairspec/metadata"
+import { getSupportedDialect } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
-import { inferCsvFormat } from "./actions/format/infer.ts"
+import { inferCsvDialect } from "./actions/dialect/infer.ts"
 import { loadCsvTable } from "./actions/table/load.ts"
 import { saveCsvTable } from "./actions/table/save.ts"
 
@@ -15,25 +15,25 @@ import { saveCsvTable } from "./actions/table/save.ts"
 
 export class CsvPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const format = getSupportedFormat(resource, ["csv", "tsv"])
-    if (!format) return undefined
+    const dialect = await getSupportedDialect(resource, ["csv", "tsv"])
+    if (!dialect) return undefined
 
-    return await loadCsvTable({ ...resource, format }, options)
+    return await loadCsvTable({ ...resource, dialect }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const format = getSupportedFormat(resource, ["csv", "tsv"])
-    if (!format) return undefined
+    const dialect = await getSupportedDialect(resource, ["csv", "tsv"])
+    if (!dialect) return undefined
 
-    return await saveCsvTable(table, { ...options, format })
+    return await saveCsvTable(table, { ...options, dialect })
   }
 
-  async inferFormat(resource: Resource) {
-    const format = getSupportedFormat(resource, ["csv", "tsv"])
-    if (!format) return undefined
+  async inferDialect(resource: Resource) {
+    const dialect = await getSupportedDialect(resource, ["csv", "tsv"])
+    if (!dialect) return undefined
 
-    return await inferCsvFormat(resource)
+    return await inferCsvDialect(resource)
   }
 }

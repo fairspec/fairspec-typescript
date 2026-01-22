@@ -43,8 +43,8 @@ describe("assertProfile", () => {
     }
 
     const profile = await assertProfile(jsonSchema, {
-      path: "https://fairspec.org/profiles/2.1.3/table.json",
-      type: "table",
+      path: "https://fairspec.org/profiles/1.0.0/schema.json",
+      type: "schema",
     })
 
     expect(profile).toEqual(jsonSchema)

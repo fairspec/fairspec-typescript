@@ -8,7 +8,7 @@ useRecording()
 describe("loadCsvTable", () => {
   it("should load local file", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
-    const table = await loadCsvTable({ data: path })
+    const table = await loadCsvTable({ data: path, dialect: { format: "csv" } })
 
     expect((await table.collect()).toRecords()).toEqual([
       { id: 1, name: "english" },
@@ -20,7 +20,10 @@ describe("loadCsvTable", () => {
     const path1 = await writeTempFile("id,name\n1,english")
     const path2 = await writeTempFile("id,name\n2,中文\n3,german")
 
-    const table = await loadCsvTable({ data: [path1, path2] })
+    const table = await loadCsvTable({
+      data: [path1, path2],
+      dialect: { format: "csv" },
+    })
 
     expect((await table.collect()).toRecords()).toEqual([
       { id: 1, name: "english" },
@@ -61,7 +64,7 @@ describe("loadCsvTable", () => {
     const path = await writeTempFile("id,name\r\n1,english\r\n2,中文")
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", lineTerminator: "\r\n" },
+      dialect: { format: "csv", lineTerminator: "\r\n" },
     })
 
     expect((await table.collect()).toRecords()).toEqual([
@@ -74,7 +77,7 @@ describe("loadCsvTable", () => {
     const path = await writeTempFile("id|name\n1|alice\n2|bob")
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", delimiter: "|" },
+      dialect: { format: "csv", delimiter: "|" },
     })
 
     expect((await table.collect()).toRecords()).toEqual([
@@ -87,7 +90,7 @@ describe("loadCsvTable", () => {
     const path = await writeTempFile("1,alice\n2,bob")
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", headerRows: false },
+      dialect: { format: "csv", headerRows: false },
     })
 
     const records = (await table.collect()).toRecords()
@@ -101,7 +104,7 @@ describe("loadCsvTable", () => {
     const path = await writeTempFile("id,name|1,alice|2,bob")
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", lineTerminator: "|" },
+      dialect: { format: "csv", lineTerminator: "|" },
     })
 
     expect((await table.collect()).toRecords()).toEqual([
@@ -115,7 +118,7 @@ describe("loadCsvTable", () => {
 
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", quoteChar: "'" },
+      dialect: { format: "csv", quoteChar: "'" },
     })
 
     expect((await table.collect()).toRecords()).toEqual([
@@ -131,7 +134,7 @@ describe("loadCsvTable", () => {
 
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", commentPrefix: "#" },
+      dialect: { format: "csv", commentPrefix: "#" },
     })
 
     const records = (await table.collect()).toRecords()
@@ -146,7 +149,7 @@ describe("loadCsvTable", () => {
 
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", headerRows: [2] },
+      dialect: { format: "csv", headerRows: [2] },
     })
 
     const records = (await table.collect()).toRecords()
@@ -163,7 +166,7 @@ describe("loadCsvTable", () => {
 
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", headerRows: [2, 3], headerJoin: "_" },
+      dialect: { format: "csv", headerRows: [2, 3], headerJoin: "_" },
     })
 
     const records = (await table.collect()).toRecords()
@@ -178,7 +181,7 @@ describe("loadCsvTable", () => {
 
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", commentRows: [3] },
+      dialect: { format: "csv", commentRows: [3] },
     })
 
     const records = (await table.collect()).toRecords()
@@ -195,7 +198,7 @@ describe("loadCsvTable", () => {
 
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", headerRows: [2], commentRows: [4] },
+      dialect: { format: "csv", headerRows: [2], commentRows: [4] },
     })
 
     const records = (await table.collect()).toRecords()
@@ -212,8 +215,8 @@ describe("loadCsvTable", () => {
 
     const table = await loadCsvTable({
       data: path,
-      format: {
-        name: "csv",
+      dialect: {
+        format: "csv",
         headerRows: [2, 3],
         headerJoin: "_",
         commentRows: [5],
@@ -233,7 +236,7 @@ describe("loadCsvTable", () => {
     )
     const table = await loadCsvTable({
       data: path,
-      format: { name: "csv", nullSequence: "N/A" },
+      dialect: { format: "csv", nullSequence: "N/A" },
     })
 
     expect((await table.collect()).toRecords()).toEqual([
@@ -249,8 +252,8 @@ describe("loadCsvTable", () => {
     )
     const table = await loadCsvTable({
       data: path,
-      format: {
-        name: "csv",
+      dialect: {
+        format: "csv",
         delimiter: "|",
         quoteChar: "'",
         commentPrefix: "#",
@@ -268,7 +271,7 @@ describe("loadCsvTable", () => {
 describe("loadCsvTable (format=tsv)", () => {
   it("should load local file", async () => {
     const path = await writeTempFile("id\tname\n1\tenglish\n2\t中文")
-    const table = await loadCsvTable({ data: path, format: { name: "tsv" } })
+    const table = await loadCsvTable({ data: path, dialect: { format: "tsv" } })
 
     expect((await table.collect()).toRecords()).toEqual([
       { id: 1, name: "english" },

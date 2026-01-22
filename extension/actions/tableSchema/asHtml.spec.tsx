@@ -5,7 +5,6 @@ import { renderTableSchemaAsHtml } from "./asHtml.tsx"
 describe("renderTableSchemaAsHtml", () => {
   it("converts a simple schema to html table", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "integer",
@@ -37,7 +36,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles column constraints", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         age: {
           type: "integer",
@@ -65,7 +63,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles required field indicator", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         requiredField: {
           type: "string",
@@ -86,7 +83,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles empty properties object", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {},
     }
 
@@ -99,7 +95,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("escapes HTML special characters", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field: {
           type: "string",
@@ -117,7 +112,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles columns with enum constraints", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         status: {
           type: "string",
@@ -134,7 +128,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles multiple constraint types", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         username: {
           type: "string",
@@ -157,7 +150,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles different column types", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field1: { type: "string" },
         field2: { type: "integer" },
@@ -179,7 +171,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("sanitizes IDs for anchors", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         "field-with-dashes": {
           type: "string",
@@ -198,7 +189,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("does not include top-level html tags", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field1: { type: "string" },
       },
@@ -215,7 +205,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles column without description", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field1: {
           type: "string",
@@ -231,7 +220,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("uses frontmatter when frontmatter option is true", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       title: "Table Schema",
       properties: {
         field1: {
@@ -248,7 +236,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles schema with primary key", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "integer",
@@ -268,7 +255,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles schema with composite primary key", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         user_id: {
           type: "integer",
@@ -288,7 +274,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles schema with foreign keys", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         user_id: {
           type: "integer",
@@ -318,7 +303,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles schema with multiple foreign keys", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         user_id: {
           type: "integer",
@@ -356,7 +340,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles foreign key without resource specified", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         parent_id: {
           type: "integer",
@@ -382,7 +365,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("does not render primary key or foreign keys sections when not present", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field1: {
           type: "string",
@@ -398,7 +380,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles string categories", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         status: {
           type: "string",
@@ -416,7 +397,6 @@ describe("renderTableSchemaAsHtml", () => {
 
   it("handles integer categories with labels", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         level: {
           type: "integer",

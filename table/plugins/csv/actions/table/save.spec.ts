@@ -15,7 +15,7 @@ describe("saveCsvTable", () => {
       })
       .lazy()
 
-    await saveCsvTable(table, { path })
+    await saveCsvTable(table, { path, dialect: { format: "csv" } })
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual("id,name\n1.0,Alice\n2.0,Bob\n3.0,Charlie\n")
@@ -32,7 +32,7 @@ describe("saveCsvTable", () => {
 
     await saveCsvTable(table, {
       path,
-      format: { name: "csv", delimiter: ";" },
+      dialect: { format: "csv", delimiter: ";" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -50,7 +50,7 @@ describe("saveCsvTable", () => {
 
     await saveCsvTable(table, {
       path,
-      format: { name: "csv", headerRows: false },
+      dialect: { format: "csv", headerRows: false },
     })
 
     const content = await readFile(path, "utf-8")
@@ -68,7 +68,7 @@ describe("saveCsvTable", () => {
 
     await saveCsvTable(table, {
       path,
-      format: { name: "csv", quoteChar: "'" },
+      dialect: { format: "csv", quoteChar: "'" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -78,7 +78,7 @@ describe("saveCsvTable", () => {
   })
 
   it("should save and load various data types", async () => {
-    const path = getTempFilePath()
+    const path = getTempFilePath({ format: "csv" })
 
     const source = pl
       .DataFrame([
@@ -117,7 +117,7 @@ describe("saveCsvTable (format=tsv)", () => {
       })
       .lazy()
 
-    await saveCsvTable(table, { path, format: { name: "tsv" } })
+    await saveCsvTable(table, { path, dialect: { format: "tsv" } })
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual("id\tname\n1.0\tAlice\n2.0\tBob\n3.0\tCharlie\n")

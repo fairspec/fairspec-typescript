@@ -8,7 +8,7 @@ describe("validateTable", () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
     const resource: Resource = {
       data: path,
-      format: { name: "csv" },
+      dialect: { format: "csv" },
       tableSchema: {
         properties: {
           id: { type: "integer" },
@@ -27,7 +27,7 @@ describe("validateTable", () => {
     const path = await writeTempFile("id,name\ninvalid,alice\n2,bob")
     const resource: Resource = {
       data: path,
-      format: { name: "csv" },
+      dialect: { format: "csv" },
       tableSchema: {
         properties: {
           id: { type: "integer" },

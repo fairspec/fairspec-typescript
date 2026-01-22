@@ -1,7 +1,7 @@
 import type { Resource } from "@fairspec/library"
 import { loadTable } from "@fairspec/library"
 import { Command } from "commander"
-import { createMergedFormat } from "../../helpers/format.ts"
+import { createDialectFromPathAndOptions } from "../../helpers/dialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
@@ -18,7 +18,8 @@ export const describeTableCommand = new Command()
   .addOption(params.debug)
   .addOption(params.json)
 
-  .optionsGroup("Format")
+  .optionsGroup("Dialect")
+  .addOption(params.dialect)
   .addOption(params.format)
   .addOption(params.delimiter)
   .addOption(params.lineTerminator)
@@ -61,11 +62,13 @@ export const describeTableCommand = new Command()
       json: options.json,
     })
 
-    const resource: Resource = path
-      ? { data: path, tableSchema: options.schema }
-      : await selectResource(session, options)
+    const dialect = path
+      ? (options.dialect ?? createDialectFromPathAndOptions(path, options))
+      : undefined
 
-    resource.format = createMergedFormat(resource, options)
+    const resource: Resource = path
+      ? { data: path, dialect, tableSchema: options.schema }
+      : await selectResource(session, options)
 
     const table = await session.task("Loading table", async () => {
       const table = await loadTable(resource)

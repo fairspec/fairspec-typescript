@@ -9,8 +9,10 @@ export function convertResourceToCkan(resource: Resource) {
     ckanResource.name = resource.name
   }
 
-  if (resource.format) {
-    ckanResource.format = resource.format?.name?.toUpperCase()
+  if (resource.dialect) {
+    if (typeof resource.dialect !== "string") {
+      ckanResource.format = resource.dialect.format?.toUpperCase()
+    }
   }
 
   if (resource.descriptions?.[0]?.description) {

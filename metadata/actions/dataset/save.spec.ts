@@ -110,7 +110,7 @@ describe("saveDatasetDescriptor", () => {
         {
           name: "resource2",
           data: path.join(testDir, "data2.json"),
-          format: { name: "json" },
+          dialect: { format: "json" },
         },
       ],
     }
@@ -159,8 +159,8 @@ describe("saveDatasetDescriptor", () => {
         {
           name: "test-resource",
           data: path.join(testDir, "data.csv"),
-          format: {
-            name: "csv",
+          dialect: {
+            format: "csv",
             delimiter: ";",
             lineTerminator: "\n",
           },
@@ -172,8 +172,8 @@ describe("saveDatasetDescriptor", () => {
 
     const content = await fs.readFile(testPath, "utf-8")
     const parsedContent = JSON.parse(content)
-    expect(parsedContent.resources[0]?.format).toEqual(
-      datasetWithFormat.resources?.[0]?.format,
+    expect(parsedContent.resources[0]?.dialect).toEqual(
+      datasetWithFormat.resources?.[0]?.dialect,
     )
   })
 

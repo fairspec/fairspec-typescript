@@ -12,7 +12,7 @@ export { loadFileStream } from "./actions/stream/load.ts"
 
 export type {
   DatasetPlugin,
-  InferFormatOptions,
+  InferDialectOptions,
   SaveDatasetOptions,
 } from "./plugin.ts"
 export {

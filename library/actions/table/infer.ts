@@ -1,17 +1,20 @@
 import type { Resource } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { inferTableSchemaFromTable } from "@fairspec/table"
-import { inferFormat } from "../../actions/format/infer.ts"
+import { inferDialect } from "../../actions/dialect/infer.ts"
 import { loadTable } from "./load.ts"
 
 export async function inferTable(resource: Resource) {
-  let format = resource.format
+  let dialect = resource.dialect
 
-  if (!format) {
-    format = await inferFormat(resource)
+  if (!dialect) {
+    dialect = await inferDialect(resource)
   }
 
-  const table = await loadTable({ ...resource, format }, { denormalized: true })
+  const table = await loadTable(
+    { ...resource, dialect },
+    { denormalized: true },
+  )
 
   if (!table) {
     return undefined
@@ -22,5 +25,5 @@ export async function inferTable(resource: Resource) {
     tableSchema = await inferTableSchemaFromTable(table)
   }
 
-  return { format, table, tableSchema }
+  return { dialect, table, tableSchema }
 }

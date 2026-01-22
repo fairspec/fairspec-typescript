@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedFormat, getDataFirstPath, getDataValue } from "@fairspec/metadata"
+import { getSupportedDialect, getDataFirstPath, getDataValue } from "@fairspec/metadata"
 import { loadDescriptor } from "@fairspec/metadata"
 
 export async function loadData(
@@ -10,8 +10,8 @@ export async function loadData(
 
   const firstPath = getDataFirstPath(resource)
   if (firstPath) {
-    const format = getSupportedFormat(resource, ['json'])
-    if (format) {
+    const dialect = await getSupportedDialect(resource, ['json'])
+    if (dialect) {
       return await loadDescriptor(firstPath)
     }
   }

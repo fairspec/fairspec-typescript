@@ -27,7 +27,7 @@ describe("loadData", () => {
     const text = JSON.stringify({ id: 1, name: "test" })
     const path = await writeTempFile(text)
 
-    const resource: Resource = { data: path, format: { name: "json" } }
+    const resource: Resource = { data: path, dialect: { format: "json" } }
 
     const data = await loadData(resource)
     expect(data).toEqual({ id: 1, name: "test" })

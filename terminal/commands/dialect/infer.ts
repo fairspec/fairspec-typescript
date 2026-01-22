@@ -1,13 +1,13 @@
-import { inferFormat } from "@fairspec/library"
+import { inferDialect } from "@fairspec/library"
 import { Command } from "commander"
 import { selectFile } from "../../helpers/file.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const inferFormatCommand = new Command()
+export const inferDialectCommand = new Command()
   .name("infer")
-  .description("Infer the format of a file")
+  .description("Infer the dialect of a file")
   .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalFilePath)
@@ -30,7 +30,7 @@ export const inferFormatCommand = new Command()
     }
 
     const format = await session.task("Inferring format", async () => {
-      const format = await inferFormat(
+      const format = await inferDialect(
         { data: path },
         { sampleBytes: options.sampleBytes },
       )

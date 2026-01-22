@@ -1,4 +1,4 @@
-export type FormatOptions = {
+export type DialectOptions = {
   format?: string
   delimiter?: string
   lineTerminator?: string

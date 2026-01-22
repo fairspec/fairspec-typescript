@@ -37,8 +37,8 @@ describe("format infer", () => {
 
     expect(text.length).toBeGreaterThan(0)
     const data = JSON.parse(text[0] ?? "")
-    expect(data).toHaveProperty("name")
-    expect(data.name).toBe("csv")
+    expect(data).toHaveProperty("format")
+    expect(data.format).toBe("csv")
   })
 
   it("should infer format with additional properties", async () => {
@@ -65,8 +65,8 @@ describe("format infer", () => {
 
     expect(text.length).toBeGreaterThan(0)
     const data = JSON.parse(text[0] ?? "")
-    expect(data).toHaveProperty("name")
-    expect(data.name).toBe("csv")
+    expect(data).toHaveProperty("format")
+    expect(data.format).toBe("csv")
     expect(data).toHaveProperty("delimiter")
   })
 
@@ -96,7 +96,7 @@ describe("format infer", () => {
 
     expect(text.length).toBeGreaterThan(0)
     const data = JSON.parse(text[0] ?? "")
-    expect(data).toHaveProperty("name")
-    expect(data.name).toBe("tsv")
+    expect(data).toHaveProperty("format")
+    expect(data.format).toBe("tsv")
   })
 })

@@ -1,5 +1,10 @@
 import { Option } from "commander"
 
+export const dialect = new Option(
+  "--dialect <dialect>",
+  "path to a Dialect descriptor",
+)
+
 export const format = new Option(
   "--format <format>",
   "format type (csv, json, xlsx, etc)",

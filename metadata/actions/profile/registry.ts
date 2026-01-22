@@ -1,8 +1,13 @@
 import type { ProfileRegistry } from "../../models/profile.ts"
 import catalogProfile from "../../profiles/catalog.json" with { type: "json" }
+import dataSchemaProfile from "../../profiles/data-schema.json" with {
+  type: "json",
+}
 import datasetProfile from "../../profiles/dataset.json" with { type: "json" }
 import dialectProfile from "../../profiles/dialect.json" with { type: "json" }
-import schemaProfile from "../../profiles/schema.json" with { type: "json" }
+import tableSchemaProfile from "../../profiles/table-schema.json" with {
+  type: "json",
+}
 
 export const profileRegistry: ProfileRegistry = [
   {
@@ -18,15 +23,21 @@ export const profileRegistry: ProfileRegistry = [
     profile: datasetProfile,
   },
   {
-    type: "schema",
-    path: "https://fairspec.org/profiles/latest/schema.json",
-    version: "latest",
-    profile: schemaProfile,
-  },
-  {
     type: "dialect",
     path: "https://fairspec.org/profiles/latest/dialect.json",
     version: "latest",
     profile: dialectProfile,
+  },
+  {
+    type: "data-schema",
+    path: "https://fairspec.org/profiles/latest/data-schema.json",
+    version: "latest",
+    profile: dataSchemaProfile,
+  },
+  {
+    type: "table-schema",
+    path: "https://fairspec.org/profiles/latest/table-schema.json",
+    version: "latest",
+    profile: tableSchemaProfile,
   },
 ]

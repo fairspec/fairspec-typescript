@@ -20,6 +20,13 @@ export async function assertProfile(
     }
   }
 
+  // Data schema supports direct JSON schema profile
+  if (options.type === "data-schema") {
+    if (options.path === "https://json-schema.org/draft/2020-12/schema") {
+      return jsonSchema as Profile
+    }
+  }
+
   // If one of the paths matches the profile type, we're good
   for (const path of paths) {
     if (regex.test(path)) {

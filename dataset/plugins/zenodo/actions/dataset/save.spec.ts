@@ -21,7 +21,7 @@ describe("saveDatasetToZenodo", () => {
       {
         name: "test-resource",
         data: getFixturePath("data.csv"),
-        format: { name: "csv" },
+        dialect: { format: "csv" },
       },
     ],
   }
@@ -397,12 +397,12 @@ describe("saveDatasetToZenodo", () => {
         {
           name: "resource-1",
           data: getFixturePath("data.csv"),
-          format: { name: "csv" },
+          dialect: { format: "csv" },
         },
         {
           name: "resource-2",
           data: getFixturePath("data.csv"),
-          format: { name: "json" },
+          dialect: { format: "json" },
         },
       ],
     }

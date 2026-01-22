@@ -1,6 +1,6 @@
 import type {
   Dataset,
-  Format,
+  Dialect,
   MetadataPlugin,
   Resource,
 } from "@fairspec/metadata"
@@ -10,7 +10,7 @@ export type SaveDatasetOptions = {
   withRemote?: boolean
 }
 
-export type InferFormatOptions = {
+export type InferDialectOptions = {
   sampleBytes?: number
 }
 
@@ -22,8 +22,8 @@ export interface DatasetPlugin extends MetadataPlugin {
     options: SaveDatasetOptions,
   ): Promise<{ path?: string } | undefined>
 
-  inferFormat?(
+  inferDialect?(
     resource: Resource,
-    options?: InferFormatOptions,
-  ): Promise<Format | undefined>
+    options?: InferDialectOptions,
+  ): Promise<Dialect | undefined>
 }

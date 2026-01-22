@@ -79,7 +79,7 @@ describe("loadDatasetFromFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv" },
+          dialect: { format: "csv" },
         },
       ],
     }
@@ -91,7 +91,7 @@ describe("loadDatasetFromFolder", () => {
     expect.assert(loadedDataset.resources)
     expect(loadedDataset.resources).toHaveLength(1)
     expect(loadedDataset.resources[0]?.name).toBe("test_resource")
-    expect(loadedDataset.resources[0]?.format?.name).toBe("csv")
+    expect(loadedDataset.resources[0]?.dialect).toEqual({ format: "csv" })
   })
 
   it("should load dataset with tableSchema", async () => {
@@ -131,7 +131,7 @@ describe("loadDatasetFromFolder", () => {
         {
           name: "resource1",
           data: csvPath,
-          format: { name: "csv" },
+          dialect: { format: "csv" },
         },
         {
           name: "resource2",
@@ -159,7 +159,7 @@ describe("loadDatasetFromFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          format: { name: "csv", delimiter: ";" },
+          dialect: { format: "csv", delimiter: ";" },
         },
       ],
     }
@@ -168,11 +168,11 @@ describe("loadDatasetFromFolder", () => {
     const loadedDataset = await loadDatasetFromFolder(tempFolderPath)
 
     expect.assert(loadedDataset.resources)
-    expect(loadedDataset.resources[0]?.format).toBeDefined()
-    const format = loadedDataset.resources[0]?.format
-    expect(typeof format === "object" && "delimiter" in format).toBe(true)
-    if (typeof format === "object" && "delimiter" in format) {
-      expect(format.delimiter).toBe(";")
+    expect(loadedDataset.resources[0]?.dialect).toBeDefined()
+    const dialect = loadedDataset.resources[0]?.dialect
+    expect(typeof dialect === "object" && "delimiter" in dialect).toBe(true)
+    if (typeof dialect === "object" && "delimiter" in dialect) {
+      expect(dialect.delimiter).toBe(";")
     }
   })
 

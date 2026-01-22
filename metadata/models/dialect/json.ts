@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { BaseFormat } from "./base.ts"
+import { BaseDialect } from "./base.ts"
 import {
   ColumnNames,
   CommentPrefix,
@@ -10,8 +10,8 @@ import {
   RowType,
 } from "./common.ts"
 
-export const JsonFormat = BaseFormat.extend({
-  name: z.literal("json"),
+export const JsonDialect = BaseDialect.extend({
+  format: z.literal("json"),
   jsonPointer: JsonPointer.optional(),
   rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),
@@ -21,4 +21,4 @@ export const JsonFormat = BaseFormat.extend({
   columnNames: ColumnNames.optional(),
 })
 
-export type JsonFormat = z.infer<typeof JsonFormat>
+export type JsonDialect = z.infer<typeof JsonDialect>

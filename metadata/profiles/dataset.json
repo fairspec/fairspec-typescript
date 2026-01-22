@@ -21,8 +21,8 @@
       "properties": {
         "name": { "$ref": "#/$defs/Name" },
         "data": { "$ref": "#/$defs/Data" },
-        "format": { "$ref": "#/$defs/Format" },
         "textual": { "$ref": "#/$defs/Textual" },
+        "dialect": { "$ref": "#/$defs/Dialect" },
         "integrity": { "$ref": "#/$defs/Integrity" },
         "dataSchema": { "$ref": "#/$defs/DataSchema" },
         "tableSchema": { "$ref": "#/$defs/TableSchema" }
@@ -34,27 +34,6 @@
     },
     "Data": {
       "oneOf": [{ "$ref": "#/$defs/PathData" }, { "$ref": "#/$defs/JsonData" }]
-    },
-    "Integrity": {
-      "type": "string",
-      "properties": {
-        "type": {
-          "enum": ["md5", "sha1", "sha256", "sha512"]
-        },
-        "hash": { "type": "string" }
-      }
-    },
-    "DataSchema": {
-      "oneOf": [
-        { "$ref": "#/$defs/Path" },
-        { "$ref": "https://json-schema.org/draft/2020-12/schema" }
-      ]
-    },
-    "TableSchema": {
-      "oneOf": [
-        { "$ref": "#/$defs/Path" },
-        { "$ref": "https://fairspec.org/profiles/latest/table.json" }
-      ]
     },
     "PathData": {
       "oneOf": [
@@ -90,245 +69,29 @@
     "Textual": {
       "type": "boolean"
     },
-    "Format": {
-      "properties": {
-        "name": {
-          "enum": [
-            "csv",
-            "tsv",
-            "json",
-            "jsonl",
-            "xlsx",
-            "ods",
-            "parquet",
-            "arrow",
-            "sqlite"
-          ]
-        }
-      },
-      "allOf": [
-        {
-          "if": { "properties": { "name": { "const": "csv" } } },
-          "then": { "$ref": "#/$defs/CsvFormat" }
-        },
-        {
-          "if": { "properties": { "name": { "const": "tsv" } } },
-          "then": { "$ref": "#/$defs/TsvFormat" }
-        },
-        {
-          "if": { "properties": { "name": { "const": "json" } } },
-          "then": { "$ref": "#/$defs/JsonFormat" }
-        },
-        {
-          "if": { "properties": { "name": { "const": "jsonl" } } },
-          "then": { "$ref": "#/$defs/JsonlFormat" }
-        },
-        {
-          "if": { "properties": { "name": { "const": "xlsx" } } },
-          "then": { "$ref": "#/$defs/XlsxFormat" }
-        },
-        {
-          "if": { "properties": { "name": { "const": "ods" } } },
-          "then": { "$ref": "#/$defs/OdsFormat" }
-        },
-        {
-          "if": { "properties": { "name": { "const": "parquet" } } },
-          "then": { "$ref": "#/$defs/ParquetFormat" }
-        },
-        {
-          "if": { "properties": { "name": { "const": "arrow" } } },
-          "then": { "$ref": "#/$defs/ArrowFormat" }
-        },
-        {
-          "if": { "properties": { "name": { "const": "sqlite" } } },
-          "then": { "$ref": "#/$defs/SqliteFormat" }
-        },
-        {
-          "if": { "not": { "required": ["name"] } },
-          "then": { "$ref": "#/$defs/CustomFormat" }
-        }
-      ]
-    },
-    "BaseFormat": {
-      "type": "object",
-      "properties": {
-        "title": { "$ref": "#/$defs/FormatTitle" },
-        "description": { "$ref": "#/$defs/FormatDescription" }
-      }
-    },
-    "CsvFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "csv" },
-        "delimiter": { "$ref": "#/$defs/Delimiter" },
-        "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
-        "quoteChar": { "$ref": "#/$defs/QuoteChar" },
-        "nullSequence": { "$ref": "#/$defs/NullSequence" },
-        "headerRows": { "$ref": "#/$defs/HeaderRows" },
-        "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
-        "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
-        "columnNames": { "$ref": "#/$defs/ColumnNames" }
-      }
-    },
-    "TsvFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "tsv" },
-        "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
-        "nullSequence": { "$ref": "#/$defs/NullSequence" },
-        "headerRows": { "$ref": "#/$defs/HeaderRows" },
-        "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
-        "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
-        "columnNames": { "$ref": "#/$defs/ColumnNames" }
-      }
-    },
-    "JsonFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "json" },
-        "jsonPointer": { "$ref": "#/$defs/JsonPointer" },
-        "rowType": { "$ref": "#/$defs/RowType" },
-        "headerRows": { "$ref": "#/$defs/HeaderRows" },
-        "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
-        "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
-        "columnNames": { "$ref": "#/$defs/ColumnNames" }
-      }
-    },
-    "JsonlFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "jsonl" },
-        "rowType": { "$ref": "#/$defs/RowType" },
-        "headerRows": { "$ref": "#/$defs/HeaderRows" },
-        "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
-        "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
-        "columnNames": { "$ref": "#/$defs/ColumnNames" }
-      }
-    },
-    "XlsxFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "xlxs" },
-        "sheetName": { "$ref": "#/$defs/SheetName" },
-        "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
-        "headerRows": { "$ref": "#/$defs/HeaderRows" },
-        "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
-        "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
-        "columnNames": { "$ref": "#/$defs/ColumnNames" }
-      }
-    },
-    "OdsFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "ods" },
-        "sheetName": { "$ref": "#/$defs/SheetName" },
-        "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
-        "headerRows": { "$ref": "#/$defs/HeaderRows" },
-        "headerJoin": { "$ref": "#/$defs/HeaderJoin" },
-        "commentRows": { "$ref": "#/$defs/CommentRows" },
-        "commentPrefix": { "$ref": "#/$defs/CommentPrefix" },
-        "columnNames": { "$ref": "#/$defs/ColumnNames" }
-      }
-    },
-    "ParquetFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "parquet" }
-      }
-    },
-    "ArrowFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "arrow" }
-      }
-    },
-    "SqliteFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }],
-      "required": ["name"],
-      "properties": {
-        "name": { "const": "sqlite" },
-        "tableName": { "$ref": "#/$defs/TableName" }
-      }
-    },
-    "CustomFormat": {
-      "allOf": [{ "$ref": "#/$defs/BaseFormat" }]
-    },
-    "FormatTitle": {
-      "type": "string"
-    },
-    "FormatDescription": {
-      "type": "string"
-    },
-    "Delimiter": {
-      "type": "string",
-      "maxLength": 1
-    },
-    "LineTerminator": {
-      "type": "string"
-    },
-    "QuoteChar": {
-      "type": "string"
-    },
-    "NullSequence": {
-      "type": "string"
-    },
-    "Header": {
-      "type": "boolean"
-    },
-    "HeaderRows": {
+    "Dialect": {
       "oneOf": [
-        { "const": false },
-        {
-          "type": "array",
-          "items": { "type": "integer", "minimum": 1 },
-          "minItems": 1
-        }
+        { "$ref": "#/$defs/Path" },
+        { "$ref": "https://fairspec.org/profiles/latest/dialect.json" }
       ]
     },
-    "HeaderJoin": {
-      "type": "string"
-    },
-    "CommentRows": {
-      "type": "array",
-      "items": { "type": "integer", "minimum": 1 },
-      "minItems": 1
-    },
-    "CommentPrefix": {
-      "type": "string"
-    },
-    "ColumnNames": {
-      "type": "array",
-      "items": { "type": "string" },
-      "minItems": 1
-    },
-    "JsonPointer": {
+    "Integrity": {
       "type": "string",
-      "format": "json-pointer"
+      "properties": {
+        "type": {
+          "enum": ["md5", "sha1", "sha256", "sha512"]
+        },
+        "hash": { "type": "string" }
+      }
     },
-    "RowType": {
-      "enum": ["array", "object"]
+    "DataSchema": {
+      "oneOf": [
+        { "$ref": "#/$defs/Path" },
+        { "$ref": "https://json-schema.org/draft/2020-12/schema" }
+      ]
     },
-    "SheetNumber": {
-      "type": "integer"
-    },
-    "SheetName": {
-      "type": "string"
-    },
-    "TableName": {
-      "type": "string"
+    "TableSchema": {
+      "oneOf": [{ "$ref": "#/$defs/Path" }, { "$ref": "https://fairspec.org/profiles/latest/schema.json" }]
     },
     "Datacite": {
       "type": "object",

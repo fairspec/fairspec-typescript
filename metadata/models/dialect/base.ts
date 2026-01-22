@@ -1,6 +1,8 @@
 import { z } from "zod"
 
-export const BaseFormat = z.object({
+export const BaseDialect = z.object({
+  $schema: z.httpUrl().optional().describe("Fairspec Dialect profile url."),
+
   title: z
     .string()
     .optional()
@@ -12,4 +14,4 @@ export const BaseFormat = z.object({
     .describe("An optional detailed description of the format"),
 })
 
-export type BaseFormat = z.infer<typeof BaseFormat>
+export type BaseDialect = z.infer<typeof BaseDialect>

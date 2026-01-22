@@ -47,6 +47,14 @@ export async function validateDatasetDescriptor(
     for (const [index, resource] of (dataset?.resources ?? []).entries()) {
       const rootJsonPointer = `/resources/${index}`
 
+      if (typeof resource.dialect === "string") {
+        const dialectReport = await validateDataSchema(resource.dialect, {
+          rootJsonPointer,
+        })
+
+        report.errors.push(...dialectReport.errors)
+      }
+
       if (typeof resource.dataSchema === "string") {
         const dataReport = await validateDataSchema(resource.dataSchema, {
           rootJsonPointer,

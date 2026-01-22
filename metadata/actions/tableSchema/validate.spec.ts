@@ -63,7 +63,7 @@ describe("validateTableSchema", () => {
     }
 
     await expect(validateTableSchema(descriptor)).rejects.toThrow(
-      "Profile at path https://fairspec.org/profiles/latest/dataset.json is not a valid schema profile",
+      "Profile at path https://fairspec.org/profiles/latest/dataset.json is not a valid table-schema profile",
     )
   })
 })

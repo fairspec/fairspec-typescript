@@ -18,10 +18,10 @@ export async function validateTableSchema(
   const $schema =
     typeof descriptor.$schema === "string"
       ? descriptor.$schema
-      : `https://fairspec.org/profiles/latest/schema.json`
+      : `https://fairspec.org/profiles/latest/table-schema.json`
 
   const profile = await loadProfile($schema, {
-    profileType: "schema",
+    profileType: "table-schema",
   })
 
   const report = await validateDescriptor(descriptor, {

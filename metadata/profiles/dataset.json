@@ -87,13 +87,13 @@
     "DataSchema": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
-        { "$ref": "https://json-schema.org/draft/2020-12/schema" }
+        { "$ref": "https://fairspec.org/profiles/latest/data-schema.json" }
       ]
     },
     "TableSchema": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
-        { "$ref": "https://fairspec.org/profiles/latest/schema.json" }
+        { "$ref": "https://fairspec.org/profiles/latest/table-schema.json" }
       ]
     },
     "Datacite": {

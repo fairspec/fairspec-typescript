@@ -1,6 +1,6 @@
 import { loadDescriptor } from "../../actions/descriptor/load.ts"
-import { inspectJsonSchema } from "../../actions/jsonSchema/inspect.ts"
-import { createReport } from "../../actions/report/create.ts"
+import { validateDescriptor } from "../../actions/descriptor/validate.ts"
+import { loadProfile } from "../../actions/profile/load.ts"
 import type { DataSchema } from "../../models/dataSchema.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
 
@@ -15,18 +15,19 @@ export async function validateDataSchema(
       ? await loadDescriptor(source)
       : (source as Descriptor)
 
-  const errors = await inspectJsonSchema(descriptor, {
-    rootJsonPointer: options?.rootJsonPointer,
+  const $schema =
+    typeof descriptor.$schema === "string"
+      ? descriptor.$schema
+      : `https://fairspec.org/profiles/latest/data-schema.json`
+
+  const profile = await loadProfile($schema, {
+    profileType: "data-schema",
   })
 
-  const report = createReport(
-    errors.map(error => {
-      return {
-        type: "metadata",
-        ...error,
-      }
-    }),
-  )
+  const report = await validateDescriptor(descriptor, {
+    profile,
+    rootJsonPointer: options?.rootJsonPointer,
+  })
 
   let dataSchema: DataSchema | undefined
   if (report.valid) {

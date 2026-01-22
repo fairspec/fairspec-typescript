@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import type { JsonFormat, JsonlFormat } from "@fairspec/metadata"
+import type { JsonDialect, JsonlDialect } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../../plugin.ts"
@@ -8,18 +8,20 @@ import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
+import { getSupportedDialect } from "@fairspec/metadata"
 
 export async function loadJsonTable(
   resource: Resource,
   options?: LoadTableOptions,
 ) {
 
-  const jsonFormat = resource.format?.name === "json" ? resource.format : undefined
-  const jsonlFormat = resource.format?.name === "jsonl" ? resource.format : undefined
-  const format = jsonFormat ?? jsonlFormat
+  let dialect = await getSupportedDialect(resource, ["json", "jsonl"])
+  if (!dialect) {
+    throw new Error("Resource data is not compatible")
+  }
 
-  const isLines = format?.name === "jsonl"
-  const isDefault = Object.keys(format ?? {})
+  const isLines = dialect?.format === "jsonl"
+  const isDefault = Object.keys(dialect ?? {})
     .filter(key => !['type', 'title', 'description'].includes(key)).length === 0
 
 
@@ -39,7 +41,7 @@ export async function loadJsonTable(
     const buffer = await loadFile(path)
     let data = decodeJsonBuffer(buffer, { isLines })
     if (!isDefault) {
-      data = processData(data, format)
+      data = processData(data, dialect)
     }
 
     const table = pl.DataFrame(data).lazy()
@@ -58,12 +60,12 @@ export async function loadJsonTable(
 }
 
 // TODO: Make data unkonwn not any!
-function processData(data: any, format?: JsonFormat | JsonlFormat) {
-  if (format?.name === 'json' && format?.jsonPointer) {
-    data = data[format.jsonPointer]
+function processData(data: any, dialect?: JsonDialect | JsonlDialect) {
+  if (dialect?.format === 'json' && dialect?.jsonPointer) {
+    data = data[dialect.jsonPointer]
   }
 
-  if (format?.rowType === "array") {
+  if (dialect?.rowType === "array") {
     const keys = data[0]
 
     data = data
@@ -75,8 +77,8 @@ function processData(data: any, format?: JsonFormat | JsonlFormat) {
       )
   }
 
-  if (format?.columnNames) {
-    const columnNames = format.columnNames
+  if (dialect?.columnNames) {
+    const columnNames = dialect.columnNames
 
     data = data.map((row: any) =>
       Object.fromEntries(columnNames.map((name: any) => [name, row[name]])),

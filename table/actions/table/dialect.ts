@@ -1,15 +1,15 @@
 import * as pl from "nodejs-polars"
-import { getHeaderRows } from "../../helpers/format.ts"
-import type { FormatWithHeaderAndCommentRows } from "../../models/format.ts"
+import { getHeaderRows } from "../../helpers/dialect.ts"
+import type { DialectWithHeaderAndCommentRows } from "../../models/dialect.ts"
 import type { Table } from "../../models/table.ts"
 
 export async function joinHeaderRows(
   table: Table,
-  format: FormatWithHeaderAndCommentRows,
+  dialect: DialectWithHeaderAndCommentRows,
 ) {
-  const headerRows = getHeaderRows(format)
+  const headerRows = getHeaderRows(dialect)
   const headerOffset = headerRows.at(0) ?? 0
-  const headerJoin = format?.headerJoin ?? " "
+  const headerJoin = dialect?.headerJoin ?? " "
   if (headerRows.length < 2) {
     return table
   }
@@ -39,11 +39,11 @@ export async function joinHeaderRows(
 
 export function skipCommentRows(
   table: Table,
-  format: FormatWithHeaderAndCommentRows,
+  dialect: DialectWithHeaderAndCommentRows,
 ) {
-  const headerRows = getHeaderRows(format)
+  const headerRows = getHeaderRows(dialect)
   const commentOffset = headerRows.at(-1) ?? 0
-  if (!format?.commentRows) {
+  if (!dialect?.commentRows) {
     return table
   }
 
@@ -53,7 +53,7 @@ export function skipCommentRows(
       pl
         .col("fairspec:number")
         .add(commentOffset)
-        .isIn(format.commentRows)
+        .isIn(dialect.commentRows)
         .not(),
     )
     .drop("fairspec:number")

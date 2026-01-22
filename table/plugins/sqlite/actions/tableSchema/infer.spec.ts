@@ -1,11 +1,11 @@
 import { getTempFilePath } from "@fairspec/dataset"
-import type { SqliteFormat } from "@fairspec/metadata"
+import type { SqliteDialect } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { saveSqliteTable } from "../../actions/table/save.ts"
 import { inferTableSchemaFromSqlite } from "./infer.ts"
 
-const format: SqliteFormat = { name: "sqlite", tableName: "fairspec" }
+const dialect: SqliteDialect = { format: "sqlite", tableName: "fairspec" }
 
 describe("inferTableSchemaFromSqlite", () => {
   it("should infer schema", async () => {
@@ -21,13 +21,13 @@ describe("inferTableSchemaFromSqlite", () => {
 
     await saveSqliteTable(source, {
       path,
-      format,
+      dialect,
       overwrite: true,
     })
 
     const schema = await inferTableSchemaFromSqlite({
       data: path,
-      format,
+      dialect,
     })
 
     expect(schema).toEqual({
@@ -43,7 +43,7 @@ describe("inferTableSchemaFromSqlite", () => {
   it("throws error when resource path is not defined", async () => {
     await expect(
       inferTableSchemaFromSqlite({
-        format: { name: "sqlite", tableName: "fairspec" },
+        dialect: { format: "sqlite", tableName: "fairspec" },
       }),
     ).rejects.toThrow("Database is not defined")
   })
@@ -52,7 +52,7 @@ describe("inferTableSchemaFromSqlite", () => {
     await expect(
       inferTableSchemaFromSqlite({
         data: "path",
-        format: { name: "sqlite" },
+        dialect: { format: "sqlite" },
       }),
     ).rejects.toThrow("Table name is not defined")
   })

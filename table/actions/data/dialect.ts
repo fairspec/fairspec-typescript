@@ -1,23 +1,23 @@
-import { getHeaderRows } from "../../helpers/format.ts"
+import { getHeaderRows } from "../../helpers/dialect.ts"
 import type { DataRecord, DataRow } from "../../models/data.ts"
-import type { FormatWithHeaderAndCommentRows } from "../../models/format.ts"
+import type { DialectWithHeaderAndCommentRows } from "../../models/dialect.ts"
 
 export function getRecordsFromRows(
   rows: DataRow[],
-  format?: FormatWithHeaderAndCommentRows,
+  dialect?: DialectWithHeaderAndCommentRows,
 ) {
   const records: DataRecord[] = []
 
-  const header = getHeaderFromRows(rows, format)
-  const content = getContentFromRows(rows, format)
+  const header = getHeaderFromRows(rows, dialect)
+  const content = getContentFromRows(rows, dialect)
 
-  const labels = getLabelsFromHeader(header, format)
+  const labels = getLabelsFromHeader(header, dialect)
   if (!labels) {
     return records
   }
 
   for (const row of content) {
-    const isCommentedRow = getIsCommentedRow(row, format)
+    const isCommentedRow = getIsCommentedRow(row, dialect)
     if (isCommentedRow) {
       continue
     }
@@ -32,9 +32,9 @@ export function getRecordsFromRows(
 
 function getHeaderFromRows(
   rows: DataRow[],
-  format?: FormatWithHeaderAndCommentRows,
+  dialect?: DialectWithHeaderAndCommentRows,
 ) {
-  const headerRows = getHeaderRows(format)
+  const headerRows = getHeaderRows(dialect)
 
   if (!headerRows.length) {
     const length = Math.max(...rows.map(row => row.length))
@@ -56,10 +56,10 @@ function getHeaderFromRows(
 
 function getContentFromRows(
   rows: DataRow[],
-  format?: FormatWithHeaderAndCommentRows,
+  dialect?: DialectWithHeaderAndCommentRows,
 ) {
-  const headerRows = getHeaderRows(format)
-  const commentRows = format?.commentRows ?? []
+  const headerRows = getHeaderRows(dialect)
+  const commentRows = dialect?.commentRows ?? []
   const skipRows = headerRows[0] ? headerRows[0] - 1 : 0
 
   const content: DataRow[] = []
@@ -78,7 +78,7 @@ function getContentFromRows(
       continue
     }
 
-    const isCommentedRow = getIsCommentedRow(row, format)
+    const isCommentedRow = getIsCommentedRow(row, dialect)
     if (isCommentedRow) {
       continue
     }
@@ -91,14 +91,14 @@ function getContentFromRows(
 
 function getLabelsFromHeader(
   header: DataRow[],
-  format?: FormatWithHeaderAndCommentRows,
+  dialect?: DialectWithHeaderAndCommentRows,
 ) {
   if (!header[0]) {
     return undefined
   }
 
   const labels = header[0].map(String)
-  const headerJoin = format?.headerJoin ?? " "
+  const headerJoin = dialect?.headerJoin ?? " "
 
   for (const row of header.slice(1)) {
     for (const [index, label] of row.entries()) {
@@ -112,9 +112,9 @@ function getLabelsFromHeader(
 
 function getIsCommentedRow(
   row: unknown[],
-  format?: FormatWithHeaderAndCommentRows,
+  dialect?: DialectWithHeaderAndCommentRows,
 ) {
-  const commentPrefix = format?.commentPrefix
+  const commentPrefix = dialect?.commentPrefix
   if (!commentPrefix) {
     return false
   }

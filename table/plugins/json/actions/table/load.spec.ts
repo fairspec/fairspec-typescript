@@ -71,7 +71,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: { name: "json", jsonPointer: "key" },
+        dialect: { format: "json", jsonPointer: "key" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -86,7 +86,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: { name: "json", columnNames: ["name"] },
+        dialect: { format: "json", columnNames: ["name"] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -101,7 +101,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: { name: "json", rowType: "array" },
+        dialect: { format: "json", rowType: "array" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -116,7 +116,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: { name: "json", rowType: "object" },
+        dialect: { format: "json", rowType: "object" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -135,7 +135,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: { name: "jsonl" },
+        dialect: { format: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -151,7 +151,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: [path1, path2],
-        format: { name: "jsonl" },
+        dialect: { format: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -165,7 +165,7 @@ describe("loadJsonTable (format=jsonl)", () => {
     it.skip("should load remote file", async () => {
       const table = await loadJsonTable({
         data: "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
-        format: { name: "jsonl" },
+        dialect: { format: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -180,7 +180,7 @@ describe("loadJsonTable (format=jsonl)", () => {
           "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
           "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
         ],
-        format: { name: "jsonl" },
+        dialect: { format: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -199,7 +199,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: { name: "jsonl", columnNames: ["name"] },
+        dialect: { format: "jsonl", columnNames: ["name"] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -214,7 +214,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: { name: "jsonl", rowType: "array" },
+        dialect: { format: "jsonl", rowType: "array" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -229,7 +229,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        format: { name: "jsonl", rowType: "object" },
+        dialect: { format: "jsonl", rowType: "object" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

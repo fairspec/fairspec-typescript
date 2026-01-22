@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { getRecordsFromRows } from "./format.ts"
+import { getRecordsFromRows } from "./dialect.ts"
 
 describe("getRecordsFromRows", () => {
   it("should convert rows to records with default header", () => {
@@ -40,7 +40,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       headerRows: false,
     })
 
@@ -59,7 +59,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       headerRows: [2],
     })
 
@@ -78,7 +78,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       headerRows: [1, 2],
     })
 
@@ -105,7 +105,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       headerRows: [1, 2],
       headerJoin: "_",
     })
@@ -125,7 +125,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       commentRows: [3],
     })
 
@@ -145,7 +145,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       commentPrefix: "#",
     })
 
@@ -166,7 +166,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       commentPrefix: "#",
     })
 
@@ -185,7 +185,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       commentPrefix: "#",
     })
 
@@ -286,7 +286,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       headerRows: [1, 2],
     })
 
@@ -305,7 +305,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       headerRows: [2],
       commentRows: [3],
     })
@@ -326,7 +326,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       commentRows: [4],
       commentPrefix: "#",
     })
@@ -345,7 +345,7 @@ describe("getRecordsFromRows", () => {
     ]
 
     const result = getRecordsFromRows(rows, {
-      name: "json",
+      format: "json",
       headerRows: false,
     })
 

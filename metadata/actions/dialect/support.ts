@@ -3,16 +3,20 @@ import type { Resource } from "../../models/resource.ts"
 import { inferDialectFormat } from "./infer.ts"
 import { resolveDialect } from "./resolve.ts"
 
-export async function getSupportedDialect(
+export async function getSupportedDialect<F extends Dialect["format"]>(
   resource: Resource,
-  formats: Dialect["format"][],
-): Promise<Dialect | undefined> {
-  const dialect = await resolveDialect(resource.dialect)
-
-  if (dialect) {
-    return formats.includes(dialect.format) ? dialect : undefined
+  suportedFormats: F[],
+): Promise<Extract<Dialect, { format: F }> | undefined> {
+  let format = (await resolveDialect(resource.dialect))?.format
+  if (!format) {
+    format = inferDialectFormat(resource)
   }
 
-  const format = inferDialectFormat(resource)
-  return formats.includes(format) ? { format } : undefined
+  for (const supportedFormat of suportedFormats) {
+    if (format === supportedFormat) {
+      return resource.dialect as Extract<Dialect, { format: F }>
+    }
+  }
+
+  return undefined
 }

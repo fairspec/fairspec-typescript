@@ -36,7 +36,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "json" } },
+        { ...resource, dialect: { format: "json" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -52,7 +52,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "jsonl" } },
+        { ...resource, dialect: { format: "jsonl" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -68,7 +68,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "jsonl" } },
+        { ...resource, dialect: { format: "jsonl" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -88,7 +88,7 @@ describe("JsonPlugin", () => {
     it("should handle explicit format specification", async () => {
       const resource: Resource = {
         data: "test.txt",
-        format: { name: "json" },
+        dialect: { format: "json" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadJsonTable.mockResolvedValue(mockTable)
@@ -96,7 +96,7 @@ describe("JsonPlugin", () => {
       const result = await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "json" } },
+        { ...resource, dialect: { format: "json" } },
         undefined,
       )
       expect(result).toEqual(mockTable)
@@ -113,7 +113,7 @@ describe("JsonPlugin", () => {
       await plugin.loadTable(resource, options)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "json" } },
+        { ...resource, dialect: { format: "json" } },
         options,
       )
     })
@@ -128,7 +128,7 @@ describe("JsonPlugin", () => {
       await plugin.loadTable(resource)
 
       expect(mockLoadJsonTable).toHaveBeenCalledWith(
-        { ...resource, format: { name: "json" } },
+        { ...resource, dialect: { format: "json" } },
         undefined,
       )
     })
@@ -144,7 +144,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { name: "json" },
+        dialect: { format: "json" },
       })
       expect(result).toEqual({ path: "output.json" })
     })
@@ -158,7 +158,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { name: "jsonl" },
+        dialect: { format: "jsonl" },
       })
       expect(result).toEqual({ path: "output.jsonl" })
     })
@@ -172,7 +172,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { name: "jsonl" },
+        dialect: { format: "jsonl" },
       })
       expect(result).toEqual({ path: "output.ndjson" })
     })
@@ -189,14 +189,17 @@ describe("JsonPlugin", () => {
 
     it("should handle explicit format specification", async () => {
       const table = pl.DataFrame().lazy()
-      const options = { path: "output.txt", format: { name: "json" } as const }
+      const options = {
+        path: "output.txt",
+        dialect: { format: "json" } as const,
+      }
       mockSaveJsonTable.mockResolvedValue({ path: "output.txt" })
 
       const result = await plugin.saveTable(table, options)
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { name: "json" },
+        dialect: { format: "json" },
       })
       expect(result).toEqual({ path: "output.txt" })
     })
@@ -210,7 +213,7 @@ describe("JsonPlugin", () => {
 
       expect(mockSaveJsonTable).toHaveBeenCalledWith(table, {
         ...options,
-        format: { name: "json" },
+        dialect: { format: "json" },
       })
     })
 

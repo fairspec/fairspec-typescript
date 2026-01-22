@@ -37,7 +37,7 @@ describe("XlsxPlugin", () => {
         const result = await plugin.loadTable(resource)
 
         expect(mockLoadXlsxTable).toHaveBeenCalledWith(
-          { ...resource, format: { name: "xlsx" } },
+          { ...resource, dialect: { format: "xlsx" } },
           undefined,
         )
         expect(result).toEqual(mockTable)
@@ -46,7 +46,7 @@ describe("XlsxPlugin", () => {
       it("should handle explicit format specification", async () => {
         const resource: Resource = {
           data: "test.txt",
-          format: { name: "xlsx" },
+          dialect: { format: "xlsx" },
         }
         const mockTable = pl.DataFrame().lazy()
         mockLoadXlsxTable.mockResolvedValue(mockTable)
@@ -54,7 +54,7 @@ describe("XlsxPlugin", () => {
         const result = await plugin.loadTable(resource)
 
         expect(mockLoadXlsxTable).toHaveBeenCalledWith(
-          { ...resource, format: { name: "xlsx" } },
+          { ...resource, dialect: { format: "xlsx" } },
           undefined,
         )
         expect(result).toEqual(mockTable)
@@ -71,7 +71,7 @@ describe("XlsxPlugin", () => {
         await plugin.loadTable(resource, options)
 
         expect(mockLoadXlsxTable).toHaveBeenCalledWith(
-          { ...resource, format: { name: "xlsx" } },
+          { ...resource, dialect: { format: "xlsx" } },
           options,
         )
       })
@@ -86,7 +86,7 @@ describe("XlsxPlugin", () => {
         await plugin.loadTable(resource)
 
         expect(mockLoadXlsxTable).toHaveBeenCalledWith(
-          { ...resource, format: { name: "xlsx" } },
+          { ...resource, dialect: { format: "xlsx" } },
           undefined,
         )
       })
@@ -103,7 +103,7 @@ describe("XlsxPlugin", () => {
         const result = await plugin.loadTable(resource)
 
         expect(mockLoadXlsxTable).toHaveBeenCalledWith(
-          { ...resource, format: { name: "ods" } },
+          { ...resource, dialect: { format: "ods" } },
           undefined,
         )
         expect(result).toEqual(mockTable)
@@ -112,7 +112,7 @@ describe("XlsxPlugin", () => {
       it("should handle explicit format specification", async () => {
         const resource: Resource = {
           data: "test.txt",
-          format: { name: "ods" },
+          dialect: { format: "ods" },
         }
         const mockTable = pl.DataFrame().lazy()
         mockLoadXlsxTable.mockResolvedValue(mockTable)
@@ -120,7 +120,7 @@ describe("XlsxPlugin", () => {
         const result = await plugin.loadTable(resource)
 
         expect(mockLoadXlsxTable).toHaveBeenCalledWith(
-          { ...resource, format: { name: "ods" } },
+          { ...resource, dialect: { format: "ods" } },
           undefined,
         )
         expect(result).toEqual(mockTable)
@@ -137,7 +137,7 @@ describe("XlsxPlugin", () => {
         await plugin.loadTable(resource, options)
 
         expect(mockLoadXlsxTable).toHaveBeenCalledWith(
-          { ...resource, format: { name: "ods" } },
+          { ...resource, dialect: { format: "ods" } },
           options,
         )
       })
@@ -152,7 +152,7 @@ describe("XlsxPlugin", () => {
         await plugin.loadTable(resource)
 
         expect(mockLoadXlsxTable).toHaveBeenCalledWith(
-          { ...resource, format: { name: "ods" } },
+          { ...resource, dialect: { format: "ods" } },
           undefined,
         )
       })
@@ -192,7 +192,7 @@ describe("XlsxPlugin", () => {
 
         expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
           ...options,
-          format: { name: "xlsx" },
+          dialect: { format: "xlsx" },
         })
         expect(result).toBe("output.xlsx")
       })
@@ -201,7 +201,7 @@ describe("XlsxPlugin", () => {
         const table = pl.DataFrame().lazy()
         const options = {
           path: "output.txt",
-          format: { name: "xlsx" as const },
+          dialect: { format: "xlsx" as const },
         }
         mockSaveXlsxTable.mockResolvedValue("output.txt")
 
@@ -209,7 +209,7 @@ describe("XlsxPlugin", () => {
 
         expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
           ...options,
-          format: { name: "xlsx" },
+          dialect: { format: "xlsx" },
         })
         expect(result).toBe("output.txt")
       })
@@ -223,7 +223,7 @@ describe("XlsxPlugin", () => {
 
         expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
           ...options,
-          format: { name: "xlsx" },
+          dialect: { format: "xlsx" },
         })
       })
     })
@@ -238,21 +238,24 @@ describe("XlsxPlugin", () => {
 
         expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
           ...options,
-          format: { name: "ods" },
+          dialect: { format: "ods" },
         })
         expect(result).toBe("output.ods")
       })
 
       it("should handle explicit format specification", async () => {
         const table = pl.DataFrame().lazy()
-        const options = { path: "output.txt", format: { name: "ods" as const } }
+        const options = {
+          path: "output.txt",
+          dialect: { format: "ods" as const },
+        }
         mockSaveXlsxTable.mockResolvedValue("output.txt")
 
         const result = await plugin.saveTable(table, options)
 
         expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
           ...options,
-          format: { name: "ods" },
+          dialect: { format: "ods" },
         })
         expect(result).toBe("output.txt")
       })
@@ -266,7 +269,7 @@ describe("XlsxPlugin", () => {
 
         expect(mockSaveXlsxTable).toHaveBeenCalledWith(table, {
           ...options,
-          format: { name: "ods" },
+          dialect: { format: "ods" },
         })
       })
     })

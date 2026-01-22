@@ -1,4 +1,5 @@
 import { saveFile } from "@fairspec/dataset"
+import { getSupportedDialect } from "@fairspec/metadata"
 import { utils, write } from "xlsx"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
@@ -11,10 +12,10 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const format =
-    options.format?.name === "xlsx" || options.format?.name === "ods"
-      ? options.format
-      : undefined
+  const dialect = await getSupportedDialect(options, ["xlsx", "ods"])
+  if (!dialect) {
+    throw new Error("Saving options is not compatible")
+  }
 
   const tableSchema =
     options.tableSchema ??
@@ -28,13 +29,13 @@ export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   })
 
   const frame = await table.collect()
-  const sheetName = format?.sheetName ?? "Sheet1"
+  const sheetName = dialect?.sheetName ?? "Sheet1"
 
   const sheet = utils.json_to_sheet(frame.toRecords())
   const book = utils.book_new()
   utils.book_append_sheet(book, sheet, sheetName)
 
-  const bookType = format?.name === "ods" ? "ods" : "xlsx"
+  const bookType = dialect?.format === "ods" ? "ods" : "xlsx"
   const buffer = write(book, { type: "buffer", bookType })
   await saveFile(path, buffer, { overwrite })
 

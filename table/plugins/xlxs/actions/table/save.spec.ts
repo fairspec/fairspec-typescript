@@ -12,7 +12,7 @@ const table = pl.readRecords([row1, row2]).lazy()
 describe("saveXlsxTable (format=xlsx)", () => {
   it("should save table to file", async () => {
     const path = getTempFilePath()
-    await saveXlsxTable(table, { path, format: { name: "xlsx" } })
+    await saveXlsxTable(table, { path, dialect: { format: "xlsx" } })
 
     const data = await readTestData(path)
     expect(data).toEqual([row1, row2])
@@ -32,10 +32,10 @@ describe("saveXlsxTable (format=xlsx)", () => {
       ])
       .lazy()
 
-    await saveXlsxTable(source, { path, format: { name: "xlsx" } })
+    await saveXlsxTable(source, { path, dialect: { format: "xlsx" } })
 
     const target = await loadXlsxTable(
-      { data: path, format: { name: "xlsx" } },
+      { data: path, dialect: { format: "xlsx" } },
       { denormalized: true },
     )
     expect((await target.collect()).toRecords()).toEqual([
@@ -54,7 +54,7 @@ describe("saveXlsxTable (format=xlsx)", () => {
 describe("saveXlsxTable (format=ods)", () => {
   it("should save table to file", async () => {
     const path = getTempFilePath()
-    await saveXlsxTable(table, { path, format: { name: "ods" } })
+    await saveXlsxTable(table, { path, dialect: { format: "ods" } })
 
     const data = await readTestData(path)
     expect(data).toEqual([row1, row2])
@@ -74,10 +74,10 @@ describe("saveXlsxTable (format=ods)", () => {
       ])
       .lazy()
 
-    await saveXlsxTable(source, { path, format: { name: "ods" } })
+    await saveXlsxTable(source, { path, dialect: { format: "ods" } })
 
     const target = await loadXlsxTable(
-      { data: path, format: { name: "ods" } },
+      { data: path, dialect: { format: "ods" } },
       { denormalized: true },
     )
     expect((await target.collect()).toRecords()).toEqual([

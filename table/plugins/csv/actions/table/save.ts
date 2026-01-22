@@ -10,11 +10,10 @@ export async function saveCsvTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
   const dialect = await getSupportedDialect(options, ["csv", "tsv"])
-  if (dialect?.format !== "csv" && dialect?.format !== "tsv") {
+  if (!dialect) {
     throw new Error("Saving options is not compatible")
   }
 
-  const isTabs = dialect?.format === "tsv"
   const headerRows = getHeaderRows(dialect)
 
   if (!overwrite) {
@@ -36,9 +35,9 @@ export async function saveCsvTable(table: Table, options: SaveTableOptions) {
     .sinkCSV(path, {
       maintainOrder: true,
       includeHeader: headerRows.length > 0,
-      separator: csvDialect?.delimiter ?? (isTabs ? "\t" : ","),
-      lineTerminator: csvDialect?.lineTerminator ?? "\n",
-      quoteChar: csvDialect?.quoteChar ?? '"',
+      lineTerminator: dialect.lineTerminator ?? "\n",
+      quoteChar: dialect.format === "csv" ? dialect.quoteChar : undefined,
+      separator: dialect.format === "csv" ? (dialect?.delimiter ?? ",") : "\t",
     })
     .collect()
 

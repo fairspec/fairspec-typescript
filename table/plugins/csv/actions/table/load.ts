@@ -5,9 +5,9 @@ import { resolveTableSchema } from "@fairspec/metadata"
 import { prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../../plugin.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
-import { joinHeaderRows } from "../../../../actions/table/format.ts"
+import { joinHeaderRows } from "../../../../actions/table/dialect.ts"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
-import { skipCommentRows } from "../../../../actions/table/format.ts"
+import { skipCommentRows } from "../../../../actions/table/dialect.ts"
 import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { inferCsvDialect } from "../../actions/dialect/infer.ts"
@@ -28,11 +28,11 @@ export async function loadCsvTable(
 
   let dialect = await getSupportedDialect(resource, ["csv", "tsv"])
   if (!dialect) {
-    dialect = await inferCsvDialect({ ...resource, data: paths[0] }, options)
+    throw new Error("Resource data is not compatible")
   }
 
-  if (dialect?.format !== "csv" && dialect?.format !== "tsv") {
-    throw new Error("Resource data is not compatible")
+  if (!resource.dialect) {
+    dialect = await inferCsvDialect({ ...resource, data: paths[0] }, options)
   }
 
   const scanOptions = getScanOptions(dialect)

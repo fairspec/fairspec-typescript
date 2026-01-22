@@ -1,6 +1,6 @@
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { joinHeaderRows, skipCommentRows } from "./format.ts"
+import { joinHeaderRows, skipCommentRows } from "./dialect.ts"
 
 describe("joinHeaderRows", () => {
   it("should join two header rows with default space separator", async () => {
@@ -19,7 +19,7 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      name: "csv",
+      format: "csv",
       headerRows: [2, 3],
     })
 
@@ -46,7 +46,7 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      name: "csv",
+      format: "csv",
       headerRows: [2, 3],
       headerJoin: "_",
     })
@@ -70,7 +70,7 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      name: "csv",
+      format: "csv",
       headerRows: [1],
     })
 
@@ -89,7 +89,7 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      name: "csv",
+      format: "csv",
     })
 
     const collected = await result.collect()
@@ -107,7 +107,7 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      name: "csv",
+      format: "csv",
       headerRows: [2, 3, 4],
     })
 
@@ -134,7 +134,7 @@ describe("joinHeaderRows", () => {
       .lazy()
 
     const result = await joinHeaderRows(table, {
-      name: "csv",
+      format: "csv",
       headerRows: [2, 3],
     })
 
@@ -159,7 +159,7 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      name: "csv",
+      format: "csv",
       commentRows: [2],
       headerRows: false,
     })
@@ -181,7 +181,7 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      name: "csv",
+      format: "csv",
       commentRows: [2, 4],
       headerRows: false,
     })
@@ -203,7 +203,7 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      name: "csv",
+      format: "csv",
     })
 
     const collected = await result.collect()
@@ -221,7 +221,7 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      name: "csv",
+      format: "csv",
       headerRows: [2],
       commentRows: [5],
     })
@@ -243,7 +243,7 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      name: "csv",
+      format: "csv",
       commentRows: [1],
       headerRows: false,
     })
@@ -264,7 +264,7 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      name: "csv",
+      format: "csv",
       commentRows: [3],
       headerRows: false,
     })
@@ -285,7 +285,7 @@ describe("skipCommentRows", () => {
       .lazy()
 
     const result = skipCommentRows(table, {
-      name: "csv",
+      format: "csv",
       headerRows: [2, 3],
       commentRows: [7],
     })

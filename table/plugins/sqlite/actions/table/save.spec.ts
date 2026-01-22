@@ -1,11 +1,11 @@
 import { getTempFilePath } from "@fairspec/dataset"
-import type { SqliteFormat } from "@fairspec/metadata"
+import type { SqliteDialect } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
 import { loadSqliteTable } from "./load.ts"
 import { saveSqliteTable } from "./save.ts"
 
-const format: SqliteFormat = { name: "sqlite", tableName: "fairspec" }
+const dialect: SqliteDialect = { format: "sqlite", tableName: "fairspec" }
 const record1 = { id: 1, name: "english" }
 const record2 = { id: 2, name: "中文" }
 
@@ -18,11 +18,11 @@ describe("saveSqliteTable", () => {
     const source = pl.DataFrame([record1, record2]).lazy()
     await saveSqliteTable(source, {
       path,
-      format,
+      dialect,
       overwrite: true,
     })
 
-    const target = await loadSqliteTable({ data: path, format })
+    const target = await loadSqliteTable({ data: path, dialect })
     expect((await target.collect()).toRecords()).toEqual([record1, record2])
   })
 
@@ -32,11 +32,11 @@ describe("saveSqliteTable", () => {
     const source = pl.DataFrame([record1, record2]).lazy()
     await saveSqliteTable(source, {
       path,
-      format,
+      dialect,
       overwrite: true,
     })
 
-    const target = await loadSqliteTable({ data: path, format })
+    const target = await loadSqliteTable({ data: path, dialect })
     expect((await target.collect()).toRecords()).toEqual([record1, record2])
   })
 
@@ -56,12 +56,12 @@ describe("saveSqliteTable", () => {
 
     await saveSqliteTable(source, {
       path,
-      format,
+      dialect,
       overwrite: true,
     })
 
     const target = await loadSqliteTable(
-      { data: path, format },
+      { data: path, dialect },
       { denormalized: true },
     )
 
@@ -81,7 +81,7 @@ describe("saveSqliteTable", () => {
     await expect(
       saveSqliteTable(mockTable, {
         path: "test.db",
-        format: { name: "sqlite" },
+        dialect: { name: "sqlite" },
       }),
     ).rejects.toThrow("Table name is not defined")
   })

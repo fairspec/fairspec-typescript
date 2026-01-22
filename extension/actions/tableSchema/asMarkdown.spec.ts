@@ -5,7 +5,6 @@ import { renderTableSchemaAsMarkdown } from "./asMarkdown.ts"
 describe("renderTableSchemaAsMarkdown", () => {
   it("converts a simple schema to markdown table", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         id: {
           type: "integer",
@@ -33,7 +32,6 @@ describe("renderTableSchemaAsMarkdown", () => {
 
   it("handles column constraints", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         age: {
           type: "integer",
@@ -58,7 +56,6 @@ describe("renderTableSchemaAsMarkdown", () => {
 
   it("handles empty properties object", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {},
     }
 
@@ -71,7 +68,6 @@ describe("renderTableSchemaAsMarkdown", () => {
 
   it("handles pipe characters in column values", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field: {
           type: "string",
@@ -87,7 +83,6 @@ describe("renderTableSchemaAsMarkdown", () => {
 
   it("handles columns with enum constraints", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         status: {
           type: "string",
@@ -103,7 +98,6 @@ describe("renderTableSchemaAsMarkdown", () => {
 
   it("uses frontmatter when frontmatter option is true", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       title: "Table Schema",
       properties: {
         field1: {
@@ -120,7 +114,6 @@ describe("renderTableSchemaAsMarkdown", () => {
 
   it("does not use frontmatter when option is false or not provided", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field1: {
           type: "string",
@@ -136,7 +129,6 @@ describe("renderTableSchemaAsMarkdown", () => {
 
   it("handles multiple constraint types", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         username: {
           type: "string",
@@ -158,7 +150,6 @@ describe("renderTableSchemaAsMarkdown", () => {
 
   it("handles columns with newlines in descriptions", () => {
     const schema: TableSchema = {
-      $schema: "https://fairspec.org/profiles/latest/table.json",
       properties: {
         field: {
           type: "string",

@@ -9,7 +9,8 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 export async function saveCsvTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const dialect = await getSupportedDialect(options, ["csv", "tsv"])
+  const resource = { data: path, dialect: options.dialect }
+  const dialect = await getSupportedDialect(resource, ["csv", "tsv"])
   if (!dialect) {
     throw new Error("Saving options is not compatible")
   }

@@ -11,7 +11,10 @@ describe("loadJsonTable", () => {
       const body = '[{"id":1,"name":"english"},{"id":2,"name":"中文"}]'
       const path = await writeTempFile(body)
 
-      const table = await loadJsonTable({ data: path })
+      const table = await loadJsonTable({
+        data: path,
+        dialect: { format: "json" },
+      })
 
       expect((await table.collect()).toRecords()).toEqual([
         { id: 1, name: "english" },
@@ -26,6 +29,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: [path1, path2],
+        dialect: { format: "json" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

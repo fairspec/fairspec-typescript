@@ -13,7 +13,8 @@ import type { SqliteSchema } from "../../models/schema.ts"
 export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const dialect = await getSupportedDialect(options, ["sqlite"])
+  const resource = { data: path, dialect: options.dialect }
+  const dialect = await getSupportedDialect(resource, ["sqlite"])
   if (!dialect) {
     throw new Error("Saving options is not compatible")
   }

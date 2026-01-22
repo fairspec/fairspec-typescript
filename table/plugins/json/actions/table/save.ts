@@ -11,7 +11,8 @@ import { encodeJsonBuffer } from "../../actions/buffer/encode.ts"
 export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const dialect = await getSupportedDialect(options, ["json", "jsonl"])
+  const resource = { data: path, dialect: options.dialect }
+  const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
   if (!dialect) {
     throw new Error("Saving options is not compatible")
   }

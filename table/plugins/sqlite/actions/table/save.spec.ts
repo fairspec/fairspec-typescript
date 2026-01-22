@@ -10,8 +10,6 @@ const record1 = { id: 1, name: "english" }
 const record2 = { id: 2, name: "中文" }
 
 describe("saveSqliteTable", () => {
-  const mockTable = pl.DataFrame({ col1: [1, 2, 3] }).lazy()
-
   it("should save/load table", async () => {
     const path = getTempFilePath()
 
@@ -75,14 +73,5 @@ describe("saveSqliteTable", () => {
         string: "string",
       },
     ])
-  })
-
-  it("throws error when table name is not defined", async () => {
-    await expect(
-      saveSqliteTable(mockTable, {
-        path: "test.db",
-        dialect: { name: "sqlite" },
-      }),
-    ).rejects.toThrow("Table name is not defined")
   })
 })

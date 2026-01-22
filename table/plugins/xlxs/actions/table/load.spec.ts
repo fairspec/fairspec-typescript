@@ -19,7 +19,11 @@ describe("loadXlsxTable (format=xlsx)", () => {
       const path = getTempFilePath()
       await writeTestData(path, [row1, row2, row3])
 
-      const table = await loadXlsxTable({ data: path })
+      const table = await loadXlsxTable({
+        data: path,
+        dialect: { format: "xlsx" },
+      })
+
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
     })
 
@@ -29,7 +33,11 @@ describe("loadXlsxTable (format=xlsx)", () => {
       await writeTestData(path1, [row1, row2, row3])
       await writeTestData(path2, [row1, row2, row3])
 
-      const table = await loadXlsxTable({ data: [path1, path2] })
+      const table = await loadXlsxTable({
+        data: [path1, path2],
+        dialect: { format: "xlsx" },
+      })
+
       expect((await table.collect()).toRecords()).toEqual([
         record1,
         record2,

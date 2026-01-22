@@ -12,7 +12,7 @@ const table = pl.readRecords([row1, row2]).lazy()
 describe("saveJsonTable", () => {
   it("should save table to file", async () => {
     const path = getTempFilePath()
-    await saveJsonTable(table, { path })
+    await saveJsonTable(table, { path, dialect: { format: "json" } })
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual(JSON.stringify([row1, row2], null, 2))
@@ -63,7 +63,7 @@ describe("saveJsonTable", () => {
   })
 
   it("should save and load various data types", async () => {
-    const path = getTempFilePath()
+    const path = getTempFilePath({ format: "json" })
 
     const source = pl
       .DataFrame([

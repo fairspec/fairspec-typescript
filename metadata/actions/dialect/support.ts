@@ -7,14 +7,13 @@ export async function getSupportedDialect<F extends Dialect["format"]>(
   resource: Resource,
   suportedFormats: F[],
 ): Promise<Extract<Dialect, { format: F }> | undefined> {
-  let format = (await resolveDialect(resource.dialect))?.format
-  if (!format) {
-    format = inferDialectFormat(resource)
+  const dialect = (await resolveDialect(resource.dialect)) ?? {
+    format: inferDialectFormat(resource),
   }
 
   for (const supportedFormat of suportedFormats) {
-    if (format === supportedFormat) {
-      return resource.dialect as Extract<Dialect, { format: F }>
+    if (dialect.format === supportedFormat) {
+      return dialect as Extract<Dialect, { format: F }>
     }
   }
 

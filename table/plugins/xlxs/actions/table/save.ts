@@ -12,7 +12,8 @@ import type { SaveTableOptions } from "../../../../plugin.ts"
 export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const dialect = await getSupportedDialect(options, ["xlsx", "ods"])
+  const resource = { data: path, dialect: options.dialect }
+  const dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
   if (!dialect) {
     throw new Error("Saving options is not compatible")
   }

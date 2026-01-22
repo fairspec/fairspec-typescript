@@ -8,7 +8,7 @@ useRecording()
 describe("loadCsvTable", () => {
   it("should load local file", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
-    const table = await loadCsvTable({ data: path })
+    const table = await loadCsvTable({ data: path, dialect: { format: "csv" } })
 
     expect((await table.collect()).toRecords()).toEqual([
       { id: 1, name: "english" },
@@ -20,7 +20,10 @@ describe("loadCsvTable", () => {
     const path1 = await writeTempFile("id,name\n1,english")
     const path2 = await writeTempFile("id,name\n2,中文\n3,german")
 
-    const table = await loadCsvTable({ data: [path1, path2] })
+    const table = await loadCsvTable({
+      data: [path1, path2],
+      dialect: { format: "csv" },
+    })
 
     expect((await table.collect()).toRecords()).toEqual([
       { id: 1, name: "english" },

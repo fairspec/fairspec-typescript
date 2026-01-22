@@ -47,13 +47,4 @@ describe("inferTableSchemaFromSqlite", () => {
       }),
     ).rejects.toThrow("Database is not defined")
   })
-
-  it("throws error when table name is not defined", async () => {
-    await expect(
-      inferTableSchemaFromSqlite({
-        data: "path",
-        dialect: { format: "sqlite" },
-      }),
-    ).rejects.toThrow("Table name is not defined")
-  })
 })

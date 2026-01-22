@@ -40,6 +40,18 @@
       }
     },
     "ColumnProperty": {
+      "type": "object",
+      "properties": {
+        "type": {},
+        "title": { "$ref": "#/$defs/Title" },
+        "description": { "$ref": "#/$defs/Description" },
+        "rdfType": { "$ref": "#/$defs/RdfType" },
+        "enum": { "$ref": "#/$defs/UnknownEnum" },
+        "const": { "$ref": "#/$defs/UnknownConst" },
+        "default": { "$ref": "#/$defs/UnknownDefault" },
+        "examples": { "$ref": "#/$defs/UnknownExamples" },
+        "missingValues": { "$ref": "#/$defs/MissingValues" }
+      },
       "allOf": [
         {
           "if": { "properties": { "type": { "$ref": "#/$defs/BooleanType" } } },
@@ -179,16 +191,7 @@
         }
       ]
     },
-    "BaseColumnProperty": {
-      "type": "object",
-      "properties": {
-        "title": { "$ref": "#/$defs/Title" },
-        "description": { "$ref": "#/$defs/Description" },
-        "rdfType": { "$ref": "#/$defs/RdfType" }
-      }
-    },
     "BooleanColumnProperty": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "$ref": "#/$defs/BooleanType" },
         "enum": { "$ref": "#/$defs/BooleanEnum" },
@@ -201,7 +204,6 @@
       }
     },
     "BaseIntegerColumnProperty": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "$ref": "#/$defs/IntegerType" },
         "enum": { "$ref": "#/$defs/IntegerEnum" },
@@ -232,7 +234,6 @@
       }
     },
     "NumberColumnProperty": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "$ref": "#/$defs/NumberType" },
         "enum": { "$ref": "#/$defs/NumberEnum" },
@@ -251,7 +252,6 @@
       }
     },
     "BaseStringColumnProperty": {
-      "allOf": [{ "$ref": "#/$defs/BaseColumnProperty" }],
       "properties": {
         "type": { "$ref": "#/$defs/StringType" },
         "enum": { "$ref": "#/$defs/StringEnum" },
@@ -367,10 +367,7 @@
       }
     },
     "ArrayColumnProperty": {
-      "allOf": [
-        { "$ref": "#/$defs/BaseColumnProperty" },
-        { "$ref": "#/$defs/JsonSchema" }
-      ],
+      "allOf": [{ "$ref": "#/$defs/JsonSchema" }],
       "properties": {
         "type": { "$ref": "#/$defs/ArrayType" },
         "enum": { "$ref": "#/$defs/ArrayEnum" },
@@ -381,10 +378,7 @@
       }
     },
     "BaseObjectColumnProperty": {
-      "allOf": [
-        { "$ref": "#/$defs/BaseColumnProperty" },
-        { "$ref": "#/$defs/JsonSchema" }
-      ],
+      "allOf": [{ "$ref": "#/$defs/JsonSchema" }],
       "properties": {
         "type": { "$ref": "#/$defs/ObjectType" },
         "enum": { "$ref": "#/$defs/ObjectEnum" },

@@ -3,20 +3,12 @@
   "allOf": [{ "$ref": "#/$defs/Dialect" }],
   "$defs": {
     "Dialect": {
+      "type": "object",
       "properties": {
-        "format": {
-          "enum": [
-            "csv",
-            "tsv",
-            "json",
-            "jsonl",
-            "xlsx",
-            "ods",
-            "parquet",
-            "arrow",
-            "sqlite"
-          ]
-        }
+        "$schema": { "$ref": "#/$defs/Profile" },
+        "format": { "$ref": "#/$defs/Format" },
+        "title": { "$ref": "#/$defs/Title" },
+        "description": { "$ref": "#/$defs/Description" }
       },
       "allOf": [
         {
@@ -54,24 +46,10 @@
         {
           "if": { "properties": { "format": { "const": "sqlite" } } },
           "then": { "$ref": "#/$defs/SqliteDialect" }
-        },
-        {
-          "if": { "not": { "required": ["format"] } },
-          "then": { "$ref": "#/$defs/CustomDialect" }
         }
       ]
     },
-    "BaseDialect": {
-      "type": "object",
-      "properties": {
-        "$schema": { "$ref": "#/$defs/Profile" },
-        "title": { "$ref": "#/$defs/Title" },
-        "description": { "$ref": "#/$defs/Description" }
-      }
-    },
     "CsvDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "csv" },
         "delimiter": { "$ref": "#/$defs/Delimiter" },
@@ -86,8 +64,6 @@
       }
     },
     "TsvDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "tsv" },
         "lineTerminator": { "$ref": "#/$defs/LineTerminator" },
@@ -100,8 +76,6 @@
       }
     },
     "JsonDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "json" },
         "jsonPointer": { "$ref": "#/$defs/JsonPointer" },
@@ -114,8 +88,6 @@
       }
     },
     "JsonlDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "jsonl" },
         "rowType": { "$ref": "#/$defs/RowType" },
@@ -127,8 +99,6 @@
       }
     },
     "XlsxDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "xlxs" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
@@ -141,8 +111,6 @@
       }
     },
     "OdsDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "ods" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
@@ -155,31 +123,19 @@
       }
     },
     "ParquetDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "parquet" }
       }
     },
     "ArrowDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "arrow" }
       }
     },
     "SqliteDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "required": ["format"],
       "properties": {
         "format": { "const": "sqlite" },
         "tableName": { "$ref": "#/$defs/TableName" }
-      }
-    },
-    "CustomDialect": {
-      "allOf": [{ "$ref": "#/$defs/BaseDialect" }],
-      "properties": {
-        "name": { "$ref": "#/$defs/Name" }
       }
     },
     "Profile": {
@@ -189,7 +145,7 @@
       "type": "string",
       "pattern": "^https?://"
     },
-    "Name": {
+    "Format": {
       "type": "string"
     },
     "Title": {

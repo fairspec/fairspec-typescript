@@ -91,10 +91,7 @@
       ]
     },
     "TableSchema": {
-      "oneOf": [
-        { "$ref": "#/$defs/Path" },
-        { "$ref": "https://fairspec.org/profiles/latest/schema.json" }
-      ]
+      "oneOf": [{ "$ref": "#/$defs/Path" }, { "$ref": "https://fairspec.org/profiles/latest/schema.json" }]
     },
     "Datacite": {
       "type": "object",

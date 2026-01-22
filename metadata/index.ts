@@ -96,6 +96,7 @@ export { OdsDialect } from "./models/dialect/ods.ts"
 export { ParquetDialect } from "./models/dialect/parquet.ts"
 export { SqliteDialect } from "./models/dialect/sqlite.ts"
 export { TsvDialect } from "./models/dialect/tsv.ts"
+export { UnknownDialect } from "./models/dialect/unknown.ts"
 export { XlsxDialect } from "./models/dialect/xlsx.ts"
 export {
   CellConstError,

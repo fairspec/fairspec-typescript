@@ -1,23 +1,28 @@
 import type {
   DatasetPlugin,
-  InferFormatOptions,
+  InferDialectOptions,
   SaveDatasetOptions,
 } from "@fairspec/dataset"
-import type { Dataset, Format, Resource, TableSchema } from "@fairspec/metadata"
+import type {
+  Dataset,
+  Dialect,
+  Resource,
+  TableSchema,
+} from "@fairspec/metadata"
 import type {
   InferTableSchemaOptions,
   TableSchemaOptions,
 } from "./models/schema.ts"
 import type { Table } from "./models/table.ts"
 
-export type LoadTableOptions = InferFormatOptions &
+export type LoadTableOptions = InferDialectOptions &
   InferTableSchemaOptions & {
     denormalized?: boolean
   }
 
 export type SaveTableOptions = TableSchemaOptions & {
   path: string
-  format?: Format
+  dialect?: Dialect
   tableSchema?: TableSchema
   overwrite?: boolean
 }

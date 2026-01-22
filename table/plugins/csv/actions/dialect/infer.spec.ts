@@ -1,15 +1,15 @@
 import { writeTempFile } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { inferCsvFormat } from "./infer.ts"
+import { inferCsvDialect } from "./infer.ts"
 
-describe("inferCsvFormat", () => {
+describe("inferCsvDialect", () => {
   it("should infer a simple CSV file", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
-    const format = await inferCsvFormat({ data: path })
+    const dialect = await inferCsvDialect({ data: path })
 
-    expect(format).toEqual({
-      name: "csv",
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       lineTerminator: "\n",
     })
@@ -17,10 +17,10 @@ describe("inferCsvFormat", () => {
 
   it("should infer quoteChar", async () => {
     const path = await writeTempFile('id,name\n1,"John Doe"\n2,"Jane Smith"')
-    const format = await inferCsvFormat({ data: path })
+    const dialect = await inferCsvDialect({ data: path })
 
-    expect(format).toEqual({
-      name: "csv",
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       quoteChar: '"',
       lineTerminator: "\n",
@@ -29,10 +29,10 @@ describe("inferCsvFormat", () => {
 
   it("should infer quoteChar with single quotes", async () => {
     const path = await writeTempFile("id,name\n1,'John Doe'\n2,'Jane Smith'")
-    const format = await inferCsvFormat({ data: path })
+    const dialect = await inferCsvDialect({ data: path })
 
-    expect(format).toEqual({
-      name: "csv",
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       quoteChar: "'",
       lineTerminator: "\n",
@@ -42,10 +42,10 @@ describe("inferCsvFormat", () => {
   // TODO: it gives false positives
   it.skip("should infer header false when no header present", async () => {
     const path = await writeTempFile("1,english\n2,中文\n3,español")
-    const format = await inferCsvFormat({ data: path })
+    const dialect = await inferCsvDialect({ data: path })
 
-    expect(format).toEqual({
-      name: "csv",
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       headerRows: false,
     })
@@ -53,10 +53,10 @@ describe("inferCsvFormat", () => {
 
   it("should not set header when header is present", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
-    const format = await inferCsvFormat({ data: path })
+    const dialect = await inferCsvDialect({ data: path })
 
-    expect(format).toEqual({
-      name: "csv",
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       lineTerminator: "\n",
     })
@@ -68,57 +68,57 @@ describe("inferCsvFormat", () => {
       'name,description\n"Product A","A great product with, commas"\n"Product B","Another product"',
     )
 
-    const format = await inferCsvFormat({ data: path })
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect({ data: path })
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       quoteChar: '"',
     })
   })
 
-  it("should infer format from CSV file with comma delimiter", async () => {
+  it("should infer dialect from CSV file with comma delimiter", async () => {
     const path = await writeTempFile("id,name,age\n1,alice,25\n2,bob,30")
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       lineTerminator: "\n",
     })
   })
 
-  it("should infer format from CSV file with pipe delimiter", async () => {
+  it("should infer dialect from CSV file with pipe delimiter", async () => {
     const path = await writeTempFile("id|name|age\n1|alice|25\n2|bob|30")
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: "|",
       lineTerminator: "\n",
     })
   })
 
-  it("should infer format from CSV file with semicolon delimiter", async () => {
+  it("should infer dialect from CSV file with semicolon delimiter", async () => {
     const path = await writeTempFile("id;name;age\n1;alice;25\n2;bob;30")
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ";",
       lineTerminator: "\n",
     })
   })
 
-  it("should infer format from TSV file with tab delimiter", async () => {
+  it("should infer dialect from TSV file with tab delimiter", async () => {
     const path = await writeTempFile("id\tname\tage\n1\talice\t25\n2\tbob\t30")
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "tsv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "tsv",
       lineTerminator: "\n",
     })
   })
@@ -128,11 +128,11 @@ describe("inferCsvFormat", () => {
       'id,name,description\n1,"alice","Description with, comma"\n2,"bob","Normal text"',
     )
 
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       quoteChar: '"',
       lineTerminator: "\n",
@@ -144,11 +144,11 @@ describe("inferCsvFormat", () => {
       "id,name,description\n1,'alice','Description text'\n2,'bob','Normal text'",
     )
 
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       quoteChar: "'",
       lineTerminator: "\n",
@@ -163,27 +163,27 @@ describe("inferCsvFormat", () => {
       ],
     }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toBeUndefined()
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toBeUndefined()
   })
 
   it("should return empty object for non-CSV resources", async () => {
     const resource: Resource = {
-      format: { name: "json" },
+      dialect: { format: "json" },
       data: [{ id: 1 }],
     }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toBeUndefined()
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toBeUndefined()
   })
 
   it("should handle CSV with custom line terminator", async () => {
     const path = await writeTempFile("id,name\r\n1,alice\r\n2,bob\r\n")
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "csv",
       delimiter: ",",
       lineTerminator: "\r\n",
     })
@@ -191,21 +191,21 @@ describe("inferCsvFormat", () => {
 
   it("should handle CSV with header row only", async () => {
     const path = await writeTempFile("id,name,age")
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "csv",
     })
   })
 
   it("should handle empty CSV file", async () => {
     const path = await writeTempFile("")
-    const resource: Resource = { data: path, format: { name: "csv" } }
+    const resource: Resource = { data: path, dialect: { format: "csv" } }
 
-    const format = await inferCsvFormat(resource)
-    expect(format).toEqual({
-      name: "csv",
+    const dialect = await inferCsvDialect(resource)
+    expect(dialect).toEqual({
+      format: "csv",
     })
   })
 })

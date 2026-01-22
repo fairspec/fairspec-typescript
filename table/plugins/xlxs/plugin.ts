@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedFormat } from "@fairspec/metadata"
+import { getSupportedDialect } from "@fairspec/metadata"
 import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
@@ -11,18 +11,18 @@ import { saveXlsxTable } from "./actions/table/save.ts"
 
 export class XlsxPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const format = getSupportedFormat(resource, ["xlsx", "ods"])
-    if (!format) return undefined
+    const dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
+    if (!dialect) return undefined
 
-    return await loadXlsxTable({ ...resource, format }, options)
+    return await loadXlsxTable({ ...resource, dialect }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const format = getSupportedFormat(resource, ["xlsx", "ods"])
-    if (!format) return undefined
+    const dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
+    if (!dialect) return undefined
 
-    return await saveXlsxTable(table, { ...options, format })
+    return await saveXlsxTable(table, { ...options, dialect })
   }
 }

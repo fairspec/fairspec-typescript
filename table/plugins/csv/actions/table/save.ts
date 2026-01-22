@@ -1,19 +1,21 @@
 import { assertLocalPathVacant } from "@fairspec/dataset"
+import { getSupportedDialect } from "@fairspec/metadata"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
-import { getHeaderRows } from "../../../../helpers/format.ts"
+import { getHeaderRows } from "../../../../helpers/dialect.ts"
 import type { Table } from "../../../../models/table.ts"
 import type { SaveTableOptions } from "../../../../plugin.ts"
 
 export async function saveCsvTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const csvFormat = options.format?.name === "csv" ? options.format : undefined
-  const tsvFormat = options.format?.name === "tsv" ? options.format : undefined
-  const format = csvFormat ?? tsvFormat
+  const dialect = await getSupportedDialect(options, ["csv", "tsv"])
+  if (dialect?.format !== "csv" && dialect?.format !== "tsv") {
+    throw new Error("Saving options is not compatible")
+  }
 
-  const isTabs = format?.name === "tsv"
-  const headerRows = getHeaderRows(format)
+  const isTabs = dialect?.format === "tsv"
+  const headerRows = getHeaderRows(dialect)
 
   if (!overwrite) {
     await assertLocalPathVacant(path)
@@ -34,9 +36,9 @@ export async function saveCsvTable(table: Table, options: SaveTableOptions) {
     .sinkCSV(path, {
       maintainOrder: true,
       includeHeader: headerRows.length > 0,
-      separator: csvFormat?.delimiter ?? (isTabs ? "\t" : ","),
-      lineTerminator: csvFormat?.lineTerminator ?? "\n",
-      quoteChar: csvFormat?.quoteChar ?? '"',
+      separator: csvDialect?.delimiter ?? (isTabs ? "\t" : ","),
+      lineTerminator: csvDialect?.lineTerminator ?? "\n",
+      quoteChar: csvDialect?.quoteChar ?? '"',
     })
     .collect()
 

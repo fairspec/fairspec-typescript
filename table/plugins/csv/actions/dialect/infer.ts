@@ -1,12 +1,12 @@
 import { text } from "node:stream/consumers"
 import { loadFileStream } from "@fairspec/dataset"
-import type { CsvFormat, Resource, TsvFormat } from "@fairspec/metadata"
+import type { CsvDialect, Resource, TsvDialect } from "@fairspec/metadata"
 import { getDataPath } from "@fairspec/metadata"
 import { default as CsvSnifferFactory } from "csv-sniffer"
 
 const DELIMITERS = [",", ";", ":", "|", "\t", "^", "*", "&"]
 
-export async function inferCsvFormat(
+export async function inferCsvDialect(
   resource: Resource,
   options?: {
     sampleBytes?: number
@@ -26,27 +26,27 @@ export async function inferCsvFormat(
   const sample = await text(stream)
   const result = sniffSample(sample, DELIMITERS)
 
-  let format: CsvFormat | TsvFormat = { name: "csv" }
+  let dialect: CsvDialect | TsvDialect = { format: "csv" }
 
   if (result?.delimiter) {
     if (result.delimiter === "\t") {
-      format = { name: "tsv" }
+      dialect = { format: "tsv" }
     } else {
-      format.delimiter = result.delimiter
+      dialect.delimiter = result.delimiter
     }
   }
 
-  if (format.name === "csv") {
+  if (dialect.format === "csv") {
     if (result?.quoteChar) {
-      format.quoteChar = result.quoteChar
+      dialect.quoteChar = result.quoteChar
     }
   }
 
   if (result?.newlineStr) {
-    format.lineTerminator = result.newlineStr
+    dialect.lineTerminator = result.newlineStr
   }
 
-  return format
+  return dialect
 }
 
 function sniffSample(sample: string, delimiters: string[]) {

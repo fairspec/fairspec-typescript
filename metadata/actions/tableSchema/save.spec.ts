@@ -51,7 +51,7 @@ describe("saveTableSchema", () => {
 
     expect(parsedContent).toEqual({
       ...testSchema,
-      $schema: `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/schema.json`,
+      $schema: `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/table-schema.json`,
     })
   })
 })

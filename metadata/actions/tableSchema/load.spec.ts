@@ -7,7 +7,7 @@ describe("loadTableSchema", () => {
   const getFixturePath = (name: string) =>
     join(import.meta.dirname, "fixtures", name)
   const expectedSchema = {
-    $schema: "https://fairspec.org/profiles/latest/schema.json",
+    $schema: "https://fairspec.org/profiles/latest/table-schema.json",
     properties: {
       id: {
         type: "integer",
@@ -37,7 +37,7 @@ describe("loadTableSchema", () => {
     expectTypeOf(schema).toEqualTypeOf<TableSchema>()
     expect(schema).toBeDefined()
     expect(schema.$schema).toBe(
-      "https://fairspec.org/profiles/latest/schema.json",
+      "https://fairspec.org/profiles/latest/table-schema.json",
     )
 
     expect(schema.required).toEqual(["id", "email"])

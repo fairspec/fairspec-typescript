@@ -1,5 +1,8 @@
-import { loadJsonSchema } from "../../actions/jsonSchema/load.ts"
+import { loadDescriptor } from "../../actions/descriptor/load.ts"
+import { assertDataSchema } from "./assert.ts"
 
 export async function loadDataSchema(path: string) {
-  return await loadJsonSchema(path)
+  const descriptor = await loadDescriptor(path)
+  const dataSchema = await assertDataSchema(descriptor)
+  return dataSchema
 }

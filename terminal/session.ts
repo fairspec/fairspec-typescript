@@ -29,9 +29,9 @@ export class Session implements SessionOptions {
 
     // Have empty line before/after output
     if (!this.silent && !this.json) {
-      console.log()
+      process.stdout.write("\n")
       exitHook(() => {
-        console.log()
+        process.stdout.write("\n")
       })
     }
   }

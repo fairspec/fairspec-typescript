@@ -44,10 +44,7 @@ export async function validateDataset(
   if (!descriptorReport.dataset) {
     return {
       valid: descriptorReport.valid,
-      errors: descriptorReport.errors.map(error => ({
-        ...error,
-        resource: undefined,
-      })),
+      errors: descriptorReport.errors,
     }
   }
 

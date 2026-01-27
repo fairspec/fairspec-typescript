@@ -1,5 +1,6 @@
 import type { Dataset } from "../../models/dataset.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
+import { FairspecException } from "../../models/exception.ts"
 import { validateDatasetDescriptor } from "./validate.ts"
 
 /**
@@ -14,9 +15,7 @@ export async function assertDataset(
   const report = await validateDatasetDescriptor(source, options)
 
   if (!report.dataset) {
-    throw new Error(
-      `Dataset "${JSON.stringify(source).slice(0, 100)}" is not valid`,
-    )
+    throw new FairspecException(`Dataset is not valid`, { report })
   }
 
   return report.dataset

@@ -7,7 +7,7 @@ export async function assertTableSchema(source: Descriptor | TableSchema) {
   const report = await validateTableSchema(source)
 
   if (!report.tableSchema) {
-    throw new FairspecException(`Table Schema is not valid`, { report })
+    throw new FairspecException(`Invalid Table Schema`, { report })
   }
 
   return report.tableSchema

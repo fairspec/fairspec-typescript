@@ -7,7 +7,7 @@ export async function assertDialect(source: Descriptor | Dialect) {
   const report = await validateDialect(source)
 
   if (!report.dialect) {
-    throw new FairspecException(`Dialect is not valid`, { report })
+    throw new FairspecException(`Invalid dialect`, { report })
   }
 
   return report.dialect

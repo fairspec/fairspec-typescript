@@ -7,7 +7,7 @@ export async function assertDataSchema(source: Descriptor | DataSchema) {
   const report = await validateDataSchema(source)
 
   if (!report.dataSchema) {
-    throw new FairspecException(`Data Schema is not valid`, { report })
+    throw new FairspecException(`Invalid Data Schema`, { report })
   }
 
   return report.dataSchema

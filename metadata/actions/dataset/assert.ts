@@ -15,7 +15,7 @@ export async function assertDataset(
   const report = await validateDatasetDescriptor(source, options)
 
   if (!report.dataset) {
-    throw new FairspecException(`Dataset is not valid`, { report })
+    throw new FairspecException(`Invalid Dataset`, { report })
   }
 
   return report.dataset

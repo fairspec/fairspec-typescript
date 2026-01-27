@@ -98,7 +98,7 @@ export function renderCellTypeError(error: CellTypeError) {
   const columnType = pc.bold(error.columnType)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is not ${columnType}${inResource}`
 }
@@ -108,7 +108,7 @@ export function renderCellRequiredError(error: CellRequiredError) {
   const rowNumber = pc.bold(error.rowNumber)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `A required cell in column ${columnName} of row ${rowNumber} is missing${inResource}`
 }
@@ -120,7 +120,7 @@ export function renderCellMinimumError(error: CellMinimumError) {
   const minimum = pc.bold(error.minimum)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is less than ${minimum}${inResource}`
 }
@@ -132,7 +132,7 @@ export function renderCellMaximumError(error: CellMaximumError) {
   const maximum = pc.bold(error.maximum)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is more than ${maximum}${inResource}`
 }
@@ -146,7 +146,7 @@ export function renderCellExclusiveMinimumError(
   const minimum = pc.bold(error.minimum)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is less or equal to ${minimum}${inResource}`
 }
@@ -160,7 +160,7 @@ export function renderCellExclusiveMaximumError(
   const maximum = pc.bold(error.maximum)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is greater or equal to ${maximum}${inResource}`
 }
@@ -172,7 +172,7 @@ export function renderCellMultipleOfError(error: CellMultipleOfError) {
   const multipleOf = pc.bold(error.multipleOf)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is not a multiple of ${multipleOf}${inResource}`
 }
@@ -184,7 +184,7 @@ export function renderCellMinLengthError(error: CellMinLengthError) {
   const minLength = pc.bold(error.minLength)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Length of the cell ${cell} in column ${columnName} of row ${rowNumber} is less than ${minLength}${inResource}`
 }
@@ -196,7 +196,7 @@ export function renderCellMaxLengthError(error: CellMaxLengthError) {
   const maxLength = pc.bold(error.maxLength)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Length of the cell ${cell} in column ${columnName} of row ${rowNumber} is more than ${maxLength}${inResource}`
 }
@@ -208,7 +208,7 @@ export function renderCellPatternError(error: CellPatternError) {
   const pattern = pc.bold(error.pattern)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} does not match the ${pattern}${inResource}`
 }
@@ -219,7 +219,7 @@ export function renderCellUniqueError(error: CellUniqueError) {
   const rowNumber = pc.bold(error.rowNumber)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is not unique${inResource}`
 }
@@ -231,7 +231,7 @@ export function renderCellConstError(error: CellConstError) {
   const constValue = pc.bold(error.const)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is not allowed value ${constValue}${inResource}`
 }
@@ -243,7 +243,7 @@ export function renderCellEnumError(error: CellEnumError) {
   const enumValues = error.enum.map(v => pc.bold(v)).join(", ")
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is not in the allowed values ${enumValues}${inResource}`
 }
@@ -255,7 +255,7 @@ export function renderCellJsonError(error: CellJsonError) {
   const jsonPointer = pc.bold(error.jsonPointer)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} violates JSON schema at ${jsonPointer}: ${error.message}${inResource}`
 }
@@ -267,7 +267,7 @@ export function renderCellMinItemsError(error: CellMinItemsError) {
   const minItems = pc.bold(error.minItems)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} has less than ${minItems} items${inResource}`
 }
@@ -279,7 +279,7 @@ export function renderCellMaxItemsError(error: CellMaxItemsError) {
   const maxItems = pc.bold(error.maxItems)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} has more than ${maxItems} items${inResource}`
 }
@@ -290,7 +290,7 @@ export function renderColumnMissingError(error: ColumnMissingError) {
   const columnName = pc.bold(error.columnName)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Required column ${columnName} is missing${inResource}`
 }
@@ -301,7 +301,7 @@ export function renderColumnTypeError(error: ColumnTypeError) {
   const actualColumnType = pc.bold(error.actualColumnType)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Column ${columnName} is expected to be ${expectedColumnType}, but it is ${actualColumnType}${inResource}`
 }
@@ -312,7 +312,7 @@ export function renderDataError(error: DataError) {
   const jsonPointer = pc.bold(error.jsonPointer)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Data error at ${jsonPointer}: ${error.message}${inResource}`
 }
@@ -322,10 +322,10 @@ export function renderDataError(error: DataError) {
 export function renderTextualError(error: TextualError) {
   const actualEncoding = error.actualEncoding
     ? pc.bold(error.actualEncoding)
-    : undefined
+    : ""
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `File is expected to be textual with utf-8 encoding but it is ${actualEncoding ?? "binary"}${inResource}`
 }
@@ -336,7 +336,7 @@ export function renderIntegrityError(error: IntegrityError) {
   const actualHash = pc.bold(error.actualHash)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `File hash ${hashType} is expected to be ${expectedHash}, but it is ${actualHash})${inResource}`
 }
@@ -347,7 +347,7 @@ export function renderForeignKeyError(error: ForeignKeyError) {
   const cells = error.cells.map(c => pc.bold(c)).join(", ")
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Foreign key constraint violated as cells ${cells} do not reference existing values${inResource}`
 }
@@ -358,7 +358,7 @@ export function renderMetadataError(error: MetadataError) {
   const jsonPointer = pc.bold(error.jsonPointer)
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `${error.message} at ${jsonPointer}${inResource}`
 }
@@ -370,7 +370,7 @@ export function renderResourceMissingError(error: ResourceMissingError) {
   const referencingResourceName = pc.bold(error.referencingResourceName)
   const inResource = error.referencingResourceName
     ? ` in resource ${pc.bold(error.referencingResourceName)}`
-    : undefined
+    : ""
 
   return `Resource ${resourceName} is missing, but expected in ${referencingResourceName}${inResource}`
 }
@@ -379,7 +379,7 @@ export function renderResourceTypeError(error: ResourceTypeError) {
   const expectedResourceType = pc.bold(error.expectedResourceType)
   const inResource = error.referencingResourceName
     ? ` in resource ${pc.bold(error.referencingResourceName)}`
-    : undefined
+    : ""
 
   return `Resource type is expected to be ${expectedResourceType}${inResource}`
 }
@@ -391,7 +391,7 @@ export function renderRowPrimaryKeyError(error: RowPrimaryKeyError) {
   const columnNames = error.columnNames.map(c => pc.bold(c)).join(", ")
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Row ${rowNumber} violates primary key constraint on columns ${columnNames}${inResource}`
 }
@@ -401,7 +401,7 @@ export function renderRowUniqueKeyError(error: RowUniqueKeyError) {
   const columnNames = error.columnNames.map(c => pc.bold(c)).join(", ")
   const inResource = error.resourceName
     ? ` in resource ${pc.bold(error.resourceName)}`
-    : undefined
+    : ""
 
   return `Row ${rowNumber} violates unique key constraint on columns ${columnNames}${inResource}`
 }

@@ -7,7 +7,7 @@ import { colorize } from "json-colorizer"
 import pc from "picocolors"
 import type { TaskInnerAPI } from "tasuku"
 import tasuku from "tasuku"
-import { renderError } from "./helpers/error.ts"
+import { renderError } from "./actions/error/render.ts"
 
 type TaskApi = Omit<TaskInnerAPI, "task">
 type Status = "success" | "warning" | "error"

@@ -1,6 +1,7 @@
 import { z } from "zod"
+import { BaseError } from "./base.ts"
 
-export const RowPrimaryKeyError = z.object({
+export const RowPrimaryKeyError = BaseError.extend({
   type: z.literal("row/primaryKey").describe("Error type identifier"),
   rowNumber: z.number().describe("The row number where the error occurred"),
 
@@ -9,7 +10,7 @@ export const RowPrimaryKeyError = z.object({
     .describe("Column names involved in the primary key constraint violation"),
 })
 
-export const RowUniqueKeyError = z.object({
+export const RowUniqueKeyError = BaseError.extend({
   type: z.literal("row/uniqueKey").describe("Error type identifier"),
   rowNumber: z.number().describe("The row number where the error occurred"),
 

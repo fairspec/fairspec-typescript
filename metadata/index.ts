@@ -57,7 +57,6 @@ export { loadTableSchema } from "./actions/tableSchema/load.ts"
 export { resolveTableSchema } from "./actions/tableSchema/resolve.ts"
 export { saveTableSchema } from "./actions/tableSchema/save.ts"
 export { validateTableSchema } from "./actions/tableSchema/validate.ts"
-
 export { Catalog } from "./models/catalog.ts"
 export { ArrayColumn } from "./models/column/array.ts"
 export { Base64Column } from "./models/column/base64.ts"
@@ -103,6 +102,7 @@ export { SqliteDialect } from "./models/dialect/sqlite.ts"
 export { TsvDialect } from "./models/dialect/tsv.ts"
 export { UnknownDialect } from "./models/dialect/unknown.ts"
 export { XlsxDialect } from "./models/dialect/xlsx.ts"
+export { BaseError } from "./models/error/base.ts"
 export {
   CellConstError,
   CellEnumError,
@@ -128,11 +128,9 @@ export {
   ColumnTypeError,
 } from "./models/error/column.ts"
 export { DataError } from "./models/error/data.ts"
-export { DatasetError } from "./models/error/dataset.ts"
 export { FairspecError } from "./models/error/error.ts"
 export { FileError, IntegrityError, TextualError } from "./models/error/file.ts"
 export { ForeignKeyError } from "./models/error/foreignKey.ts"
-export { GeneralError } from "./models/error/general.ts"
 export { MetadataError } from "./models/error/metadata.ts"
 export {
   ResourceError,
@@ -145,6 +143,7 @@ export {
   RowUniqueKeyError,
 } from "./models/error/row.ts"
 export { TableError } from "./models/error/table.ts"
+export { FairspecException } from "./models/exception.ts"
 export { JsonSchema } from "./models/jsonSchema.ts"
 export { ExternalPath, InternalPath, Path } from "./models/path.ts"
 export { Profile } from "./models/profile.ts"

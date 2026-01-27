@@ -1,12 +1,13 @@
 import { z } from "zod"
 import { ColumnType } from "../column/column.ts"
+import { BaseError } from "./base.ts"
 
-export const ColumnMissingError = z.object({
+export const ColumnMissingError = BaseError.extend({
   type: z.literal("column/missing").describe("Error type identifier"),
   columnName: z.string().describe("Names of missing column"),
 })
 
-export const ColumnTypeError = z.object({
+export const ColumnTypeError = BaseError.extend({
   type: z.literal("column/type").describe("Error type identifier"),
   columnName: z.string().describe("The name of the column"),
   expectedColumnType: ColumnType.describe("The column type that was expected"),

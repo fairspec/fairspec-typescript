@@ -1,4 +1,4 @@
-import type { GeneralError, Resource } from "@fairspec/metadata"
+import type { FairspecError, Resource } from "@fairspec/metadata"
 import {
   createReport,
   inspectJson,
@@ -7,7 +7,7 @@ import {
 import { loadData } from "./load.ts"
 
 export async function validateData(resource: Resource) {
-  const errors: GeneralError[] = []
+  const errors: FairspecError[] = []
 
   const dataSchema = await resolveDataSchema(resource.dataSchema)
 

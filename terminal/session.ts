@@ -1,12 +1,13 @@
 import { setTimeout } from "node:timers/promises"
 import util from "node:util"
 import type { Frame, Report } from "@fairspec/library"
+import { FairspecException } from "@fairspec/library"
 import exitHook from "exit-hook"
 import { colorize } from "json-colorizer"
 import pc from "picocolors"
 import type { TaskInnerAPI } from "tasuku"
 import tasuku from "tasuku"
-import { renderError } from "./helpers/error.ts"
+import { renderError } from "./actions/error/render.ts"
 
 type TaskApi = Omit<TaskInnerAPI, "task">
 type Status = "success" | "warning" | "error"
@@ -29,9 +30,9 @@ export class Session implements SessionOptions {
 
     // Have empty line before/after output
     if (!this.silent && !this.json) {
-      console.log()
+      process.stdout.write("\n")
       exitHook(() => {
-        console.log()
+        process.stdout.write("\n")
       })
     }
   }
@@ -42,11 +43,13 @@ export class Session implements SessionOptions {
     }
 
     if (!options?.status) {
-      console.log(text)
+      process.stdout.write(text)
+      process.stdout.write("\n")
       return
     }
 
-    console.log(renderStatus(options.status), text)
+    process.stdout.write(`${renderStatus(options.status)} ${text}`)
+    process.stdout.write("\n")
   }
 
   renderTextResult(text: string, options?: { status?: Status }) {
@@ -56,16 +59,19 @@ export class Session implements SessionOptions {
 
     if (this.json) {
       text = util.stripVTControlCharacters(text)
-      console.log(JSON.stringify({ result: text }, null, 2))
+      process.stdout.write(JSON.stringify({ result: text }, null, 2))
+      process.stdout.write("\n")
       return
     }
 
     if (!options?.status) {
-      console.log(text)
+      process.stdout.write(text)
+      process.stdout.write("\n")
       return
     }
 
-    console.log(renderStatus(options.status), text)
+    process.stdout.write(`${renderStatus(options.status)} ${text}`)
+    process.stdout.write("\n")
   }
 
   renderDataResult(data: string | object) {
@@ -74,11 +80,13 @@ export class Session implements SessionOptions {
     }
 
     if (this.json) {
-      console.log(JSON.stringify(data, null, 2))
+      process.stdout.write(JSON.stringify(data, null, 2))
+      process.stdout.write("\n")
       return
     }
 
-    console.log(colorize(data))
+    process.stdout.write(colorize(data))
+    process.stdout.write("\n")
   }
 
   renderFrameResult(frame: Frame) {
@@ -87,11 +95,13 @@ export class Session implements SessionOptions {
     }
 
     if (this.json) {
-      console.log(JSON.stringify(frame.toRecords(), null, 2))
+      process.stdout.write(JSON.stringify(frame.toRecords(), null, 2))
+      process.stdout.write("\n")
       return
     }
 
-    console.log(frame.toString())
+    process.stdout.write(frame.toString())
+    process.stdout.write("\n")
   }
 
   renderReportResult(report: Report) {
@@ -100,7 +110,8 @@ export class Session implements SessionOptions {
     }
 
     if (this.json) {
-      console.log(JSON.stringify(report, null, 2))
+      process.stdout.write(JSON.stringify(report, null, 2))
+      process.stdout.write("\n")
       return
     }
 
@@ -118,14 +129,22 @@ export class Session implements SessionOptions {
     const runTask = async (api: TaskApi): Promise<T> => {
       try {
         return await func(api)
-      } catch (error) {
+      } catch (exception) {
         if (this.debug) {
-          throw error
+          throw exception
         }
 
-        // TODO: Find a better way to terminate the process
-        api.setError(error instanceof Error ? error : String(error))
+        // Wihout timeout, tasulu clears the failed task result
+        api.setError(exception instanceof Error ? exception : String(exception))
         await setTimeout(100)
+
+        if (exception instanceof FairspecException) {
+          if (exception.report) {
+            process.stdout.write("\n")
+            this.renderReportResult(exception.report)
+          }
+        }
+
         process.exit(1)
       }
     }
@@ -138,7 +157,9 @@ export class Session implements SessionOptions {
         setWarning: () => {},
         setError: error => {
           if (this.json) {
-            console.log(JSON.stringify({ error: String(error) }, null, 2))
+            process.stdout.write(
+              JSON.stringify({ error: String(error) }, null, 2),
+            )
           }
 
           process.exit(1)

@@ -1,4 +1,4 @@
-import type { Dataset, DatasetError } from "@fairspec/metadata"
+import type { Dataset, FairspecError } from "@fairspec/metadata"
 import { createReport, resolveTableSchema } from "@fairspec/metadata"
 import type { Table } from "@fairspec/table"
 import { loadTable } from "../../actions/table/load.ts"
@@ -12,7 +12,7 @@ export async function validateDatasetForeignKeys(
 ) {
   const { maxErrors = 1000 } = options ?? {}
 
-  const errors: DatasetError[] = []
+  const errors: FairspecError[] = []
   const tables: Record<string, Table> = {}
 
   for (const [index, resource] of (dataset.resources ?? []).entries()) {
@@ -36,7 +36,7 @@ export async function validateDatasetForeignKeys(
         errors.push({
           type: "resource/missing",
           resourceName: name,
-          resource: resourceName,
+          referencingResourceName: resourceName,
         })
 
         continue
@@ -48,8 +48,9 @@ export async function validateDatasetForeignKeys(
         if (!table) {
           errors.push({
             type: "resource/type",
+            resourceName: name,
             expectedResourceType: "table",
-            resource: resourceName,
+            referencingResourceName: resourceName,
           })
 
           continue
@@ -85,7 +86,7 @@ export async function validateDatasetForeignKeys(
           type: "foreignKey",
           foreignKey,
           cells: Object.values(row).map(String),
-          resource: resourceName,
+          resourceName,
         })
       }
     }

@@ -36,9 +36,12 @@ describe("dataset validate", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(console, "log").mockImplementation(msg => {
-      text.push(msg)
-    })
+    vi.spyOn(process.stdout, "write").mockImplementation(
+      (msg: string | Uint8Array) => {
+        text.push(typeof msg === "string" ? msg : msg.toString())
+        return true
+      },
+    )
 
     const command = new Command()
       .addCommand(validateDatasetCommand)
@@ -84,9 +87,12 @@ describe("dataset validate", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(console, "log").mockImplementation(msg => {
-      text.push(msg)
-    })
+    vi.spyOn(process.stdout, "write").mockImplementation(
+      (msg: string | Uint8Array) => {
+        text.push(typeof msg === "string" ? msg : msg.toString())
+        return true
+      },
+    )
 
     const command = new Command()
       .addCommand(validateDatasetCommand)
@@ -142,9 +148,12 @@ describe("dataset validate", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(console, "log").mockImplementation(msg => {
-      text.push(msg)
-    })
+    vi.spyOn(process.stdout, "write").mockImplementation(
+      (msg: string | Uint8Array) => {
+        text.push(typeof msg === "string" ? msg : msg.toString())
+        return true
+      },
+    )
 
     const command = new Command()
       .addCommand(validateDatasetCommand)

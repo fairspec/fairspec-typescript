@@ -1,7 +1,8 @@
 import { z } from "zod"
 import { ColumnType } from "../column/column.ts"
+import { BaseError } from "./base.ts"
 
-const BaseCellError = z.object({
+const BaseCellError = BaseError.extend({
   columnName: z.string().describe("The name of the column"),
   rowNumber: z.number().describe("The row number where the error occurred"),
   cell: z.string().describe("The cell value that caused the error"),

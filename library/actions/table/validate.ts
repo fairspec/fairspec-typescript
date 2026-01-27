@@ -1,4 +1,4 @@
-import type { GeneralError, Resource } from "@fairspec/metadata"
+import type { FairspecError, Resource } from "@fairspec/metadata"
 import { createReport, resolveTableSchema } from "@fairspec/metadata"
 import type { LoadTableOptions } from "@fairspec/table"
 import { inspectTable } from "@fairspec/table"
@@ -15,7 +15,7 @@ export async function validateTable(
   options?: ValidateTableOptions,
 ) {
   const { maxErrors } = options ?? {}
-  const errors: GeneralError[] = []
+  const errors: FairspecError[] = []
 
   let tableSchema = await resolveTableSchema(resource.tableSchema)
   if (!tableSchema && !options?.noInfer) {

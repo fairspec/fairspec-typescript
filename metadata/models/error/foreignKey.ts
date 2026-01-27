@@ -1,7 +1,8 @@
 import { z } from "zod"
 import { ForeignKey } from "../foreignKey.ts"
+import { BaseError } from "./base.ts"
 
-export const ForeignKeyError = z.object({
+export const ForeignKeyError = BaseError.extend({
   type: z.literal("foreignKey").describe("Error type identifier"),
 
   foreignKey: ForeignKey.describe(

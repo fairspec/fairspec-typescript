@@ -1,7 +1,16 @@
 import { z } from "zod"
-import { DatasetError } from "./dataset.ts"
-import { GeneralError } from "./general.ts"
+import { DataError } from "./data.ts"
+import { FileError } from "./file.ts"
+import { MetadataError } from "./metadata.ts"
+import { ResourceError } from "./resource.ts"
+import { TableError } from "./table.ts"
 
-export const FairspecError = z.union([GeneralError, DatasetError])
+export const FairspecError = z.union([
+  MetadataError,
+  ResourceError,
+  TableError,
+  DataError,
+  FileError,
+])
 
 export type FairspecError = z.infer<typeof FairspecError>

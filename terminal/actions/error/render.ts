@@ -321,17 +321,17 @@ export function renderMetadataError(error: MetadataError) {
 
 export function renderResourceMissingError(error: ResourceMissingError) {
   const resourceName = pc.bold(error.resourceName)
-  const referencingResourceName = pc.bold(error.referencingResourceName)
-  const inResource = renderInResource(error.referencingResourceName)
+  const inReferencingResource = renderInResource(error.referencingResourceName)
 
-  return `Resource ${resourceName} is missing, but expected in ${referencingResourceName}${inResource}`
+  return `Resource ${resourceName} is missing, but expected${inReferencingResource}`
 }
 
 export function renderResourceTypeError(error: ResourceTypeError) {
+  const resourceName = pc.bold(error.resourceName)
   const expectedResourceType = pc.bold(error.expectedResourceType)
-  const inResource = renderInResource(error.referencingResourceName)
+  const inReferencingResource = renderInResource(error.referencingResourceName)
 
-  return `Resource type is expected to be ${expectedResourceType}${inResource}`
+  return `Resource ${resourceName} is expected to be ${expectedResourceType}${inReferencingResource}`
 }
 
 // Row

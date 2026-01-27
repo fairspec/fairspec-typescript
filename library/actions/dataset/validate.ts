@@ -1,60 +1,36 @@
 import os from "node:os"
-import type { Dataset, Descriptor, FairspecError } from "@fairspec/metadata"
+import type { Dataset, FairspecError } from "@fairspec/metadata"
 import {
   createReport,
-  loadDescriptor,
-  resolveBasepath,
-  validateDatasetDescriptor,
+  FairspecException,
+  inferResourceName,
 } from "@fairspec/metadata"
 import pAll from "p-all"
 import { validateResource } from "../../actions/resource/validate.ts"
-import { system } from "../../system.ts"
 import { validateDatasetForeignKeys } from "./foreignKey.ts"
+import { loadDataset } from "./load.ts"
 
-// TODO: review this function
-
-export async function validateDataset(
-  source: string | Descriptor | Dataset,
-  options?: { basepath?: string },
-) {
-  let descriptor: Descriptor | undefined
-  let basepath = options?.basepath
+export async function validateDataset(source: string | Dataset) {
+  let dataset: Dataset
 
   if (typeof source !== "string") {
-    descriptor = source
+    dataset = source
   } else {
-    for (const plugin of system.plugins) {
-      const result = await plugin.loadDataset?.(source)
-      if (result) {
-        descriptor = result as unknown as Descriptor
-        break
+    try {
+      dataset = await loadDataset(source)
+    } catch (exception) {
+      if (exception instanceof FairspecException) {
+        if (exception.report) {
+          return exception.report
+        }
       }
-    }
 
-    if (!descriptor) {
-      basepath = await resolveBasepath(source)
-      descriptor = await loadDescriptor(source)
+      throw exception
     }
   }
 
-  const descriptorReport = await validateDatasetDescriptor(descriptor, {
-    basepath,
-  })
-
-  if (!descriptorReport.dataset) {
-    return {
-      valid: descriptorReport.valid,
-      errors: descriptorReport.errors,
-    }
-  }
-
-  const resourcesReport = await validateDatasetResources(
-    descriptorReport.dataset,
-  )
-
-  const foreignKeyReport = await validateDatasetForeignKeys(
-    descriptorReport.dataset,
-  )
+  const resourcesReport = await validateDatasetResources(dataset)
+  const foreignKeyReport = await validateDatasetForeignKeys(dataset)
 
   const errors = [...resourcesReport.errors, ...foreignKeyReport.errors]
   return createReport(errors)
@@ -66,13 +42,17 @@ export async function validateDatasetResources(dataset: Dataset) {
   const errors: FairspecError[] = (
     await pAll(
       (dataset.resources ?? []).map((resource, index) => async () => {
-        const resourceName = resource.name ?? `resource${index + 1}`
+        const resourceName =
+          resource.name ??
+          inferResourceName(resource, {
+            resourceNumber: index + 1,
+          })
 
         try {
           const report = await validateResource(resource)
           return report.errors.map(error => ({
             ...error,
-            resource: resourceName,
+            resourceName,
           }))
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error)

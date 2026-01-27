@@ -1,6 +1,7 @@
 import { z } from "zod"
+import { BaseError } from "./base.ts"
 
-export const TextualError = z.object({
+export const TextualError = BaseError.extend({
   type: z.literal("file/textual").describe("Error type identifier"),
   actualEncoding: z
     .string()
@@ -8,7 +9,7 @@ export const TextualError = z.object({
     .describe("The actual encoding format found"),
 })
 
-export const IntegrityError = z.object({
+export const IntegrityError = BaseError.extend({
   type: z.literal("file/integrity").describe("Error type identifier"),
   hashType: z.string().describe("The type of hash algorithm used"),
   expectedHash: z.string().describe("The expected hash value"),

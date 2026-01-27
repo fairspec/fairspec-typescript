@@ -107,7 +107,7 @@ describe("validateDatasetForeignKeys", () => {
         },
       },
       cells: ["999"],
-      resource: "posts",
+      resourceName: "posts",
     })
   })
 
@@ -179,7 +179,7 @@ describe("validateDatasetForeignKeys", () => {
     expect(report.errors).toContainEqual({
       type: "resource/missing",
       resourceName: "users",
-      resource: "posts",
+      referencingResourceName: "posts",
     })
   })
 })

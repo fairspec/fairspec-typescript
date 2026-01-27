@@ -1,5 +1,5 @@
 import os from "node:os"
-import type { Dataset, DatasetError, Descriptor } from "@fairspec/metadata"
+import type { Dataset, Descriptor, FairspecError } from "@fairspec/metadata"
 import {
   createReport,
   loadDescriptor,
@@ -66,7 +66,7 @@ export async function validateDataset(
 export async function validateDatasetResources(dataset: Dataset) {
   const concurrency = os.cpus().length
 
-  const errors: DatasetError[] = (
+  const errors: FairspecError[] = (
     await pAll(
       (dataset.resources ?? []).map((resource, index) => async () => {
         const resourceName = resource.name ?? `resource${index + 1}`

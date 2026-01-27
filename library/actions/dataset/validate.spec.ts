@@ -56,8 +56,8 @@ describe("validateDataset", () => {
       columnName: "id",
       columnType: "integer",
       rowNumber: 2,
+      resourceName: "test_resource",
       cell: "not-a-number",
-      resource: "test_resource",
     })
   })
 

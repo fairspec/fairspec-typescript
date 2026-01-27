@@ -157,7 +157,9 @@ export class Session implements SessionOptions {
         setWarning: () => {},
         setError: error => {
           if (this.json) {
-            console.log(JSON.stringify({ error: String(error) }, null, 2))
+            process.stdout.write(
+              JSON.stringify({ error: String(error) }, null, 2),
+            )
           }
 
           process.exit(1)

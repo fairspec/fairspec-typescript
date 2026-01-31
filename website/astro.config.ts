@@ -41,7 +41,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: packageJson.repository,
+          href: "https://github.com/fairspec",
         },
       ],
       favicon: "fairspec-logo.png",

@@ -21,7 +21,8 @@ export async function loadCsvTable(
   resource: Resource,
   options?: LoadTableOptions,
 ) {
-  const paths = await prefetchFiles(resource)
+  const maxBytes = options?.previewBytes
+  const paths = await prefetchFiles(resource, {maxBytes})
   if (!paths.length) {
     throw new Error("Resource path is not defined")
   }

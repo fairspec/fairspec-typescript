@@ -13,6 +13,7 @@ import { copyFileCommand } from "./commands/file/copy.ts"
 import { describeFileCommand } from "./commands/file/describe.ts"
 import { validateFileCommand } from "./commands/file/validate.ts"
 import { describeTableCommand } from "./commands/table/describe.ts"
+import { previewTableCommand } from "./commands/table/preview.ts"
 import { queryTableCommand } from "./commands/table/query.ts"
 import { scriptTableCommand } from "./commands/table/script.ts"
 import { validateTableCommand } from "./commands/table/validate.ts"
@@ -37,6 +38,7 @@ const tableCommand = new commander.Command()
   .description("Table related commands")
 
   .addCommand(describeTableCommand.name("describe"))
+  .addCommand(previewTableCommand.name("preview"))
   .addCommand(queryTableCommand.name("query"))
   .addCommand(scriptTableCommand.name("script"))
   .addCommand(validateTableCommand.name("validate"))

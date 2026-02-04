@@ -7,5 +7,6 @@ export type DialectWithHeaderAndCommentRows = Extract<
     headerJoin?: any
     commentRows?: any
     commentPrefix?: any
+    columnNames?: any
   }
 >

@@ -355,4 +355,70 @@ describe("getRecordsFromRows", () => {
       { column1: "Charlie", column2: 35, column3: "SF", column4: undefined },
     ])
   })
+
+  it("should use columnNames when provided with headerRows false", () => {
+    const rows = [
+      ["Alice", 30, "NYC"],
+      ["Bob", 25, "LA"],
+    ]
+
+    const result = getRecordsFromRows(rows, {
+      format: "json",
+      headerRows: false,
+      columnNames: ["name", "age", "city"],
+    })
+
+    expect(result).toEqual([
+      { name: "Alice", age: 30, city: "NYC" },
+      { name: "Bob", age: 25, city: "LA" },
+    ])
+  })
+
+  it("should use columnNames even when file has headers (override)", () => {
+    const rows = [
+      ["firstName", "years", "location"],
+      ["Alice", 30, "NYC"],
+      ["Bob", 25, "LA"],
+    ]
+
+    const result = getRecordsFromRows(rows, {
+      format: "json",
+      columnNames: ["name", "age", "city"],
+    })
+
+    expect(result).toEqual([
+      { name: "Alice", age: 30, city: "NYC" },
+      { name: "Bob", age: 25, city: "LA" },
+    ])
+  })
+
+  it("should handle columnNames with rows longer than columnNames array", () => {
+    const rows = [
+      ["Alice", 30, "NYC", "USA"],
+      ["Bob", 25, "LA", "USA"],
+    ]
+
+    const result = getRecordsFromRows(rows, {
+      format: "json",
+      headerRows: false,
+      columnNames: ["name", "age"],
+    })
+
+    expect(result).toEqual([
+      { name: "Alice", age: 30 },
+      { name: "Bob", age: 25 },
+    ])
+  })
+
+  it("should handle columnNames with rows shorter than columnNames array", () => {
+    const rows = [["Alice", 30], ["Bob"]]
+
+    const result = getRecordsFromRows(rows, {
+      format: "json",
+      headerRows: false,
+      columnNames: ["name", "age", "city", "country"],
+    })
+
+    expect(result).toEqual([{ name: "Alice", age: 30 }, { name: "Bob" }])
+  })
 })

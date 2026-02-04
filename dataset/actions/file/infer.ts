@@ -8,7 +8,7 @@ import pMap from "p-map"
 import { loadFile } from "../../actions/file/load.ts"
 import { concatFileStreams } from "../../actions/stream/concat.ts"
 import { loadFileStream } from "../../actions/stream/load.ts"
-import { prefetchFiles } from "./fetch.ts"
+import { prefetchFiles } from "./prefetch.ts"
 
 export type HashType = NonNullable<Resource["integrity"]>["type"]
 

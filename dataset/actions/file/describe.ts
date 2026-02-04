@@ -1,6 +1,6 @@
-import { prefetchFile } from "./fetch.ts"
 import type { HashType } from "./infer.ts"
 import { inferBytes, inferIntegrity, inferTextual } from "./infer.ts"
+import { prefetchFile } from "./prefetch.ts"
 
 export async function describeFile(
   path: string,

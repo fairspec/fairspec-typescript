@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { writeTempFile } from "../../actions/file/temp.ts"
-import * as fetchModule from "./fetch.ts"
 import { inferBytes, inferHash, inferTextual } from "./infer.ts"
+import * as fetchModule from "./prefetch.ts"
 
-vi.mock("./fetch.ts", () => ({
+vi.mock("./prefetch.ts", () => ({
   prefetchFiles: vi.fn(),
 }))
 

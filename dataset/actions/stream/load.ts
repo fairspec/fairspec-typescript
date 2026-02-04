@@ -61,6 +61,7 @@ function limitBytesStream(inputStream: Readable, maxBytes: number) {
         if (total >= maxBytes) {
           this.push(null)
           callback()
+          inputStream.destroy()
           return
         }
 

@@ -3,10 +3,10 @@ import {
   getFileExtension,
   getFileName,
   getFileNameSlug,
-  isRemotePath,
+  getIsRemotePath,
 } from "./general.ts"
 
-describe("isRemotePath", () => {
+describe("getIsRemotePath", () => {
   it.each([
     {
       description: "http URL",
@@ -60,7 +60,7 @@ describe("isRemotePath", () => {
       isRemote: true,
     },
   ])("$description", ({ path, isRemote }) => {
-    expect(isRemotePath(path)).toBe(isRemote)
+    expect(getIsRemotePath(path)).toBe(isRemote)
   })
 })
 

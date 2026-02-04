@@ -1,9 +1,9 @@
 import { node } from "../../services/node.ts"
-import { isRemotePath } from "./general.ts"
+import { getIsRemotePath } from "./general.ts"
 
 export function normalizePath(path: string, options: { basepath?: string }) {
-  const isPathRemote = isRemotePath(path)
-  const isBasepathRemote = isRemotePath(options.basepath ?? "")
+  const isPathRemote = getIsRemotePath(path)
+  const isBasepathRemote = getIsRemotePath(options.basepath ?? "")
 
   if (isPathRemote) {
     return new URL(path).toString()

@@ -1,4 +1,4 @@
-import { isRemotePath } from "@fairspec/metadata"
+import { getIsRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
 import { loadDatasetFromZenodo } from "./actions/dataset/load.ts"
 
@@ -13,7 +13,7 @@ export class ZenodoPlugin implements DatasetPlugin {
 }
 
 function getIsZenodo(path: string) {
-  const isRemote = isRemotePath(path)
+  const isRemote = getIsRemotePath(path)
   if (!isRemote) return false
 
   return new URL(path).hostname.endsWith("zenodo.org")

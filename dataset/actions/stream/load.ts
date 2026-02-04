@@ -1,7 +1,7 @@
 import { createReadStream } from "node:fs"
 import type { ResourceDataPath } from "@fairspec/metadata"
 import { Readable, Transform } from "node:stream"
-import { isRemotePath } from "@fairspec/metadata"
+import { getIsRemotePath } from "@fairspec/metadata"
 
 export async function loadFileStream(
   dataPath: ResourceDataPath,
@@ -19,7 +19,7 @@ export async function loadFileStream(
     throw new Error(`Cannot stream resource ${indexPath} at index ${index}`)
   }
 
-  const isRemote = isRemotePath(indexPath)
+  const isRemote = getIsRemotePath(indexPath)
   const stream = isRemote
     ? await loadRemoteFileStream(indexPath, options)
     : await loadLocalFileStream(indexPath, options)

@@ -1,11 +1,11 @@
-import { isRemotePath } from "../../actions/path/general.ts"
+import { getIsRemotePath } from "../../actions/path/general.ts"
 import type { Resource } from "../../models/resource.ts"
 import { getDataPath } from "./data.ts"
 
-export function isRemoteResource(resource: Resource) {
+export function getIsRemoteResource(resource: Resource) {
   const dataPath = getDataPath(resource)
   if (!dataPath) return false
 
   const paths = Array.isArray(dataPath) ? dataPath : [dataPath]
-  return paths?.some(path => isRemotePath(path))
+  return paths?.some(path => getIsRemotePath(path))
 }

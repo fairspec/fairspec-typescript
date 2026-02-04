@@ -1,6 +1,6 @@
 import os from "node:os"
 import type { Resource } from "@fairspec/metadata"
-import { getDataPaths, isRemotePath } from "@fairspec/metadata"
+import { getDataPaths, getIsRemotePath } from "@fairspec/metadata"
 import pAll from "p-all"
 import { copyFile } from "../../actions/file/copy.ts"
 import { getTempFilePath } from "../../actions/file/temp.ts"
@@ -25,7 +25,7 @@ export async function prefetchFile(
   path: string,
   options?: { maxBytes?: number },
 ) {
-  if (!isRemotePath(path)) {
+  if (!getIsRemotePath(path)) {
     return path
   }
 

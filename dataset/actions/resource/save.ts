@@ -3,7 +3,7 @@ import {
   copyDescriptor,
   denormalizePath,
   getFileName,
-  isRemotePath,
+  getIsRemotePath,
 } from "@fairspec/metadata"
 
 export type SaveFile = (options: {
@@ -28,7 +28,7 @@ export async function saveResourceFiles(
   const dedupIndexes = new Map<string, number>()
 
   const saveFile = async (path: string, name: string, index: number) => {
-    const isRemote = isRemotePath(path)
+    const isRemote = getIsRemotePath(path)
 
     // Denormalized path always uses "/" as the path separator
     let denormalizedPath = denormalizePath(path, { basepath })

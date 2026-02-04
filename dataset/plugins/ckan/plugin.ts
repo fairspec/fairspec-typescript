@@ -1,4 +1,4 @@
-import { isRemotePath } from "@fairspec/metadata"
+import { getIsRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
 import { loadDatasetFromCkan } from "./actions/dataset/load.ts"
 
@@ -13,7 +13,7 @@ export class CkanPlugin implements DatasetPlugin {
 }
 
 function getIsCkan(path: string) {
-  const isRemote = isRemotePath(path)
+  const isRemote = getIsRemotePath(path)
   if (!isRemote) return false
 
   return path.includes("/dataset/")

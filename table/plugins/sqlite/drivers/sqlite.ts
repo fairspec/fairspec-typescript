@@ -1,5 +1,5 @@
 import { DatabaseSync } from "node:sqlite"
-import { isLocalPathExist } from "@fairspec/dataset"
+import { getIsLocalPathExist } from "@fairspec/dataset"
 import type { Column } from "@fairspec/metadata"
 import type { IGenericSqlite } from "kysely-generic-sqlite"
 import {
@@ -19,7 +19,7 @@ export class SqliteDriver extends BaseDriver {
     path = path.replace(/^sqlite:\/\//, "")
 
     if (!options?.create) {
-      const isExist = await isLocalPathExist(path)
+      const isExist = await getIsLocalPathExist(path)
       if (!isExist) {
         throw new Error(`Database file "${path}" does not exist`)
       }

@@ -17,6 +17,7 @@ import type { Table } from "./models/table.ts"
 
 export type LoadTableOptions = InferDialectOptions &
   InferTableSchemaOptions & {
+    previewBytes?: number
     denormalized?: boolean
   }
 

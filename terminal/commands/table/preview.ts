@@ -1,6 +1,5 @@
-import assert from "node:assert"
 import type { Resource } from "@fairspec/library"
-import { loadTable, queryTable } from "@fairspec/library"
+import { loadTable } from "@fairspec/library"
 import { Command } from "commander"
 import { createDialectFromPathAndOptions } from "../../helpers/dialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
@@ -8,13 +7,12 @@ import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const queryTableCommand = new Command()
-  .name("query")
-  .description("Query a table from a local or remote path")
+export const previewTableCommand = new Command()
+  .name("preview")
+  .description("Preview a table from a local or remote path")
   .configureHelp(helpConfiguration)
 
   .addArgument(params.positionalTablePath)
-  .addArgument(params.query)
   .addOption(params.fromDataset)
   .addOption(params.fromResource)
   .addOption(params.debug)
@@ -58,7 +56,7 @@ export const queryTableCommand = new Command()
   .addOption(params.monthFirst)
   .addOption(params.keepStrings)
 
-  .action(async (path, query, options) => {
+  .action(async (path, options) => {
     const session = new Session({
       debug: options.debug,
       json: options.json,
@@ -72,18 +70,11 @@ export const queryTableCommand = new Command()
       ? { data: path, dialect, tableSchema: options.schema }
       : await selectResource(session, options)
 
-    let table = await session.task("Loading table", async () => {
-      const table = await loadTable(resource)
+    const table = await session.task("Loading table preview", async () => {
+      const table = await loadTable(resource, { previewBytes: 10_000 })
       if (!table) throw new Error("Could not load table")
       return table
     })
-
-    if (query) {
-      table = await session.task("Executing query", async () => {
-        assert(query)
-        return queryTable(table, query)
-      })
-    }
 
     const frame = await session.task("Collecting data", async () => {
       return await table.collect()

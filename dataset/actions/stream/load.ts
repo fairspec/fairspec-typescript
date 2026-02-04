@@ -27,6 +27,14 @@ export async function loadFileStream(
   return stream
 }
 
+async function loadLocalFileStream(
+  path: string,
+  options?: { maxBytes?: number },
+) {
+  const end = options?.maxBytes ? options.maxBytes - 1 : undefined
+  return createReadStream(path, { end })
+}
+
 async function loadRemoteFileStream(
   path: string,
   options?: { maxBytes?: number },
@@ -45,14 +53,6 @@ async function loadRemoteFileStream(
   return stream
 }
 
-async function loadLocalFileStream(
-  path: string,
-  options?: { maxBytes?: number },
-) {
-  const end = options?.maxBytes ? options.maxBytes - 1 : undefined
-  return createReadStream(path, { end })
-}
-
 function limitBytesStream(inputStream: Readable, maxBytes: number) {
   let total = 0
   return inputStream.pipe(
@@ -61,7 +61,13 @@ function limitBytesStream(inputStream: Readable, maxBytes: number) {
         if (total >= maxBytes) {
           this.push(null)
           callback()
+          inputStream.destroy()
           return
+        }
+
+        const remaining = maxBytes - total
+        if (chunk.length > remaining) {
+          chunk = chunk.slice(0, remaining)
         }
 
         total += chunk.length

@@ -59,6 +59,19 @@ describe("loadCsvTable", () => {
     ])
   })
 
+  it("should load remote file with previewBytes limit", async () => {
+    const table = await loadCsvTable(
+      {
+        data: "https://raw.githubusercontent.com/fairspec/fairspec-typescript/refs/heads/main/table/plugins/csv/actions/table/fixtures/table.csv",
+      },
+      { previewBytes: 18 },
+    )
+
+    expect((await table.collect()).toRecords()).toEqual([
+      { id: 1, name: "english" },
+    ])
+  })
+
   // TODO: polars bug?
   it.skip("should handle windows line terminator set in format", async () => {
     const path = await writeTempFile("id,name\r\n1,english\r\n2,中文")

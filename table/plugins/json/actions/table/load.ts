@@ -25,7 +25,8 @@ export async function loadJsonTable(
     .filter(key => !['type', 'title', 'description'].includes(key)).length === 0
 
 
-  const paths = await prefetchFiles(resource)
+  const maxBytes = dialect?.format === "jsonl" ? options?.previewBytes : undefined
+  const paths = await prefetchFiles(resource, {maxBytes})
   if (!paths.length) {
     throw new Error("Resource data is not defined")
   }

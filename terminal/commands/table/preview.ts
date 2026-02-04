@@ -76,7 +76,7 @@ export const previewTableCommand = new Command()
       return table
     })
 
-    const frame = await session.task("Collecting preview", async () => {
+    const frame = await session.task("Collecting data", async () => {
       return await table.collect()
     })
 

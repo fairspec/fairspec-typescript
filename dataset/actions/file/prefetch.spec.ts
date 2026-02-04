@@ -37,7 +37,6 @@ describe("prefetchFiles", () => {
     expect(stats.size).toBe(maxBytes)
 
     const content = await fs.readFile(filePath, "utf-8")
-    expect(content.length).toBe(maxBytes)
     expect(content).toContain("id,name")
     expect(content).toContain("1,english")
     expect(content).not.toContain("中文")

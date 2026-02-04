@@ -85,7 +85,7 @@ export const queryTableCommand = new Command()
       })
     }
 
-    const frame = await session.task("Collecting query", async () => {
+    const frame = await session.task("Collecting data", async () => {
       return await table.collect()
     })
 

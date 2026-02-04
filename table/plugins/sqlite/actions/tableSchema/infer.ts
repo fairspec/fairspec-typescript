@@ -1,6 +1,7 @@
 import type { Resource } from "@fairspec/metadata"
 import { getDataFirstPath, getSupportedDialect } from "@fairspec/metadata"
-import { SqliteDriver } from "../../drivers/sqlite.ts"
+import { connectDatabase } from "../database/connect.ts"
+import { convertTableSchemaFromDatabase } from "./fromDatabase.ts"
 
 export async function inferTableSchemaFromSqlite(resource: Resource) {
   const firstPath = getDataFirstPath(resource)
@@ -13,8 +14,7 @@ export async function inferTableSchemaFromSqlite(resource: Resource) {
     throw new Error("Resource data is not compatible")
   }
 
-  const driver = new SqliteDriver()
-  const database = await driver.connectDatabase(firstPath)
+  const database = await connectDatabase(firstPath)
   const databaseSchemas = await database.introspection.getTables()
 
   const tableName =
@@ -30,5 +30,5 @@ export async function inferTableSchemaFromSqlite(resource: Resource) {
     throw new Error(`Table is not found in the database: ${tableName}`)
   }
 
-  return driver.convertTableSchemaFromDatabase(databaseSchema)
+  return convertTableSchemaFromDatabase(databaseSchema)
 }

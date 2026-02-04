@@ -1,6 +1,7 @@
 import type { Resource } from "@fairspec/metadata"
 import { getDataFirstPath, getSupportedDialect } from "@fairspec/metadata"
-import { SqliteDriver } from "../../drivers/sqlite.ts"
+import { connectDatabase } from "../database/connect.ts"
+import { convertTableSchemaFromDatabase } from "./fromDatabase.ts"
 
 export async function inferTableSchemaFromSqlite(resource: Resource) {
   const firstPath = getDataFirstPath(resource)
@@ -13,22 +14,25 @@ export async function inferTableSchemaFromSqlite(resource: Resource) {
     throw new Error("Resource data is not compatible")
   }
 
-  const driver = new SqliteDriver()
-  const database = await driver.connectDatabase(firstPath)
-  const databaseSchemas = await database.introspection.getTables()
+  const database = await connectDatabase(firstPath)
+  try {
+    const databaseSchemas = await database.introspection.getTables()
 
-  const tableName =
-    dialect?.tableName ??
-    databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
+    const tableName =
+      dialect?.tableName ??
+      databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
-  if (!tableName) {
-    throw new Error("Table name is not defined")
+    if (!tableName) {
+      throw new Error("Table name is not defined")
+    }
+
+    const databaseSchema = databaseSchemas.find(s => s.name === tableName)
+    if (!databaseSchema) {
+      throw new Error(`Table is not found in the database: ${tableName}`)
+    }
+
+    return convertTableSchemaFromDatabase(databaseSchema)
+  } finally {
+    await database.destroy()
   }
-
-  const databaseSchema = databaseSchemas.find(s => s.name === tableName)
-  if (!databaseSchema) {
-    throw new Error(`Table is not found in the database: ${tableName}`)
-  }
-
-  return driver.convertTableSchemaFromDatabase(databaseSchema)
 }

@@ -1,13 +1,13 @@
 import slugify from "@sindresorhus/slugify"
 import { node } from "../../services/node.ts"
 
-export function isRemotePath(path: string) {
+export function getIsRemotePath(path: string) {
   const protocol = getFileProtocol(path)
   return protocol !== "file"
 }
 
 export function getFileName(path: string) {
-  const isRemote = isRemotePath(path)
+  const isRemote = getIsRemotePath(path)
 
   if (isRemote) {
     const pathname = new URL(path).pathname

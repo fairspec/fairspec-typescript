@@ -34,6 +34,11 @@ export {
   saveParquetTable,
 } from "./plugins/parquet/index.ts"
 export {
+  loadSqliteTable,
+  SqlitePlugin,
+  saveSqliteTable,
+} from "./plugins/sqlite/index.ts"
+export {
   loadXlsxTable,
   saveXlsxTable,
   XlsxPlugin,

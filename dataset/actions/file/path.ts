@@ -1,6 +1,6 @@
 import { access } from "node:fs/promises"
 
-export async function isLocalPathExist(path: string) {
+export async function getIsLocalPathExist(path: string) {
   try {
     await access(path)
     return true
@@ -10,7 +10,7 @@ export async function isLocalPathExist(path: string) {
 }
 
 export async function assertLocalPathVacant(path: string) {
-  const isExist = await isLocalPathExist(path)
+  const isExist = await getIsLocalPathExist(path)
 
   if (isExist) {
     throw new Error(`Path "${path}" already exists`)

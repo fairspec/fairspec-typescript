@@ -1,8 +1,8 @@
 import { node } from "../../services/node.ts"
-import { isRemotePath } from "./general.ts"
+import { getIsRemotePath } from "./general.ts"
 
 export async function resolveBasepath(path: string) {
-  const isRemote = isRemotePath(path)
+  const isRemote = getIsRemotePath(path)
 
   // Resolves redirects
   if (isRemote) {
@@ -15,7 +15,7 @@ export async function resolveBasepath(path: string) {
 }
 
 export function getBasepath(path: string) {
-  const isRemote = isRemotePath(path)
+  const isRemote = getIsRemotePath(path)
 
   if (isRemote) {
     const normalizedPath = new URL(path).toString()

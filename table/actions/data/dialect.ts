@@ -34,6 +34,10 @@ function getHeaderFromRows(
   rows: DataRow[],
   dialect?: DialectWithHeaderAndCommentRows,
 ) {
+  if (dialect?.columnNames) {
+    return [dialect.columnNames]
+  }
+
   const headerRows = getHeaderRows(dialect)
 
   if (!headerRows.length) {

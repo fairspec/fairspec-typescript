@@ -13,6 +13,7 @@ import {
   InlinePlugin,
   JsonPlugin,
   ParquetPlugin,
+  SqlitePlugin,
   XlsxPlugin,
 } from "@fairspec/table"
 import type { Plugin } from "./plugin.ts"
@@ -47,4 +48,5 @@ system.register(CsvPlugin)
 system.register(InlinePlugin)
 system.register(JsonPlugin)
 system.register(ParquetPlugin)
+system.register(SqlitePlugin)
 system.register(XlsxPlugin)

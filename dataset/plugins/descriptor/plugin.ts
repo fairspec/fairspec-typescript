@@ -1,7 +1,7 @@
 import type { Dataset } from "@fairspec/metadata"
 import {
   getFileExtension,
-  isRemotePath,
+  getIsRemotePath,
   loadDatasetDescriptor,
   saveDatasetDescriptor,
 } from "@fairspec/metadata"
@@ -35,7 +35,7 @@ export class DescriptorPlugin implements DatasetPlugin {
 
 function getIsLocalJson(path: string) {
   const isJson = getIsJson(path)
-  const isRemote = isRemotePath(path)
+  const isRemote = getIsRemotePath(path)
   return isJson && !isRemote
 }
 

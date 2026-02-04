@@ -25,4 +25,11 @@ export class ParquetPlugin implements TablePlugin {
 
     return await saveParquetTable(table, options)
   }
+
+  async inferDialect(resource: Resource) {
+    const dialect = await getSupportedDialect(resource, ["parquet"])
+    if (!dialect) return undefined
+
+    return { format: dialect.format }
+  }
 }

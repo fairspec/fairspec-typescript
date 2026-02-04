@@ -113,6 +113,24 @@ describe("loadCsvTable", () => {
     ])
   })
 
+  it("should handle files without header using columnNames", async () => {
+    const path = await writeTempFile("1,alice\n2,bob")
+    const table = await loadCsvTable({
+      data: path,
+      dialect: {
+        format: "csv",
+        headerRows: false,
+        columnNames: ["id", "name"],
+      },
+    })
+
+    const records = (await table.collect()).toRecords()
+    expect(records).toEqual([
+      { id: 1, name: "alice" },
+      { id: 2, name: "bob" },
+    ])
+  })
+
   it("should handle custom line terminator", async () => {
     const path = await writeTempFile("id,name|1,alice|2,bob")
     const table = await loadCsvTable({

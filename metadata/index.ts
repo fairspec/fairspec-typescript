@@ -10,7 +10,7 @@ export { normalizeDataset } from "./actions/dataset/normalize.ts"
 export { saveDatasetDescriptor } from "./actions/dataset/save.ts"
 export { validateDatasetDescriptor } from "./actions/dataset/validate.ts"
 export { copyDescriptor } from "./actions/descriptor/copy.ts"
-export { isDescriptor } from "./actions/descriptor/general.ts"
+export { getIsDescriptor } from "./actions/descriptor/general.ts"
 export { loadDescriptor } from "./actions/descriptor/load.ts"
 export { parseDescriptor } from "./actions/descriptor/parse.ts"
 export { saveDescriptor } from "./actions/descriptor/save.ts"
@@ -36,7 +36,7 @@ export {
   getFileName,
   getFileNameSlug,
   getFileProtocol,
-  isRemotePath,
+  getIsRemotePath,
 } from "./actions/path/general.ts"
 export { normalizePath } from "./actions/path/normalize.ts"
 export { createReport } from "./actions/report/create.ts"
@@ -48,7 +48,7 @@ export {
   getDataValue,
 } from "./actions/resource/data.ts"
 export { denormalizeResource } from "./actions/resource/denormalize.ts"
-export { isRemoteResource } from "./actions/resource/general.ts"
+export { getIsRemoteResource } from "./actions/resource/general.ts"
 export { inferResourceName } from "./actions/resource/infer.ts"
 export { normalizeResource } from "./actions/resource/normalize.ts"
 export { assertTableSchema } from "./actions/tableSchema/assert.ts"

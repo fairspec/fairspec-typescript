@@ -25,4 +25,11 @@ export class XlsxPlugin implements TablePlugin {
 
     return await saveXlsxTable(table, { ...options, dialect })
   }
+
+  async inferDialect(resource: Resource) {
+    const dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
+    if (!dialect) return undefined
+
+    return { format: dialect.format }
+  }
 }

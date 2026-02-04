@@ -3,7 +3,7 @@ import {
   type Dataset,
   getBasepath,
   getDataPaths,
-  isRemotePath,
+  getIsRemotePath,
 } from "@fairspec/metadata"
 
 export function getDatasetBasepath(dataset: Dataset) {
@@ -19,7 +19,7 @@ export function getDatasetBasepath(dataset: Dataset) {
 
 export function getCommonLocalBasepath(paths: string[]) {
   const absoluteBasepaths = paths
-    .filter(path => !isRemotePath(path))
+    .filter(path => !getIsRemotePath(path))
     .map(path => resolve(getBasepath(path)))
 
   if (!absoluteBasepaths.length) {

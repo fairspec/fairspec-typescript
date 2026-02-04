@@ -1,5 +1,5 @@
 import { node } from "../../services/node.ts"
-import { getFileProtocol, isRemotePath } from "../../actions/path/general.ts"
+import { getFileProtocol, getIsRemotePath } from "../../actions/path/general.ts"
 import { parseDescriptor } from "./parse.ts"
 
 /**
@@ -13,7 +13,7 @@ export async function loadDescriptor(
     onlyRemote?: boolean
   },
 ) {
-  const isRemote = isRemotePath(path)
+  const isRemote = getIsRemotePath(path)
   if (!isRemote && options?.onlyRemote) {
     throw new Error("Cannot load descriptor for security reasons")
   }

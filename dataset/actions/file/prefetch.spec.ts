@@ -1,7 +1,10 @@
 import * as fs from "node:fs/promises"
 import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
+import { useRecording } from "vitest-polly"
 import { prefetchFiles } from "./prefetch.ts"
+
+useRecording()
 
 describe("prefetchFiles", () => {
   const remoteUrl =

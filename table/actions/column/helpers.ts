@@ -10,7 +10,7 @@ import type {
 } from "@fairspec/metadata"
 import { inspectJson } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { isObject } from "../../helpers/general.ts"
+import { getIsObject } from "../../helpers/general.ts"
 import type { Table } from "../../models/table.ts"
 
 // TODO: Generalize wkt/wkb/duration inspectors
@@ -72,7 +72,7 @@ export async function inspectJsonColumn(
     if (row.source === null) continue
 
     let target: Record<string, any> | undefined
-    const checkCompat = column.type === "array" ? Array.isArray : isObject
+    const checkCompat = column.type === "array" ? Array.isArray : getIsObject
 
     try {
       target = JSON.parse(row.source)

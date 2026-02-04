@@ -25,4 +25,11 @@ export class JsonPlugin implements TablePlugin {
 
     return await saveJsonTable(table, { ...options, dialect })
   }
+
+  async inferDialect(resource: Resource) {
+    const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
+    if (!dialect) return undefined
+
+    return { format: dialect.format }
+  }
 }

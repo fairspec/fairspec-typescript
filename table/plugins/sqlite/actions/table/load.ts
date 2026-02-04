@@ -5,8 +5,8 @@ import type { Resource } from "@fairspec/metadata"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import type { LoadTableOptions } from "../../../../plugin.ts"
 import * as pl from "nodejs-polars"
-import { SqliteDriver } from "../../drivers/sqlite.ts"
-import { inferTableSchemaFromSqlite } from "../../actions/tableSchema/infer.ts"
+import { connectDatabase } from "../database/connect.ts"
+import { inferTableSchemaFromSqlite } from "../tableSchema/infer.ts"
 
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation
@@ -25,29 +25,32 @@ export async function loadSqliteTable(
     throw new Error("Resource data is not compatible")
   }
 
-  const driver = new SqliteDriver()
-  const database = await driver.connectDatabase(firstPath)
-  const databaseSchemas = await database.introspection.getTables()
+  const database = await connectDatabase(firstPath)
+  try {
+    const databaseSchemas = await database.introspection.getTables()
 
-  const tableName =
-    dialect?.tableName ??
-    databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
+    const tableName =
+      dialect?.tableName ??
+      databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
-  if (!tableName) {
-    throw new Error("Table name is not defined")
-  }
-
-  const records = await database.selectFrom(tableName).selectAll().execute()
-  let table = pl.DataFrame(records).lazy()
-
-  if (!options?.denormalized) {
-    let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema) {
-      tableSchema = await inferTableSchemaFromSqlite({...resource, dialect})
+    if (!tableName) {
+      throw new Error("Table name is not defined")
     }
 
-    table = await normalizeTable(table, tableSchema)
-  }
+    const records = await database.selectFrom(tableName).selectAll().execute()
+    let table = pl.DataFrame(records).lazy()
 
-  return table
+    if (!options?.denormalized) {
+      let tableSchema = await resolveTableSchema(resource.tableSchema)
+      if (!tableSchema) {
+        tableSchema = await inferTableSchemaFromSqlite({...resource, dialect})
+      }
+
+      table = await normalizeTable(table, tableSchema)
+    }
+
+    return table
+  } finally {
+    await database.destroy()
+  }
 }

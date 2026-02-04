@@ -1,6 +1,6 @@
 import { stat } from "node:fs/promises"
 import type { Dataset } from "@fairspec/metadata"
-import { isRemotePath } from "@fairspec/metadata"
+import { getIsRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
 import { loadDatasetFromFolder } from "./actions/dataset/load.ts"
 import { saveDatasetToFolder } from "./actions/dataset/save.ts"
@@ -31,7 +31,7 @@ export class FolderPlugin implements DatasetPlugin {
 }
 
 async function getIsFolder(path: string) {
-  const isRemote = isRemotePath(path)
+  const isRemote = getIsRemotePath(path)
   if (isRemote) return false
 
   try {

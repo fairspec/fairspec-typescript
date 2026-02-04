@@ -4,8 +4,10 @@ import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { Table } from "../../../../models/table.ts"
 import type { SaveTableOptions } from "../../../../plugin.ts"
-import { SqliteDriver } from "../../drivers/sqlite.ts"
 import type { SqliteSchema } from "../../models/schema.ts"
+import { SQLITE_NATIVE_TYPES } from "../../settings.ts"
+import { connectDatabase } from "../database/connect.ts"
+import { convertTableSchemaToDatabase } from "../tableSchema/toDatabase.ts"
 
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation
@@ -26,31 +28,31 @@ export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
       keepStrings: true,
     }))
 
-  const driver = new SqliteDriver()
   table = await denormalizeTable(table, tableSchema, {
-    nativeTypes: driver.nativeTypes,
+    nativeTypes: SQLITE_NATIVE_TYPES,
   })
 
-  const database = await driver.connectDatabase(path, { create: true })
-  const databaseSchemas = await database.introspection.getTables()
+  const database = await connectDatabase(path, { create: true })
+  try {
+    const databaseSchemas = await database.introspection.getTables()
 
-  const tableName =
-    dialect?.tableName ??
-    databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
+    const tableName =
+      dialect?.tableName ??
+      databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
-  if (!tableName) {
-    throw new Error("Table name is not defined")
+    if (!tableName) {
+      throw new Error("Table name is not defined")
+    }
+
+    const sqliteSchema = convertTableSchemaToDatabase(tableSchema, tableName)
+
+    await defineTable(database, sqliteSchema, { overwrite })
+    await populateTable(database, tableName, table)
+
+    return path
+  } finally {
+    await database.destroy()
   }
-
-  const sqliteSchema = driver.convertTableSchemaToDatabase(
-    tableSchema,
-    tableName,
-  )
-
-  await defineTable(database, sqliteSchema, { overwrite })
-  await populateTable(database, tableName, table)
-
-  return path
 }
 
 async function defineTable(

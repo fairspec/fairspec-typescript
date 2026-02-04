@@ -64,6 +64,11 @@ function limitBytesStream(inputStream: Readable, maxBytes: number) {
           return
         }
 
+        const remaining = maxBytes - total
+        if (chunk.length > remaining) {
+          chunk = chunk.slice(0, remaining)
+        }
+
         total += chunk.length
         callback(null, chunk)
       },

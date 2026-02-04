@@ -6,7 +6,7 @@ import { resolveDialect } from "./resolve.ts"
 
 export async function getSupportedDialect<F extends Dialect["format"]>(
   resource: Resource,
-  suportedFormats: F[],
+  supportedFormats: F[],
 ): Promise<Extract<Dialect, { format: F }> | undefined> {
   const dataPath = getDataPath(resource)
   if (!dataPath) return undefined
@@ -15,7 +15,7 @@ export async function getSupportedDialect<F extends Dialect["format"]>(
     format: inferDialectFormat(resource),
   }
 
-  for (const supportedFormat of suportedFormats) {
+  for (const supportedFormat of supportedFormats) {
     if (dialect.format === supportedFormat) {
       return dialect as Extract<Dialect, { format: F }>
     }

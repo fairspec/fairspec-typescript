@@ -30,6 +30,6 @@ export class ParquetPlugin implements TablePlugin {
     const dialect = await getSupportedDialect(resource, ["parquet"])
     if (!dialect) return undefined
 
-    return { format: "parquet" }
+    return { format: dialect.format }
   }
 }

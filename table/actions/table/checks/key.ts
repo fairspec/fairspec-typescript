@@ -19,19 +19,19 @@ export function createRowKeyChecks(mapping: SchemaMapping) {
 }
 
 function createRowKeyCheck(
-  uniqueKey: string[],
+  keyColumns: string[],
   options: { keyType: KeyCheckType },
 ) {
   const isErrorExpr = pl
-    .concatList(uniqueKey)
+    .concatList(keyColumns)
     .isFirstDistinct()
     .not()
     // Fold is not available so we use a tricky way to eliminate nulls
-    .and(pl.concatList(uniqueKey).lst.min().isNotNull())
+    .and(pl.concatList(keyColumns).lst.min().isNotNull())
 
   const errorTemplate: RowPrimaryKeyError | RowUniqueKeyError = {
     type: options.keyType === "primary" ? "row/primaryKey" : "row/uniqueKey",
-    columnNames: uniqueKey,
+    columnNames: keyColumns,
     rowNumber: 0,
   }
 

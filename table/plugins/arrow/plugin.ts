@@ -30,6 +30,6 @@ export class ArrowPlugin implements TablePlugin {
     const dialect = await getSupportedDialect(resource, ["arrow"])
     if (!dialect) return undefined
 
-    return { format: "arrow" }
+    return { format: dialect.format }
   }
 }

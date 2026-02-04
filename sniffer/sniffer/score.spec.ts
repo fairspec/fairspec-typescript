@@ -1,16 +1,16 @@
-import { describe, it, expect } from 'vitest'
-import { scoreDialect, findBestDialect } from './score.ts'
-import type { PotentialDialect } from './potentialDialects.ts'
+import { describe, expect, it } from "vitest"
+import type { PotentialDialect } from "./potentialDialects.ts"
+import { findBestDialect, scoreDialect } from "./score.ts"
 
-describe('score', () => {
-  describe('scoreDialect', () => {
-    it('should score comma-delimited CSV highly', () => {
-      const csv = 'a,b,c\n1,2,3\n4,5,6'
+describe("score", () => {
+  describe("scoreDialect", () => {
+    it("should score comma-delimited CSV highly", () => {
+      const csv = "a,b,c\n1,2,3\n4,5,6"
       const bytes = new TextEncoder().encode(csv)
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const score = scoreDialect(bytes, dialect)
@@ -20,13 +20,13 @@ describe('score', () => {
       expect(score.numFields).toBe(3)
     })
 
-    it('should score incorrect delimiter poorly', () => {
-      const csv = 'a,b,c\n1,2,3\n4,5,6'
+    it("should score incorrect delimiter poorly", () => {
+      const csv = "a,b,c\n1,2,3\n4,5,6"
       const bytes = new TextEncoder().encode(csv)
       const dialect: PotentialDialect = {
         delimiter: 9, // tab instead of comma
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const score = scoreDialect(bytes, dialect)
@@ -35,13 +35,13 @@ describe('score', () => {
       expect(score.numFields).toBe(1)
     })
 
-    it('should detect non-uniform tables', () => {
-      const csv = 'a,b\n1,2\n3,4,5'
+    it("should detect non-uniform tables", () => {
+      const csv = "a,b\n1,2\n3,4,5"
       const bytes = new TextEncoder().encode(csv)
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const score = scoreDialect(bytes, dialect)
@@ -49,13 +49,13 @@ describe('score', () => {
       expect(score.isUniform).toBe(false)
     })
 
-    it('should calculate tau0 and tau1', () => {
-      const csv = 'a,b,c\n1,2,3\n4,5,6'
+    it("should calculate tau0 and tau1", () => {
+      const csv = "a,b,c\n1,2,3\n4,5,6"
       const bytes = new TextEncoder().encode(csv)
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const score = scoreDialect(bytes, dialect)
@@ -64,13 +64,13 @@ describe('score', () => {
       expect(score.tau1).toBeGreaterThan(0)
     })
 
-    it('should handle quoted fields', () => {
+    it("should handle quoted fields", () => {
       const csv = '"a","b,c","d"\n"1","2,3","4"'
       const bytes = new TextEncoder().encode(csv)
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'Some', char: 34 },
-        lineTerminator: 'LF',
+        quote: { type: "Some", char: 34 },
+        lineTerminator: "LF",
       }
 
       const score = scoreDialect(bytes, dialect)
@@ -80,18 +80,18 @@ describe('score', () => {
     })
   })
 
-  describe('findBestDialect', () => {
-    it('should select highest scoring dialect', () => {
-      const csv = 'a,b,c\n1,2,3\n4,5,6'
+  describe("findBestDialect", () => {
+    it("should select highest scoring dialect", () => {
+      const csv = "a,b,c\n1,2,3\n4,5,6"
       const bytes = new TextEncoder().encode(csv)
 
       const dialects: PotentialDialect[] = [
-        { delimiter: 44, quote: { type: 'None' }, lineTerminator: 'LF' },
-        { delimiter: 9, quote: { type: 'None' }, lineTerminator: 'LF' },
-        { delimiter: 59, quote: { type: 'None' }, lineTerminator: 'LF' },
+        { delimiter: 44, quote: { type: "None" }, lineTerminator: "LF" },
+        { delimiter: 9, quote: { type: "None" }, lineTerminator: "LF" },
+        { delimiter: 59, quote: { type: "None" }, lineTerminator: "LF" },
       ]
 
-      const scores = dialects.map((dialect) => scoreDialect(bytes, dialect))
+      const scores = dialects.map(dialect => scoreDialect(bytes, dialect))
       const best = findBestDialect(scores, {
         preferCommonDelimiters: true,
         preferDoubleQuote: true,
@@ -100,16 +100,16 @@ describe('score', () => {
       expect(best.dialect.delimiter).toBe(44)
     })
 
-    it('should prefer common delimiters when preference is set', () => {
-      const csv = 'a,b\n1,2\n3,4'
+    it("should prefer common delimiters when preference is set", () => {
+      const csv = "a,b\n1,2\n3,4"
       const bytes = new TextEncoder().encode(csv)
 
       const dialects: PotentialDialect[] = [
-        { delimiter: 44, quote: { type: 'None' }, lineTerminator: 'LF' },
-        { delimiter: 94, quote: { type: 'None' }, lineTerminator: 'LF' },
+        { delimiter: 44, quote: { type: "None" }, lineTerminator: "LF" },
+        { delimiter: 94, quote: { type: "None" }, lineTerminator: "LF" },
       ]
 
-      const scores = dialects.map((dialect) => scoreDialect(bytes, dialect))
+      const scores = dialects.map(dialect => scoreDialect(bytes, dialect))
 
       scores[0]!.gamma = 0.7
       scores[1]!.gamma = 0.71
@@ -122,43 +122,51 @@ describe('score', () => {
       expect(best.dialect.delimiter).toBe(44)
     })
 
-    it('should prefer double quote when preference is set', () => {
+    it("should prefer double quote when preference is set", () => {
       const csv = '"a","b"\n"1","2"'
       const bytes = new TextEncoder().encode(csv)
 
       const dialects: PotentialDialect[] = [
-        { delimiter: 44, quote: { type: 'Some', char: 34 }, lineTerminator: 'LF' },
-        { delimiter: 44, quote: { type: 'Some', char: 39 }, lineTerminator: 'LF' },
+        {
+          delimiter: 44,
+          quote: { type: "Some", char: 34 },
+          lineTerminator: "LF",
+        },
+        {
+          delimiter: 44,
+          quote: { type: "Some", char: 39 },
+          lineTerminator: "LF",
+        },
       ]
 
-      const scores = dialects.map((dialect) => scoreDialect(bytes, dialect))
+      const scores = dialects.map(dialect => scoreDialect(bytes, dialect))
 
       const best = findBestDialect(scores, {
         preferCommonDelimiters: false,
         preferDoubleQuote: true,
       })
 
-      if (best.dialect.quote.type === 'Some') {
+      if (best.dialect.quote.type === "Some") {
         expect(best.dialect.quote.char).toBe(34)
       }
     })
 
-    it('should throw error for empty scores array', () => {
+    it("should throw error for empty scores array", () => {
       expect(() =>
         findBestDialect([], {
           preferCommonDelimiters: true,
           preferDoubleQuote: true,
-        })
+        }),
       ).toThrow()
     })
 
-    it('should handle single score', () => {
-      const csv = 'a,b\n1,2'
+    it("should handle single score", () => {
+      const csv = "a,b\n1,2"
       const bytes = new TextEncoder().encode(csv)
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const score = scoreDialect(bytes, dialect)
@@ -171,18 +179,18 @@ describe('score', () => {
     })
   })
 
-  describe('gamma calculation', () => {
-    it('should reward uniform tables', () => {
-      const uniformCsv = 'a,b,c\n1,2,3\n4,5,6\n7,8,9'
-      const nonUniformCsv = 'a,b\n1,2,3\n4,5\n6,7,8,9'
+  describe("gamma calculation", () => {
+    it("should reward uniform tables", () => {
+      const uniformCsv = "a,b,c\n1,2,3\n4,5,6\n7,8,9"
+      const nonUniformCsv = "a,b\n1,2,3\n4,5\n6,7,8,9"
 
       const uniformBytes = new TextEncoder().encode(uniformCsv)
       const nonUniformBytes = new TextEncoder().encode(nonUniformCsv)
 
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const uniformScore = scoreDialect(uniformBytes, dialect)
@@ -191,20 +199,26 @@ describe('score', () => {
       expect(uniformScore.gamma).toBeGreaterThan(nonUniformScore.gamma)
     })
 
-    it('should reward reasonable field counts', () => {
-      const csv2Fields = 'a,b\n1,2\n3,4'
+    it("should reward reasonable field counts", () => {
+      const csv2Fields = "a,b\n1,2\n3,4"
       const csv100Fields =
-        'a,' + 'b,'.repeat(98) + 'z\n' +
-        '1,' + '2,'.repeat(98) + '3\n' +
-        '4,' + '5,'.repeat(98) + '6'
+        "a," +
+        "b,".repeat(98) +
+        "z\n" +
+        "1," +
+        "2,".repeat(98) +
+        "3\n" +
+        "4," +
+        "5,".repeat(98) +
+        "6"
 
       const bytes2 = new TextEncoder().encode(csv2Fields)
       const bytes100 = new TextEncoder().encode(csv100Fields)
 
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const score2 = scoreDialect(bytes2, dialect)
@@ -214,13 +228,13 @@ describe('score', () => {
       expect(score100.numFields).toBeGreaterThan(50)
     })
 
-    it('should cap gamma at 2', () => {
-      const csv = 'a,b,c\n1,2,3\n4,5,6\n7,8,9\n10,11,12'
+    it("should cap gamma at 2", () => {
+      const csv = "a,b,c\n1,2,3\n4,5,6\n7,8,9\n10,11,12"
       const bytes = new TextEncoder().encode(csv)
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const score = scoreDialect(bytes, dialect)
@@ -228,13 +242,13 @@ describe('score', () => {
       expect(score.gamma).toBeLessThanOrEqual(2)
     })
 
-    it('should ensure gamma is non-negative', () => {
-      const csv = 'random text without structure'
+    it("should ensure gamma is non-negative", () => {
+      const csv = "random text without structure"
       const bytes = new TextEncoder().encode(csv)
       const dialect: PotentialDialect = {
         delimiter: 44,
-        quote: { type: 'None' },
-        lineTerminator: 'LF',
+        quote: { type: "None" },
+        lineTerminator: "LF",
       }
 
       const score = scoreDialect(bytes, dialect)

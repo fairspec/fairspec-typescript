@@ -3,7 +3,7 @@ export class SnifferError extends Error {
 
   constructor(message: string, cause?: unknown) {
     super(message)
-    this.name = 'SnifferError'
+    this.name = "SnifferError"
     this.cause = cause
   }
 }
@@ -11,13 +11,13 @@ export class SnifferError extends Error {
 export class EncodingError extends SnifferError {
   constructor(message: string, cause?: unknown) {
     super(message, cause)
-    this.name = 'EncodingError'
+    this.name = "EncodingError"
   }
 }
 
 export class ParseError extends SnifferError {
   constructor(message: string, cause?: unknown) {
     super(message, cause)
-    this.name = 'ParseError'
+    this.name = "ParseError"
   }
 }

@@ -1,8 +1,6 @@
-export type LineTerminator = 'LF' | 'CRLF' | 'CR'
+export type LineTerminator = "LF" | "CRLF" | "CR"
 
-export type Quote =
-  | { type: 'None' }
-  | { type: 'Some'; char: number }
+export type Quote = { type: "None" } | { type: "Some"; char: number }
 
 export interface Header {
   hasHeaderRow: boolean

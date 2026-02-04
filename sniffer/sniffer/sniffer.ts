@@ -1,15 +1,15 @@
-import type { SampleSize } from './sample.ts'
-import type { Metadata, Quote, Dialect, LineTerminator } from './metadata.ts'
-import type { PotentialDialect } from './potentialDialects.ts'
+import type { Dialect, LineTerminator, Metadata, Quote } from "./metadata.ts"
+import type { PotentialDialect } from "./potentialDialects.ts"
 import {
   detectLineTerminator,
   generatePotentialDialects,
-} from './potentialDialects.ts'
-import { scoreDialect, findBestDialect } from './score.ts'
-import { Table } from './table.ts'
+} from "./potentialDialects.ts"
+import type { SampleSize } from "./sample.ts"
+import { findBestDialect, scoreDialect } from "./score.ts"
+import { Table } from "./table.ts"
 
 export class Sniffer {
-  private sampleSize: SampleSize = { type: 'Bytes', count: 8192 }
+  private sampleSize: SampleSize = { type: "Bytes", count: 8192 }
   private forcedDelimiter?: number
   private forcedQuote?: Quote
 
@@ -31,8 +31,10 @@ export class Sniffer {
   sniffBytes(bytes: Uint8Array): Metadata {
     let data = this.skipBom(bytes)
 
-    const { data: withoutCommentPreamble, preambleLines: commentPreambleLines } =
-      this.skipPreamble(data)
+    const {
+      data: withoutCommentPreamble,
+      preambleLines: commentPreambleLines,
+    } = this.skipPreamble(data)
     data = withoutCommentPreamble
 
     const sample = this.takeSample(data)
@@ -43,7 +45,7 @@ export class Sniffer {
       ? this.generateForcedDialects(lineTerminator)
       : generatePotentialDialects(lineTerminator)
 
-    const scores = dialects.map((dialect) => scoreDialect(sample, dialect))
+    const scores = dialects.map(dialect => scoreDialect(sample, dialect))
 
     const bestScore = findBestDialect(scores, {
       preferCommonDelimiters: true,
@@ -65,11 +67,11 @@ export class Sniffer {
     const structuralPreambleRows = this.detectStructuralPreamble(data, dialect)
     dialect.header.numPreambleRows += structuralPreambleRows
 
-    const dataAfterAllPreamble = this.skipLines(
-      data,
-      structuralPreambleRows,
+    const dataAfterAllPreamble = this.skipLines(data, structuralPreambleRows)
+    const headerDetectionResult = this.detectHeader(
+      dataAfterAllPreamble,
+      dialect,
     )
-    const headerDetectionResult = this.detectHeader(dataAfterAllPreamble, dialect)
     dialect.header.hasHeaderRow = headerDetectionResult.hasHeader
 
     return this.buildMetadata(bytes, dialect)
@@ -119,11 +121,11 @@ export class Sniffer {
   }
 
   private takeSample(bytes: Uint8Array): Uint8Array {
-    if (this.sampleSize.type === 'All') {
+    if (this.sampleSize.type === "All") {
       return bytes
     }
 
-    if (this.sampleSize.type === 'Bytes') {
+    if (this.sampleSize.type === "Bytes") {
       return bytes.slice(0, this.sampleSize.count)
     }
 
@@ -153,12 +155,12 @@ export class Sniffer {
     const quotes: Quote[] = this.forcedQuote
       ? [this.forcedQuote]
       : [
-          { type: 'None' },
-          { type: 'Some', char: 34 },
-          { type: 'Some', char: 39 },
+          { type: "None" },
+          { type: "Some", char: 34 },
+          { type: "Some", char: 39 },
         ]
 
-    return quotes.map((quote) => ({
+    return quotes.map(quote => ({
       delimiter,
       quote,
       lineTerminator,
@@ -285,12 +287,14 @@ export class Sniffer {
       lineTerminator: dialect.lineTerminator,
     })
 
-    const dataFieldCounts = dialect.header.hasHeaderRow && table.fieldCounts.length > 0
-      ? table.fieldCounts.slice(1)
-      : table.fieldCounts
+    const dataFieldCounts =
+      dialect.header.hasHeaderRow && table.fieldCounts.length > 0
+        ? table.fieldCounts.slice(1)
+        : table.fieldCounts
 
-    const isUniform = dataFieldCounts.length === 0 ||
-      dataFieldCounts.every((count) => count === dataFieldCounts[0])
+    const isUniform =
+      dataFieldCounts.length === 0 ||
+      dataFieldCounts.every(count => count === dataFieldCounts[0])
 
     dialect.flexible = !isUniform
 
@@ -299,7 +303,7 @@ export class Sniffer {
     let fields: string[] = []
     if (dialect.header.hasHeaderRow && table.numRows() > 0) {
       const headerRow = table.rows[0]
-      fields = headerRow ? headerRow.map((field) => field.trim()) : []
+      fields = headerRow ? headerRow.map(field => field.trim()) : []
     } else {
       fields = Array.from({ length: numFields }, (_, i) => `field_${i + 1}`)
     }

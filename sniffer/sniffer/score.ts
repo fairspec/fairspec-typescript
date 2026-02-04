@@ -1,7 +1,7 @@
-import type { PotentialDialect } from './potentialDialects.ts'
-import type { Quote } from './metadata.ts'
-import { Table } from './table.ts'
-import { calculateTau0, calculateTau1 } from './uniformity.ts'
+import type { Quote } from "./metadata.ts"
+import type { PotentialDialect } from "./potentialDialects.ts"
+import { Table } from "./table.ts"
+import { calculateTau0, calculateTau1 } from "./uniformity.ts"
 
 export interface DialectScore {
   dialect: PotentialDialect
@@ -84,7 +84,7 @@ function calculateGamma(
     gamma += 0.15
   }
 
-  if (quote.type === 'Some') {
+  if (quote.type === "Some") {
     const quoteScore =
       quoteEvidence.boundaryMatches * 0.5 +
       quoteEvidence.quoteDensity * 0.3 -
@@ -108,7 +108,7 @@ function analyzeQuoteEvidence(
   bytes: Uint8Array,
   dialect: PotentialDialect,
 ): QuoteEvidence {
-  if (dialect.quote.type === 'None') {
+  if (dialect.quote.type === "None") {
     return {
       quoteDensity: 0,
       boundaryMatches: 0,
@@ -165,12 +165,12 @@ export function findBestDialect(
   },
 ): DialectScore {
   if (scores.length === 0) {
-    throw new Error('No dialect scores provided')
+    throw new Error("No dialect scores provided")
   }
 
   const firstScore = scores[0]
   if (!firstScore) {
-    throw new Error('No dialect scores provided')
+    throw new Error("No dialect scores provided")
   }
 
   let bestScore = firstScore
@@ -191,13 +191,13 @@ export function findBestDialect(
 
     if (preferences.preferDoubleQuote) {
       if (
-        score.dialect.quote.type === 'Some' &&
+        score.dialect.quote.type === "Some" &&
         score.dialect.quote.char === 34
       ) {
         currentGamma += 0.05
       }
       if (
-        bestScore.dialect.quote.type === 'Some' &&
+        bestScore.dialect.quote.type === "Some" &&
         bestScore.dialect.quote.char === 34
       ) {
         bestGamma += 0.05

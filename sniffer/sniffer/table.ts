@@ -1,4 +1,4 @@
-import type { PotentialDialect } from './potentialDialects.ts'
+import type { PotentialDialect } from "./potentialDialects.ts"
 
 export class Table {
   rows: string[][]
@@ -11,7 +11,7 @@ export class Table {
   }
 
   static parse(bytes: Uint8Array, dialect: PotentialDialect): Table {
-    const decoder = new TextDecoder('utf-8', { fatal: false })
+    const decoder = new TextDecoder("utf-8", { fatal: false })
     const text = decoder.decode(bytes)
 
     const rows: string[][] = []
@@ -19,14 +19,14 @@ export class Table {
 
     const delimiterChar = String.fromCharCode(dialect.delimiter)
     const quoteChar =
-      dialect.quote.type === 'Some'
+      dialect.quote.type === "Some"
         ? String.fromCharCode(dialect.quote.char)
         : null
 
     const lineTerminatorRegex =
-      dialect.lineTerminator === 'CRLF'
+      dialect.lineTerminator === "CRLF"
         ? /\r\n/g
-        : dialect.lineTerminator === 'CR'
+        : dialect.lineTerminator === "CR"
           ? /\r/g
           : /\n/g
 
@@ -99,7 +99,7 @@ export class Table {
     if (this.fieldCounts.length === 0) return true
 
     const first = this.fieldCounts[0]
-    return this.fieldCounts.every((count) => count === first)
+    return this.fieldCounts.every(count => count === first)
   }
 
   numRows(): number {
@@ -113,7 +113,7 @@ function parseQuotedLine(
   quote: string,
 ): string[] {
   const fields: string[] = []
-  let currentField = ''
+  let currentField = ""
   let inQuotes = false
   let i = 0
 
@@ -130,7 +130,7 @@ function parseQuotedLine(
       }
     } else if (char === delimiter && !inQuotes) {
       fields.push(currentField)
-      currentField = ''
+      currentField = ""
       i++
     } else {
       currentField += char

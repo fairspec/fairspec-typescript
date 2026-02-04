@@ -1,16 +1,16 @@
-import { describe, it, expect } from 'vitest'
-import { calculateTau0, calculateTau1 } from './uniformity.ts'
+import { describe, expect, it } from "vitest"
+import { calculateTau0, calculateTau1 } from "./uniformity.ts"
 
-describe('uniformity', () => {
-  describe('calculateTau0', () => {
-    it('should return 1 for uniform field counts', () => {
+describe("uniformity", () => {
+  describe("calculateTau0", () => {
+    it("should return 1 for uniform field counts", () => {
       const fieldCounts = [3, 3, 3, 3, 3]
       const tau0 = calculateTau0(fieldCounts)
 
       expect(tau0).toBe(1)
     })
 
-    it('should return lower score for varying field counts', () => {
+    it("should return lower score for varying field counts", () => {
       const fieldCounts = [3, 4, 3, 5, 3]
       const tau0 = calculateTau0(fieldCounts)
 
@@ -18,13 +18,13 @@ describe('uniformity', () => {
       expect(tau0).toBeGreaterThan(0)
     })
 
-    it('should return 0 for empty array', () => {
+    it("should return 0 for empty array", () => {
       const tau0 = calculateTau0([])
 
       expect(tau0).toBe(0)
     })
 
-    it('should penalize high variance', () => {
+    it("should penalize high variance", () => {
       const lowVariance = [3, 3, 3, 4, 3]
       const highVariance = [1, 5, 2, 8, 3]
 
@@ -35,8 +35,8 @@ describe('uniformity', () => {
     })
   })
 
-  describe('calculateTau1', () => {
-    it('should return high score for consistent field counts', () => {
+  describe("calculateTau1", () => {
+    it("should return high score for consistent field counts", () => {
       const fieldCounts = [3, 3, 3, 3, 3]
       const modalCount = 3
       const tau1 = calculateTau1(fieldCounts, modalCount)
@@ -44,7 +44,7 @@ describe('uniformity', () => {
       expect(tau1).toBeGreaterThan(0.9)
     })
 
-    it('should return lower score for varying field counts', () => {
+    it("should return lower score for varying field counts", () => {
       const fieldCounts = [3, 4, 5, 3, 4]
       const modalCount = 3
       const tau1 = calculateTau1(fieldCounts, modalCount)
@@ -53,13 +53,13 @@ describe('uniformity', () => {
       expect(tau1).toBeGreaterThan(0)
     })
 
-    it('should return 0 for empty array', () => {
+    it("should return 0 for empty array", () => {
       const tau1 = calculateTau1([], 0)
 
       expect(tau1).toBe(0)
     })
 
-    it('should penalize frequent transitions', () => {
+    it("should penalize frequent transitions", () => {
       const fewTransitions = [3, 3, 3, 4, 4, 4]
       const manyTransitions = [3, 4, 3, 4, 3, 4]
 
@@ -69,7 +69,7 @@ describe('uniformity', () => {
       expect(tau1Few).toBeGreaterThan(tau1Many)
     })
 
-    it('should favor higher mode dominance', () => {
+    it("should favor higher mode dominance", () => {
       const highModeDominance = [3, 3, 3, 3, 4]
       const lowModeDominance = [3, 3, 4, 4, 5]
 
@@ -79,7 +79,7 @@ describe('uniformity', () => {
       expect(tau1High).toBeGreaterThan(tau1Low)
     })
 
-    it('should penalize wide range', () => {
+    it("should penalize wide range", () => {
       const narrowRange = [3, 3, 4, 4, 3]
       const wideRange = [1, 3, 7, 3, 2]
 
@@ -90,8 +90,8 @@ describe('uniformity', () => {
     })
   })
 
-  describe('combined tau0 and tau1', () => {
-    it('should both score uniform data highly', () => {
+  describe("combined tau0 and tau1", () => {
+    it("should both score uniform data highly", () => {
       const fieldCounts = [5, 5, 5, 5, 5]
       const modalCount = 5
 
@@ -102,7 +102,7 @@ describe('uniformity', () => {
       expect(tau1).toBeGreaterThan(0.9)
     })
 
-    it('should both score chaotic data lowly', () => {
+    it("should both score chaotic data lowly", () => {
       const fieldCounts = [1, 5, 2, 8, 3, 9, 1, 7]
       const modalCount = 1
 

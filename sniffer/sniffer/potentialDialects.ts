@@ -1,4 +1,4 @@
-import type { LineTerminator, Quote } from './metadata.ts'
+import type { LineTerminator, Quote } from "./metadata.ts"
 
 export interface PotentialDialect {
   delimiter: number
@@ -20,9 +20,9 @@ export const DELIMITERS: number[] = [
 ]
 
 export const QUOTE_CHARS: Quote[] = [
-  { type: 'None' },
-  { type: 'Some', char: 34 }, // " (double quote)
-  { type: 'Some', char: 39 }, // ' (single quote)
+  { type: "None" },
+  { type: "Some", char: 34 }, // " (double quote)
+  { type: "Some", char: 39 }, // ' (single quote)
 ]
 
 export function detectLineTerminator(bytes: Uint8Array): LineTerminator {
@@ -43,11 +43,11 @@ export function detectLineTerminator(bytes: Uint8Array): LineTerminator {
     }
   }
 
-  if (hasCRLF) return 'CRLF'
-  if (hasLF) return 'LF'
-  if (hasCR) return 'CR'
+  if (hasCRLF) return "CRLF"
+  if (hasLF) return "LF"
+  if (hasCR) return "CR"
 
-  return 'LF'
+  return "LF"
 }
 
 export function generatePotentialDialects(

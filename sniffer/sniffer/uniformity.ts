@@ -23,8 +23,7 @@ function calculateStdDev(counts: number[]): number {
 
   const mean = counts.reduce((sum, count) => sum + count, 0) / counts.length
   const variance =
-    counts.reduce((sum, count) => sum + Math.pow(count - mean, 2), 0) /
-    counts.length
+    counts.reduce((sum, count) => sum + (count - mean) ** 2, 0) / counts.length
 
   return Math.sqrt(variance)
 }
@@ -61,7 +60,7 @@ function calculateTransitionScore(counts: number[]): number {
 function calculateModeScore(counts: number[], modalCount: number): number {
   if (counts.length === 0) return 0
 
-  const modalFrequency = counts.filter((count) => count === modalCount).length
+  const modalFrequency = counts.filter(count => count === modalCount).length
   const modeRatio = modalFrequency / counts.length
 
   return modeRatio

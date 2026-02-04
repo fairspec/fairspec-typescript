@@ -9,8 +9,6 @@ import type {
 import { loadSqliteTable } from "./actions/table/load.ts"
 import { saveSqliteTable } from "./actions/table/save.ts"
 
-// TODO: Add inferTableSchema
-
 export class SqlitePlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
     const dialect = await getSupportedDialect(resource, ["sqlite"])
@@ -26,5 +24,12 @@ export class SqlitePlugin implements TablePlugin {
     if (!dialect) return undefined
 
     return await saveSqliteTable(table, options)
+  }
+
+  async inferDialect(resource: Resource) {
+    const dialect = await getSupportedDialect(resource, ["sqlite"])
+    if (!dialect) return undefined
+
+    return { format: "sqlite" }
   }
 }

@@ -29,14 +29,14 @@ export const inferDialectCommand = new Command()
       path = await selectFile(session, options)
     }
 
-    const format = await session.task("Inferring format", async () => {
+    const format = await session.task("Inferring dialect", async () => {
       const format = await inferDialect(
         { data: path },
         { sampleBytes: options.sampleBytes },
       )
 
       if (!format) {
-        throw new Error("Could not infer format")
+        throw new Error("Could not infer dialect")
       }
 
       return format

@@ -25,4 +25,11 @@ export class ArrowPlugin implements TablePlugin {
 
     return await saveArrowTable(table, { ...options, dialect })
   }
+
+  async inferDialect(resource: Resource) {
+    const dialect = await getSupportedDialect(resource, ["arrow"])
+    if (!dialect) return undefined
+
+    return { format: "arrow" }
+  }
 }

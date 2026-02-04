@@ -46,7 +46,7 @@ export async function loadCsvTable(
   // There is no way to specify column names in nodejs-polars by default
   // so we have to rename `column_*` to `column*` is table doesn't have header
   let table = pl.concat(tables)
-  if (!scanOptions.hasHeader) {
+  if (!scanOptions.hasHeader && !dialect?.columnNames) {
     table = table.rename(
       Object.fromEntries(
         table.columns.map(name => [name, name.replace("column_", "column")]),
@@ -83,6 +83,12 @@ function getScanOptions(dialect?: TsvDialect | CsvDialect) {
   options.quoteChar = dialect?.format === "csv" ? dialect?.quoteChar ?? '"' : undefined
   options.nullValues = dialect?.nullSequence
   options.commentPrefix = dialect?.commentPrefix
+
+  if (dialect?.columnNames) {
+    options.schema = Object.fromEntries(
+      dialect.columnNames.map(name => [name, pl.String])
+    )
+  }
 
   return options
 }

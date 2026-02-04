@@ -9,6 +9,10 @@ export async function createDialect(
 ) {
   path = path.replace(/^sqlite:\/\//, "")
 
+  if (path === ":memory:" || path.startsWith("file::memory")) {
+    throw new Error("In-memory databases are not supported")
+  }
+
   if (!options?.create) {
     const isExist = await getIsLocalPathExist(path)
     if (!isExist) {

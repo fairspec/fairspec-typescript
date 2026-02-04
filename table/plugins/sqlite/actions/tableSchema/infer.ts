@@ -15,20 +15,24 @@ export async function inferTableSchemaFromSqlite(resource: Resource) {
   }
 
   const database = await connectDatabase(firstPath)
-  const databaseSchemas = await database.introspection.getTables()
+  try {
+    const databaseSchemas = await database.introspection.getTables()
 
-  const tableName =
-    dialect?.tableName ??
-    databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
+    const tableName =
+      dialect?.tableName ??
+      databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
-  if (!tableName) {
-    throw new Error("Table name is not defined")
+    if (!tableName) {
+      throw new Error("Table name is not defined")
+    }
+
+    const databaseSchema = databaseSchemas.find(s => s.name === tableName)
+    if (!databaseSchema) {
+      throw new Error(`Table is not found in the database: ${tableName}`)
+    }
+
+    return convertTableSchemaFromDatabase(databaseSchema)
+  } finally {
+    await database.destroy()
   }
-
-  const databaseSchema = databaseSchemas.find(s => s.name === tableName)
-  if (!databaseSchema) {
-    throw new Error(`Table is not found in the database: ${tableName}`)
-  }
-
-  return convertTableSchemaFromDatabase(databaseSchema)
 }

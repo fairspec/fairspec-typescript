@@ -16,7 +16,7 @@ export function convertTableSchemaToDatabase(
   const columns = getColumns(tableSchema)
   for (const column of columns) {
     // TODO: Update when required uses JSON Schema symantics
-    const isNullable = tableSchema.required?.includes(column.name)
+    const isNullable = !tableSchema.required?.includes(column.name)
     const databaseColumn = convertColumnToDatabase(column, isNullable)
     databaseSchema.columns.push(databaseColumn)
   }

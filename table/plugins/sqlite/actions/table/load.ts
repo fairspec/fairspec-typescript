@@ -26,27 +26,31 @@ export async function loadSqliteTable(
   }
 
   const database = await connectDatabase(firstPath)
-  const databaseSchemas = await database.introspection.getTables()
+  try {
+    const databaseSchemas = await database.introspection.getTables()
 
-  const tableName =
-    dialect?.tableName ??
-    databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
+    const tableName =
+      dialect?.tableName ??
+      databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
-  if (!tableName) {
-    throw new Error("Table name is not defined")
-  }
-
-  const records = await database.selectFrom(tableName).selectAll().execute()
-  let table = pl.DataFrame(records).lazy()
-
-  if (!options?.denormalized) {
-    let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema) {
-      tableSchema = await inferTableSchemaFromSqlite({...resource, dialect})
+    if (!tableName) {
+      throw new Error("Table name is not defined")
     }
 
-    table = await normalizeTable(table, tableSchema)
-  }
+    const records = await database.selectFrom(tableName).selectAll().execute()
+    let table = pl.DataFrame(records).lazy()
 
-  return table
+    if (!options?.denormalized) {
+      let tableSchema = await resolveTableSchema(resource.tableSchema)
+      if (!tableSchema) {
+        tableSchema = await inferTableSchemaFromSqlite({...resource, dialect})
+      }
+
+      table = await normalizeTable(table, tableSchema)
+    }
+
+    return table
+  } finally {
+    await database.destroy()
+  }
 }

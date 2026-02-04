@@ -31,8 +31,8 @@ describe("inferDialect", () => {
     const path = await writeTempFile(JSON.stringify([{ id: 1, name: "alice" }]))
     const resource: Resource = { data: path, dialect: { format: "json" } }
 
-    const format = await inferDialect(resource)
-    expect(format).toEqual({ format: "json" })
+    const dialect = await inferDialect(resource)
+    expect(dialect).toEqual({ format: "json" })
   })
 
   it("should return undefined for inline data", async () => {

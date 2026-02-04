@@ -33,22 +33,26 @@ export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
   })
 
   const database = await connectDatabase(path, { create: true })
-  const databaseSchemas = await database.introspection.getTables()
+  try {
+    const databaseSchemas = await database.introspection.getTables()
 
-  const tableName =
-    dialect?.tableName ??
-    databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
+    const tableName =
+      dialect?.tableName ??
+      databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
-  if (!tableName) {
-    throw new Error("Table name is not defined")
+    if (!tableName) {
+      throw new Error("Table name is not defined")
+    }
+
+    const sqliteSchema = convertTableSchemaToDatabase(tableSchema, tableName)
+
+    await defineTable(database, sqliteSchema, { overwrite })
+    await populateTable(database, tableName, table)
+
+    return path
+  } finally {
+    await database.destroy()
   }
-
-  const sqliteSchema = convertTableSchemaToDatabase(tableSchema, tableName)
-
-  await defineTable(database, sqliteSchema, { overwrite })
-  await populateTable(database, tableName, table)
-
-  return path
 }
 
 async function defineTable(

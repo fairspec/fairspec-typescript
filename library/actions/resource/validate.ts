@@ -1,8 +1,8 @@
 import { validateFile } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
 import { createReport } from "@fairspec/metadata"
+import type { ValidateTableOptions } from "../../models/table.ts"
 import { validateData } from "../../actions/data/validate.ts"
-import type { ValidateTableOptions } from "../../actions/table/validate.ts"
 import { validateTable } from "../../actions/table/validate.ts"
 
 export async function validateResource(

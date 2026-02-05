@@ -1,41 +1,54 @@
-import type { DataSchema } from "./models/dataSchema.ts"
-import type { Dataset } from "./models/dataset.ts"
+import type {
+  DataSchema,
+  RenderDataSchemaOptions,
+} from "./models/dataSchema.ts"
+import type {
+  ConvertDatasetFromOptions,
+  ConvertDatasetToOptions,
+  Dataset,
+  RenderDatasetOptions,
+} from "./models/dataset.ts"
 import type { Descriptor } from "./models/descriptor.ts"
-import type { TableSchema } from "./models/tableSchema.ts"
+import type {
+  ConvertTableSchemaFromOptions,
+  ConvertTableSchemaToOptions,
+  RenderTableSchemaOptions,
+  TableSchema,
+} from "./models/tableSchema.ts"
 
 export interface MetadataPlugin {
   renderDatasetAs?(
     dataset: Dataset,
-    options: { format: string },
+    options: RenderDatasetOptions,
   ): string | undefined
 
   convertDatasetTo?(
     dataset: Dataset,
-    options: { format: string },
+    options: ConvertDatasetToOptions,
   ): Descriptor | undefined
 
   convertDatasetFrom?(
     descriptor: Descriptor,
-    options: { format: string },
+    options: ConvertDatasetFromOptions,
   ): Dataset | undefined
 
   renderDataSchemaAs?(
     dataSchema: DataSchema,
-    options: { format: string },
+    options: RenderDataSchemaOptions,
   ): string | undefined
 
   renderTableSchemaAs?(
     tableSchema: TableSchema,
-    options: { format: string },
+    options: RenderTableSchemaOptions,
   ): string | undefined
 
   convertTableSchemaTo?(
     tableSchema: TableSchema,
-    options: { format: string },
+    options: ConvertTableSchemaToOptions,
   ): Descriptor | undefined
 
   convertTableSchemaFrom?(
     descriptor: Descriptor,
-    options: { format: string },
+    options: ConvertTableSchemaFromOptions,
   ): TableSchema | undefined
 }

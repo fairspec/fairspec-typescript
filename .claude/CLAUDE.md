@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## General
+## Guidelines
 
 - Prioritize using LSP capabilities if possible
 - When resolving a TODO, follow its instructions literally
@@ -20,7 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Run `pnpm run spec` to run only the Vitest tests
 - Run `pnpm exec vitest run -t "test name"` or `pnpm exec vitest run path/to/test.ts` to run a single test
 
-## Format
+## Formats
 
 - Use 2-space indentation, UTF-8 encoding, and LF line endings
 - Use PascalCase for classes and interfaces, and camelCase for methods and variables

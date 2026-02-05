@@ -313,6 +313,11 @@ export class Sniffer {
         continue
       }
 
+      if (/^(true|false)$/i.test(trimmed)) {
+        headerScore -= 0.3
+        continue
+      }
+
       if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(trimmed)) {
         headerScore += 0.3
       }

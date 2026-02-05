@@ -280,5 +280,19 @@ describe("inferCsvDialect", () => {
         lineTerminator: "\n",
       })
     })
+
+    it("should not detect header when first row has data-like values", async () => {
+      const path = await writeTempFile(
+        "blsrpxedd,37257,695.80,false,1927-11-07T01:03:54Z\nzmvpq03o4,68694,337.73,false,1927-04-02T12:37:52Z\niw1fm3k9n,52019,988.74,false,2009-02-22T05:50:15Z",
+      )
+      const dialect = await inferCsvDialect({ data: path })
+
+      expect(dialect).toEqual({
+        format: "csv",
+        delimiter: ",",
+        headerRows: false,
+        lineTerminator: "\n",
+      })
+    })
   })
 })

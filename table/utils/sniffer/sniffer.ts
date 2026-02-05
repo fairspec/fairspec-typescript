@@ -29,7 +29,8 @@ export class Sniffer {
   }
 
   sniffBytes(bytes: Uint8Array): Metadata {
-    let data = this.skipBom(bytes)
+    const bytesNoBom = this.skipBom(bytes)
+    let data = bytesNoBom
 
     const {
       data: withoutCommentPreamble,
@@ -74,7 +75,7 @@ export class Sniffer {
     )
     dialect.header.hasHeaderRow = headerDetectionResult.hasHeader
 
-    return this.buildMetadata(bytes, dialect)
+    return this.buildMetadata(bytesNoBom, dialect)
   }
 
   sniffRows(rows: unknown[][]): Metadata {

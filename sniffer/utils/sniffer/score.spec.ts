@@ -111,8 +111,12 @@ describe("score", () => {
 
       const scores = dialects.map(dialect => scoreDialect(bytes, dialect))
 
-      scores[0]!.gamma = 0.7
-      scores[1]!.gamma = 0.71
+      const firstScore = scores[0]
+      const secondScore = scores[1]
+      if (firstScore && secondScore) {
+        firstScore.gamma = 0.7
+        secondScore.gamma = 0.71
+      }
 
       const best = findBestDialect(scores, {
         preferCommonDelimiters: true,

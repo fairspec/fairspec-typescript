@@ -150,7 +150,11 @@ export class Sniffer {
   private generateForcedDialects(
     lineTerminator: LineTerminator,
   ): PotentialDialect[] {
-    const delimiter = this.forcedDelimiter!
+    if (!this.forcedDelimiter) {
+      throw new Error("generateForcedDialects called without forcedDelimiter")
+    }
+
+    const delimiter = this.forcedDelimiter
 
     const quotes: Quote[] = this.forcedQuote
       ? [this.forcedQuote]

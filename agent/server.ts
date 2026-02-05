@@ -5,6 +5,7 @@ import { inferDataSchemaTool } from "./tools/dataSchema/infer.ts"
 import { validateDataSchemaTool } from "./tools/dataSchema/validate.ts"
 import { inferDatasetTool } from "./tools/dataset/infer.ts"
 import { validateDatasetTool } from "./tools/dataset/validate.ts"
+import { inferDialectTool } from "./tools/dialect/infer.ts"
 import { validateTableTool } from "./tools/table/validate.ts"
 import { inferTableSchemaTool } from "./tools/tableSchema/infer.ts"
 import { validateTableSchemaTool } from "./tools/tableSchema/validate.ts"
@@ -15,6 +16,7 @@ export const server = new MCPServer({
   tools: {
     inferDataSchemaTool,
     inferDatasetTool,
+    inferDialectTool,
     inferTableSchemaTool,
     validateDataSchemaTool,
     validateDatasetTool,

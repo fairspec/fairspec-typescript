@@ -1,5 +1,6 @@
 import { MCPServer } from "@mastra/mcp"
 import packageJson from "./package.json" with { type: "json" }
+import { validateDataTool } from "./tools/data/validate.ts"
 import { inferDataSchemaTool } from "./tools/dataSchema/infer.ts"
 import { validateDataSchemaTool } from "./tools/dataSchema/validate.ts"
 import { validateTableTool } from "./tools/table/validate.ts"
@@ -13,6 +14,7 @@ export const server = new MCPServer({
     inferDataSchemaTool,
     inferTableSchemaTool,
     validateDataSchemaTool,
+    validateDataTool,
     validateTableSchemaTool,
     validateTableTool,
   },

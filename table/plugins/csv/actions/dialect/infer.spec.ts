@@ -11,6 +11,7 @@ describe("inferCsvDialect", () => {
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -23,6 +24,7 @@ describe("inferCsvDialect", () => {
       format: "csv",
       delimiter: ",",
       quoteChar: '"',
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -35,12 +37,12 @@ describe("inferCsvDialect", () => {
       format: "csv",
       delimiter: ",",
       quoteChar: "'",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
 
-  // TODO: it gives false positives
-  it.skip("should infer header false when no header present", async () => {
+  it("should infer header false when no header present", async () => {
     const path = await writeTempFile("1,english\n2,中文\n3,español")
     const dialect = await inferCsvDialect({ data: path })
 
@@ -48,22 +50,23 @@ describe("inferCsvDialect", () => {
       format: "csv",
       delimiter: ",",
       headerRows: false,
+      lineTerminator: "\n",
     })
   })
 
-  it("should not set header when header is present", async () => {
+  it("should detect header when header is present", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
     const dialect = await inferCsvDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
 
-  // TODO: recover if possible with csv-sniffer
-  it.skip("should infer complex CSV with quotes and header", async () => {
+  it("should infer complex CSV with quotes and header", async () => {
     const path = await writeTempFile(
       'name,description\n"Product A","A great product with, commas"\n"Product B","Another product"',
     )
@@ -73,6 +76,8 @@ describe("inferCsvDialect", () => {
       format: "csv",
       delimiter: ",",
       quoteChar: '"',
+      headerRows: [1],
+      lineTerminator: "\n",
     })
   })
 
@@ -84,6 +89,7 @@ describe("inferCsvDialect", () => {
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -96,6 +102,7 @@ describe("inferCsvDialect", () => {
     expect(dialect).toEqual({
       format: "csv",
       delimiter: "|",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -108,6 +115,7 @@ describe("inferCsvDialect", () => {
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ";",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -119,6 +127,7 @@ describe("inferCsvDialect", () => {
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
       format: "tsv",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -135,6 +144,7 @@ describe("inferCsvDialect", () => {
       format: "csv",
       delimiter: ",",
       quoteChar: '"',
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -151,6 +161,7 @@ describe("inferCsvDialect", () => {
       format: "csv",
       delimiter: ",",
       quoteChar: "'",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -185,6 +196,7 @@ describe("inferCsvDialect", () => {
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
+      headerRows: [1],
       lineTerminator: "\r\n",
     })
   })
@@ -196,6 +208,9 @@ describe("inferCsvDialect", () => {
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
+      delimiter: ",",
+      headerRows: false,
+      lineTerminator: "\n",
     })
   })
 
@@ -206,6 +221,78 @@ describe("inferCsvDialect", () => {
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
+      delimiter: ",",
+      lineTerminator: "\n",
+    })
+  })
+
+  describe("Header Detection", () => {
+    it("should detect header row in CSV with mixed types", async () => {
+      const path = await writeTempFile(
+        "id,name,age\n1,Alice,25\n2,Bob,30\n3,Charlie,35",
+      )
+      const dialect = await inferCsvDialect({ data: path })
+
+      expect(dialect).toEqual({
+        format: "csv",
+        delimiter: ",",
+        headerRows: [1],
+        lineTerminator: "\n",
+      })
+    })
+
+    it("should detect header after preamble rows", async () => {
+      const path = await writeTempFile(
+        "# Comment line 1\n# Comment line 2\nid,name,age\n1,Alice,25\n2,Bob,30",
+      )
+      const dialect = await inferCsvDialect({ data: path })
+
+      expect(dialect).toEqual({
+        format: "csv",
+        delimiter: ",",
+        headerRows: [3],
+        lineTerminator: "\n",
+      })
+    })
+
+    it("should not detect header when first row is numeric", async () => {
+      const path = await writeTempFile("1,2,3\n4,5,6\n7,8,9")
+      const dialect = await inferCsvDialect({ data: path })
+
+      expect(dialect).toEqual({
+        format: "csv",
+        delimiter: ",",
+        headerRows: false,
+        lineTerminator: "\n",
+      })
+    })
+
+    it("should detect header with underscores and mixed case", async () => {
+      const path = await writeTempFile(
+        "user_id,User_Name,EmailAddress\n1,alice,alice@example.com\n2,bob,bob@example.com",
+      )
+      const dialect = await inferCsvDialect({ data: path })
+
+      expect(dialect).toEqual({
+        format: "csv",
+        delimiter: ",",
+        headerRows: [1],
+        lineTerminator: "\n",
+      })
+    })
+
+    it("should not detect header when first row has data-like values", async () => {
+      const path = await writeTempFile(
+        "blsrpxedd,37257,695.80,false,1927-11-07T01:03:54Z\nzmvpq03o4,68694,337.73,false,1927-04-02T12:37:52Z\niw1fm3k9n,52019,988.74,false,2009-02-22T05:50:15Z",
+      )
+      const dialect = await inferCsvDialect({ data: path })
+
+      expect(dialect).toEqual({
+        format: "csv",
+        delimiter: ",",
+        headerRows: false,
+        lineTerminator: "\n",
+      })
     })
   })
 })

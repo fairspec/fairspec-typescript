@@ -1,10 +1,8 @@
-import { text } from "node:stream/consumers"
+import { buffer } from "node:stream/consumers"
 import { loadFileStream } from "@fairspec/dataset"
 import type { CsvDialect, Resource, TsvDialect } from "@fairspec/metadata"
 import { getDataPath } from "@fairspec/metadata"
-import { default as CsvSnifferFactory } from "csv-sniffer"
-
-const DELIMITERS = [",", ";", ":", "|", "\t", "^", "*", "&"]
+import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 
 export async function inferCsvDialect(
   resource: Resource,
@@ -23,39 +21,62 @@ export async function inferCsvDialect(
     maxBytes: sampleBytes,
   })
 
-  const sample = await text(stream)
-  const result = sniffSample(sample, DELIMITERS)
+  const sampleBuffer = await buffer(stream)
+  const bytes = new Uint8Array(sampleBuffer)
 
-  let dialect: CsvDialect | TsvDialect = { format: "csv" }
+  const sniffer = new Sniffer()
+  let sniffResult: ReturnType<typeof sniffer.sniffBytes>
 
-  if (result?.delimiter) {
-    if (result.delimiter === "\t") {
-      dialect = { format: "tsv" }
-    } else {
-      dialect.delimiter = result.delimiter
-    }
+  try {
+    sniffResult = sniffer.sniffBytes(bytes)
+  } catch {
+    const fallback: CsvDialect = { format: "csv" }
+    return fallback
   }
 
-  if (dialect.format === "csv") {
-    if (result?.quoteChar) {
-      dialect.quoteChar = result.quoteChar
-    }
+  if (!sniffResult) {
+    const fallback: CsvDialect = { format: "csv" }
+    return fallback
   }
 
-  if (result?.newlineStr) {
-    dialect.lineTerminator = result.newlineStr
+  const lt = sniffResult.dialect.lineTerminator
+  const lineTerminator = lt === "LF" ? "\n" : lt === "CRLF" ? "\r\n" : "\r"
+
+  const format = sniffResult.dialect.delimiter === 9 ? "tsv" : "csv"
+  let dialect: CsvDialect | TsvDialect
+
+  if (format === "csv") {
+    const csvDialect: CsvDialect = {
+      format: "csv",
+      delimiter: String.fromCharCode(sniffResult.dialect.delimiter),
+      lineTerminator,
+    }
+
+    if (sniffResult.dialect.quote.type === "Some") {
+      csvDialect.quoteChar = String.fromCharCode(sniffResult.dialect.quote.char)
+    }
+
+    if (sniffResult.dialect.header.hasHeaderRow) {
+      csvDialect.headerRows = [sniffResult.dialect.header.numPreambleRows + 1]
+    } else if (sniffResult.numFields > 0) {
+      csvDialect.headerRows = false
+    }
+
+    dialect = csvDialect
+  } else {
+    const tsvDialect: TsvDialect = {
+      format: "tsv",
+      lineTerminator,
+    }
+
+    if (sniffResult.dialect.header.hasHeaderRow) {
+      tsvDialect.headerRows = [sniffResult.dialect.header.numPreambleRows + 1]
+    } else if (sniffResult.numFields > 0) {
+      tsvDialect.headerRows = false
+    }
+
+    dialect = tsvDialect
   }
 
   return dialect
-}
-
-function sniffSample(sample: string, delimiters: string[]) {
-  try {
-    const CsvSniffer = CsvSnifferFactory()
-    const sniffer = new CsvSniffer(delimiters)
-    const result = sniffer.sniff(sample)
-    return result
-  } catch {
-    return undefined
-  }
 }

@@ -6,6 +6,7 @@ import type {
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
+import { inferXlsxDialect } from "./actions/dialect/infer.ts"
 import { loadXlsxTable } from "./actions/table/load.ts"
 import { saveXlsxTable } from "./actions/table/save.ts"
 
@@ -30,6 +31,6 @@ export class XlsxPlugin implements TablePlugin {
     const dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
     if (!dialect) return undefined
 
-    return { format: dialect.format }
+    return await inferXlsxDialect(resource)
   }
 }

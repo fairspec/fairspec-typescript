@@ -35,7 +35,7 @@
     "type": "tsc --noEmit"
   },
   "dependencies": {
-    "@bomb.sh/tab": "^0.0.11",
+    "@bomb.sh/tab": "^0.0.12",
     "@commander-js/extra-typings": "^14.0.0",
     "@fairspec/library": "workspace:*",
     "commander": "^14.0.0",

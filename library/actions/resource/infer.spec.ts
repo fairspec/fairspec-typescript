@@ -25,6 +25,7 @@ describe("inferResource", () => {
     expect(target.dialect).toEqual({
       format: "csv",
       delimiter: ",",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })

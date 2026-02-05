@@ -12,6 +12,7 @@ describe("inferDialect", () => {
     expect(dialect).toEqual<CsvDialect>({
       format: "csv",
       delimiter: ",",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -23,6 +24,7 @@ describe("inferDialect", () => {
     const dialect = await inferDialect(resource)
     expect(dialect).toEqual({
       format: "tsv",
+      headerRows: [1],
       lineTerminator: "\n",
     })
   })
@@ -32,7 +34,10 @@ describe("inferDialect", () => {
     const resource: Resource = { data: path, dialect: { format: "json" } }
 
     const dialect = await inferDialect(resource)
-    expect(dialect).toEqual({ format: "json" })
+    expect(dialect).toEqual({
+      format: "json",
+      rowType: "object",
+    })
   })
 
   it("should return undefined for inline data", async () => {

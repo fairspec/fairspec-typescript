@@ -10,6 +10,7 @@ import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { read, utils } from "xlsx"
+import { inferXlsxDialect } from "../dialect/infer.ts"
 
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation
@@ -26,6 +27,10 @@ export async function loadXlsxTable(
   let dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
   if (!dialect) {
     throw new Error("Resource data is not compatible")
+  }
+
+  if (!resource.dialect) {
+    dialect = await inferXlsxDialect({ ...resource, data: paths[0] })
   }
 
   const tables: Table[] = []

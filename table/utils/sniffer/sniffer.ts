@@ -77,6 +77,60 @@ export class Sniffer {
     return this.buildMetadata(bytes, dialect)
   }
 
+  sniffRows(rows: unknown[][]): Metadata {
+    const csvString = this.rowsToCSV(rows)
+    const bytes = new TextEncoder().encode(csvString)
+    return this.sniffBytes(bytes)
+  }
+
+  private valueToString(value: unknown): string {
+    if (value === null || value === undefined) {
+      return ""
+    }
+    if (typeof value === "string") {
+      return value
+    }
+    if (typeof value === "number" || typeof value === "boolean") {
+      return String(value)
+    }
+    if (value instanceof Date) {
+      return value.toISOString()
+    }
+    if (typeof value === "object") {
+      return JSON.stringify(value)
+    }
+    return String(value)
+  }
+
+  private escapeField(value: string): string {
+    const needsQuoting = /[,"\n\r]/.test(value)
+
+    if (!needsQuoting) {
+      return value
+    }
+
+    const escaped = value.replace(/"/g, '""')
+    return `"${escaped}"`
+  }
+
+  private rowsToCSV(rows: unknown[][]): string {
+    if (rows.length === 0) {
+      return ""
+    }
+
+    const lines: string[] = []
+
+    for (const row of rows) {
+      const values = row.map(value => {
+        const stringValue = this.valueToString(value)
+        return this.escapeField(stringValue)
+      })
+      lines.push(values.join(","))
+    }
+
+    return lines.join("\n")
+  }
+
   private skipBom(bytes: Uint8Array): Uint8Array {
     if (
       bytes.length >= 3 &&

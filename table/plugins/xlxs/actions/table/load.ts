@@ -29,7 +29,8 @@ export async function loadXlsxTable(
     throw new Error("Resource data is not compatible")
   }
 
-  if (!resource.dialect) {
+  // TODO: Consider inferring all the missing dialect properties
+  if (!dialect || Object.keys(dialect).length <= 1) {
     dialect = await inferXlsxDialect({ ...resource, data: paths[0] })
   }
 

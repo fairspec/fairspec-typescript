@@ -131,6 +131,21 @@ describe("loadCsvTable", () => {
     ])
   })
 
+  it("should infer headerRows when partial dialect is provided", async () => {
+    const path = await writeTempFile("1,100\n2,200\n3,300")
+    const table = await loadCsvTable({
+      data: path,
+      dialect: { format: "csv" },
+    })
+
+    const records = (await table.collect()).toRecords()
+    expect(records).toEqual([
+      { column1: 1, column2: 100 },
+      { column1: 2, column2: 200 },
+      { column1: 3, column2: 300 },
+    ])
+  })
+
   it("should handle custom line terminator", async () => {
     const path = await writeTempFile("id,name|1,alice|2,bob")
     const table = await loadCsvTable({

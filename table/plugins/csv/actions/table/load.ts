@@ -32,7 +32,8 @@ export async function loadCsvTable(
     throw new Error("Resource data is not compatible")
   }
 
-  if (!resource.dialect) {
+  // TODO: Consider inferring all the missing dialect properties
+  if (!dialect || Object.keys(dialect).length <= 1) {
     dialect = await inferCsvDialect({ ...resource, data: paths[0] }, options)
   }
 

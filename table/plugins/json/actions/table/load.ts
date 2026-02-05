@@ -9,27 +9,32 @@ import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
 import { getSupportedDialect } from "@fairspec/metadata"
+import { inferJsonDialect } from "../dialect/infer.ts"
 
 export async function loadJsonTable(
   resource: Resource,
   options?: LoadTableOptions,
 ) {
-
   let dialect = await getSupportedDialect(resource, ["json", "jsonl"])
   if (!dialect) {
     throw new Error("Resource data is not compatible")
   }
-
-  const isLines = dialect?.format === "jsonl"
-  const isDefault = Object.keys(dialect ?? {})
-    .filter(key => !['type', 'title', 'description'].includes(key)).length === 0
-
 
   const maxBytes = dialect?.format === "jsonl" ? options?.previewBytes : undefined
   const paths = await prefetchFiles(resource, {maxBytes})
   if (!paths.length) {
     throw new Error("Resource data is not defined")
   }
+
+  // TODO: Consider inferring all the missing dialect properties
+  if (!dialect || Object.keys(dialect).length <= 1) {
+    dialect = await inferJsonDialect({ ...resource, data: paths[0] })
+  }
+
+  const isLines = dialect?.format === "jsonl"
+  const isDefault = Object.keys(dialect ?? {})
+    .filter(key => !['type', 'title', 'description'].includes(key)).length === 0
+
 
   const tables: Table[] = []
   for (const path of paths) {

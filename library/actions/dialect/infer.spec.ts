@@ -34,7 +34,10 @@ describe("inferDialect", () => {
     const resource: Resource = { data: path, dialect: { format: "json" } }
 
     const dialect = await inferDialect(resource)
-    expect(dialect).toEqual({ format: "json" })
+    expect(dialect).toEqual({
+      format: "json",
+      rowType: "object",
+    })
   })
 
   it("should return undefined for inline data", async () => {

@@ -6,6 +6,7 @@ import type {
   SaveTableOptions,
   TablePlugin,
 } from "../../plugin.ts"
+import { inferJsonDialect } from "./actions/dialect/infer.ts"
 import { loadJsonTable } from "./actions/table/load.ts"
 import { saveJsonTable } from "./actions/table/save.ts"
 
@@ -27,9 +28,6 @@ export class JsonPlugin implements TablePlugin {
   }
 
   async inferDialect(resource: Resource) {
-    const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
-    if (!dialect) return undefined
-
-    return { format: dialect.format }
+    return await inferJsonDialect(resource)
   }
 }

@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## General
+
 - Prioritize using LSP capabilities if possible
 - Run `pnpm run lint` to lint the code using Biome
 - Run `pnpm run format` to auto-fix formatting issues with Biome

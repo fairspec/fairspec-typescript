@@ -3,18 +3,15 @@ export { inspectTable } from "./actions/table/inspect.ts"
 export { normalizeTable } from "./actions/table/normalize.ts"
 export { queryTable } from "./actions/table/query.ts"
 export { inferTableSchemaFromTable } from "./actions/tableSchema/infer.ts"
-
+export { DenormalizeColumnOptions } from "./models/column.ts"
 export type { Frame } from "./models/frame.ts"
-export type {
+export {
   InferTableSchemaOptions,
   TableSchemaOptions,
 } from "./models/schema.ts"
 export type { Table } from "./models/table.ts"
-export type {
-  LoadTableOptions,
-  SaveTableOptions,
-  TablePlugin,
-} from "./plugin.ts"
+export { LoadTableOptions, SaveTableOptions } from "./models/table.ts"
+export type { TablePlugin } from "./plugin.ts"
 
 export {
   ArrowPlugin,

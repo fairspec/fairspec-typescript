@@ -4,15 +4,8 @@ import type {
   MetadataPlugin,
   Resource,
 } from "@fairspec/metadata"
-
-export type SaveDatasetOptions = {
-  target: string
-  withRemote?: boolean
-}
-
-export type InferDialectOptions = {
-  sampleBytes?: number
-}
+import type { SaveDatasetOptions } from "./models/dataset.ts"
+import type { InferDialectOptions } from "./models/dialect.ts"
 
 export interface DatasetPlugin extends MetadataPlugin {
   loadDataset?(source: string): Promise<Dataset | undefined>

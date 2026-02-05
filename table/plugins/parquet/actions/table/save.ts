@@ -1,8 +1,7 @@
 import { assertLocalPathVacant } from "@fairspec/dataset"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
-import type { Table } from "../../../../models/table.ts"
-import type { SaveTableOptions } from "../../../../plugin.ts"
+import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 
 export async function saveParquetTable(
   table: Table,

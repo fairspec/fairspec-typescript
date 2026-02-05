@@ -3,8 +3,7 @@ import { getSupportedDialect } from "@fairspec/metadata"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import { getHeaderRows } from "../../../../helpers/dialect.ts"
-import type { Table } from "../../../../models/table.ts"
-import type { SaveTableOptions } from "../../../../plugin.ts"
+import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 
 export async function saveCsvTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options

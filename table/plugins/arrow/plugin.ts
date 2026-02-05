@@ -1,11 +1,11 @@
 import type { Resource } from "@fairspec/metadata"
 import { getSupportedDialect } from "@fairspec/metadata"
-import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
   SaveTableOptions,
-  TablePlugin,
-} from "../../plugin.ts"
+  Table,
+} from "../../models/table.ts"
+import type { TablePlugin } from "../../plugin.ts"
 import { loadArrowTable } from "./actions/table/load.ts"
 import { saveArrowTable } from "./actions/table/save.ts"
 

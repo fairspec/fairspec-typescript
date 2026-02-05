@@ -1,7 +1,9 @@
 import type { Column } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import type { ColumnMapping } from "../../models/column.ts"
-import type { DenormalizeColumnOptions } from "./denormalize.ts"
+import type {
+  ColumnMapping,
+  DenormalizeColumnOptions,
+} from "../../models/column.ts"
 
 export function desubstituteColumn(
   mapping: ColumnMapping,

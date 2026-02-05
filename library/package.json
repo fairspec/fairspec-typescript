@@ -28,6 +28,7 @@
     "@fairspec/dataset": "workspace:*",
     "@fairspec/extension": "workspace:*",
     "@fairspec/metadata": "workspace:*",
+    "@fairspec/sniffer": "workspace:*",
     "@fairspec/table": "workspace:*",
     "json-schema-it": "^1.2.23",
     "p-all": "^5.0.1"

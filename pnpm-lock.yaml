@@ -148,6 +148,9 @@ importers:
       '@fairspec/metadata':
         specifier: workspace:*
         version: link:../metadata
+      '@fairspec/sniffer':
+        specifier: workspace:*
+        version: link:../sniffer
       '@fairspec/table':
         specifier: workspace:*
         version: link:../table

@@ -36,6 +36,7 @@ function calculateRangeScore(counts: number[], modalCount: number): number {
   const range = max - min
 
   if (range === 0) return 1
+  if (modalCount <= 0) return 0
 
   const normalizedRange = range / modalCount
   return 1 / (1 + normalizedRange)

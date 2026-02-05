@@ -148,9 +148,6 @@ importers:
       '@fairspec/metadata':
         specifier: workspace:*
         version: link:../metadata
-      '@fairspec/sniffer':
-        specifier: workspace:*
-        version: link:../sniffer
       '@fairspec/table':
         specifier: workspace:*
         version: link:../table
@@ -181,8 +178,6 @@ importers:
       zod:
         specifier: ^4.2.1
         version: 4.2.1
-
-  sniffer: {}
 
   table:
     dependencies:
@@ -223,8 +218,8 @@ importers:
   terminal:
     dependencies:
       '@bomb.sh/tab':
-        specifier: ^0.0.11
-        version: 0.0.11(commander@14.0.2)
+        specifier: ^0.0.12
+        version: 0.0.12(commander@14.0.2)
       '@commander-js/extra-typings':
         specifier: ^14.0.0
         version: 14.0.0(commander@14.0.2)
@@ -410,8 +405,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@bomb.sh/tab@0.0.11':
-    resolution: {integrity: sha512-RSqyreeicYBALcMaNxIUJTBknftXsyW45VRq5gKDNwKroh0Re5SDoWwXZaphb+OTEzVdpm/BA8Uq6y0P+AtVYw==}
+  '@bomb.sh/tab@0.0.12':
+    resolution: {integrity: sha512-dYRwg4MqfHR5/BcTy285XOGRhjQFmNpaJBZ0tl2oU+RY595MQ5ApTF6j3OvauPAooHL6cfoOZMySQrOQztT8RQ==}
     hasBin: true
     peerDependencies:
       cac: ^6.7.14
@@ -4459,7 +4454,7 @@ snapshots:
   '@biomejs/cli-win32-x64@2.3.11':
     optional: true
 
-  '@bomb.sh/tab@0.0.11(commander@14.0.2)':
+  '@bomb.sh/tab@0.0.12(commander@14.0.2)':
     optionalDependencies:
       commander: 14.0.2
 

@@ -17,7 +17,6 @@ const PACKAGES = {
   "@fairspec/dataset": "../dataset",
   "@fairspec/extension": "../extension",
   "@fairspec/metadata": "../metadata",
-  "@fairspec/sniffer": "../sniffer",
   "@fairspec/table": "../table",
 }
 

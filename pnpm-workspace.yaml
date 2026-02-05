@@ -5,7 +5,6 @@ packages:
   - fairspec
   - library
   - metadata
-  - sniffer
   - table
   - terminal
   - website

@@ -1,7 +1,6 @@
 export * from "@fairspec/dataset"
 export * from "@fairspec/extension"
 export * from "@fairspec/metadata"
-export * from "@fairspec/sniffer"
 export * from "@fairspec/table"
 
 export { loadData } from "./actions/data/load.ts"

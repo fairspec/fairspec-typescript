@@ -1,8 +1,8 @@
 import type { FairspecError, Resource } from "@fairspec/metadata"
 import { createReport, resolveTableSchema } from "@fairspec/metadata"
 import { inspectTable } from "@fairspec/table"
-import type { ValidateTableOptions } from "../../models/table.ts"
 import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
+import type { ValidateTableOptions } from "../../models/table.ts"
 import { loadTable } from "./load.ts"
 
 export async function validateTable(

@@ -30,6 +30,6 @@ export class SqlitePlugin implements TablePlugin {
     const dialect = await getSupportedDialect(resource, ["sqlite"])
     if (!dialect) return undefined
 
-    return { format: "sqlite" }
+    return { format: dialect.format }
   }
 }

@@ -1,3 +1,4 @@
+import type { Resource } from "@fairspec/library"
 import { describe, expect, it } from "vitest"
 import { validateTableTool } from "./validate.ts"
 
@@ -11,7 +12,7 @@ describe("validateTableTool", () => {
   })
 
   it("validates a valid table resource", async () => {
-    const validResource = {
+    const validResource: Resource = {
       data: [
         { name: "Alice", age: 30 },
         { name: "Bob", age: 25 },
@@ -39,7 +40,7 @@ describe("validateTableTool", () => {
   })
 
   it("detects invalid data in table", async () => {
-    const invalidResource = {
+    const invalidResource: Resource = {
       data: [
         { name: "Alice", age: "not a number" },
         { name: "Bob", age: 25 },
@@ -68,7 +69,7 @@ describe("validateTableTool", () => {
   })
 
   it("respects maxErrors option", async () => {
-    const invalidResource = {
+    const invalidResource: Resource = {
       data: [
         { age: "invalid1" },
         { age: "invalid2" },
@@ -99,7 +100,7 @@ describe("validateTableTool", () => {
   })
 
   it("infers schema when not provided", async () => {
-    const resourceWithoutSchema = {
+    const resourceWithoutSchema: Resource = {
       data: [
         { name: "Alice", age: 30 },
         { name: "Bob", age: 25 },
@@ -121,7 +122,7 @@ describe("validateTableTool", () => {
   })
 
   it("skips inference when noInfer is true", async () => {
-    const resourceWithoutSchema = {
+    const resourceWithoutSchema: Resource = {
       data: [{ name: "Alice" }],
     }
 

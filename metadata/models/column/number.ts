@@ -3,7 +3,7 @@ import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
 export const BaseNumberColumnProperty = BaseColumnProperty.extend({
   type: z.literal("number"),
-  format: z.undefined().optional(),
+  format: z.never().optional(),
 
   enum: z
     .array(z.number())
@@ -94,7 +94,7 @@ export const BaseNumberColumnProperty = BaseColumnProperty.extend({
 })
 
 export const NumberColumnProperty = BaseNumberColumnProperty.extend({
-  format: z.undefined().optional(),
+  format: z.never().optional(),
 })
 
 export const NumberColumn = BaseColumn.extend({

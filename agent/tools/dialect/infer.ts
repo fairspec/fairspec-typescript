@@ -17,8 +17,11 @@ export const inferDialectTool = createTool({
       "Dialect inference options",
     ),
   }),
-  outputSchema: Dialect.optional(),
+  outputSchema: z.object({
+    dialect: Dialect.optional(),
+  }),
   execute: async input => {
-    return await inferDialect(input.resource, input.options)
+    const dialect = await inferDialect(input.resource, input.options)
+    return { dialect }
   },
 })

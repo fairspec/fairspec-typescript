@@ -85,7 +85,7 @@ export const BaseIntegerColumnProperty = BaseColumnProperty.extend({
 })
 
 export const IntegerColumnProperty = BaseIntegerColumnProperty.extend({
-  format: z.undefined().optional(),
+  format: z.never().optional(),
 })
 
 export const IntegerColumn = BaseColumn.extend({

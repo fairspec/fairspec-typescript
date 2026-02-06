@@ -63,7 +63,7 @@ export const BaseObjectColumnProperty = BaseColumnProperty.extend({
 })
 
 export const ObjectColumnProperty = BaseObjectColumnProperty.extend({
-  format: z.undefined().optional(),
+  format: z.never().optional(),
 })
 
 export const ObjectColumn = BaseColumn.extend({

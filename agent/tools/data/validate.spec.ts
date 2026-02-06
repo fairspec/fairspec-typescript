@@ -34,8 +34,8 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects invalid data", async () => {
@@ -60,14 +60,14 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
-    expect(result.errors).toContainEqual({
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeGreaterThan(0)
+    expect(result.report.errors).toContainEqual({
       type: "data",
       jsonPointer: "/name",
       message: "must be string",
     })
-    expect(result.errors).toContainEqual({
+    expect(result.report.errors).toContainEqual({
       type: "data",
       jsonPointer: "/count",
       message: "must be integer",
@@ -103,8 +103,8 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects invalid data from file path", async () => {
@@ -135,8 +135,8 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeGreaterThan(0)
   })
 
   it("validates data with nested objects", async () => {
@@ -170,8 +170,8 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("validates data with array types", async () => {
@@ -205,8 +205,8 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("returns error when no data but schema expected", async () => {
@@ -225,9 +225,9 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors).toHaveLength(1)
-    expect(result.errors).toContainEqual({
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors).toHaveLength(1)
+    expect(result.report.errors).toContainEqual({
       type: "resource/type",
       expectedResourceType: "data",
     })
@@ -256,8 +256,8 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeGreaterThan(0)
   })
 
   it("validates array data against schema", async () => {
@@ -288,7 +288,7 @@ describe("validateDataTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 })

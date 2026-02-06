@@ -9,8 +9,11 @@ export const validateDataTool = createTool({
   inputSchema: z.object({
     resource: Resource.describe("The data resource to validate"),
   }),
-  outputSchema: Report,
+  outputSchema: z.object({
+    report: Report,
+  }),
   execute: async input => {
-    return await validateData(input.resource)
+    const report = await validateData(input.resource)
+    return { report }
   },
 })

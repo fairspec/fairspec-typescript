@@ -12,7 +12,9 @@ export const queryTableTool = createTool({
       .string()
       .describe("SQL query to execute (use 'self' as table name)"),
   }),
-  outputSchema: z.array(z.record(z.string(), z.unknown())),
+  outputSchema: z.object({
+    records: z.array(z.record(z.string(), z.unknown())),
+  }),
   execute: async input => {
     const table = await loadTable(input.resource, {})
     if (!table) {
@@ -21,6 +23,7 @@ export const queryTableTool = createTool({
 
     const lazyFrame = queryTable(table, input.query)
     const frame = await lazyFrame.collect()
-    return frame.toRecords()
+    const records = frame.toRecords()
+    return { records }
   },
 })

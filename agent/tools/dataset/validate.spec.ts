@@ -41,8 +41,8 @@ describe("validateDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects invalid resource data", async () => {
@@ -74,9 +74,9 @@ describe("validateDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors).toHaveLength(1)
-    expect(result.errors).toContainEqual({
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors).toHaveLength(1)
+    expect(result.report.errors).toContainEqual({
       type: "cell/type",
       columnName: "id",
       columnType: "integer",
@@ -122,8 +122,8 @@ describe("validateDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors).toHaveLength(2)
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors).toHaveLength(2)
   })
 
   it("validates dataset from file path", async () => {
@@ -158,8 +158,8 @@ describe("validateDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("validates empty dataset", async () => {
@@ -177,8 +177,8 @@ describe("validateDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("validates dataset with multiple valid resources", async () => {
@@ -223,8 +223,8 @@ describe("validateDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects schema mismatch in resource", async () => {
@@ -256,7 +256,7 @@ describe("validateDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 })

@@ -33,8 +33,8 @@ describe("validateDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects invalid data schema", async () => {
@@ -55,8 +55,8 @@ describe("validateDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeGreaterThan(0)
   })
 
   it("validates data schema from file path", async () => {
@@ -82,8 +82,8 @@ describe("validateDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects invalid data schema from file path", async () => {
@@ -109,8 +109,8 @@ describe("validateDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeGreaterThan(0)
   })
 
   it("validates minimal valid descriptor", async () => {
@@ -129,8 +129,8 @@ describe("validateDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("validates schema with nested objects", async () => {
@@ -163,8 +163,8 @@ describe("validateDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("validates schema with array types", async () => {
@@ -192,7 +192,7 @@ describe("validateDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 })

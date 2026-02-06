@@ -12,6 +12,7 @@ import { inferTableSchemaTool } from "./tools/tableSchema/infer.ts"
 import { validateTableSchemaTool } from "./tools/tableSchema/validate.ts"
 
 export const server = new MCPServer({
+  id: "fairspec",
   name: "fairspec",
   version: packageJson.version,
   tools: {

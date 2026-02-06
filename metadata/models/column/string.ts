@@ -60,7 +60,8 @@ export const BaseStringColumnProperty = BaseColumnProperty.extend({
 })
 
 export const StringColumnProperty = BaseStringColumnProperty.extend({
-  format: z.undefined().optional(),
+  // TODO: Fix this hack
+  format: z.literal("").optional(),
 })
 
 export const StringColumn = BaseColumn.extend({

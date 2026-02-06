@@ -11,8 +11,11 @@ export const validateDatasetTool = createTool({
       .union([Dataset, z.string()])
       .describe("The dataset to validate (dataset object or file path)"),
   }),
-  outputSchema: Report,
+  outputSchema: z.object({
+    report: Report,
+  }),
   execute: async input => {
-    return await validateDataset(input.source)
+    const report = await validateDataset(input.source)
+    return { report }
   },
 })

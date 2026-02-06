@@ -3,7 +3,8 @@ import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
 export const UnknownColumnProperty = BaseColumnProperty.extend({
   type: z.literal("null").optional(),
-  format: z.undefined().optional(),
+  // TODO: Fix this hack
+  format: z.literal("").optional(),
 
   enum: z
     .array(z.array(z.unknown()))

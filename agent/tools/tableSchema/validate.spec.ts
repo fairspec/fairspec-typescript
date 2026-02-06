@@ -30,8 +30,8 @@ describe("validateTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects invalid table schema", async () => {
@@ -53,8 +53,8 @@ describe("validateTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeGreaterThan(0)
   })
 
   it("validates table schema from file path", async () => {
@@ -79,8 +79,8 @@ describe("validateTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects invalid table schema from file path", async () => {
@@ -105,8 +105,8 @@ describe("validateTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeGreaterThan(0)
   })
 
   it("validates minimal valid descriptor", async () => {
@@ -124,8 +124,8 @@ describe("validateTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("validates schema with field constraints", async () => {
@@ -158,7 +158,7 @@ describe("validateTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 })

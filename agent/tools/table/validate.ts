@@ -15,8 +15,11 @@ export const validateTableTool = createTool({
     resource: Resource.describe("The table resource to validate"),
     options: ValidateTableOptions.optional().describe("Validation options"),
   }),
-  outputSchema: Report,
+  outputSchema: z.object({
+    report: Report,
+  }),
   execute: async input => {
-    return await validateTable(input.resource, input.options)
+    const report = await validateTable(input.resource, input.options)
+    return { report }
   },
 })

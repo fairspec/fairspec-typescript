@@ -13,8 +13,11 @@ export const validateTableSchemaTool = createTool({
         "The table schema to validate (descriptor object or file path)",
       ),
   }),
-  outputSchema: Report,
+  outputSchema: z.object({
+    report: Report,
+  }),
   execute: async input => {
-    return await validateTableSchema(input.source)
+    const report = await validateTableSchema(input.source)
+    return { report }
   },
 })

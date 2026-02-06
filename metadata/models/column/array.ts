@@ -5,7 +5,8 @@ import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
 export const ArrayColumnProperty = BaseColumnProperty.extend({
   type: z.literal("array"),
-  format: z.undefined().optional(),
+  // TODO: Fix this hack
+  format: z.literal("").optional(),
 
   enum: z
     .array(z.unknown())

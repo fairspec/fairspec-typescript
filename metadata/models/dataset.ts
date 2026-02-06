@@ -13,4 +13,21 @@ export const Dataset = Datacite.extend({
     ),
 })
 
+export const RenderDatasetOptions = z.object({
+  format: z.string(),
+})
+
+export const ConvertDatasetToOptions = z.object({
+  format: z.string(),
+})
+
+export const ConvertDatasetFromOptions = z.object({
+  format: z.string(),
+})
+
 export type Dataset = z.infer<typeof Dataset>
+export type RenderDatasetOptions = z.infer<typeof RenderDatasetOptions>
+export type ConvertDatasetToOptions = z.infer<typeof ConvertDatasetToOptions>
+export type ConvertDatasetFromOptions = z.infer<
+  typeof ConvertDatasetFromOptions
+>

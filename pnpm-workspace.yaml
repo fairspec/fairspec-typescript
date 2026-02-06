@@ -1,5 +1,6 @@
 dangerouslyAllowAllBuilds: true
 packages:
+  - agent
   - dataset
   - extension
   - fairspec

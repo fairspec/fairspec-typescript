@@ -88,8 +88,13 @@ export {
   ResourceDataValue,
 } from "./models/data.ts"
 export { Datacite } from "./models/datacite/datacite.ts"
-export { DataSchema } from "./models/dataSchema.ts"
-export { Dataset } from "./models/dataset.ts"
+export { DataSchema, RenderDataSchemaOptions } from "./models/dataSchema.ts"
+export {
+  ConvertDatasetFromOptions,
+  ConvertDatasetToOptions,
+  Dataset,
+  RenderDatasetOptions,
+} from "./models/dataset.ts"
 export { Descriptor } from "./models/descriptor.ts"
 export { ArrowDialect } from "./models/dialect/arrow.ts"
 export { CsvDialect } from "./models/dialect/csv.ts"
@@ -149,5 +154,10 @@ export { ExternalPath, InternalPath, Path } from "./models/path.ts"
 export { Profile } from "./models/profile.ts"
 export { Report } from "./models/report.ts"
 export { Resource } from "./models/resource.ts"
-export { TableSchema } from "./models/tableSchema.ts"
+export {
+  ConvertTableSchemaFromOptions,
+  ConvertTableSchemaToOptions,
+  RenderTableSchemaOptions,
+  TableSchema,
+} from "./models/tableSchema.ts"
 export type { MetadataPlugin } from "./plugin.ts"

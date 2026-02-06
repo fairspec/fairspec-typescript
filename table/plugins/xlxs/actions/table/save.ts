@@ -3,8 +3,7 @@ import { getSupportedDialect } from "@fairspec/metadata"
 import { utils, write } from "xlsx"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
-import type { Table } from "../../../../models/table.ts"
-import type { SaveTableOptions } from "../../../../plugin.ts"
+import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation

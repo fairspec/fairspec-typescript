@@ -1,11 +1,11 @@
 import type { Resource } from "@fairspec/metadata"
 import { getSupportedDialect } from "@fairspec/metadata"
-import type { Table } from "../../models/table.ts"
 import type {
   LoadTableOptions,
   SaveTableOptions,
-  TablePlugin,
-} from "../../plugin.ts"
+  Table,
+} from "../../models/table.ts"
+import type { TablePlugin } from "../../plugin.ts"
 import { loadSqliteTable } from "./actions/table/load.ts"
 import { saveSqliteTable } from "./actions/table/save.ts"
 
@@ -30,6 +30,6 @@ export class SqlitePlugin implements TablePlugin {
     const dialect = await getSupportedDialect(resource, ["sqlite"])
     if (!dialect) return undefined
 
-    return { format: "sqlite" }
+    return { format: dialect.format }
   }
 }

@@ -37,6 +37,7 @@
   "dependencies": {
     "@bomb.sh/tab": "^0.0.12",
     "@commander-js/extra-typings": "^14.0.0",
+    "@fairspec/agent": "workspace:*",
     "@fairspec/library": "workspace:*",
     "commander": "^14.0.0",
     "exit-hook": "^4.0.0",

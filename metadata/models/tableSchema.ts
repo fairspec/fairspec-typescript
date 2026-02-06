@@ -66,4 +66,23 @@ export const TableSchema = z.object({
     .describe("An optional array of foreign key constraints"),
 })
 
+export const RenderTableSchemaOptions = z.object({
+  format: z.string(),
+})
+
+export const ConvertTableSchemaToOptions = z.object({
+  format: z.string(),
+})
+
+export const ConvertTableSchemaFromOptions = z.object({
+  format: z.string(),
+})
+
 export type TableSchema = z.infer<typeof TableSchema>
+export type RenderTableSchemaOptions = z.infer<typeof RenderTableSchemaOptions>
+export type ConvertTableSchemaToOptions = z.infer<
+  typeof ConvertTableSchemaToOptions
+>
+export type ConvertTableSchemaFromOptions = z.infer<
+  typeof ConvertTableSchemaFromOptions
+>

@@ -12,12 +12,10 @@ export { getTempFilePath, writeTempFile } from "./actions/file/temp.ts"
 export { validateFile } from "./actions/file/validate.ts"
 export { getTempFolderPath } from "./actions/folder/temp.ts"
 export { loadFileStream } from "./actions/stream/load.ts"
+export { SaveDatasetOptions } from "./models/dataset.ts"
 
-export type {
-  DatasetPlugin,
-  InferDialectOptions,
-  SaveDatasetOptions,
-} from "./plugin.ts"
+export { InferDialectOptions } from "./models/dialect.ts"
+export type { DatasetPlugin } from "./plugin.ts"
 export {
   CkanPlugin,
   loadDatasetFromCkan,

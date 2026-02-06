@@ -30,7 +30,8 @@
     "@fairspec/metadata": "workspace:*",
     "@fairspec/table": "workspace:*",
     "json-schema-it": "^1.2.23",
-    "p-all": "^5.0.1"
+    "p-all": "^5.0.1",
+    "zod": "^4.2.1"
   },
   "scripts": {
     "build": "tsc",

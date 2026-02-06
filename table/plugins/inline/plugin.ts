@@ -1,6 +1,7 @@
 import type { Resource } from "@fairspec/metadata"
 import { getDataRecords } from "@fairspec/metadata"
-import type { LoadTableOptions, TablePlugin } from "../../plugin.ts"
+import type { LoadTableOptions } from "../../models/table.ts"
+import type { TablePlugin } from "../../plugin.ts"
 import { loadInlineTable } from "./actions/table/load.ts"
 
 export class InlinePlugin implements TablePlugin {

@@ -7,12 +7,10 @@ export async function saveDataset(
   options: SaveDatasetOptions,
 ) {
   for (const plugin of system.plugins) {
-    const result = await plugin.saveDataset?.(dataset, {
-      plugins: system.plugins,
-      ...options,
-    })
-
-    if (result) return result
+    const result = await plugin.saveDataset?.(dataset, options)
+    if (result) {
+      return result
+    }
   }
 
   throw new Error(`No plugin can save the dataset: ${options.target}`)

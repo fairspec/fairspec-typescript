@@ -12,6 +12,7 @@ import { inferDialectCommand } from "./commands/dialect/infer.ts"
 import { copyFileCommand } from "./commands/file/copy.ts"
 import { describeFileCommand } from "./commands/file/describe.ts"
 import { validateFileCommand } from "./commands/file/validate.ts"
+import { mcpCommand } from "./commands/general/mcp.ts"
 import { describeTableCommand } from "./commands/table/describe.ts"
 import { previewTableCommand } from "./commands/table/preview.ts"
 import { queryTableCommand } from "./commands/table/query.ts"
@@ -76,5 +77,6 @@ export const program = commander.program
   .addCommand(tableCommand.name("table"))
   .addCommand(dataCommand.name("data"))
   .addCommand(fileCommand.name("file"))
+  .addCommand(mcpCommand.name("mcp"))
 
 tab(program)

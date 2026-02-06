@@ -29,9 +29,9 @@ describe("inferDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.language).toBe("en")
-    expect(result.resources).toHaveLength(1)
-    expect(result.resources?.[0]?.tableSchema).toEqual({
+    expect(result.dataset.language).toBe("en")
+    expect(result.dataset.resources).toHaveLength(1)
+    expect(result.dataset.resources?.[0]?.tableSchema).toEqual({
       properties: {
         id: { type: "integer" },
         name: { type: "string" },
@@ -60,10 +60,10 @@ describe("inferDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.language).toBe("en")
-    expect(result.resources).toHaveLength(2)
-    expect(result.resources?.[0]?.tableSchema).toBeDefined()
-    expect(result.resources?.[1]?.tableSchema).toBeDefined()
+    expect(result.dataset.language).toBe("en")
+    expect(result.dataset.resources).toHaveLength(2)
+    expect(result.dataset.resources?.[0]?.tableSchema).toBeDefined()
+    expect(result.dataset.resources?.[1]?.tableSchema).toBeDefined()
   })
 
   it("infers dataset with inline data resources", async () => {
@@ -89,9 +89,9 @@ describe("inferDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.language).toBe("en")
-    expect(result.resources).toHaveLength(1)
-    expect(result.resources?.[0]?.tableSchema).toEqual({
+    expect(result.dataset.language).toBe("en")
+    expect(result.dataset.resources).toHaveLength(1)
+    expect(result.dataset.resources?.[0]?.tableSchema).toEqual({
       properties: {
         id: { type: "integer" },
         name: { type: "string" },
@@ -127,7 +127,7 @@ describe("inferDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.resources?.[0]?.tableSchema).toEqual({
+    expect(result.dataset.resources?.[0]?.tableSchema).toEqual({
       properties: {
         id: { type: "string" },
         name: { type: "string" },
@@ -150,7 +150,7 @@ describe("inferDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.resources).toHaveLength(0)
+    expect(result.dataset.resources).toHaveLength(0)
   })
 
   it("infers resource names when not provided", async () => {
@@ -173,8 +173,8 @@ describe("inferDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.resources?.[0]?.name).toBeDefined()
-    expect(result.resources?.[1]?.name).toBeDefined()
+    expect(result.dataset.resources?.[0]?.name).toBeDefined()
+    expect(result.dataset.resources?.[1]?.name).toBeDefined()
   })
 
   it("infers schemas for different data types", async () => {
@@ -199,7 +199,7 @@ describe("inferDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    const tableSchema = result.resources?.[0]?.tableSchema
+    const tableSchema = result.dataset.resources?.[0]?.tableSchema
     expect(tableSchema).toBeDefined()
     expect(typeof tableSchema).not.toBe("string")
     if (typeof tableSchema === "object" && tableSchema !== null) {
@@ -232,7 +232,7 @@ describe("inferDatasetTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.language).toBe("en")
-    expect(result.version).toBe("1.0.0")
+    expect(result.dataset.language).toBe("en")
+    expect(result.dataset.version).toBe("1.0.0")
   })
 })

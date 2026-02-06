@@ -27,7 +27,7 @@ describe("inferDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result).toEqual({
+    expect(result.schema).toEqual({
       type: "object",
       properties: {
         name: { type: "string" },
@@ -55,7 +55,7 @@ describe("inferDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result).toEqual({
+    expect(result.schema).toEqual({
       type: "array",
       items: {
         type: "object",
@@ -84,7 +84,7 @@ describe("inferDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result).toEqual({
+    expect(result.schema).toEqual({
       type: "object",
       properties: {
         name: { type: "string" },
@@ -115,7 +115,7 @@ describe("inferDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result).toMatchObject({
+    expect(result.schema).toMatchObject({
       type: "object",
       properties: {
         user: {
@@ -150,7 +150,7 @@ describe("inferDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result).toMatchObject({
+    expect(result.schema).toMatchObject({
       type: "object",
       properties: {
         id: { type: "integer" },
@@ -195,7 +195,7 @@ describe("inferDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result).toMatchObject({
+    expect(result.schema).toMatchObject({
       type: "object",
       properties: {
         users: {
@@ -219,7 +219,9 @@ describe("inferDataSchemaTool", () => {
       {},
     )
 
-    expect(result).toBeUndefined()
+    expect.assert(result)
+    expect.assert(!("error" in result))
+    expect(result.schema).toBeUndefined()
   })
 
   it("infers schema from different data types", async () => {
@@ -243,7 +245,7 @@ describe("inferDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result).toEqual({
+    expect(result.schema).toEqual({
       type: "object",
       properties: {
         string: { type: "string" },
@@ -270,7 +272,7 @@ describe("inferDataSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result).toEqual({
+    expect(result.schema).toEqual({
       type: "array",
       items: { type: "integer" },
     })

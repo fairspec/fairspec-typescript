@@ -9,8 +9,11 @@ export const inferDatasetTool = createTool({
   inputSchema: z.object({
     dataset: Dataset.describe("The dataset to infer metadata for"),
   }),
-  outputSchema: Dataset,
+  outputSchema: z.object({
+    dataset: Dataset,
+  }),
   execute: async input => {
-    return await inferDataset(input.dataset)
+    const dataset = await inferDataset(input.dataset)
+    return { dataset }
   },
 })

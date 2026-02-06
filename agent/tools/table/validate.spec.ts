@@ -35,8 +35,8 @@ describe("validateTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("detects invalid data in table", async () => {
@@ -63,9 +63,9 @@ describe("validateTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
-    expect(result.errors[0]?.type).toContain("cell")
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeGreaterThan(0)
+    expect(result.report.errors[0]?.type).toContain("cell")
   })
 
   it("respects maxErrors option", async () => {
@@ -95,8 +95,8 @@ describe("validateTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(false)
-    expect(result.errors.length).toBeLessThanOrEqual(2)
+    expect(result.report.valid).toBe(false)
+    expect(result.report.errors.length).toBeLessThanOrEqual(2)
   })
 
   it("infers schema when not provided", async () => {
@@ -117,8 +117,8 @@ describe("validateTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
-    expect(result.errors).toHaveLength(0)
+    expect(result.report.valid).toBe(true)
+    expect(result.report.errors).toHaveLength(0)
   })
 
   it("skips inference when noInfer is true", async () => {
@@ -137,6 +137,6 @@ describe("validateTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.valid).toBe(true)
+    expect(result.report.valid).toBe(true)
   })
 })

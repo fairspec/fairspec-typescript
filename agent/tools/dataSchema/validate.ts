@@ -11,8 +11,11 @@ export const validateDataSchemaTool = createTool({
       .union([Descriptor, z.string()])
       .describe("The data schema to validate (descriptor object or file path)"),
   }),
-  outputSchema: Report,
+  outputSchema: z.object({
+    report: Report,
+  }),
   execute: async input => {
-    return await validateDataSchema(input.source)
+    const report = await validateDataSchema(input.source)
+    return { report }
   },
 })

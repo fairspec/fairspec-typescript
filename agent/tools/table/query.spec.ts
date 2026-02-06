@@ -28,10 +28,10 @@ describe("queryTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(Array.isArray(result)).toBe(true)
-    expect(result.length).toBe(2)
-    expect(result).toContainEqual({ id: 2, name: "bob", age: 30 })
-    expect(result).toContainEqual({ id: 3, name: "carol", age: 28 })
+    expect(Array.isArray(result.records)).toBe(true)
+    expect(result.records.length).toBe(2)
+    expect(result.records).toContainEqual({ id: 2, name: "bob", age: 30 })
+    expect(result.records).toContainEqual({ id: 3, name: "carol", age: 28 })
   })
 
   it("queries table with column selection", async () => {
@@ -51,12 +51,12 @@ describe("queryTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(Array.isArray(result)).toBe(true)
-    expect(result.length).toBe(3)
-    expect(result[0]).toHaveProperty("name")
-    expect(result[0]).toHaveProperty("city")
-    expect(result[0]).not.toHaveProperty("id")
-    expect(result[0]).not.toHaveProperty("age")
+    expect(Array.isArray(result.records)).toBe(true)
+    expect(result.records.length).toBe(3)
+    expect(result.records[0]).toHaveProperty("name")
+    expect(result.records[0]).toHaveProperty("city")
+    expect(result.records[0]).not.toHaveProperty("id")
+    expect(result.records[0]).not.toHaveProperty("age")
   })
 
   it("queries table with ORDER BY clause", async () => {
@@ -75,11 +75,11 @@ describe("queryTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(Array.isArray(result)).toBe(true)
-    expect(result.length).toBe(3)
-    expect(result[0]).toMatchObject({ name: "bob", score: 90 })
-    expect(result[1]).toMatchObject({ name: "carol", score: 88 })
-    expect(result[2]).toMatchObject({ name: "alice", score: 85 })
+    expect(Array.isArray(result.records)).toBe(true)
+    expect(result.records.length).toBe(3)
+    expect(result.records[0]).toMatchObject({ name: "bob", score: 90 })
+    expect(result.records[1]).toMatchObject({ name: "carol", score: 88 })
+    expect(result.records[2]).toMatchObject({ name: "alice", score: 85 })
   })
 
   it("queries table with aggregation", async () => {
@@ -98,10 +98,10 @@ describe("queryTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(Array.isArray(result)).toBe(true)
-    expect(result.length).toBe(1)
-    expect(result[0]).toHaveProperty("count")
-    expect(result[0]).toHaveProperty("avg_score")
+    expect(Array.isArray(result.records)).toBe(true)
+    expect(result.records.length).toBe(1)
+    expect(result.records[0]).toHaveProperty("count")
+    expect(result.records[0]).toHaveProperty("avg_score")
   })
 
   it("queries table with WHERE and LIMIT", async () => {
@@ -121,8 +121,8 @@ describe("queryTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(Array.isArray(result)).toBe(true)
-    expect(result.length).toBe(2)
+    expect(Array.isArray(result.records)).toBe(true)
+    expect(result.records.length).toBe(2)
   })
 
   it("queries inline data", async () => {
@@ -145,10 +145,10 @@ describe("queryTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(Array.isArray(result)).toBe(true)
-    expect(result.length).toBe(2)
-    expect(result).toContainEqual({ name: "bob", score: 90 })
-    expect(result).toContainEqual({ name: "carol", score: 88 })
+    expect(Array.isArray(result.records)).toBe(true)
+    expect(result.records.length).toBe(2)
+    expect(result.records).toContainEqual({ name: "bob", score: 90 })
+    expect(result.records).toContainEqual({ name: "carol", score: 88 })
   })
 
   it("queries with JOIN operations", async () => {
@@ -170,9 +170,9 @@ describe("queryTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(Array.isArray(result)).toBe(true)
-    expect(result.length).toBe(1)
-    expect(result[0]).toMatchObject({ name: "alice", dept_id: 10 })
+    expect(Array.isArray(result.records)).toBe(true)
+    expect(result.records.length).toBe(1)
+    expect(result.records[0]).toMatchObject({ name: "alice", dept_id: 10 })
   })
 
   it("returns all records when querying without filters", async () => {
@@ -191,7 +191,7 @@ describe("queryTableTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(Array.isArray(result)).toBe(true)
-    expect(result.length).toBe(3)
+    expect(Array.isArray(result.records)).toBe(true)
+    expect(result.records.length).toBe(3)
   })
 })

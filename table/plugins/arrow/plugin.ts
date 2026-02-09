@@ -11,25 +11,25 @@ import { saveArrowTable } from "./actions/table/save.ts"
 
 export class ArrowPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const dialect = await getSupportedFileDialect(resource, ["arrow"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["arrow"])
+    if (!fileDialect) return undefined
 
-    return await loadArrowTable({ ...resource, fileDialect: dialect }, options)
+    return await loadArrowTable({ ...resource, fileDialect }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const dialect = await getSupportedFileDialect(resource, ["arrow"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["arrow"])
+    if (!fileDialect) return undefined
 
-    return await saveArrowTable(table, { ...options, fileDialect: dialect })
+    return await saveArrowTable(table, { ...options, fileDialect })
   }
 
   async inferFileDialect(resource: Resource) {
-    const dialect = await getSupportedFileDialect(resource, ["arrow"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["arrow"])
+    if (!fileDialect) return undefined
 
-    return { format: dialect.format }
+    return { format: fileDialect.format }
   }
 }

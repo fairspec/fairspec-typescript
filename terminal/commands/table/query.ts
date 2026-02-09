@@ -64,12 +64,12 @@ export const queryTableCommand = new Command()
       json: options.json,
     })
 
-    const dialect = path
+    const fileDialect = path
       ? (options.dialect ?? createFileDialectFromPathAndOptions(path, options))
       : undefined
 
     const resource: Resource = path
-      ? { data: path, fileDialect: dialect, tableSchema: options.schema }
+      ? { data: path, fileDialect, tableSchema: options.schema }
       : await selectResource(session, options)
 
     let table = await session.task("Loading table", async () => {

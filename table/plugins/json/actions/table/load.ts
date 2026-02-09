@@ -15,24 +15,24 @@ export async function loadJsonTable(
   resource: Resource,
   options?: LoadTableOptions,
 ) {
-  let dialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
-  if (!dialect) {
+  let fileDialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
+  if (!fileDialect) {
     throw new Error("Resource data is not compatible")
   }
 
-  const maxBytes = dialect?.format === "jsonl" ? options?.previewBytes : undefined
+  const maxBytes = fileDialect?.format === "jsonl" ? options?.previewBytes : undefined
   const paths = await prefetchFiles(resource, {maxBytes})
   if (!paths.length) {
     throw new Error("Resource data is not defined")
   }
 
   // TODO: Consider inferring all the missing dialect properties
-  if (!dialect || Object.keys(dialect).length <= 1) {
-    dialect = await inferJsonFileDialect({ ...resource, data: paths[0] })
+  if (!fileDialect || Object.keys(fileDialect).length <= 1) {
+    fileDialect = await inferJsonFileDialect({ ...resource, data: paths[0] })
   }
 
-  const isLines = dialect?.format === "jsonl"
-  const isDefault = Object.keys(dialect ?? {})
+  const isLines = fileDialect?.format === "jsonl"
+  const isDefault = Object.keys(fileDialect ?? {})
     .filter(key => !['type', 'title', 'description'].includes(key)).length === 0
 
 
@@ -47,7 +47,7 @@ export async function loadJsonTable(
     const buffer = await loadFile(path)
     let data = decodeJsonBuffer(buffer, { isLines })
     if (!isDefault) {
-      data = processData(data, dialect)
+      data = processData(data, fileDialect)
     }
 
     const table = pl.DataFrame(data).lazy()

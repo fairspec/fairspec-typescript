@@ -17,59 +17,60 @@ export function createFileDialectFromPathAndOptions(
   const format = options.format ?? inferFileDialectFormat({ data: path })
 
   if (format === "csv" || format === "tsv") {
-    const dialect: CsvFileDialect | TsvFileDialect = { format }
+    const fileDialect: CsvFileDialect | TsvFileDialect = { format }
 
-    if (options.lineTerminator) dialect.lineTerminator = options.lineTerminator
-    if (options.nullSequence) dialect.nullSequence = options.nullSequence
-    if (options.headerRows) dialect.headerRows = options.headerRows
-    if (options.headerJoin) dialect.headerJoin = options.headerJoin
-    if (options.commentRows) dialect.commentRows = options.commentRows
-    if (options.commentPrefix) dialect.commentPrefix = options.commentPrefix
-    if (options.columnNames) dialect.columnNames = options.columnNames
+    if (options.lineTerminator)
+      fileDialect.lineTerminator = options.lineTerminator
+    if (options.nullSequence) fileDialect.nullSequence = options.nullSequence
+    if (options.headerRows) fileDialect.headerRows = options.headerRows
+    if (options.headerJoin) fileDialect.headerJoin = options.headerJoin
+    if (options.commentRows) fileDialect.commentRows = options.commentRows
+    if (options.commentPrefix) fileDialect.commentPrefix = options.commentPrefix
+    if (options.columnNames) fileDialect.columnNames = options.columnNames
 
-    if (dialect.format === "csv") {
-      if (options.delimiter) dialect.delimiter = options.delimiter
-      if (options.quoteChar) dialect.quoteChar = options.quoteChar
+    if (fileDialect.format === "csv") {
+      if (options.delimiter) fileDialect.delimiter = options.delimiter
+      if (options.quoteChar) fileDialect.quoteChar = options.quoteChar
     }
 
-    return dialect
+    return fileDialect
   }
 
   if (format === "xlsx" || format === "ods") {
-    const dialect: XlsxFileDialect | OdsFileDialect = { format }
+    const fileDialect: XlsxFileDialect | OdsFileDialect = { format }
 
-    if (options.sheetNumber) dialect.sheetNumber = options.sheetNumber
-    if (options.sheetName) dialect.sheetName = options.sheetName
-    if (options.headerRows) dialect.headerRows = options.headerRows
-    if (options.headerJoin) dialect.headerJoin = options.headerJoin
-    if (options.commentRows) dialect.commentRows = options.commentRows
-    if (options.commentPrefix) dialect.commentPrefix = options.commentPrefix
+    if (options.sheetNumber) fileDialect.sheetNumber = options.sheetNumber
+    if (options.sheetName) fileDialect.sheetName = options.sheetName
+    if (options.headerRows) fileDialect.headerRows = options.headerRows
+    if (options.headerJoin) fileDialect.headerJoin = options.headerJoin
+    if (options.commentRows) fileDialect.commentRows = options.commentRows
+    if (options.commentPrefix) fileDialect.commentPrefix = options.commentPrefix
 
-    return dialect
+    return fileDialect
   }
 
   if (format === "json" || format === "jsonl") {
-    const dialect: JsonFileDialect | JsonlFileDialect = { format }
+    const fileDialect: JsonFileDialect | JsonlFileDialect = { format }
 
-    if (options.headerRows) dialect.headerRows = options.headerRows
-    if (options.headerJoin) dialect.headerJoin = options.headerJoin
-    if (options.commentRows) dialect.commentRows = options.commentRows
-    if (options.commentPrefix) dialect.commentPrefix = options.commentPrefix
-    if (options.rowType) dialect.rowType = options.rowType
+    if (options.headerRows) fileDialect.headerRows = options.headerRows
+    if (options.headerJoin) fileDialect.headerJoin = options.headerJoin
+    if (options.commentRows) fileDialect.commentRows = options.commentRows
+    if (options.commentPrefix) fileDialect.commentPrefix = options.commentPrefix
+    if (options.rowType) fileDialect.rowType = options.rowType
 
-    if (dialect?.format === "json") {
-      if (options.jsonPointer) dialect.jsonPointer = options.jsonPointer
+    if (fileDialect?.format === "json") {
+      if (options.jsonPointer) fileDialect.jsonPointer = options.jsonPointer
     }
 
-    return dialect
+    return fileDialect
   }
 
   if (format === "sqlite") {
-    const dialect: SqliteFileDialect = { format }
+    const fileDialect: SqliteFileDialect = { format }
 
-    if (options.tableName) dialect.tableName = options.tableName
+    if (options.tableName) fileDialect.tableName = options.tableName
 
-    return dialect
+    return fileDialect
   }
 
   return undefined

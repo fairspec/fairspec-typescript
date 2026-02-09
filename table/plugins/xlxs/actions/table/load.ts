@@ -24,14 +24,14 @@ export async function loadXlsxTable(
     throw new Error("Resource path is not defined")
   }
 
-  let dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
-  if (!dialect) {
+  let fileDialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
+  if (!fileDialect) {
     throw new Error("Resource data is not compatible")
   }
 
   // TODO: Consider inferring all the missing dialect properties
-  if (!dialect || Object.keys(dialect).length <= 1) {
-    dialect = await inferXlsxFileDialect({ ...resource, data: paths[0] })
+  if (!fileDialect || Object.keys(fileDialect).length <= 1) {
+    fileDialect = await inferXlsxFileDialect({ ...resource, data: paths[0] })
   }
 
   const tables: Table[] = []
@@ -39,8 +39,8 @@ export async function loadXlsxTable(
     const buffer = await loadFile(path)
 
     const book = read(buffer, { type: "buffer" })
-    const sheetIndex = dialect?.sheetNumber ? dialect.sheetNumber - 1 : 0
-    const sheetName = dialect?.sheetName ?? book.SheetNames[sheetIndex]
+    const sheetIndex = fileDialect?.sheetNumber ? fileDialect.sheetNumber - 1 : 0
+    const sheetName = fileDialect?.sheetName ?? book.SheetNames[sheetIndex]
     const sheet = sheetName ? book.Sheets[sheetName] : undefined
 
     if (sheet) {
@@ -49,7 +49,7 @@ export async function loadXlsxTable(
         raw: true,
       }) as DataRow[]
 
-      const records = getRecordsFromRows(rows, dialect)
+      const records = getRecordsFromRows(rows, fileDialect)
       const table = pl.DataFrame(records).lazy()
 
       tables.push(table)

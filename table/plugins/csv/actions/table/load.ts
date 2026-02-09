@@ -27,17 +27,17 @@ export async function loadCsvTable(
     throw new Error("Resource path is not defined")
   }
 
-  let dialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
-  if (!dialect) {
+  let fileDialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
+  if (!fileDialect) {
     throw new Error("Resource data is not compatible")
   }
 
   // TODO: Consider inferring all the missing dialect properties
-  if (!dialect || Object.keys(dialect).length <= 1) {
-    dialect = await inferCsvFileDialect({ ...resource, data: paths[0] }, options)
+  if (!fileDialect || Object.keys(fileDialect).length <= 1) {
+    fileDialect = await inferCsvFileDialect({ ...resource, data: paths[0] }, options)
   }
 
-  const scanOptions = getScanOptions(dialect)
+  const scanOptions = getScanOptions(fileDialect)
   const tables: Table[] = []
   for (const path of paths) {
     const table = pl.scanCSV(path, scanOptions)
@@ -47,7 +47,7 @@ export async function loadCsvTable(
   // There is no way to specify column names in nodejs-polars by default
   // so we have to rename `column_*` to `column*` is table doesn't have header
   let table = pl.concat(tables)
-  if (!scanOptions.hasHeader && !dialect?.columnNames) {
+  if (!scanOptions.hasHeader && !fileDialect?.columnNames) {
     table = table.rename(
       Object.fromEntries(
         table.columns.map(name => [name, name.replace("column_", "column")]),
@@ -55,9 +55,9 @@ export async function loadCsvTable(
     )
   }
 
-  if (dialect) {
-    table = await joinHeaderRows(table, dialect)
-    table = skipCommentRows(table, dialect)
+  if (fileDialect) {
+    table = await joinHeaderRows(table, fileDialect)
+    table = skipCommentRows(table, fileDialect)
   }
 
   if (!options?.denormalized) {
@@ -69,8 +69,8 @@ export async function loadCsvTable(
   return table
 }
 
-function getScanOptions(dialect?: TsvFileDialect | CsvFileDialect) {
-  const headerRows = getHeaderRows(dialect)
+function getScanOptions(fileDialect?: TsvFileDialect | CsvFileDialect) {
+  const headerRows = getHeaderRows(fileDialect)
 
   const options: Partial<pl.ScanCsvOptions> = {
     inferSchemaLength: 0,
@@ -79,15 +79,15 @@ function getScanOptions(dialect?: TsvFileDialect | CsvFileDialect) {
 
   options.skipRows = headerRows[0] ? headerRows[0] - 1 : 0
   options.hasHeader = headerRows.length > 0
-  options.eolChar = dialect?.lineTerminator ?? "\n"
-  options.sep = dialect?.format === "csv" ? (dialect?.delimiter ?? ",") : "\t"
-  options.quoteChar = dialect?.format === "csv" ? dialect?.quoteChar ?? '"' : undefined
-  options.nullValues = dialect?.nullSequence
-  options.commentPrefix = dialect?.commentPrefix
+  options.eolChar = fileDialect?.lineTerminator ?? "\n"
+  options.sep = fileDialect?.format === "csv" ? (fileDialect?.delimiter ?? ",") : "\t"
+  options.quoteChar = fileDialect?.format === "csv" ? fileDialect?.quoteChar ?? '"' : undefined
+  options.nullValues = fileDialect?.nullSequence
+  options.commentPrefix = fileDialect?.commentPrefix
 
-  if (dialect?.columnNames) {
+  if (fileDialect?.columnNames) {
     options.schema = Object.fromEntries(
-      dialect.columnNames.map(name => [name, pl.String])
+      fileDialect.columnNames.map(name => [name, pl.String])
     )
   }
 

@@ -20,8 +20,8 @@ export async function loadSqliteTable(
     throw new Error("Resource path is not defined")
   }
 
-  let dialect = await getSupportedFileDialect(resource, ["sqlite"])
-  if (!dialect) {
+  let fileDialect = await getSupportedFileDialect(resource, ["sqlite"])
+  if (!fileDialect) {
     throw new Error("Resource data is not compatible")
   }
 
@@ -30,7 +30,7 @@ export async function loadSqliteTable(
     const databaseSchemas = await database.introspection.getTables()
 
     const tableName =
-      dialect?.tableName ??
+      fileDialect?.tableName ??
       databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
     if (!tableName) {
@@ -43,7 +43,7 @@ export async function loadSqliteTable(
     if (!options?.denormalized) {
       let tableSchema = await resolveTableSchema(resource.tableSchema)
       if (!tableSchema) {
-        tableSchema = await inferTableSchemaFromSqlite({...resource, fileDialect: dialect})
+        tableSchema = await inferTableSchemaFromSqlite({...resource, fileDialect})
       }
 
       table = await normalizeTable(table, tableSchema)

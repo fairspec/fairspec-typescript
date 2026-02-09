@@ -15,8 +15,8 @@ export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
   const resource = { data: path, fileDialect: options.fileDialect }
-  const dialect = await getSupportedFileDialect(resource, ["sqlite"])
-  if (!dialect) {
+  const fileDialect = await getSupportedFileDialect(resource, ["sqlite"])
+  if (!fileDialect) {
     throw new Error("Saving options is not compatible")
   }
 
@@ -36,7 +36,7 @@ export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
     const databaseSchemas = await database.introspection.getTables()
 
     const tableName =
-      dialect?.tableName ??
+      fileDialect?.tableName ??
       databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
     if (!tableName) {

@@ -4,20 +4,20 @@ import type { FileDialectWithHeaderAndCommentRows } from "../../models/fileDiale
 
 export function getRecordsFromRows(
   rows: DataRow[],
-  dialect?: FileDialectWithHeaderAndCommentRows,
+  fileDialect?: FileDialectWithHeaderAndCommentRows,
 ) {
   const records: DataRecord[] = []
 
-  const header = getHeaderFromRows(rows, dialect)
-  const content = getContentFromRows(rows, dialect)
+  const header = getHeaderFromRows(rows, fileDialect)
+  const content = getContentFromRows(rows, fileDialect)
 
-  const labels = getLabelsFromHeader(header, dialect)
+  const labels = getLabelsFromHeader(header, fileDialect)
   if (!labels) {
     return records
   }
 
   for (const row of content) {
-    const isCommentedRow = getIsCommentedRow(row, dialect)
+    const isCommentedRow = getIsCommentedRow(row, fileDialect)
     if (isCommentedRow) {
       continue
     }
@@ -32,13 +32,13 @@ export function getRecordsFromRows(
 
 function getHeaderFromRows(
   rows: DataRow[],
-  dialect?: FileDialectWithHeaderAndCommentRows,
+  fileDialect?: FileDialectWithHeaderAndCommentRows,
 ) {
-  if (dialect?.columnNames) {
-    return [dialect.columnNames]
+  if (fileDialect?.columnNames) {
+    return [fileDialect.columnNames]
   }
 
-  const headerRows = getHeaderRows(dialect)
+  const headerRows = getHeaderRows(fileDialect)
 
   if (!headerRows.length) {
     const length = Math.max(...rows.map(row => row.length))
@@ -60,10 +60,10 @@ function getHeaderFromRows(
 
 function getContentFromRows(
   rows: DataRow[],
-  dialect?: FileDialectWithHeaderAndCommentRows,
+  fileDialect?: FileDialectWithHeaderAndCommentRows,
 ) {
-  const headerRows = getHeaderRows(dialect)
-  const commentRows = dialect?.commentRows ?? []
+  const headerRows = getHeaderRows(fileDialect)
+  const commentRows = fileDialect?.commentRows ?? []
   const skipRows = headerRows[0] ? headerRows[0] - 1 : 0
 
   const content: DataRow[] = []
@@ -82,7 +82,7 @@ function getContentFromRows(
       continue
     }
 
-    const isCommentedRow = getIsCommentedRow(row, dialect)
+    const isCommentedRow = getIsCommentedRow(row, fileDialect)
     if (isCommentedRow) {
       continue
     }
@@ -95,14 +95,14 @@ function getContentFromRows(
 
 function getLabelsFromHeader(
   header: DataRow[],
-  dialect?: FileDialectWithHeaderAndCommentRows,
+  fileDialect?: FileDialectWithHeaderAndCommentRows,
 ) {
   if (!header[0]) {
     return undefined
   }
 
   const labels = header[0].map(String)
-  const headerJoin = dialect?.headerJoin ?? " "
+  const headerJoin = fileDialect?.headerJoin ?? " "
 
   for (const row of header.slice(1)) {
     for (const [index, label] of row.entries()) {
@@ -116,9 +116,9 @@ function getLabelsFromHeader(
 
 function getIsCommentedRow(
   row: unknown[],
-  dialect?: FileDialectWithHeaderAndCommentRows,
+  fileDialect?: FileDialectWithHeaderAndCommentRows,
 ) {
-  const commentPrefix = dialect?.commentPrefix
+  const commentPrefix = fileDialect?.commentPrefix
   if (!commentPrefix) {
     return false
   }

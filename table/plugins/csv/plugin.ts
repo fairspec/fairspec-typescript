@@ -15,24 +15,24 @@ import { saveCsvTable } from "./actions/table/save.ts"
 
 export class CsvPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const dialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
+    if (!fileDialect) return undefined
 
-    return await loadCsvTable({ ...resource, fileDialect: dialect }, options)
+    return await loadCsvTable({ ...resource, fileDialect }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const dialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
+    if (!fileDialect) return undefined
 
-    return await saveCsvTable(table, { ...options, fileDialect: dialect })
+    return await saveCsvTable(table, { ...options, fileDialect })
   }
 
   async inferFileDialect(resource: Resource) {
-    const dialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
+    if (!fileDialect) return undefined
 
     return await inferCsvFileDialect(resource)
   }

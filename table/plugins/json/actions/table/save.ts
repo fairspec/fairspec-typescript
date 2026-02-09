@@ -11,12 +11,12 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
   const resource = { data: path, fileDialect: options.fileDialect }
-  const dialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
-  if (!dialect) {
+  const fileDialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
+  if (!fileDialect) {
     throw new Error("Saving options is not compatible")
   }
 
-  const isLines = dialect?.format === "jsonl"
+  const isLines = fileDialect?.format === "jsonl"
 
   const tableSchema =
     options.tableSchema ??
@@ -33,8 +33,8 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   let buffer = frame.writeJSON({ format: isLines ? "lines" : "json" })
   let data = decodeJsonBuffer(buffer, { isLines })
 
-  if (dialect) {
-    data = processData(data, dialect)
+  if (fileDialect) {
+    data = processData(data, fileDialect)
   }
 
   buffer = encodeJsonBuffer(data, { isLines })

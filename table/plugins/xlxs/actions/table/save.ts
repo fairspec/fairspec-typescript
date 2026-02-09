@@ -12,8 +12,8 @@ export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
   const resource = { data: path, fileDialect: options.fileDialect }
-  const dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
-  if (!dialect) {
+  const fileDialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
+  if (!fileDialect) {
     throw new Error("Saving options is not compatible")
   }
 
@@ -29,13 +29,13 @@ export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   })
 
   const frame = await table.collect()
-  const sheetName = dialect?.sheetName ?? "Sheet1"
+  const sheetName = fileDialect?.sheetName ?? "Sheet1"
 
   const sheet = utils.json_to_sheet(frame.toRecords())
   const book = utils.book_new()
   utils.book_append_sheet(book, sheet, sheetName)
 
-  const bookType = dialect?.format === "ods" ? "ods" : "xlsx"
+  const bookType = fileDialect?.format === "ods" ? "ods" : "xlsx"
   const buffer = write(book, { type: "buffer", bookType })
   await saveFile(path, buffer, { overwrite })
 

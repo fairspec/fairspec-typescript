@@ -12,24 +12,24 @@ import { saveXlsxTable } from "./actions/table/save.ts"
 
 export class XlsxPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
+    if (!fileDialect) return undefined
 
-    return await loadXlsxTable({ ...resource, fileDialect: dialect }, options)
+    return await loadXlsxTable({ ...resource, fileDialect }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
+    if (!fileDialect) return undefined
 
-    return await saveXlsxTable(table, { ...options, fileDialect: dialect })
+    return await saveXlsxTable(table, { ...options, fileDialect })
   }
 
   async inferFileDialect(resource: Resource) {
-    const dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
+    if (!fileDialect) return undefined
 
     return await inferXlsxFileDialect(resource)
   }

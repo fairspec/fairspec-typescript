@@ -9,12 +9,12 @@ export async function saveCsvTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
   const resource = { data: path, fileDialect: options.fileDialect }
-  const dialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
-  if (!dialect) {
+  const fileDialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
+  if (!fileDialect) {
     throw new Error("Saving options is not compatible")
   }
 
-  const headerRows = getHeaderRows(dialect)
+  const headerRows = getHeaderRows(fileDialect)
 
   if (!overwrite) {
     await assertLocalPathVacant(path)
@@ -35,9 +35,9 @@ export async function saveCsvTable(table: Table, options: SaveTableOptions) {
     .sinkCSV(path, {
       maintainOrder: true,
       includeHeader: headerRows.length > 0,
-      lineTerminator: dialect.lineTerminator ?? "\n",
-      quoteChar: dialect.format === "csv" ? dialect.quoteChar : undefined,
-      separator: dialect.format === "csv" ? (dialect?.delimiter ?? ",") : "\t",
+      lineTerminator: fileDialect.lineTerminator ?? "\n",
+      quoteChar: fileDialect.format === "csv" ? fileDialect.quoteChar : undefined,
+      separator: fileDialect.format === "csv" ? (fileDialect?.delimiter ?? ",") : "\t",
     })
     .collect()
 

@@ -18,11 +18,11 @@ export const inferTableSchemaTool = createTool({
     ),
   }),
   outputSchema: z.object({
-    schema: TableSchema.optional(),
+    tableSchema: TableSchema.optional(),
   }),
   execute: async input => {
-    const schema = await inferTableSchema(input.resource, input.options)
-    console.log(schema)
-    return { schema }
+    const tableSchema = await inferTableSchema(input.resource, input.options)
+    console.log(tableSchema)
+    return { tableSchema }
   },
 })

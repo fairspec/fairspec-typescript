@@ -18,10 +18,10 @@ export const inferFileDialectTool = createTool({
     ),
   }),
   outputSchema: z.object({
-    dialect: FileDialect.optional(),
+    fileDialect: FileDialect.optional(),
   }),
   execute: async input => {
-    const dialect = await inferFileDialect(input.resource, input.options)
-    return { dialect }
+    const fileDialect = await inferFileDialect(input.resource, input.options)
+    return { fileDialect }
   },
 })

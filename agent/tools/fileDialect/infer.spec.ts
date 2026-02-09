@@ -26,7 +26,7 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect).toEqual<CsvFileDialect>({
+    expect(result.fileDialect).toEqual<CsvFileDialect>({
       format: "csv",
       delimiter: ",",
       headerRows: [1],
@@ -48,7 +48,7 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect).toEqual({
+    expect(result.fileDialect).toEqual({
       format: "tsv",
       headerRows: [1],
       lineTerminator: "\n",
@@ -69,7 +69,7 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect).toEqual({
+    expect(result.fileDialect).toEqual({
       format: "json",
       rowType: "object",
     })
@@ -94,8 +94,8 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect?.format).toBe("json")
-    expect(result.dialect).toHaveProperty("rowType")
+    expect(result.fileDialect?.format).toBe("json")
+    expect(result.fileDialect).toHaveProperty("rowType")
   })
 
   it("infers JSONL format", async () => {
@@ -114,7 +114,7 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect?.format).toBe("jsonl")
+    expect(result.fileDialect?.format).toBe("jsonl")
   })
 
   it("infers CSV with different delimiter", async () => {
@@ -131,7 +131,7 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect).toMatchObject({
+    expect(result.fileDialect).toMatchObject({
       format: "csv",
       delimiter: ";",
     })
@@ -151,8 +151,8 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect?.format).toBe("csv")
-    expect(result.dialect).toHaveProperty("delimiter")
+    expect(result.fileDialect?.format).toBe("csv")
+    expect(result.fileDialect).toHaveProperty("delimiter")
   })
 
   it("returns undefined for inline data", async () => {
@@ -170,7 +170,7 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect).toBeUndefined()
+    expect(result.fileDialect).toBeUndefined()
   })
 
   it("respects sampleBytes option", async () => {
@@ -192,7 +192,7 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect?.format).toBe("csv")
+    expect(result.fileDialect?.format).toBe("csv")
   })
 
   it("infers dialect with provided format hint", async () => {
@@ -212,7 +212,7 @@ describe("inferFileDialectTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.dialect?.format).toBe("csv")
-    expect(result.dialect).toHaveProperty("delimiter")
+    expect(result.fileDialect?.format).toBe("csv")
+    expect(result.fileDialect).toHaveProperty("delimiter")
   })
 })

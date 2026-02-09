@@ -60,7 +60,7 @@ function processData(
     const names = dialect.columnNames ?? Object.keys(data[0])
     data = [
       names,
-      ...data.map((row: any) => names.map((nmae: any) => row[nmae])),
+      ...data.map((row: any) => names.map((name: any) => row[name])),
     ]
   }
 

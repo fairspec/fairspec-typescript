@@ -26,7 +26,7 @@ export const profileRegistry: ProfileRegistry = [
   },
   {
     type: "file-dialect",
-    path: "https://fairspec.org/profiles/latest/dialect.json",
+    path: "https://fairspec.org/profiles/latest/file-dialect.json",
     version: "latest",
     profile: fileDialectProfile,
   },

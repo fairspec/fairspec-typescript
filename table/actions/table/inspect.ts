@@ -12,6 +12,7 @@ import { inspectColumn } from "../../actions/column/inspect.ts"
 import { getPolarsSchema } from "../../helpers/schema.ts"
 import type { SchemaMapping } from "../../models/schema.ts"
 import type { Table } from "../../models/table.ts"
+import { ERROR_COLUMN_NAME, NUMBER_COLUMN_NAME } from "../../settings.ts"
 import { createRowKeyChecks } from "./checks/key.ts"
 
 export async function inspectTable(
@@ -104,24 +105,24 @@ async function inspectRows(
   const maxRowErrors = Math.ceil(maxErrors / columns.length)
 
   const collectRowErrors = async (check: any) => {
-    const rowCheckTable = table.withRowIndex("fairspec:number", 1).withColumn(
+    const rowCheckTable = table.withRowIndex(NUMBER_COLUMN_NAME, 1).withColumn(
       pl
         .when(check.isErrorExpr)
         .then(pl.lit(JSON.stringify(check.errorTemplate)))
         .otherwise(pl.lit(null))
-        .alias("fairspec:error"),
+        .alias(ERROR_COLUMN_NAME),
     )
 
     const rowCheckFrame = await rowCheckTable
-      .filter(pl.col("fairspec:error").isNotNull())
+      .filter(pl.col(ERROR_COLUMN_NAME).isNotNull())
       .head(maxRowErrors)
       .collect()
 
     for (const row of rowCheckFrame.toRecords() as any[]) {
-      const errorTemplate = JSON.parse(row["fairspec:error"]) as RowError
+      const errorTemplate = JSON.parse(row[ERROR_COLUMN_NAME]) as RowError
       errors.push({
         ...errorTemplate,
-        rowNumber: row["fairspec:number"],
+        rowNumber: row[NUMBER_COLUMN_NAME],
       })
     }
 

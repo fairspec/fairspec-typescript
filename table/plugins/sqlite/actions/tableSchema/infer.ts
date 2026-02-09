@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getDataFirstPath, getSupportedDialect } from "@fairspec/metadata"
+import { getDataFirstPath, getSupportedFileDialect } from "@fairspec/metadata"
 import { connectDatabase } from "../database/connect.ts"
 import { convertTableSchemaFromDatabase } from "./fromDatabase.ts"
 
@@ -9,7 +9,7 @@ export async function inferTableSchemaFromSqlite(resource: Resource) {
     throw new Error("Database is not defined")
   }
 
-  const dialect = await getSupportedDialect(resource, ["sqlite"])
+  const dialect = await getSupportedFileDialect(resource, ["sqlite"])
   if (!dialect) {
     throw new Error("Resource data is not compatible")
   }

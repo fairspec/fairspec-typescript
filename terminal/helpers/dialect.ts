@@ -1,23 +1,23 @@
 import type {
-  CsvDialect,
-  JsonDialect,
-  JsonlDialect,
-  OdsDialect,
-  SqliteDialect,
-  TsvDialect,
-  XlsxDialect,
+  CsvFileDialect,
+  JsonFileDialect,
+  JsonlFileDialect,
+  OdsFileDialect,
+  SqliteFileDialect,
+  TsvFileDialect,
+  XlsxFileDialect,
 } from "@fairspec/library"
-import { inferDialectFormat } from "@fairspec/library"
+import { inferFileDialectFormat } from "@fairspec/library"
 import type { DialectOptions } from "../models/dialect.ts"
 
 export function createDialectFromPathAndOptions(
   path: string,
   options: DialectOptions,
 ) {
-  const format = options.format ?? inferDialectFormat({ data: path })
+  const format = options.format ?? inferFileDialectFormat({ data: path })
 
   if (format === "csv" || format === "tsv") {
-    const dialect: CsvDialect | TsvDialect = { format }
+    const dialect: CsvFileDialect | TsvFileDialect = { format }
 
     if (options.lineTerminator) dialect.lineTerminator = options.lineTerminator
     if (options.nullSequence) dialect.nullSequence = options.nullSequence
@@ -36,7 +36,7 @@ export function createDialectFromPathAndOptions(
   }
 
   if (format === "xlsx" || format === "ods") {
-    const dialect: XlsxDialect | OdsDialect = { format }
+    const dialect: XlsxFileDialect | OdsFileDialect = { format }
 
     if (options.sheetNumber) dialect.sheetNumber = options.sheetNumber
     if (options.sheetName) dialect.sheetName = options.sheetName
@@ -49,7 +49,7 @@ export function createDialectFromPathAndOptions(
   }
 
   if (format === "json" || format === "jsonl") {
-    const dialect: JsonDialect | JsonlDialect = { format }
+    const dialect: JsonFileDialect | JsonlFileDialect = { format }
 
     if (options.headerRows) dialect.headerRows = options.headerRows
     if (options.headerJoin) dialect.headerJoin = options.headerJoin
@@ -65,7 +65,7 @@ export function createDialectFromPathAndOptions(
   }
 
   if (format === "sqlite") {
-    const dialect: SqliteDialect = { format }
+    const dialect: SqliteFileDialect = { format }
 
     if (options.tableName) dialect.tableName = options.tableName
 

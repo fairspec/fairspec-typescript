@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import type { JsonDialect, JsonlDialect } from "@fairspec/metadata"
+import type { JsonFileDialect, JsonlFileDialect } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../../models/table.ts"
@@ -8,14 +8,14 @@ import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import { inferJsonDialect } from "../dialect/infer.ts"
 
 export async function loadJsonTable(
   resource: Resource,
   options?: LoadTableOptions,
 ) {
-  let dialect = await getSupportedDialect(resource, ["json", "jsonl"])
+  let dialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
   if (!dialect) {
     throw new Error("Resource data is not compatible")
   }
@@ -66,7 +66,7 @@ export async function loadJsonTable(
 }
 
 // TODO: Make data unkonwn not any!
-function processData(data: any, dialect?: JsonDialect | JsonlDialect) {
+function processData(data: any, dialect?: JsonFileDialect | JsonlFileDialect) {
   if (dialect?.format === 'json' && dialect?.jsonPointer) {
     data = data[dialect.jsonPointer]
   }

@@ -97,7 +97,7 @@ describe("inferXlsxDialect", () => {
   it("should return undefined for incompatible format", async () => {
     const resource: Resource = {
       data: "test.csv",
-      dialect: { format: "csv" },
+      fileDialect: { format: "csv" },
     }
 
     const dialect = await inferXlsxDialect(resource)
@@ -131,7 +131,7 @@ describe("inferXlsxDialect", () => {
 
     const dialect = await inferXlsxDialect({
       data: path,
-      dialect: { format: "xlsx", sheetNumber: 2 },
+      fileDialect: { format: "xlsx", sheetNumber: 2 },
     })
 
     expect(dialect).toEqual({
@@ -154,7 +154,7 @@ describe("inferXlsxDialect", () => {
 
     const dialect = await inferXlsxDialect({
       data: path,
-      dialect: { format: "xlsx", sheetName: "Headers" },
+      fileDialect: { format: "xlsx", sheetName: "Headers" },
     })
 
     expect(dialect).toEqual({
@@ -176,7 +176,7 @@ describe("inferXlsxDialect", () => {
 
     const dialect = await inferXlsxDialect({
       data: path,
-      dialect: { format: "ods" },
+      fileDialect: { format: "ods" },
     })
 
     expect(dialect).toEqual({

@@ -1,5 +1,5 @@
 import { saveFile } from "@fairspec/dataset"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import { utils, write } from "xlsx"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
@@ -11,8 +11,8 @@ import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const resource = { data: path, dialect: options.dialect }
-  const dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
+  const resource = { data: path, fileDialect: options.fileDialect }
+  const dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
   if (!dialect) {
     throw new Error("Saving options is not compatible")
   }

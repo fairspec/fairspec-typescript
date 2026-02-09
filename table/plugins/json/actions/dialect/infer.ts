@@ -1,7 +1,11 @@
 import { buffer } from "node:stream/consumers"
 import { loadFile, loadFileStream } from "@fairspec/dataset"
-import type { JsonDialect, JsonlDialect, Resource } from "@fairspec/metadata"
-import { getDataFirstPath, getSupportedDialect } from "@fairspec/metadata"
+import type {
+  JsonFileDialect,
+  JsonlFileDialect,
+  Resource,
+} from "@fairspec/metadata"
+import { getDataFirstPath, getSupportedFileDialect } from "@fairspec/metadata"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 import { decodeJsonBuffer } from "../buffer/decode.ts"
 
@@ -10,13 +14,13 @@ export async function inferJsonDialect(
   options?: {
     sampleRows?: number
   },
-): Promise<JsonDialect | JsonlDialect | undefined> {
+): Promise<JsonFileDialect | JsonlFileDialect | undefined> {
   const dataPath = getDataFirstPath(resource)
   if (!dataPath) {
     return undefined
   }
 
-  const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
+  const dialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
   if (!dialect) {
     return undefined
   }

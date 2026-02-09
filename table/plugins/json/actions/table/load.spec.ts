@@ -13,7 +13,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -29,7 +29,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: [path1, path2],
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -75,7 +75,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "json", jsonPointer: "key" },
+        fileDialect: { format: "json", jsonPointer: "key" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -90,7 +90,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "json", columnNames: ["name"] },
+        fileDialect: { format: "json", columnNames: ["name"] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -105,7 +105,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "json", rowType: "array" },
+        fileDialect: { format: "json", rowType: "array" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -120,7 +120,7 @@ describe("loadJsonTable", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "json", rowType: "object" },
+        fileDialect: { format: "json", rowType: "object" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -139,7 +139,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "jsonl" },
+        fileDialect: { format: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -155,7 +155,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: [path1, path2],
-        dialect: { format: "jsonl" },
+        fileDialect: { format: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -169,7 +169,7 @@ describe("loadJsonTable (format=jsonl)", () => {
     it.skip("should load remote file", async () => {
       const table = await loadJsonTable({
         data: "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
-        dialect: { format: "jsonl" },
+        fileDialect: { format: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -184,7 +184,7 @@ describe("loadJsonTable (format=jsonl)", () => {
           "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
           "https://github.com/fairspec/fairspect-typescript/raw/refs/heads/main/table/plugins/json/table/fixtures/table.jsonl",
         ],
-        dialect: { format: "jsonl" },
+        fileDialect: { format: "jsonl" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -203,7 +203,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "jsonl", columnNames: ["name"] },
+        fileDialect: { format: "jsonl", columnNames: ["name"] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -218,7 +218,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "jsonl", rowType: "array" },
+        fileDialect: { format: "jsonl", rowType: "array" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -233,7 +233,7 @@ describe("loadJsonTable (format=jsonl)", () => {
 
       const table = await loadJsonTable({
         data: path,
-        dialect: { format: "jsonl", rowType: "object" },
+        fileDialect: { format: "jsonl", rowType: "object" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

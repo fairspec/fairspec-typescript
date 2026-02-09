@@ -1,11 +1,11 @@
-import type { Dialect } from "../../models/dialect/dialect.ts"
+import type { FileDialect } from "../../models/fileDialect/fileDialect.ts"
 import type { Resource } from "../../models/resource.ts"
 import { getFileExtension } from "../path/general.ts"
 import { getDataFirstPath } from "../resource/data.ts"
 
-export function inferDialectFormat(
+export function inferFileDialectFormat(
   resource: Resource,
-): Dialect["format"] | undefined {
+): FileDialect["format"] | undefined {
   const path = getDataFirstPath(resource)
   if (!path) return undefined
 

@@ -2,10 +2,10 @@ import { loadDescriptor } from "../../actions/descriptor/load.ts"
 import { validateDescriptor } from "../../actions/descriptor/validate.ts"
 import { loadProfile } from "../../actions/profile/load.ts"
 import type { Descriptor } from "../../models/descriptor.ts"
-import type { Dialect } from "../../models/dialect/dialect.ts"
+import type { FileDialect } from "../../models/fileDialect/fileDialect.ts"
 
-export async function validateDialect(
-  source: Dialect | Descriptor | string,
+export async function validateFileDialect(
+  source: FileDialect | Descriptor | string,
   options?: {
     rootJsonPointer?: string
   },
@@ -29,10 +29,10 @@ export async function validateDialect(
     rootJsonPointer: options?.rootJsonPointer,
   })
 
-  let dialect: Dialect | undefined
+  let dialect: FileDialect | undefined
   if (report.valid) {
     // Valid -> we can cast it
-    dialect = descriptor as Dialect
+    dialect = descriptor as FileDialect
   }
 
   return { ...report, dialect }

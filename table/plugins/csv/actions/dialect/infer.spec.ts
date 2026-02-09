@@ -83,7 +83,7 @@ describe("inferCsvDialect", () => {
 
   it("should infer dialect from CSV file with comma delimiter", async () => {
     const path = await writeTempFile("id,name,age\n1,alice,25\n2,bob,30")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
@@ -96,7 +96,7 @@ describe("inferCsvDialect", () => {
 
   it("should infer dialect from CSV file with pipe delimiter", async () => {
     const path = await writeTempFile("id|name|age\n1|alice|25\n2|bob|30")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
@@ -109,7 +109,7 @@ describe("inferCsvDialect", () => {
 
   it("should infer dialect from CSV file with semicolon delimiter", async () => {
     const path = await writeTempFile("id;name;age\n1;alice;25\n2;bob;30")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
@@ -122,7 +122,7 @@ describe("inferCsvDialect", () => {
 
   it("should infer dialect from TSV file with tab delimiter", async () => {
     const path = await writeTempFile("id\tname\tage\n1\talice\t25\n2\tbob\t30")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
@@ -137,7 +137,7 @@ describe("inferCsvDialect", () => {
       'id,name,description\n1,"alice","Description with, comma"\n2,"bob","Normal text"',
     )
 
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
@@ -154,7 +154,7 @@ describe("inferCsvDialect", () => {
       "id,name,description\n1,'alice','Description text'\n2,'bob','Normal text'",
     )
 
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
@@ -180,7 +180,7 @@ describe("inferCsvDialect", () => {
 
   it("should return empty object for non-CSV resources", async () => {
     const resource: Resource = {
-      dialect: { format: "json" },
+      fileDialect: { format: "json" },
       data: [{ id: 1 }],
     }
 
@@ -190,7 +190,7 @@ describe("inferCsvDialect", () => {
 
   it("should handle CSV with custom line terminator", async () => {
     const path = await writeTempFile("id,name\r\n1,alice\r\n2,bob\r\n")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
@@ -203,7 +203,7 @@ describe("inferCsvDialect", () => {
 
   it("should handle CSV with header row only", async () => {
     const path = await writeTempFile("id,name,age")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({
@@ -216,7 +216,7 @@ describe("inferCsvDialect", () => {
 
   it("should handle empty CSV file", async () => {
     const path = await writeTempFile("")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const dialect = await inferCsvDialect(resource)
     expect(dialect).toEqual({

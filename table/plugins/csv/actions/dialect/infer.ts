@@ -1,6 +1,10 @@
 import { buffer } from "node:stream/consumers"
 import { loadFileStream } from "@fairspec/dataset"
-import type { CsvDialect, Resource, TsvDialect } from "@fairspec/metadata"
+import type {
+  CsvFileDialect,
+  Resource,
+  TsvFileDialect,
+} from "@fairspec/metadata"
 import { getDataPath } from "@fairspec/metadata"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 
@@ -30,12 +34,12 @@ export async function inferCsvDialect(
   try {
     sniffResult = sniffer.sniffBytes(bytes)
   } catch {
-    const fallback: CsvDialect = { format: "csv" }
+    const fallback: CsvFileDialect = { format: "csv" }
     return fallback
   }
 
   if (!sniffResult) {
-    const fallback: CsvDialect = { format: "csv" }
+    const fallback: CsvFileDialect = { format: "csv" }
     return fallback
   }
 
@@ -43,10 +47,10 @@ export async function inferCsvDialect(
   const lineTerminator = lt === "LF" ? "\n" : lt === "CRLF" ? "\r\n" : "\r"
 
   const format = sniffResult.dialect.delimiter === 9 ? "tsv" : "csv"
-  let dialect: CsvDialect | TsvDialect
+  let dialect: CsvFileDialect | TsvFileDialect
 
   if (format === "csv") {
-    const csvDialect: CsvDialect = {
+    const csvDialect: CsvFileDialect = {
       format: "csv",
       delimiter: String.fromCharCode(sniffResult.dialect.delimiter),
       lineTerminator,
@@ -64,7 +68,7 @@ export async function inferCsvDialect(
 
     dialect = csvDialect
   } else {
-    const tsvDialect: TsvDialect = {
+    const tsvDialect: TsvFileDialect = {
       format: "tsv",
       lineTerminator,
     }

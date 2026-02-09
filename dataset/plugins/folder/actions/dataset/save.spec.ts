@@ -81,7 +81,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test-resource",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
       ],
     }
@@ -101,7 +101,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "resource-1",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
         {
           name: "resource-2",
@@ -147,7 +147,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test-resource",
           data: csvPath,
-          dialect: { format: "csv", delimiter: ";" },
+          fileDialect: { format: "csv", delimiter: ";" },
         },
       ],
     }
@@ -244,7 +244,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
       ],
     }
@@ -254,7 +254,9 @@ describe("saveDatasetToFolder", () => {
 
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
-    expect(reloadedDataset.resources?.[0]?.dialect).toEqual({ format: "csv" })
+    expect(reloadedDataset.resources?.[0]?.fileDialect).toEqual({
+      format: "csv",
+    })
   })
 
   it("should throw error when saving to existing folder", async () => {
@@ -304,12 +306,12 @@ describe("saveDatasetToFolder", () => {
         {
           name: "resource1",
           data: csv1Path,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
         {
           name: "resource2",
           data: csv2Path,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
       ],
     }
@@ -350,7 +352,7 @@ describe("saveDatasetToFolder", () => {
         {
           name: "test_resource",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
       ],
     }

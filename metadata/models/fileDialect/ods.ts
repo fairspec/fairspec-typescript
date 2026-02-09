@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { BaseDialect } from "./base.ts"
+import { BaseFileDialect } from "./base.ts"
 import {
   ColumnNames,
   CommentPrefix,
@@ -10,8 +10,8 @@ import {
   SheetNumber,
 } from "./common.ts"
 
-export const XlsxDialect = BaseDialect.extend({
-  format: z.literal("xlsx"),
+export const OdsFileDialect = BaseFileDialect.extend({
+  format: z.literal("ods"),
   sheetName: SheetName.optional(),
   sheetNumber: SheetNumber.optional(),
   headerRows: HeaderRows.optional(),
@@ -21,4 +21,4 @@ export const XlsxDialect = BaseDialect.extend({
   columnNames: ColumnNames.optional(),
 })
 
-export type XlsxDialect = z.infer<typeof XlsxDialect>
+export type OdsFileDialect = z.infer<typeof OdsFileDialect>

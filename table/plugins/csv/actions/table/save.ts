@@ -1,5 +1,5 @@
 import { assertLocalPathVacant } from "@fairspec/dataset"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import { getHeaderRows } from "../../../../helpers/dialect.ts"
@@ -8,8 +8,8 @@ import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 export async function saveCsvTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const resource = { data: path, dialect: options.dialect }
-  const dialect = await getSupportedDialect(resource, ["csv", "tsv"])
+  const resource = { data: path, fileDialect: options.fileDialect }
+  const dialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
   if (!dialect) {
     throw new Error("Saving options is not compatible")
   }

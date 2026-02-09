@@ -1,27 +1,27 @@
 import {
-  Dialect,
-  InferDialectOptions,
-  inferDialect,
+  FileDialect,
+  InferFileDialectOptions,
+  inferFileDialect,
   Resource,
 } from "@fairspec/library"
 import { createTool } from "@mastra/core/tools"
 import { z } from "zod"
 
-export const inferDialectTool = createTool({
+export const inferFileDialectTool = createTool({
   id: "infer-dialect",
   description:
     "Infer the dialect (format and format-specific properties) from a resource. Analyzes the data to determine CSV delimiters, JSON structure, etc.",
   inputSchema: z.object({
     resource: Resource.describe("The resource to infer dialect from"),
-    options: InferDialectOptions.optional().describe(
+    options: InferFileDialectOptions.optional().describe(
       "Dialect inference options",
     ),
   }),
   outputSchema: z.object({
-    dialect: Dialect.optional(),
+    dialect: FileDialect.optional(),
   }),
   execute: async input => {
-    const dialect = await inferDialect(input.resource, input.options)
+    const dialect = await inferFileDialect(input.resource, input.options)
     return { dialect }
   },
 })

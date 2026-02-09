@@ -91,7 +91,7 @@ describe("loadDatasetFromZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
       ],
     }
@@ -103,7 +103,7 @@ describe("loadDatasetFromZip", () => {
     expect.assert(loadedDataset.resources)
     expect(loadedDataset.resources).toHaveLength(1)
     expect(loadedDataset.resources[0]?.name).toBe("test_resource")
-    expect(loadedDataset.resources[0]?.dialect).toEqual({ format: "csv" })
+    expect(loadedDataset.resources[0]?.fileDialect).toEqual({ format: "csv" })
   })
 
   it("should load dataset with tableSchema", async () => {
@@ -145,7 +145,7 @@ describe("loadDatasetFromZip", () => {
         {
           name: "resource_1",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
         {
           name: "resource_2",

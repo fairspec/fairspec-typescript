@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import type {
   LoadTableOptions,
   SaveTableOptions,
@@ -11,7 +11,7 @@ import { saveParquetTable } from "./actions/table/save.ts"
 
 export class ParquetPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const dialect = await getSupportedDialect(resource, ["parquet"])
+    const dialect = await getSupportedFileDialect(resource, ["parquet"])
     if (!dialect) return undefined
 
     return await loadParquetTable(resource, options)
@@ -20,14 +20,14 @@ export class ParquetPlugin implements TablePlugin {
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const dialect = await getSupportedDialect(resource, ["parquet"])
+    const dialect = await getSupportedFileDialect(resource, ["parquet"])
     if (!dialect) return undefined
 
     return await saveParquetTable(table, options)
   }
 
-  async inferDialect(resource: Resource) {
-    const dialect = await getSupportedDialect(resource, ["parquet"])
+  async inferFileDialect(resource: Resource) {
+    const dialect = await getSupportedFileDialect(resource, ["parquet"])
     if (!dialect) return undefined
 
     return { format: dialect.format }

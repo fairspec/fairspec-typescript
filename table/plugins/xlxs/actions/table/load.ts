@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
 import type { DataRow } from "../../../../models/data.ts"
@@ -24,7 +24,7 @@ export async function loadXlsxTable(
     throw new Error("Resource path is not defined")
   }
 
-  let dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
+  let dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
   if (!dialect) {
     throw new Error("Resource data is not compatible")
   }

@@ -14,7 +14,7 @@ describe("inferTableSchemaTool", () => {
 
   it("infers schema from CSV file", async () => {
     const path = await writeTempFile("id,name,age\n1,alice,30\n2,bob,25")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const result = await inferTableSchemaTool.execute?.(
       {

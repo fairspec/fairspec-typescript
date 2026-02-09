@@ -1,4 +1,4 @@
-import { inferDialect } from "@fairspec/library"
+import { inferFileDialect } from "@fairspec/library"
 import { Command } from "commander"
 import { selectFile } from "../../helpers/file.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
@@ -30,7 +30,7 @@ export const inferDialectCommand = new Command()
     }
 
     const dialect = await session.task("Inferring dialect", async () => {
-      const dialect = await inferDialect(
+      const dialect = await inferFileDialect(
         { data: path },
         { sampleBytes: options.sampleBytes },
       )

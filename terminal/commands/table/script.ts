@@ -68,7 +68,7 @@ export const scriptTableCommand = new Command()
       : undefined
 
     const resource: Resource = path
-      ? { data: path, dialect, tableSchema: options.schema }
+      ? { data: path, fileDialect: dialect, tableSchema: options.schema }
       : await selectResource(session, options)
 
     const table = await session.task("Loading table", async () => {

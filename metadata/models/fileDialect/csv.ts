@@ -1,18 +1,22 @@
 import { z } from "zod"
-import { BaseDialect } from "./base.ts"
+import { BaseFileDialect } from "./base.ts"
 import {
   ColumnNames,
   CommentPrefix,
   CommentRows,
+  Delimiter,
   HeaderJoin,
   HeaderRows,
   LineTerminator,
   NullSequence,
+  QuoteChar,
 } from "./common.ts"
 
-export const TsvDialect = BaseDialect.extend({
-  format: z.literal("tsv"),
+export const CsvFileDialect = BaseFileDialect.extend({
+  format: z.literal("csv"),
+  delimiter: Delimiter.optional(),
   lineTerminator: LineTerminator.optional(),
+  quoteChar: QuoteChar.optional(),
   nullSequence: NullSequence.optional(),
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),
@@ -21,4 +25,4 @@ export const TsvDialect = BaseDialect.extend({
   columnNames: ColumnNames.optional(),
 })
 
-export type TsvDialect = z.infer<typeof TsvDialect>
+export type CsvFileDialect = z.infer<typeof CsvFileDialect>

@@ -1,7 +1,7 @@
 import { validateDataSchema } from "../../actions/dataSchema/validate.ts"
 import { loadDescriptor } from "../../actions/descriptor/load.ts"
 import { validateDescriptor } from "../../actions/descriptor/validate.ts"
-import { validateDialect } from "../../actions/dialect/validate.ts"
+import { validateFileDialect } from "../../actions/fileDialect/validate.ts"
 import { loadProfile } from "../../actions/profile/load.ts"
 import { validateTableSchema } from "../../actions/tableSchema/validate.ts"
 import type { Dataset } from "../../models/dataset.ts"
@@ -48,8 +48,8 @@ export async function validateDatasetDescriptor(
     for (const [index, resource] of (dataset?.resources ?? []).entries()) {
       const rootJsonPointer = `/resources/${index}`
 
-      if (typeof resource.dialect === "string") {
-        const dialectReport = await validateDialect(resource.dialect, {
+      if (typeof resource.fileDialect === "string") {
+        const dialectReport = await validateFileDialect(resource.fileDialect, {
           rootJsonPointer,
         })
 

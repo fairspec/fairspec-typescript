@@ -53,7 +53,7 @@ describe("ParquetPlugin", () => {
     it("should handle explicit format specification", async () => {
       const resource: Resource = {
         data: "test.txt",
-        dialect: { format: "parquet" },
+        fileDialect: { format: "parquet" },
       }
       const mockTable = pl.DataFrame().lazy()
       mockLoadParquetTable.mockResolvedValue(mockTable)
@@ -138,7 +138,7 @@ describe("ParquetPlugin", () => {
       const table = pl.DataFrame().lazy()
       const options = {
         path: "output.txt",
-        dialect: { format: "parquet" } as const,
+        fileDialect: { format: "parquet" } as const,
       }
       mockSaveParquetTable.mockResolvedValue("output.txt")
 

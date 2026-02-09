@@ -57,7 +57,7 @@
     {
       "name": "name",
       "data": "table.csv",
-      "dialect": {
+      "fileDialect": {
         "format": "csv"
       },
       "tableSchema": "schema.json"

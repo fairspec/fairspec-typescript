@@ -80,7 +80,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
       ],
     }
@@ -100,7 +100,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "resource_1",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
         {
           name: "resource_2",
@@ -146,7 +146,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          dialect: { format: "csv", delimiter: ";" },
+          fileDialect: { format: "csv", delimiter: ";" },
         },
       ],
     }
@@ -251,7 +251,7 @@ describe("saveDatasetToZip", () => {
         {
           name: "test_resource",
           data: csvPath,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
       ],
     }
@@ -261,7 +261,9 @@ describe("saveDatasetToZip", () => {
 
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
-    expect(reloadedDataset.resources?.[0]?.dialect).toEqual({ format: "csv" })
+    expect(reloadedDataset.resources?.[0]?.fileDialect).toEqual({
+      format: "csv",
+    })
   })
 
   it("should throw error when saving to existing file", async () => {
@@ -315,12 +317,12 @@ describe("saveDatasetToZip", () => {
         {
           name: "resource_1",
           data: csv1Path,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
         {
           name: "resource_2",
           data: csv2Path,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
       ],
     }

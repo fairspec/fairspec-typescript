@@ -1,5 +1,5 @@
 import { resolveTableSchema } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import { getDataFirstPath } from "@fairspec/metadata"
 import type { Resource } from "@fairspec/metadata"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
@@ -20,7 +20,7 @@ export async function loadSqliteTable(
     throw new Error("Resource path is not defined")
   }
 
-  let dialect = await getSupportedDialect(resource, ["sqlite"])
+  let dialect = await getSupportedFileDialect(resource, ["sqlite"])
   if (!dialect) {
     throw new Error("Resource data is not compatible")
   }
@@ -43,7 +43,7 @@ export async function loadSqliteTable(
     if (!options?.denormalized) {
       let tableSchema = await resolveTableSchema(resource.tableSchema)
       if (!tableSchema) {
-        tableSchema = await inferTableSchemaFromSqlite({...resource, dialect})
+        tableSchema = await inferTableSchemaFromSqlite({...resource, fileDialect: dialect})
       }
 
       table = await normalizeTable(table, tableSchema)

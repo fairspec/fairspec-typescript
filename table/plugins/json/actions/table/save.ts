@@ -1,6 +1,6 @@
 import { saveFile } from "@fairspec/dataset"
-import type { JsonDialect, JsonlDialect } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import type { JsonFileDialect, JsonlFileDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
@@ -10,8 +10,8 @@ import { encodeJsonBuffer } from "../../actions/buffer/encode.ts"
 export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const resource = { data: path, dialect: options.dialect }
-  const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
+  const resource = { data: path, fileDialect: options.fileDialect }
+  const dialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
   if (!dialect) {
     throw new Error("Saving options is not compatible")
   }
@@ -45,7 +45,7 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
 
 function processData(
   records: Record<string, any>[],
-  dialect: JsonDialect | JsonlDialect,
+  dialect: JsonFileDialect | JsonlFileDialect,
 ) {
   let data: any = records
 

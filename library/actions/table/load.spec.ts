@@ -6,7 +6,7 @@ import { loadTable } from "./load.ts"
 describe("loadTable", () => {
   it("should load table from CSV file", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const table = await loadTable(resource)
     const frame = await table?.collect()
@@ -38,7 +38,7 @@ describe("loadTable", () => {
     const path = await writeTempFile("id|name\n1|alice\n2|bob")
     const resource: Resource = {
       data: path,
-      dialect: { format: "csv", delimiter: "|" },
+      fileDialect: { format: "csv", delimiter: "|" },
     }
 
     const table = await loadTable(resource)

@@ -1,13 +1,14 @@
-import type { InferDialectOptions } from "@fairspec/dataset"
+import type { InferFileDialectOptions } from "@fairspec/dataset"
 import { inferIntegrity, inferTextual } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
 import { copyDescriptor, inferResourceName } from "@fairspec/metadata"
 import type { InferTableSchemaOptions } from "@fairspec/table"
 import { inferDataSchema } from "../../actions/dataSchema/infer.ts"
-import { inferDialect } from "../../actions/dialect/infer.ts"
+import { inferFileDialect } from "../../actions/dialect/infer.ts"
 import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
 
-export type InferResourceOptions = InferDialectOptions & InferTableSchemaOptions
+export type InferResourceOptions = InferFileDialectOptions &
+  InferTableSchemaOptions
 
 export async function inferResource(
   resource: Resource,
@@ -19,10 +20,10 @@ export async function inferResource(
     resource.name = inferResourceName(resource)
   }
 
-  if (!resource.dialect) {
-    const dialect = await inferDialect(resource)
+  if (!resource.fileDialect) {
+    const dialect = await inferFileDialect(resource)
     if (dialect) {
-      resource.dialect = dialect
+      resource.fileDialect = dialect
     }
   }
 

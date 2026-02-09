@@ -57,7 +57,7 @@ describe("convertDatasetToCkan", () => {
         {
           name: "test-resource",
           data: "https://example.com/data.csv",
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
           descriptions: [
             {
               description: "Test resource",

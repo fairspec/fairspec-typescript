@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import { getHeaderRows } from "../../../../helpers/dialect.ts"
-import type {CsvDialect, TsvDialect} from "@fairspec/metadata"
+import type {CsvFileDialect, TsvFileDialect} from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../../models/table.ts"
@@ -11,7 +11,7 @@ import { skipCommentRows } from "../../../../actions/table/dialect.ts"
 import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { inferCsvDialect } from "../../actions/dialect/infer.ts"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 
 // TODO: Condier using sample to extract header first
 // for better commentPrefix + headerRows/commentRows support
@@ -27,7 +27,7 @@ export async function loadCsvTable(
     throw new Error("Resource path is not defined")
   }
 
-  let dialect = await getSupportedDialect(resource, ["csv", "tsv"])
+  let dialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
   if (!dialect) {
     throw new Error("Resource data is not compatible")
   }
@@ -69,7 +69,7 @@ export async function loadCsvTable(
   return table
 }
 
-function getScanOptions(dialect?: TsvDialect | CsvDialect) {
+function getScanOptions(dialect?: TsvFileDialect | CsvFileDialect) {
   const headerRows = getHeaderRows(dialect)
 
   const options: Partial<pl.ScanCsvOptions> = {

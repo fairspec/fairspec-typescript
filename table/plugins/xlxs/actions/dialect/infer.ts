@@ -1,6 +1,10 @@
 import { loadFile } from "@fairspec/dataset"
-import type { OdsDialect, Resource, XlsxDialect } from "@fairspec/metadata"
-import { getDataFirstPath, getSupportedDialect } from "@fairspec/metadata"
+import type {
+  OdsFileDialect,
+  Resource,
+  XlsxFileDialect,
+} from "@fairspec/metadata"
+import { getDataFirstPath, getSupportedFileDialect } from "@fairspec/metadata"
 import { read, utils } from "xlsx"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 
@@ -9,7 +13,7 @@ export async function inferXlsxDialect(
   options?: {
     sampleRows?: number
   },
-): Promise<XlsxDialect | OdsDialect | undefined> {
+): Promise<XlsxFileDialect | OdsFileDialect | undefined> {
   const { sampleRows = 100 } = options ?? {}
 
   const dataPath = getDataFirstPath(resource)
@@ -17,7 +21,7 @@ export async function inferXlsxDialect(
     return undefined
   }
 
-  const dialect = await getSupportedDialect(resource, ["xlsx", "ods"])
+  const dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
   if (!dialect) {
     return undefined
   }
@@ -58,7 +62,7 @@ export async function inferXlsxDialect(
     return { format: dialect.format }
   }
 
-  const result = { format: dialect.format } as XlsxDialect | OdsDialect
+  const result = { format: dialect.format } as XlsxFileDialect | OdsFileDialect
 
   if (detection.dialect.header.hasHeaderRow) {
     result.headerRows = [detection.dialect.header.numPreambleRows + 1]

@@ -66,7 +66,7 @@ export const inferTableSchemaCommand = new Command()
       : undefined
 
     const resource: Resource = path
-      ? { data: path, dialect }
+      ? { data: path, fileDialect: dialect }
       : await selectResource(session, options)
 
     const tableSchema = await session.task("Inferring schema", async () => {

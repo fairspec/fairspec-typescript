@@ -11,7 +11,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -30,7 +30,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -48,7 +48,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -69,7 +69,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -88,7 +88,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -108,7 +108,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "jsonl" },
+        fileDialect: { format: "jsonl" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -127,7 +127,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "jsonl" },
+        fileDialect: { format: "jsonl" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -146,7 +146,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -162,7 +162,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -178,7 +178,7 @@ describe("inferJsonDialect", () => {
           { id: 1, name: "Alice" },
           { id: 2, name: "Bob" },
         ],
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -192,7 +192,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "csv" },
+        fileDialect: { format: "csv" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -206,7 +206,7 @@ describe("inferJsonDialect", () => {
 
       const resource: Resource = {
         data: path,
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)
@@ -221,7 +221,7 @@ describe("inferJsonDialect", () => {
     it("should handle non-file path errors gracefully", async () => {
       const resource: Resource = {
         data: "/nonexistent/path/to/file.json",
-        dialect: { format: "json" },
+        fileDialect: { format: "json" },
       }
 
       const result = await inferJsonDialect(resource)

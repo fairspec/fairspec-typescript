@@ -1,4 +1,4 @@
-// import { Dialect } from "../models/dialect/dialect.ts"
+// import { FileDialect } from "../models/fileDialect/fileDialect.ts"
 // import { Report } from "../models/report.ts"
 // import { Resource } from "../models/resource.ts"
 import { TableSchema } from "../models/tableSchema.ts"

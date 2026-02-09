@@ -1,19 +1,17 @@
 import { z } from "zod"
-import { BaseDialect } from "./base.ts"
+import { BaseFileDialect } from "./base.ts"
 import {
   ColumnNames,
   CommentPrefix,
   CommentRows,
   HeaderJoin,
   HeaderRows,
-  SheetName,
-  SheetNumber,
+  RowType,
 } from "./common.ts"
 
-export const OdsDialect = BaseDialect.extend({
-  format: z.literal("ods"),
-  sheetName: SheetName.optional(),
-  sheetNumber: SheetNumber.optional(),
+export const JsonlFileDialect = BaseFileDialect.extend({
+  format: z.literal("jsonl"),
+  rowType: RowType.optional(),
   headerRows: HeaderRows.optional(),
   headerJoin: HeaderJoin.optional(),
   commentRows: CommentRows.optional(),
@@ -21,4 +19,4 @@ export const OdsDialect = BaseDialect.extend({
   columnNames: ColumnNames.optional(),
 })
 
-export type OdsDialect = z.infer<typeof OdsDialect>
+export type JsonlFileDialect = z.infer<typeof JsonlFileDialect>

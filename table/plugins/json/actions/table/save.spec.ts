@@ -12,7 +12,7 @@ const table = pl.readRecords([row1, row2]).lazy()
 describe("saveJsonTable", () => {
   it("should save table to file", async () => {
     const path = getTempFilePath()
-    await saveJsonTable(table, { path, dialect: { format: "json" } })
+    await saveJsonTable(table, { path, fileDialect: { format: "json" } })
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual(JSON.stringify([row1, row2], null, 2))
@@ -23,7 +23,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      dialect: { format: "json", jsonPointer: "key" },
+      fileDialect: { format: "json", jsonPointer: "key" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -35,7 +35,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      dialect: { format: "json", columnNames: ["name"] },
+      fileDialect: { format: "json", columnNames: ["name"] },
     })
 
     const content = await readFile(path, "utf-8")
@@ -49,7 +49,7 @@ describe("saveJsonTable", () => {
 
     await saveJsonTable(table, {
       path,
-      dialect: { format: "json", rowType: "array" },
+      fileDialect: { format: "json", rowType: "array" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -98,7 +98,7 @@ describe("saveJsonTable (format=jsonl)", () => {
   it("should save table to file", async () => {
     const path = getTempFilePath()
 
-    await saveJsonTable(table, { path, dialect: { format: "jsonl" } })
+    await saveJsonTable(table, { path, fileDialect: { format: "jsonl" } })
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual(
@@ -110,7 +110,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      dialect: { format: "jsonl", columnNames: ["name"] },
+      fileDialect: { format: "jsonl", columnNames: ["name"] },
     })
 
     const content = await readFile(path, "utf-8")
@@ -126,7 +126,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      dialect: { format: "jsonl", rowType: "array" },
+      fileDialect: { format: "jsonl", rowType: "array" },
     })
 
     const content = await readFile(path, "utf-8")
@@ -143,7 +143,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     const path = getTempFilePath()
     await saveJsonTable(table, {
       path,
-      dialect: { format: "jsonl", rowType: "object" },
+      fileDialect: { format: "jsonl", rowType: "object" },
     })
 
     const content = await readFile(path, "utf-8")

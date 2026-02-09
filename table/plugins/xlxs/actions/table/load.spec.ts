@@ -21,7 +21,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx" },
+        fileDialect: { format: "xlsx" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -35,7 +35,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: [path1, path2],
-        dialect: { format: "xlsx" },
+        fileDialect: { format: "xlsx" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -81,7 +81,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", sheetNumber: 2 },
+        fileDialect: { format: "xlsx", sheetNumber: 2 },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -93,7 +93,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", sheetName: "Sheet2" },
+        fileDialect: { format: "xlsx", sheetName: "Sheet2" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -105,7 +105,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", headerRows: false },
+        fileDialect: { format: "xlsx", headerRows: false },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -120,7 +120,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", headerRows: [2] },
+        fileDialect: { format: "xlsx", headerRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -134,7 +134,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", headerRows: [1, 2] },
+        fileDialect: { format: "xlsx", headerRows: [1, 2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -148,7 +148,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", headerRows: [1, 2], headerJoin: "-" },
+        fileDialect: { format: "xlsx", headerRows: [1, 2], headerJoin: "-" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -162,7 +162,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", commentRows: [2] },
+        fileDialect: { format: "xlsx", commentRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record2])
@@ -174,7 +174,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", commentPrefix: "#" },
+        fileDialect: { format: "xlsx", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -186,7 +186,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", commentPrefix: "#" },
+        fileDialect: { format: "xlsx", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -202,7 +202,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "xlsx", commentPrefix: "#" },
+        fileDialect: { format: "xlsx", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -222,7 +222,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods" },
+        fileDialect: { format: "ods" },
       })
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
     })
@@ -235,7 +235,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: [path1, path2],
-        dialect: { format: "ods" },
+        fileDialect: { format: "ods" },
       })
       expect((await table.collect()).toRecords()).toEqual([
         record1,
@@ -248,7 +248,7 @@ describe("loadXlsxTable (format=ods)", () => {
     it.skip("should load remote file", async () => {
       const table = await loadXlsxTable({
         data: "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/ods/table/fixtures/table.ods",
-        dialect: { format: "ods" },
+        fileDialect: { format: "ods" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -263,7 +263,7 @@ describe("loadXlsxTable (format=ods)", () => {
           "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/ods/table/fixtures/table.ods",
           "https://github.com/fairspec/fairspec-typescript/raw/refs/heads/main/table/plugins/ods/table/fixtures/table.ods",
         ],
-        dialect: { format: "ods" },
+        fileDialect: { format: "ods" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -285,7 +285,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", sheetNumber: 2 },
+        fileDialect: { format: "ods", sheetNumber: 2 },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -300,7 +300,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", sheetName: "Sheet2" },
+        fileDialect: { format: "ods", sheetName: "Sheet2" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -312,7 +312,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", headerRows: false },
+        fileDialect: { format: "ods", headerRows: false },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -327,7 +327,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", headerRows: [2] },
+        fileDialect: { format: "ods", headerRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -341,7 +341,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", headerRows: [1, 2] },
+        fileDialect: { format: "ods", headerRows: [1, 2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -355,7 +355,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", headerRows: [1, 2], headerJoin: "-" },
+        fileDialect: { format: "ods", headerRows: [1, 2], headerJoin: "-" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -369,7 +369,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", commentRows: [2] },
+        fileDialect: { format: "ods", commentRows: [2] },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record2])
@@ -383,7 +383,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", commentPrefix: "#" },
+        fileDialect: { format: "ods", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([record1, record2])
@@ -397,7 +397,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", commentPrefix: "#" },
+        fileDialect: { format: "ods", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([
@@ -413,7 +413,7 @@ describe("loadXlsxTable (format=ods)", () => {
 
       const table = await loadXlsxTable({
         data: path,
-        dialect: { format: "ods", commentPrefix: "#" },
+        fileDialect: { format: "ods", commentPrefix: "#" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

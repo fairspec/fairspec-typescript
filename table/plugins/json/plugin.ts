@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import type {
   LoadTableOptions,
   SaveTableOptions,
@@ -12,22 +12,22 @@ import { saveJsonTable } from "./actions/table/save.ts"
 
 export class JsonPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
+    const dialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
     if (!dialect) return undefined
 
-    return await loadJsonTable({ ...resource, dialect }, options)
+    return await loadJsonTable({ ...resource, fileDialect: dialect }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
+    const dialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
     if (!dialect) return undefined
 
-    return await saveJsonTable(table, { ...options, dialect })
+    return await saveJsonTable(table, { ...options, fileDialect: dialect })
   }
 
-  async inferDialect(resource: Resource) {
+  async inferFileDialect(resource: Resource) {
     return await inferJsonDialect(resource)
   }
 }

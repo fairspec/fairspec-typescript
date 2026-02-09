@@ -1,7 +1,7 @@
-import type { Dialect } from "@fairspec/metadata"
+import type { FileDialect } from "@fairspec/metadata"
 
 export type DialectWithHeaderAndCommentRows = Extract<
-  Dialect,
+  FileDialect,
   {
     headerRows?: any
     headerJoin?: any

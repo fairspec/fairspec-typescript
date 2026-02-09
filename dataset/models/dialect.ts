@@ -1,7 +1,7 @@
 import { z } from "zod"
 
-export const InferDialectOptions = z.object({
+export const InferFileDialectOptions = z.object({
   sampleBytes: z.number().optional(),
 })
 
-export type InferDialectOptions = z.infer<typeof InferDialectOptions>
+export type InferFileDialectOptions = z.infer<typeof InferFileDialectOptions>

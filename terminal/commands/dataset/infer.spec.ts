@@ -110,6 +110,6 @@ describe("dataset infer", () => {
     expect(text.length).toBeGreaterThan(0)
     const data = JSON.parse(text[0] ?? "")
     expect(data).toHaveProperty("resources")
-    expect(data.resources[0]).toHaveProperty("dialect")
+    expect(data.resources[0]).toHaveProperty("fileDialect")
   })
 })

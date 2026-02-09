@@ -6,7 +6,7 @@ import { inferResource } from "./infer.ts"
 describe("inferResource", () => {
   it("should infer name from path", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const source: Resource = { data: path, dialect: { format: "csv" } }
+    const source: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const target = await inferResource(source)
 
@@ -22,7 +22,7 @@ describe("inferResource", () => {
 
     const target = await inferResource(source)
 
-    expect(target.dialect).toEqual({
+    expect(target.fileDialect).toEqual({
       format: "csv",
       delimiter: ",",
       headerRows: [1],
@@ -32,7 +32,7 @@ describe("inferResource", () => {
 
   it("should infer tableSchema for CSV data", async () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
-    const source: Resource = { data: path, dialect: { format: "csv" } }
+    const source: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const target = await inferResource(source)
 
@@ -66,7 +66,7 @@ describe("inferResource", () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
     const source: Resource = {
       data: path,
-      dialect: { format: "csv" },
+      fileDialect: { format: "csv" },
       name: "custom-name",
     }
 
@@ -79,7 +79,7 @@ describe("inferResource", () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
     const source: Resource = {
       data: path,
-      dialect: { format: "csv" },
+      fileDialect: { format: "csv" },
       tableSchema: {
         properties: {
           id: { type: "string" },

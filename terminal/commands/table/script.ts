@@ -4,7 +4,7 @@ import * as fairspec from "@fairspec/library"
 import { loadTable } from "@fairspec/library"
 import { Command } from "commander"
 import pc from "picocolors"
-import { createDialectFromPathAndOptions } from "../../helpers/dialect.ts"
+import { createFileDialectFromPathAndOptions } from "../../helpers/fileDialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
@@ -63,12 +63,12 @@ export const scriptTableCommand = new Command()
       debug: options.debug,
     })
 
-    const dialect = path
-      ? (options.dialect ?? createDialectFromPathAndOptions(path, options))
+    const fileDialect = path
+      ? (options.dialect ?? createFileDialectFromPathAndOptions(path, options))
       : undefined
 
     const resource: Resource = path
-      ? { data: path, dialect, tableSchema: options.schema }
+      ? { data: path, fileDialect, tableSchema: options.schema }
       : await selectResource(session, options)
 
     const table = await session.task("Loading table", async () => {

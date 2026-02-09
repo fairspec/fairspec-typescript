@@ -23,7 +23,7 @@ export function denormalizeResource(
     }
   }
 
-  for (const name of ["dialect", "dataSchema", "tableSchema"] as const) {
+  for (const name of ["fileDialect", "dataSchema", "tableSchema"] as const) {
     const property = resource[name]
     if (typeof property === "string") {
       resource[name] = denormalizePath(property, { basepath })

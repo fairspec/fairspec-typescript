@@ -14,7 +14,7 @@ describe("loadArrowTable", () => {
 
       const table = await loadArrowTable({
         data: path,
-        dialect: { format: "arrow" },
+        fileDialect: { format: "arrow" },
       })
 
       expect((await table.collect()).toRecords()).toEqual([

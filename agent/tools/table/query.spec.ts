@@ -15,7 +15,7 @@ describe("queryTableTool", () => {
   it("queries table with SELECT statement", async () => {
     const csvContent = "id,name,age\n1,alice,25\n2,bob,30\n3,carol,28"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
-    const resource: Resource = { data: csvPath, dialect: { format: "csv" } }
+    const resource: Resource = { data: csvPath, fileDialect: { format: "csv" } }
 
     const result = await queryTableTool.execute?.(
       {
@@ -38,7 +38,7 @@ describe("queryTableTool", () => {
     const csvContent =
       "id,name,age,city\n1,alice,25,NYC\n2,bob,30,LA\n3,carol,28,SF"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
-    const resource: Resource = { data: csvPath, dialect: { format: "csv" } }
+    const resource: Resource = { data: csvPath, fileDialect: { format: "csv" } }
 
     const result = await queryTableTool.execute?.(
       {
@@ -62,7 +62,7 @@ describe("queryTableTool", () => {
   it("queries table with ORDER BY clause", async () => {
     const csvContent = "id,name,score\n1,alice,85\n2,bob,90\n3,carol,88"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
-    const resource: Resource = { data: csvPath, dialect: { format: "csv" } }
+    const resource: Resource = { data: csvPath, fileDialect: { format: "csv" } }
 
     const result = await queryTableTool.execute?.(
       {
@@ -85,7 +85,7 @@ describe("queryTableTool", () => {
   it("queries table with aggregation", async () => {
     const csvContent = "id,name,score\n1,alice,85\n2,bob,90\n3,carol,88"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
-    const resource: Resource = { data: csvPath, dialect: { format: "csv" } }
+    const resource: Resource = { data: csvPath, fileDialect: { format: "csv" } }
 
     const result = await queryTableTool.execute?.(
       {
@@ -108,7 +108,7 @@ describe("queryTableTool", () => {
     const csvContent =
       "id,name,age\n1,alice,25\n2,bob,30\n3,carol,28\n4,dave,35\n5,eve,22"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
-    const resource: Resource = { data: csvPath, dialect: { format: "csv" } }
+    const resource: Resource = { data: csvPath, fileDialect: { format: "csv" } }
 
     const result = await queryTableTool.execute?.(
       {
@@ -178,7 +178,7 @@ describe("queryTableTool", () => {
   it("returns all records when querying without filters", async () => {
     const csvContent = "id,name\n1,alice\n2,bob\n3,carol"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
-    const resource: Resource = { data: csvPath, dialect: { format: "csv" } }
+    const resource: Resource = { data: csvPath, fileDialect: { format: "csv" } }
 
     const result = await queryTableTool.execute?.(
       {

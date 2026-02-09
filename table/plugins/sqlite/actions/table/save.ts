@@ -1,4 +1,4 @@
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import type { Kysely } from "kysely"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
@@ -14,9 +14,9 @@ import { convertTableSchemaToDatabase } from "../tableSchema/toDatabase.ts"
 export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const resource = { data: path, dialect: options.dialect }
-  const dialect = await getSupportedDialect(resource, ["sqlite"])
-  if (!dialect) {
+  const resource = { data: path, fileDialect: options.fileDialect }
+  const fileDialect = await getSupportedFileDialect(resource, ["sqlite"])
+  if (!fileDialect) {
     throw new Error("Saving options is not compatible")
   }
 
@@ -36,7 +36,7 @@ export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
     const databaseSchemas = await database.introspection.getTables()
 
     const tableName =
-      dialect?.tableName ??
+      fileDialect?.tableName ??
       databaseSchemas.toSorted((a, b) => a.name.localeCompare(b.name))[0]?.name
 
     if (!tableName) {

@@ -1,7 +1,7 @@
 import { validateDataSchema } from "../../actions/dataSchema/validate.ts"
 import { loadDescriptor } from "../../actions/descriptor/load.ts"
 import { validateDescriptor } from "../../actions/descriptor/validate.ts"
-import { validateDialect } from "../../actions/dialect/validate.ts"
+import { validateFileDialect } from "../../actions/fileDialect/validate.ts"
 import { loadProfile } from "../../actions/profile/load.ts"
 import { validateTableSchema } from "../../actions/tableSchema/validate.ts"
 import type { Dataset } from "../../models/dataset.ts"
@@ -48,28 +48,30 @@ export async function validateDatasetDescriptor(
     for (const [index, resource] of (dataset?.resources ?? []).entries()) {
       const rootJsonPointer = `/resources/${index}`
 
-      if (typeof resource.dialect === "string") {
-        const dialectReport = await validateDialect(resource.dialect, {
-          rootJsonPointer,
-        })
+      if (typeof resource.fileDialect === "string") {
+        const fileDialectReport = await validateFileDialect(
+          resource.fileDialect,
+          { rootJsonPointer },
+        )
 
-        report.errors.push(...dialectReport.errors)
+        report.errors.push(...fileDialectReport.errors)
       }
 
       if (typeof resource.dataSchema === "string") {
-        const dataReport = await validateDataSchema(resource.dataSchema, {
+        const dataSchemaReport = await validateDataSchema(resource.dataSchema, {
           rootJsonPointer,
         })
 
-        report.errors.push(...dataReport.errors)
+        report.errors.push(...dataSchemaReport.errors)
       }
 
       if (typeof resource.tableSchema === "string") {
-        const tableReport = await validateTableSchema(resource.tableSchema, {
-          rootJsonPointer,
-        })
+        const tableSchemaReport = await validateTableSchema(
+          resource.tableSchema,
+          { rootJsonPointer },
+        )
 
-        report.errors.push(...tableReport.errors)
+        report.errors.push(...tableSchemaReport.errors)
       }
     }
 

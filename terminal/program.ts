@@ -8,10 +8,10 @@ import { inferDatasetCommand } from "./commands/dataset/infer.ts"
 import { listDatasetCommand } from "./commands/dataset/list.ts"
 import { scriptDatasetCommand } from "./commands/dataset/script.ts"
 import { validateDatasetCommand } from "./commands/dataset/validate.ts"
-import { inferDialectCommand } from "./commands/dialect/infer.ts"
 import { copyFileCommand } from "./commands/file/copy.ts"
 import { describeFileCommand } from "./commands/file/describe.ts"
 import { validateFileCommand } from "./commands/file/validate.ts"
+import { inferFileDialectCommand } from "./commands/fileDialect/infer.ts"
 import { mcpCommand } from "./commands/general/mcp.ts"
 import { describeTableCommand } from "./commands/table/describe.ts"
 import { previewTableCommand } from "./commands/table/preview.ts"
@@ -46,7 +46,7 @@ const tableCommand = new commander.Command()
   .addCommand(inferTableSchemaCommand.name("infer-schema"))
   .addCommand(renderTableSchemaCommand.name("render-schema"))
   .addCommand(validateTableSchemaCommand.name("validate-schema"))
-  .addCommand(inferDialectCommand.name("infer-dialect"))
+  .addCommand(inferFileDialectCommand.name("infer-dialect"))
 
 const dataCommand = new commander.Command()
   .configureHelp(helpConfiguration)
@@ -55,7 +55,7 @@ const dataCommand = new commander.Command()
   .addCommand(validateDataCommand.name("validate"))
   .addCommand(inferDataSchemaCommand.name("infer-schema"))
   .addCommand(validateDataSchemaCommand.name("validate-schema"))
-  .addCommand(inferDialectCommand.name("infer-dialect"))
+  .addCommand(inferFileDialectCommand.name("infer-dialect"))
 
 const fileCommand = new commander.Command()
   .configureHelp(helpConfiguration)
@@ -64,7 +64,7 @@ const fileCommand = new commander.Command()
   .addCommand(copyFileCommand.name("copy"))
   .addCommand(describeFileCommand.name("describe"))
   .addCommand(validateFileCommand.name("validate"))
-  .addCommand(inferDialectCommand.name("infer-dialect"))
+  .addCommand(inferFileDialectCommand.name("infer-dialect"))
 
 export const program = commander.program
   .name("fairspec")

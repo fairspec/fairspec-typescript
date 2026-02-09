@@ -1,11 +1,11 @@
 import type {
   Dataset,
-  Dialect,
+  FileDialect,
   MetadataPlugin,
   Resource,
 } from "@fairspec/metadata"
 import type { SaveDatasetOptions } from "./models/dataset.ts"
-import type { InferDialectOptions } from "./models/dialect.ts"
+import type { InferFileDialectOptions } from "./models/fileDialect.ts"
 
 export interface DatasetPlugin extends MetadataPlugin {
   loadDataset?(source: string): Promise<Dataset | undefined>
@@ -15,8 +15,8 @@ export interface DatasetPlugin extends MetadataPlugin {
     options: SaveDatasetOptions,
   ): Promise<{ path?: string } | undefined>
 
-  inferDialect?(
+  inferFileDialect?(
     resource: Resource,
-    options?: InferDialectOptions,
-  ): Promise<Dialect | undefined>
+    options?: InferFileDialectOptions,
+  ): Promise<FileDialect | undefined>
 }

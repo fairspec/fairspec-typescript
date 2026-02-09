@@ -10,10 +10,10 @@ export const inferDataSchemaTool = createTool({
     resource: Resource.describe("The data resource to infer schema from"),
   }),
   outputSchema: z.object({
-    schema: DataSchema.optional(),
+    dataSchema: DataSchema.optional(),
   }),
   execute: async input => {
-    const schema = await inferDataSchema(input.resource)
-    return { schema }
+    const dataSchema = await inferDataSchema(input.resource)
+    return { dataSchema }
   },
 })

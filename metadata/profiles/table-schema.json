@@ -9,8 +9,9 @@
         "$schema": { "$ref": "#/$defs/Profile" },
         "title": { "$ref": "#/$defs/Title" },
         "description": { "$ref": "#/$defs/Description" },
-        "required": { "$ref": "#/$defs/Required" },
         "properties": { "$ref": "#/$defs/Properties" },
+        "required": { "$ref": "#/$defs/Required" },
+        "allRequired": { "$ref": "#/$defs/AllRequired" },
         "missingValues": { "$ref": "#/$defs/MissingValues" },
         "primaryKey": { "$ref": "#/$defs/PrimaryKey" },
         "uniqueKeys": { "$ref": "#/$defs/UniqueKeys" },
@@ -32,6 +33,9 @@
     "Required": {
       "type": "array",
       "items": { "type": "string" }
+    },
+    "AllRequired": {
+      "type": "boolean"
     },
     "Properties": {
       "type": "object",

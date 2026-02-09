@@ -1,11 +1,11 @@
-import { InferDialectOptions } from "@fairspec/dataset"
+import { InferFileDialectOptions } from "@fairspec/dataset"
 import type * as pl from "nodejs-polars"
 import { z } from "zod"
 import { InferTableSchemaOptions, TableSchemaOptions } from "./schema.ts"
 
 export type Table = pl.LazyDataFrame
 
-export const LoadTableOptions = InferDialectOptions.and(
+export const LoadTableOptions = InferFileDialectOptions.and(
   InferTableSchemaOptions,
 ).and(
   z.object({
@@ -18,7 +18,7 @@ export type LoadTableOptions = z.infer<typeof LoadTableOptions>
 
 export const SaveTableOptions = TableSchemaOptions.extend({
   path: z.string(),
-  dialect: z.any().optional(),
+  fileDialect: z.any().optional(),
   tableSchema: z.any().optional(),
   overwrite: z.boolean().optional(),
 })

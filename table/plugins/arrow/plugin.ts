@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import type {
   LoadTableOptions,
   SaveTableOptions,
@@ -11,25 +11,25 @@ import { saveArrowTable } from "./actions/table/save.ts"
 
 export class ArrowPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const dialect = await getSupportedDialect(resource, ["arrow"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["arrow"])
+    if (!fileDialect) return undefined
 
-    return await loadArrowTable({ ...resource, dialect }, options)
+    return await loadArrowTable({ ...resource, fileDialect }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const dialect = await getSupportedDialect(resource, ["arrow"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["arrow"])
+    if (!fileDialect) return undefined
 
-    return await saveArrowTable(table, { ...options, dialect })
+    return await saveArrowTable(table, { ...options, fileDialect })
   }
 
-  async inferDialect(resource: Resource) {
-    const dialect = await getSupportedDialect(resource, ["arrow"])
-    if (!dialect) return undefined
+  async inferFileDialect(resource: Resource) {
+    const fileDialect = await getSupportedFileDialect(resource, ["arrow"])
+    if (!fileDialect) return undefined
 
-    return { format: dialect.format }
+    return { format: fileDialect.format }
   }
 }

@@ -14,7 +14,7 @@ describe("inferTableSchemaTool", () => {
 
   it("infers schema from CSV file", async () => {
     const path = await writeTempFile("id,name,age\n1,alice,30\n2,bob,25")
-    const resource: Resource = { data: path, dialect: { format: "csv" } }
+    const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const result = await inferTableSchemaTool.execute?.(
       {
@@ -26,10 +26,10 @@ describe("inferTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.schema?.properties).toBeDefined()
-    expect(result.schema?.properties?.id?.type).toBe("integer")
-    expect(result.schema?.properties?.name?.type).toBe("string")
-    expect(result.schema?.properties?.age?.type).toBe("integer")
+    expect(result.tableSchema?.properties).toBeDefined()
+    expect(result.tableSchema?.properties?.id?.type).toBe("integer")
+    expect(result.tableSchema?.properties?.name?.type).toBe("string")
+    expect(result.tableSchema?.properties?.age?.type).toBe("integer")
   })
 
   it("infers schema from inline object data", async () => {
@@ -50,10 +50,10 @@ describe("inferTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.schema?.properties).toBeDefined()
-    expect(result.schema?.properties?.id?.type).toBe("integer")
-    expect(result.schema?.properties?.name?.type).toBe("string")
-    expect(result.schema?.properties?.age?.type).toBe("integer")
+    expect(result.tableSchema?.properties).toBeDefined()
+    expect(result.tableSchema?.properties?.id?.type).toBe("integer")
+    expect(result.tableSchema?.properties?.name?.type).toBe("string")
+    expect(result.tableSchema?.properties?.age?.type).toBe("integer")
   })
 
   it("infers different field types correctly", async () => {
@@ -74,11 +74,11 @@ describe("inferTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.schema?.properties).toBeDefined()
-    expect(result.schema?.properties?.id?.type).toBe("integer")
-    expect(result.schema?.properties?.name?.type).toBe("string")
-    expect(result.schema?.properties?.score?.type).toBe("number")
-    expect(result.schema?.properties?.active?.type).toBe("boolean")
+    expect(result.tableSchema?.properties).toBeDefined()
+    expect(result.tableSchema?.properties?.id?.type).toBe("integer")
+    expect(result.tableSchema?.properties?.name?.type).toBe("string")
+    expect(result.tableSchema?.properties?.score?.type).toBe("number")
+    expect(result.tableSchema?.properties?.active?.type).toBe("boolean")
   })
 
   it("infers date fields from strings", async () => {
@@ -99,11 +99,11 @@ describe("inferTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.schema?.properties).toBeDefined()
-    expect(result.schema?.properties?.id?.type).toBe("integer")
-    expect(result.schema?.properties?.name?.type).toBe("string")
-    expect(result.schema?.properties?.created?.type).toBe("string")
-    expect(result.schema?.properties?.created?.format).toBe("date")
+    expect(result.tableSchema?.properties).toBeDefined()
+    expect(result.tableSchema?.properties?.id?.type).toBe("integer")
+    expect(result.tableSchema?.properties?.name?.type).toBe("string")
+    expect(result.tableSchema?.properties?.created?.type).toBe("string")
+    expect(result.tableSchema?.properties?.created?.format).toBe("date")
   })
 
   it("respects sampleRows option", async () => {
@@ -125,9 +125,9 @@ describe("inferTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.schema?.properties).toBeDefined()
-    expect(result.schema?.properties?.id?.type).toBe("integer")
-    expect(result.schema?.properties?.name?.type).toBe("string")
+    expect(result.tableSchema?.properties).toBeDefined()
+    expect(result.tableSchema?.properties?.id?.type).toBe("integer")
+    expect(result.tableSchema?.properties?.name?.type).toBe("string")
   })
 
   it("handles empty data", async () => {
@@ -144,7 +144,7 @@ describe("inferTableSchemaTool", () => {
 
     expect.assert(result)
     expect.assert(!("error" in result))
-    expect(result.schema).toBeUndefined()
+    expect(result.tableSchema).toBeUndefined()
   })
 
   it("handles single row data", async () => {
@@ -162,9 +162,9 @@ describe("inferTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.schema?.properties).toBeDefined()
-    expect(result.schema?.properties?.id?.type).toBe("integer")
-    expect(result.schema?.properties?.name?.type).toBe("string")
+    expect(result.tableSchema?.properties).toBeDefined()
+    expect(result.tableSchema?.properties?.id?.type).toBe("integer")
+    expect(result.tableSchema?.properties?.name?.type).toBe("string")
   })
 
   it("respects columnTypes option", async () => {
@@ -186,9 +186,9 @@ describe("inferTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.schema?.properties).toBeDefined()
-    expect(result.schema?.properties?.id?.type).toBe("integer")
-    expect(result.schema?.properties?.value?.type).toBe("integer")
+    expect(result.tableSchema?.properties).toBeDefined()
+    expect(result.tableSchema?.properties?.id?.type).toBe("integer")
+    expect(result.tableSchema?.properties?.value?.type).toBe("integer")
   })
 
   it("handles time fields", async () => {
@@ -209,9 +209,9 @@ describe("inferTableSchemaTool", () => {
     expect.assert(result)
     expect.assert(!("error" in result))
 
-    expect(result.schema?.properties).toBeDefined()
-    expect(result.schema?.properties?.id?.type).toBe("integer")
-    expect(result.schema?.properties?.time?.type).toBe("string")
-    expect(result.schema?.properties?.time?.format).toBe("time")
+    expect(result.tableSchema?.properties).toBeDefined()
+    expect(result.tableSchema?.properties?.id?.type).toBe("integer")
+    expect(result.tableSchema?.properties?.time?.type).toBe("string")
+    expect(result.tableSchema?.properties?.time?.format).toBe("time")
   })
 })

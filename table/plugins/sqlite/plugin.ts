@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import type {
   LoadTableOptions,
   SaveTableOptions,
@@ -11,8 +11,8 @@ import { saveSqliteTable } from "./actions/table/save.ts"
 
 export class SqlitePlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const dialect = await getSupportedDialect(resource, ["sqlite"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["sqlite"])
+    if (!fileDialect) return undefined
 
     return await loadSqliteTable(resource, options)
   }
@@ -20,16 +20,16 @@ export class SqlitePlugin implements TablePlugin {
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const dialect = await getSupportedDialect(resource, ["sqlite"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["sqlite"])
+    if (!fileDialect) return undefined
 
     return await saveSqliteTable(table, options)
   }
 
-  async inferDialect(resource: Resource) {
-    const dialect = await getSupportedDialect(resource, ["sqlite"])
-    if (!dialect) return undefined
+  async inferFileDialect(resource: Resource) {
+    const fileDialect = await getSupportedFileDialect(resource, ["sqlite"])
+    if (!fileDialect) return undefined
 
-    return { format: dialect.format }
+    return { format: fileDialect.format }
   }
 }

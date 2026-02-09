@@ -1,12 +1,12 @@
 import type { Resource } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import type {
   LoadTableOptions,
   SaveTableOptions,
   Table,
 } from "../../models/table.ts"
 import type { TablePlugin } from "../../plugin.ts"
-import { inferCsvDialect } from "./actions/dialect/infer.ts"
+import { inferCsvFileDialect } from "./actions/fileDialect/infer.ts"
 import { loadCsvTable } from "./actions/table/load.ts"
 import { saveCsvTable } from "./actions/table/save.ts"
 
@@ -15,25 +15,25 @@ import { saveCsvTable } from "./actions/table/save.ts"
 
 export class CsvPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const dialect = await getSupportedDialect(resource, ["csv", "tsv"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
+    if (!fileDialect) return undefined
 
-    return await loadCsvTable({ ...resource, dialect }, options)
+    return await loadCsvTable({ ...resource, fileDialect }, options)
   }
 
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const dialect = await getSupportedDialect(resource, ["csv", "tsv"])
-    if (!dialect) return undefined
+    const fileDialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
+    if (!fileDialect) return undefined
 
-    return await saveCsvTable(table, { ...options, dialect })
+    return await saveCsvTable(table, { ...options, fileDialect })
   }
 
-  async inferDialect(resource: Resource) {
-    const dialect = await getSupportedDialect(resource, ["csv", "tsv"])
-    if (!dialect) return undefined
+  async inferFileDialect(resource: Resource) {
+    const fileDialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
+    if (!fileDialect) return undefined
 
-    return await inferCsvDialect(resource)
+    return await inferCsvFileDialect(resource)
   }
 }

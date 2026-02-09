@@ -1,11 +1,11 @@
-// import { Dialect } from "../models/dialect/dialect.ts"
+// import { FileDialect } from "../models/fileDialect/fileDialect.ts"
 // import { Report } from "../models/report.ts"
 // import { Resource } from "../models/resource.ts"
 import { TableSchema } from "../models/tableSchema.ts"
 
-// console.log(Resource.toJSONSchema())
-// console.log(Dialect.toJSONSchema())
 // console.log(Report.toJSONSchema())
+// console.log(Resource.toJSONSchema())
+// console.log(FileDialect.toJSONSchema())
 // console.log(TableSchema.toJSONSchema())
 
 const schema = TableSchema.parse({

@@ -14,7 +14,7 @@ export { getTempFolderPath } from "./actions/folder/temp.ts"
 export { loadFileStream } from "./actions/stream/load.ts"
 export { SaveDatasetOptions } from "./models/dataset.ts"
 
-export { InferDialectOptions } from "./models/dialect.ts"
+export { InferFileDialectOptions } from "./models/fileDialect.ts"
 export type { DatasetPlugin } from "./plugin.ts"
 export {
   CkanPlugin,

@@ -1,7 +1,7 @@
 import type { Resource } from "@fairspec/library"
 import { inferTableSchema } from "@fairspec/library"
 import { Command } from "commander"
-import { createDialectFromPathAndOptions } from "../../helpers/dialect.ts"
+import { createFileDialectFromPathAndOptions } from "../../helpers/fileDialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
@@ -61,12 +61,12 @@ export const inferTableSchemaCommand = new Command()
       json: options.json,
     })
 
-    const dialect = path
-      ? (options.dialect ?? createDialectFromPathAndOptions(path, options))
+    const fileDialect = path
+      ? (options.dialect ?? createFileDialectFromPathAndOptions(path, options))
       : undefined
 
     const resource: Resource = path
-      ? { data: path, dialect }
+      ? { data: path, fileDialect }
       : await selectResource(session, options)
 
     const tableSchema = await session.task("Inferring schema", async () => {

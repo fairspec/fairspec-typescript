@@ -14,6 +14,7 @@
     },
     "Resources": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/Resource" }
     },
     "Resource": {
@@ -22,8 +23,8 @@
         "name": { "$ref": "#/$defs/Name" },
         "data": { "$ref": "#/$defs/Data" },
         "textual": { "$ref": "#/$defs/Textual" },
-        "dialect": { "$ref": "#/$defs/Dialect" },
         "integrity": { "$ref": "#/$defs/Integrity" },
+        "fileDialect": { "$ref": "#/$defs/FileDialect" },
         "dataSchema": { "$ref": "#/$defs/DataSchema" },
         "tableSchema": { "$ref": "#/$defs/TableSchema" }
       }
@@ -69,10 +70,10 @@
     "Textual": {
       "type": "boolean"
     },
-    "Dialect": {
+    "FileDialect": {
       "oneOf": [
         { "$ref": "#/$defs/Path" },
-        { "$ref": "https://fairspec.org/profiles/latest/dialect.json" }
+        { "$ref": "https://fairspec.org/profiles/latest/file-dialect.json" }
       ]
     },
     "Integrity": {
@@ -158,6 +159,7 @@
     },
     "CreatorNameIdentifiers": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -172,6 +174,7 @@
     },
     "CreatorAffiliations": {
       "type": "array",
+      "minItems": 1,
       "uniqueItems": true,
       "items": { "$ref": "#/$defs/CreatorAffiliation" }
     },
@@ -223,6 +226,7 @@
     },
     "Subjects": {
       "type": "array",
+      "minItems": 1,
       "uniqueItems": true,
       "items": { "$ref": "#/$defs/Subject" }
     },
@@ -241,6 +245,7 @@
     },
     "Contributors": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/Contributor" }
     },
     "Contributor": {
@@ -280,6 +285,7 @@
     },
     "Dates": {
       "type": "array",
+      "minItems": 1,
       "uniqueItems": true,
       "items": { "$ref": "#/$defs/Date" }
     },
@@ -374,6 +380,7 @@
     },
     "AlternateIdentifiers": {
       "type": "array",
+      "minItems": 1,
       "uniqueItems": true,
       "items": { "$ref": "#/$defs/AlternateIdentifier" }
     },
@@ -388,6 +395,7 @@
     },
     "RelatedIdentifiers": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/RelatedIdentifier" }
     },
     "RelatedIdentifier": {
@@ -500,6 +508,7 @@
     },
     "Sizes": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "string"
       },
@@ -507,6 +516,7 @@
     },
     "Formats": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "string"
       },
@@ -517,6 +527,7 @@
     },
     "RightsList": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/Rights" },
       "uniqueItems": true
     },
@@ -534,6 +545,7 @@
     },
     "Descriptions": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/Description" },
       "uniqueItems": true
     },
@@ -559,6 +571,7 @@
     },
     "GeoLocations": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/GeoLocation" },
       "uniqueItems": true
     },
@@ -571,6 +584,7 @@
         "geoLocationBox": { "$ref": "#/$defs/GeoLocationBox" },
         "geoLocationPolygon": {
           "type": "array",
+          "minItems": 1,
           "items": { "$ref": "#/$defs/GeoLocationPolygonItem" }
         }
       }
@@ -624,6 +638,7 @@
     },
     "FundingReferences": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/FundingReference" },
       "uniqueItems": true
     },
@@ -647,6 +662,7 @@
     },
     "RelatedItems": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/RelatedItem" },
       "uniqueItems": true
     },

@@ -2,7 +2,7 @@ import { z } from "zod"
 import { Data } from "./data.ts"
 import { Datacite } from "./datacite/datacite.ts"
 import { DataSchema } from "./dataSchema.ts"
-import { Dialect } from "./dialect/dialect.ts"
+import { FileDialect } from "./fileDialect/fileDialect.ts"
 import { Integrity } from "./integrity.ts"
 import { Path } from "./path.ts"
 import { TableSchema } from "./tableSchema.ts"
@@ -25,16 +25,16 @@ export const Resource = Datacite.extend({
     .optional()
     .describe("Whether the resource is text-based."),
 
-  dialect: z
-    .union([Path, Dialect])
+  integrity: Integrity.optional().describe(
+    "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",
+  ),
+
+  fileDialect: z
+    .union([Path, FileDialect])
     .optional()
     .describe(
       "A path to dialect or an object with the dialect of the file. For multiple files the format property defines the dialect for all the files.",
     ),
-
-  integrity: Integrity.optional().describe(
-    "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",
-  ),
 
   dataSchema: z
     .union([Path, DataSchema])

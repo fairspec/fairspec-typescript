@@ -21,7 +21,7 @@ describe("saveDatasetToCkan", () => {
       {
         name: "test-resource",
         data: getFixturePath("data.csv"),
-        dialect: { format: "csv" },
+        fileDialect: { format: "csv" },
       },
     ],
   }
@@ -309,12 +309,12 @@ describe("saveDatasetToCkan", () => {
         {
           name: "resource-1",
           data: getFixturePath("data.csv"),
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
         },
         {
           name: "resource-2",
           data: getFixturePath("data.csv"),
-          dialect: { format: "json" },
+          fileDialect: { format: "json" },
         },
       ],
     }

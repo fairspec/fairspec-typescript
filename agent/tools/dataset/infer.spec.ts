@@ -16,7 +16,7 @@ describe("inferDatasetTool", () => {
     const path = await writeTempFile("id,name\n1,alice\n2,bob")
     const source: Dataset = {
       language: "en",
-      resources: [{ data: path, dialect: { format: "csv" } }],
+      resources: [{ data: path, fileDialect: { format: "csv" } }],
     }
 
     const result = await inferDatasetTool.execute?.(
@@ -45,8 +45,8 @@ describe("inferDatasetTool", () => {
     const source: Dataset = {
       language: "en",
       resources: [
-        { data: path1, dialect: { format: "csv" } },
-        { data: path2, dialect: { format: "csv" } },
+        { data: path1, fileDialect: { format: "csv" } },
+        { data: path2, fileDialect: { format: "csv" } },
       ],
     }
 
@@ -106,7 +106,7 @@ describe("inferDatasetTool", () => {
       resources: [
         {
           data: path,
-          dialect: { format: "csv" },
+          fileDialect: { format: "csv" },
           tableSchema: {
             properties: {
               id: { type: "string" },
@@ -158,8 +158,8 @@ describe("inferDatasetTool", () => {
     const path2 = await writeTempFile("id,value\n1,100")
     const source: Dataset = {
       resources: [
-        { data: path1, dialect: { format: "csv" } },
-        { data: path2, dialect: { format: "csv" } },
+        { data: path1, fileDialect: { format: "csv" } },
+        { data: path2, fileDialect: { format: "csv" } },
       ],
     }
 

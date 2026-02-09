@@ -1,6 +1,6 @@
 import { saveFile } from "@fairspec/dataset"
-import type { JsonDialect, JsonlDialect } from "@fairspec/metadata"
-import { getSupportedDialect } from "@fairspec/metadata"
+import type { JsonFileDialect, JsonlFileDialect } from "@fairspec/metadata"
+import { getSupportedFileDialect } from "@fairspec/metadata"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
@@ -10,13 +10,13 @@ import { encodeJsonBuffer } from "../../actions/buffer/encode.ts"
 export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
-  const resource = { data: path, dialect: options.dialect }
-  const dialect = await getSupportedDialect(resource, ["json", "jsonl"])
-  if (!dialect) {
+  const resource = { data: path, fileDialect: options.fileDialect }
+  const fileDialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
+  if (!fileDialect) {
     throw new Error("Saving options is not compatible")
   }
 
-  const isLines = dialect?.format === "jsonl"
+  const isLines = fileDialect?.format === "jsonl"
 
   const tableSchema =
     options.tableSchema ??
@@ -33,8 +33,8 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   let buffer = frame.writeJSON({ format: isLines ? "lines" : "json" })
   let data = decodeJsonBuffer(buffer, { isLines })
 
-  if (dialect) {
-    data = processData(data, dialect)
+  if (fileDialect) {
+    data = processData(data, fileDialect)
   }
 
   buffer = encodeJsonBuffer(data, { isLines })
@@ -45,7 +45,7 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
 
 function processData(
   records: Record<string, any>[],
-  dialect: JsonDialect | JsonlDialect,
+  dialect: JsonFileDialect | JsonlFileDialect,
 ) {
   let data: any = records
 
@@ -60,7 +60,7 @@ function processData(
     const names = dialect.columnNames ?? Object.keys(data[0])
     data = [
       names,
-      ...data.map((row: any) => names.map((nmae: any) => row[nmae])),
+      ...data.map((row: any) => names.map((name: any) => row[name])),
     ]
   }
 

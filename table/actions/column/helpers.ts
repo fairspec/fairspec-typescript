@@ -25,8 +25,8 @@ export async function inspectTextColumn(
   const errors: CellError[] = []
 
   const frame = await table
-    .withRowIndex("number", 1)
-    .select(pl.col("number"), pl.col(column.name).alias("source"))
+    .withRowIndex("fairspec:number", 1)
+    .select(pl.col("fairspec:number"), pl.col(column.name).alias("source"))
     .collect()
 
   for (const row of frame.toRecords() as any[]) {
@@ -43,7 +43,7 @@ export async function inspectTextColumn(
         cell: String(row.source),
         columnName: column.name,
         columnType: column.type,
-        rowNumber: row.number,
+        rowNumber: row["fairspec:number"],
       })
     }
   }
@@ -64,8 +64,8 @@ export async function inspectJsonColumn(
   const constraintJsonSchema = column.property
 
   const frame = await table
-    .withRowIndex("number", 1)
-    .select(pl.col("number"), pl.col(column.name).alias("source"))
+    .withRowIndex("fairspec:number", 1)
+    .select(pl.col("fairspec:number"), pl.col(column.name).alias("source"))
     .collect()
 
   for (const row of frame.toRecords() as any[]) {
@@ -84,7 +84,7 @@ export async function inspectJsonColumn(
         cell: String(row.source),
         columnName: column.name,
         columnType: column.type,
-        rowNumber: row.number,
+        rowNumber: row["fairspec:number"],
       })
 
       continue
@@ -101,7 +101,7 @@ export async function inspectJsonColumn(
           cell: String(row.source),
           columnName: column.name,
           columnType: column.type,
-          rowNumber: row.number,
+          rowNumber: row["fairspec:number"],
         })
       }
 
@@ -118,7 +118,7 @@ export async function inspectJsonColumn(
           type: "cell/json",
           cell: String(row.source),
           columnName: column.name,
-          rowNumber: row.number,
+          rowNumber: row["fairspec:number"],
           message: error.message,
           jsonPointer: error.jsonPointer,
         })

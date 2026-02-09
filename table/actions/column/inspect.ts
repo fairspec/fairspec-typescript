@@ -134,9 +134,9 @@ async function inspectCellsInPolars(
   const { maxErrors } = options
   const errors: CellError[] = []
   let columnCheckTable = table
-    .withRowIndex("number", 1)
+    .withRowIndex("fairspec:number", 1)
     .select(
-      pl.col("number"),
+      pl.col("fairspec:number"),
       normalizeColumn(mapping).alias("target"),
       normalizeColumn(mapping, { keepType: true }).alias("source"),
       pl.lit(null).alias("error"),
@@ -184,7 +184,7 @@ async function inspectCellsInPolars(
     const errorTemplate = JSON.parse(row.error) as CellError
     errors.push({
       ...errorTemplate,
-      rowNumber: row.number,
+      rowNumber: row["fairspec:number"],
       cell: String(row.source ?? ""),
     })
   }

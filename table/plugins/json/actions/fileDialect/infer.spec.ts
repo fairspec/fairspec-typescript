@@ -1,9 +1,9 @@
 import { writeTempFile } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { inferJsonDialect } from "./infer.ts"
+import { inferJsonFileDialect } from "./infer.ts"
 
-describe("inferJsonDialect", () => {
+describe("inferJsonFileDialect", () => {
   describe("JSON array of objects", () => {
     it("should detect rowType as object without headerRows", async () => {
       const body = '[{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]'
@@ -14,7 +14,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "json",
@@ -33,7 +33,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "json",
@@ -51,7 +51,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "json",
@@ -72,7 +72,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toMatchObject({
         format: "json",
@@ -91,7 +91,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "json",
@@ -111,7 +111,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "jsonl" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "jsonl",
@@ -130,7 +130,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "jsonl" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "jsonl",
@@ -149,7 +149,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "json",
@@ -165,7 +165,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "json",
@@ -181,7 +181,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toBeUndefined()
     })
@@ -195,7 +195,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "csv" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toBeUndefined()
     })
@@ -209,7 +209,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "json",
@@ -224,7 +224,7 @@ describe("inferJsonDialect", () => {
         fileDialect: { format: "json" },
       }
 
-      const result = await inferJsonDialect(resource)
+      const result = await inferJsonFileDialect(resource)
 
       expect(result).toEqual({
         format: "json",

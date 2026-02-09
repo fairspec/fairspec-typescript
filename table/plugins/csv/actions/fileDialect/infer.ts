@@ -8,7 +8,7 @@ import type {
 import { getDataPath } from "@fairspec/metadata"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 
-export async function inferCsvDialect(
+export async function inferCsvFileDialect(
   resource: Resource,
   options?: {
     sampleBytes?: number

@@ -1,6 +1,6 @@
 import * as pl from "nodejs-polars"
 import { describe, expect, it } from "vitest"
-import { joinHeaderRows, skipCommentRows } from "./dialect.ts"
+import { joinHeaderRows, skipCommentRows } from "./fileDialect.ts"
 
 describe("joinHeaderRows", () => {
   it("should join two header rows with default space separator", async () => {

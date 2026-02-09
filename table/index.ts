@@ -21,7 +21,7 @@ export {
 export { CsvPlugin, loadCsvTable, saveCsvTable } from "./plugins/csv/index.ts"
 export { InlinePlugin, loadInlineTable } from "./plugins/inline/index.ts"
 export {
-  inferJsonDialect,
+  inferJsonFileDialect,
   JsonPlugin,
   loadJsonTable,
   saveJsonTable,
@@ -37,7 +37,7 @@ export {
   saveSqliteTable,
 } from "./plugins/sqlite/index.ts"
 export {
-  inferXlsxDialect,
+  inferXlsxFileDialect,
   loadXlsxTable,
   saveXlsxTable,
   XlsxPlugin,

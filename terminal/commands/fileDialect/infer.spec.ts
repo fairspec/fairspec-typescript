@@ -1,7 +1,7 @@
 import { writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { inferDialectCommand } from "./infer.ts"
+import { inferFileDialectCommand } from "./infer.ts"
 
 describe("format infer", () => {
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe("format infer", () => {
     )
 
     const command = new Command()
-      .addCommand(inferDialectCommand)
+      .addCommand(inferFileDialectCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -59,7 +59,7 @@ describe("format infer", () => {
     )
 
     const command = new Command()
-      .addCommand(inferDialectCommand)
+      .addCommand(inferFileDialectCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},
@@ -93,7 +93,7 @@ describe("format infer", () => {
     )
 
     const command = new Command()
-      .addCommand(inferDialectCommand)
+      .addCommand(inferFileDialectCommand)
       .configureOutput({
         writeOut: () => {},
         writeErr: () => {},

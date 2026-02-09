@@ -1,16 +1,16 @@
 import type { Resource } from "@fairspec/metadata"
-import { getHeaderRows } from "../../../../helpers/dialect.ts"
+import { getHeaderRows } from "../../../../helpers/fileDialect.ts"
 import type {CsvFileDialect, TsvFileDialect} from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../../models/table.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
-import { joinHeaderRows } from "../../../../actions/table/dialect.ts"
+import { joinHeaderRows } from "../../../../actions/table/fileDialect.ts"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
-import { skipCommentRows } from "../../../../actions/table/dialect.ts"
+import { skipCommentRows } from "../../../../actions/table/fileDialect.ts"
 import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
-import { inferCsvDialect } from "../../actions/dialect/infer.ts"
+import { inferCsvFileDialect } from "../../actions/fileDialect/infer.ts"
 import { getSupportedFileDialect } from "@fairspec/metadata"
 
 // TODO: Condier using sample to extract header first
@@ -34,7 +34,7 @@ export async function loadCsvTable(
 
   // TODO: Consider inferring all the missing dialect properties
   if (!dialect || Object.keys(dialect).length <= 1) {
-    dialect = await inferCsvDialect({ ...resource, data: paths[0] }, options)
+    dialect = await inferCsvFileDialect({ ...resource, data: paths[0] }, options)
   }
 
   const scanOptions = getScanOptions(dialect)

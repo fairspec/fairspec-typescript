@@ -5,7 +5,7 @@ import type {
   Resource,
 } from "@fairspec/metadata"
 import type { SaveDatasetOptions } from "./models/dataset.ts"
-import type { InferFileDialectOptions } from "./models/dialect.ts"
+import type { InferFileDialectOptions } from "./models/fileDialect.ts"
 
 export interface DatasetPlugin extends MetadataPlugin {
   loadDataset?(source: string): Promise<Dataset | undefined>

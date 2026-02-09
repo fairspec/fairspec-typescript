@@ -4,7 +4,7 @@ import type { Resource } from "@fairspec/metadata"
 import { copyDescriptor, inferResourceName } from "@fairspec/metadata"
 import type { InferTableSchemaOptions } from "@fairspec/table"
 import { inferDataSchema } from "../../actions/dataSchema/infer.ts"
-import { inferFileDialect } from "../../actions/dialect/infer.ts"
+import { inferFileDialect } from "../../actions/fileDialect/infer.ts"
 import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
 
 export type InferResourceOptions = InferFileDialectOptions &

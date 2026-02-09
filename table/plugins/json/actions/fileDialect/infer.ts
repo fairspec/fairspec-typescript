@@ -9,7 +9,7 @@ import { getDataFirstPath, getSupportedFileDialect } from "@fairspec/metadata"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 import { decodeJsonBuffer } from "../buffer/decode.ts"
 
-export async function inferJsonDialect(
+export async function inferJsonFileDialect(
   resource: Resource,
   options?: {
     sampleRows?: number

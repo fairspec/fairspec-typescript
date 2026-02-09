@@ -6,7 +6,7 @@ import type {
   Table,
 } from "../../models/table.ts"
 import type { TablePlugin } from "../../plugin.ts"
-import { inferCsvDialect } from "./actions/dialect/infer.ts"
+import { inferCsvFileDialect } from "./actions/fileDialect/infer.ts"
 import { loadCsvTable } from "./actions/table/load.ts"
 import { saveCsvTable } from "./actions/table/save.ts"
 
@@ -34,6 +34,6 @@ export class CsvPlugin implements TablePlugin {
     const dialect = await getSupportedFileDialect(resource, ["csv", "tsv"])
     if (!dialect) return undefined
 
-    return await inferCsvDialect(resource)
+    return await inferCsvFileDialect(resource)
   }
 }

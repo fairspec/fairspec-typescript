@@ -8,7 +8,7 @@ import { getDataFirstPath, getSupportedFileDialect } from "@fairspec/metadata"
 import { read, utils } from "xlsx"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 
-export async function inferXlsxDialect(
+export async function inferXlsxFileDialect(
   resource: Resource,
   options?: {
     sampleRows?: number

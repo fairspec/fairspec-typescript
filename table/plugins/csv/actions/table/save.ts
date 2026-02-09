@@ -2,7 +2,7 @@ import { assertLocalPathVacant } from "@fairspec/dataset"
 import { getSupportedFileDialect } from "@fairspec/metadata"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
-import { getHeaderRows } from "../../../../helpers/dialect.ts"
+import { getHeaderRows } from "../../../../helpers/fileDialect.ts"
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 
 export async function saveCsvTable(table: Table, options: SaveTableOptions) {

@@ -1,10 +1,10 @@
-import { getHeaderRows } from "../../helpers/dialect.ts"
+import { getHeaderRows } from "../../helpers/fileDialect.ts"
 import type { DataRecord, DataRow } from "../../models/data.ts"
-import type { DialectWithHeaderAndCommentRows } from "../../models/dialect.ts"
+import type { FileDialectWithHeaderAndCommentRows } from "../../models/fileDialect.ts"
 
 export function getRecordsFromRows(
   rows: DataRow[],
-  dialect?: DialectWithHeaderAndCommentRows,
+  dialect?: FileDialectWithHeaderAndCommentRows,
 ) {
   const records: DataRecord[] = []
 
@@ -32,7 +32,7 @@ export function getRecordsFromRows(
 
 function getHeaderFromRows(
   rows: DataRow[],
-  dialect?: DialectWithHeaderAndCommentRows,
+  dialect?: FileDialectWithHeaderAndCommentRows,
 ) {
   if (dialect?.columnNames) {
     return [dialect.columnNames]
@@ -60,7 +60,7 @@ function getHeaderFromRows(
 
 function getContentFromRows(
   rows: DataRow[],
-  dialect?: DialectWithHeaderAndCommentRows,
+  dialect?: FileDialectWithHeaderAndCommentRows,
 ) {
   const headerRows = getHeaderRows(dialect)
   const commentRows = dialect?.commentRows ?? []
@@ -95,7 +95,7 @@ function getContentFromRows(
 
 function getLabelsFromHeader(
   header: DataRow[],
-  dialect?: DialectWithHeaderAndCommentRows,
+  dialect?: FileDialectWithHeaderAndCommentRows,
 ) {
   if (!header[0]) {
     return undefined
@@ -116,7 +116,7 @@ function getLabelsFromHeader(
 
 function getIsCommentedRow(
   row: unknown[],
-  dialect?: DialectWithHeaderAndCommentRows,
+  dialect?: FileDialectWithHeaderAndCommentRows,
 ) {
   const commentPrefix = dialect?.commentPrefix
   if (!commentPrefix) {

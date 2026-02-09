@@ -1,7 +1,7 @@
 import type { Resource } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { inferTableSchemaFromTable } from "@fairspec/table"
-import { inferFileDialect } from "../../actions/dialect/infer.ts"
+import { inferFileDialect } from "../../actions/fileDialect/infer.ts"
 import { loadTable } from "./load.ts"
 
 export async function inferTable(resource: Resource) {

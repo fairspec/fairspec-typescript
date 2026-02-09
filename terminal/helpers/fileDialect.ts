@@ -8,11 +8,11 @@ import type {
   XlsxFileDialect,
 } from "@fairspec/library"
 import { inferFileDialectFormat } from "@fairspec/library"
-import type { DialectOptions } from "../models/dialect.ts"
+import type { FileDialectOptions } from "../models/fileDialect.ts"
 
-export function createDialectFromPathAndOptions(
+export function createFileDialectFromPathAndOptions(
   path: string,
-  options: DialectOptions,
+  options: FileDialectOptions,
 ) {
   const format = options.format ?? inferFileDialectFormat({ data: path })
 

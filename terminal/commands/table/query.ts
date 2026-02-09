@@ -2,7 +2,7 @@ import assert from "node:assert"
 import type { Resource } from "@fairspec/library"
 import { loadTable, queryTable } from "@fairspec/library"
 import { Command } from "commander"
-import { createDialectFromPathAndOptions } from "../../helpers/dialect.ts"
+import { createFileDialectFromPathAndOptions } from "../../helpers/fileDialect.ts"
 import { helpConfiguration } from "../../helpers/help.ts"
 import { selectResource } from "../../helpers/resource.ts"
 import * as params from "../../params/index.ts"
@@ -65,7 +65,7 @@ export const queryTableCommand = new Command()
     })
 
     const dialect = path
-      ? (options.dialect ?? createDialectFromPathAndOptions(path, options))
+      ? (options.dialect ?? createFileDialectFromPathAndOptions(path, options))
       : undefined
 
     const resource: Resource = path

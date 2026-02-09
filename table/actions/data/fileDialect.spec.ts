@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { getRecordsFromRows } from "./dialect.ts"
+import { getRecordsFromRows } from "./fileDialect.ts"
 
 describe("getRecordsFromRows", () => {
   it("should convert rows to records with default header", () => {

@@ -3,14 +3,14 @@ import { getSupportedFileDialect } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { loadFile, prefetchFiles } from "@fairspec/dataset"
 import type { DataRow } from "../../../../models/data.ts"
-import { getRecordsFromRows } from "../../../../actions/data/dialect.ts"
+import { getRecordsFromRows } from "../../../../actions/data/fileDialect.ts"
 import type { LoadTableOptions } from "../../../../models/table.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { read, utils } from "xlsx"
-import { inferXlsxDialect } from "../dialect/infer.ts"
+import { inferXlsxFileDialect } from "../fileDialect/infer.ts"
 
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation
@@ -31,7 +31,7 @@ export async function loadXlsxTable(
 
   // TODO: Consider inferring all the missing dialect properties
   if (!dialect || Object.keys(dialect).length <= 1) {
-    dialect = await inferXlsxDialect({ ...resource, data: paths[0] })
+    dialect = await inferXlsxFileDialect({ ...resource, data: paths[0] })
   }
 
   const tables: Table[] = []

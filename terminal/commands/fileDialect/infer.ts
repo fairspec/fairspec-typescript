@@ -5,7 +5,7 @@ import { helpConfiguration } from "../../helpers/help.ts"
 import * as params from "../../params/index.ts"
 import { Session } from "../../session.ts"
 
-export const inferDialectCommand = new Command()
+export const inferFileDialectCommand = new Command()
   .name("infer")
   .description("Infer the dialect of a file")
   .configureHelp(helpConfiguration)

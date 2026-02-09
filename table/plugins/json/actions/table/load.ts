@@ -9,7 +9,7 @@ import type { Table } from "../../../../models/table.ts"
 import * as pl from "nodejs-polars"
 import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
 import { getSupportedFileDialect } from "@fairspec/metadata"
-import { inferJsonDialect } from "../dialect/infer.ts"
+import { inferJsonFileDialect } from "../fileDialect/infer.ts"
 
 export async function loadJsonTable(
   resource: Resource,
@@ -28,7 +28,7 @@ export async function loadJsonTable(
 
   // TODO: Consider inferring all the missing dialect properties
   if (!dialect || Object.keys(dialect).length <= 1) {
-    dialect = await inferJsonDialect({ ...resource, data: paths[0] })
+    dialect = await inferJsonFileDialect({ ...resource, data: paths[0] })
   }
 
   const isLines = dialect?.format === "jsonl"

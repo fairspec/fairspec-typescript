@@ -1,12 +1,12 @@
 import { writeTempFile } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
-import { inferCsvDialect } from "./infer.ts"
+import { inferCsvFileDialect } from "./infer.ts"
 
-describe("inferCsvDialect", () => {
+describe("inferCsvFileDialect", () => {
   it("should infer a simple CSV file", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
-    const dialect = await inferCsvDialect({ data: path })
+    const dialect = await inferCsvFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "csv",
@@ -18,7 +18,7 @@ describe("inferCsvDialect", () => {
 
   it("should infer quoteChar", async () => {
     const path = await writeTempFile('id,name\n1,"John Doe"\n2,"Jane Smith"')
-    const dialect = await inferCsvDialect({ data: path })
+    const dialect = await inferCsvFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "csv",
@@ -31,7 +31,7 @@ describe("inferCsvDialect", () => {
 
   it("should infer quoteChar with single quotes", async () => {
     const path = await writeTempFile("id,name\n1,'John Doe'\n2,'Jane Smith'")
-    const dialect = await inferCsvDialect({ data: path })
+    const dialect = await inferCsvFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "csv",
@@ -44,7 +44,7 @@ describe("inferCsvDialect", () => {
 
   it("should infer header false when no header present", async () => {
     const path = await writeTempFile("1,english\n2,中文\n3,español")
-    const dialect = await inferCsvDialect({ data: path })
+    const dialect = await inferCsvFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "csv",
@@ -56,7 +56,7 @@ describe("inferCsvDialect", () => {
 
   it("should detect header when header is present", async () => {
     const path = await writeTempFile("id,name\n1,english\n2,中文")
-    const dialect = await inferCsvDialect({ data: path })
+    const dialect = await inferCsvFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "csv",
@@ -71,7 +71,7 @@ describe("inferCsvDialect", () => {
       'name,description\n"Product A","A great product with, commas"\n"Product B","Another product"',
     )
 
-    const dialect = await inferCsvDialect({ data: path })
+    const dialect = await inferCsvFileDialect({ data: path })
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
@@ -85,7 +85,7 @@ describe("inferCsvDialect", () => {
     const path = await writeTempFile("id,name,age\n1,alice,25\n2,bob,30")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
@@ -98,7 +98,7 @@ describe("inferCsvDialect", () => {
     const path = await writeTempFile("id|name|age\n1|alice|25\n2|bob|30")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
       delimiter: "|",
@@ -111,7 +111,7 @@ describe("inferCsvDialect", () => {
     const path = await writeTempFile("id;name;age\n1;alice;25\n2;bob;30")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ";",
@@ -124,7 +124,7 @@ describe("inferCsvDialect", () => {
     const path = await writeTempFile("id\tname\tage\n1\talice\t25\n2\tbob\t30")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "tsv",
       headerRows: [1],
@@ -139,7 +139,7 @@ describe("inferCsvDialect", () => {
 
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
@@ -156,7 +156,7 @@ describe("inferCsvDialect", () => {
 
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
@@ -174,7 +174,7 @@ describe("inferCsvDialect", () => {
       ],
     }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toBeUndefined()
   })
 
@@ -184,7 +184,7 @@ describe("inferCsvDialect", () => {
       data: [{ id: 1 }],
     }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toBeUndefined()
   })
 
@@ -192,7 +192,7 @@ describe("inferCsvDialect", () => {
     const path = await writeTempFile("id,name\r\n1,alice\r\n2,bob\r\n")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
@@ -205,7 +205,7 @@ describe("inferCsvDialect", () => {
     const path = await writeTempFile("id,name,age")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
@@ -218,7 +218,7 @@ describe("inferCsvDialect", () => {
     const path = await writeTempFile("")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferCsvDialect(resource)
+    const dialect = await inferCsvFileDialect(resource)
     expect(dialect).toEqual({
       format: "csv",
       delimiter: ",",
@@ -231,7 +231,7 @@ describe("inferCsvDialect", () => {
       const path = await writeTempFile(
         "id,name,age\n1,Alice,25\n2,Bob,30\n3,Charlie,35",
       )
-      const dialect = await inferCsvDialect({ data: path })
+      const dialect = await inferCsvFileDialect({ data: path })
 
       expect(dialect).toEqual({
         format: "csv",
@@ -245,7 +245,7 @@ describe("inferCsvDialect", () => {
       const path = await writeTempFile(
         "# Comment line 1\n# Comment line 2\nid,name,age\n1,Alice,25\n2,Bob,30",
       )
-      const dialect = await inferCsvDialect({ data: path })
+      const dialect = await inferCsvFileDialect({ data: path })
 
       expect(dialect).toEqual({
         format: "csv",
@@ -257,7 +257,7 @@ describe("inferCsvDialect", () => {
 
     it("should not detect header when first row is numeric", async () => {
       const path = await writeTempFile("1,2,3\n4,5,6\n7,8,9")
-      const dialect = await inferCsvDialect({ data: path })
+      const dialect = await inferCsvFileDialect({ data: path })
 
       expect(dialect).toEqual({
         format: "csv",
@@ -271,7 +271,7 @@ describe("inferCsvDialect", () => {
       const path = await writeTempFile(
         "user_id,User_Name,EmailAddress\n1,alice,alice@example.com\n2,bob,bob@example.com",
       )
-      const dialect = await inferCsvDialect({ data: path })
+      const dialect = await inferCsvFileDialect({ data: path })
 
       expect(dialect).toEqual({
         format: "csv",
@@ -285,7 +285,7 @@ describe("inferCsvDialect", () => {
       const path = await writeTempFile(
         "blsrpxedd,37257,695.80,false,1927-11-07T01:03:54Z\nzmvpq03o4,68694,337.73,false,1927-04-02T12:37:52Z\niw1fm3k9n,52019,988.74,false,2009-02-22T05:50:15Z",
       )
-      const dialect = await inferCsvDialect({ data: path })
+      const dialect = await inferCsvFileDialect({ data: path })
 
       expect(dialect).toEqual({
         format: "csv",

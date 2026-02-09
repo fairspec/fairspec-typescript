@@ -2,9 +2,9 @@ import { writeTempFile } from "@fairspec/dataset"
 import type { Resource } from "@fairspec/metadata"
 import { describe, expect, it } from "vitest"
 import { utils, write } from "xlsx"
-import { inferXlsxDialect } from "./infer.ts"
+import { inferXlsxFileDialect } from "./infer.ts"
 
-describe("inferXlsxDialect", () => {
+describe("inferXlsxFileDialect", () => {
   async function createXlsxFile(rows: unknown[][]): Promise<string> {
     const ws = utils.aoa_to_sheet(rows)
     const wb = utils.book_new()
@@ -20,7 +20,7 @@ describe("inferXlsxDialect", () => {
       [2, "Bob", 30],
     ])
 
-    const dialect = await inferXlsxDialect({ data: path })
+    const dialect = await inferXlsxFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "xlsx",
@@ -35,7 +35,7 @@ describe("inferXlsxDialect", () => {
       [7, 8, 9],
     ])
 
-    const dialect = await inferXlsxDialect({ data: path })
+    const dialect = await inferXlsxFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "xlsx",
@@ -50,7 +50,7 @@ describe("inferXlsxDialect", () => {
       [2, "bob", "bob@example.com"],
     ])
 
-    const dialect = await inferXlsxDialect({ data: path })
+    const dialect = await inferXlsxFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "xlsx",
@@ -65,7 +65,7 @@ describe("inferXlsxDialect", () => {
       ["thirdId", 52019, 988.74, false, "2024-01-03"],
     ])
 
-    const dialect = await inferXlsxDialect({ data: path })
+    const dialect = await inferXlsxFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "xlsx",
@@ -76,7 +76,7 @@ describe("inferXlsxDialect", () => {
   it("should handle single row files", async () => {
     const path = await createXlsxFile([["id", "name", "age"]])
 
-    const dialect = await inferXlsxDialect({ data: path })
+    const dialect = await inferXlsxFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "xlsx",
@@ -87,7 +87,7 @@ describe("inferXlsxDialect", () => {
   it("should handle empty files", async () => {
     const path = await createXlsxFile([])
 
-    const dialect = await inferXlsxDialect({ data: path })
+    const dialect = await inferXlsxFileDialect({ data: path })
 
     expect(dialect).toEqual({
       format: "xlsx",
@@ -100,7 +100,7 @@ describe("inferXlsxDialect", () => {
       fileDialect: { format: "csv" },
     }
 
-    const dialect = await inferXlsxDialect(resource)
+    const dialect = await inferXlsxFileDialect(resource)
     expect(dialect).toBeUndefined()
   })
 
@@ -109,7 +109,7 @@ describe("inferXlsxDialect", () => {
       data: [{ id: 1, name: "alice" }],
     }
 
-    const dialect = await inferXlsxDialect(resource)
+    const dialect = await inferXlsxFileDialect(resource)
     expect(dialect).toBeUndefined()
   })
 
@@ -129,7 +129,7 @@ describe("inferXlsxDialect", () => {
     const buffer = write(wb, { type: "buffer", bookType: "xlsx" })
     const path = await writeTempFile(buffer, { format: "xlsx" })
 
-    const dialect = await inferXlsxDialect({
+    const dialect = await inferXlsxFileDialect({
       data: path,
       fileDialect: { format: "xlsx", sheetNumber: 2 },
     })
@@ -152,7 +152,7 @@ describe("inferXlsxDialect", () => {
     const buffer = write(wb, { type: "buffer", bookType: "xlsx" })
     const path = await writeTempFile(buffer, { format: "xlsx" })
 
-    const dialect = await inferXlsxDialect({
+    const dialect = await inferXlsxFileDialect({
       data: path,
       fileDialect: { format: "xlsx", sheetName: "Headers" },
     })
@@ -174,7 +174,7 @@ describe("inferXlsxDialect", () => {
     const buffer = write(wb, { type: "buffer", bookType: "ods" })
     const path = await writeTempFile(buffer, { format: "ods" })
 
-    const dialect = await inferXlsxDialect({
+    const dialect = await inferXlsxFileDialect({
       data: path,
       fileDialect: { format: "ods" },
     })

@@ -6,7 +6,7 @@ import type {
   Table,
 } from "../../models/table.ts"
 import type { TablePlugin } from "../../plugin.ts"
-import { inferXlsxDialect } from "./actions/dialect/infer.ts"
+import { inferXlsxFileDialect } from "./actions/fileDialect/infer.ts"
 import { loadXlsxTable } from "./actions/table/load.ts"
 import { saveXlsxTable } from "./actions/table/save.ts"
 
@@ -31,6 +31,6 @@ export class XlsxPlugin implements TablePlugin {
     const dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
     if (!dialect) return undefined
 
-    return await inferXlsxDialect(resource)
+    return await inferXlsxFileDialect(resource)
   }
 }

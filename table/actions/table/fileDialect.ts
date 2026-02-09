@@ -1,11 +1,11 @@
 import * as pl from "nodejs-polars"
-import { getHeaderRows } from "../../helpers/dialect.ts"
-import type { DialectWithHeaderAndCommentRows } from "../../models/dialect.ts"
+import { getHeaderRows } from "../../helpers/fileDialect.ts"
+import type { FileDialectWithHeaderAndCommentRows } from "../../models/fileDialect.ts"
 import type { Table } from "../../models/table.ts"
 
 export async function joinHeaderRows(
   table: Table,
-  dialect: DialectWithHeaderAndCommentRows,
+  dialect: FileDialectWithHeaderAndCommentRows,
 ) {
   const headerRows = getHeaderRows(dialect)
   const headerOffset = headerRows.at(0) ?? 0
@@ -39,7 +39,7 @@ export async function joinHeaderRows(
 
 export function skipCommentRows(
   table: Table,
-  dialect: DialectWithHeaderAndCommentRows,
+  dialect: FileDialectWithHeaderAndCommentRows,
 ) {
   const headerRows = getHeaderRows(dialect)
   const commentOffset = headerRows.at(-1) ?? 0

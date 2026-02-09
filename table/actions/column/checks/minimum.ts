@@ -7,17 +7,13 @@ import type { CellMapping } from "../../../models/cell.ts"
 
 export function createCheckCellMinimum(options?: { isExclusive?: boolean }) {
   return (column: Column, mapping: CellMapping) => {
-    if (
-      column.property.type !== "integer" &&
-      column.property.type !== "number" &&
-      column.property.format !== "decimal"
-    ) {
+    const property = column.property
+    if (!("minimum" in property) && !("exclusiveMinimum" in property))
       return undefined
-    }
 
     const minimum = options?.isExclusive
-      ? column.property.exclusiveMinimum
-      : column.property.minimum
+      ? property.exclusiveMinimum
+      : property.minimum
     if (minimum === undefined) return undefined
 
     const isErrorExpr = options?.isExclusive

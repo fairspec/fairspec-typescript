@@ -54,7 +54,7 @@ export const StringCategoricalColumnProperty = BaseStringColumnProperty.extend({
 
 export const CategoricalColumn = BaseColumn.extend({
   type: z.literal("categorical"),
-  property: z.discriminatedUnion("type", [
+  property: z.union([
     StringCategoricalColumnProperty,
     IntegerCategoricalColumnProperty,
   ]),

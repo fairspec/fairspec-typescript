@@ -1,64 +1,92 @@
+import { getBaseType, isNullableType } from "../../models/column/base.ts"
 import type { Column, ColumnProperty } from "../../models/column/column.ts"
 
 export function createColumnFromProperty(
   name: string,
   property: ColumnProperty,
 ): Column {
-  switch (property.type) {
+  const propertyType = property.type ?? "null"
+  const baseType = getBaseType(propertyType)
+  const format = "format" in property ? property.format : undefined
+  const nullable = isNullableType(propertyType) || undefined
+
+  let columnType: string
+  switch (baseType) {
     case "boolean":
-      return { type: "boolean", name, property }
+      columnType = "boolean"
+      break
     case "integer":
-      switch (property.format) {
-        case "categorical":
-          return { type: "categorical", name, property }
-        default:
-          return { type: "integer", name, property }
-      }
+      columnType = format === "categorical" ? "categorical" : "integer"
+      break
     case "number":
-      return { type: "number", name, property }
+      columnType = "number"
+      break
     case "string":
-      switch (property.format) {
+      switch (format) {
         case "categorical":
-          return { type: "categorical", name, property }
+          columnType = "categorical"
+          break
         case "decimal":
-          return { type: "decimal", name, property }
+          columnType = "decimal"
+          break
         case "list":
-          return { type: "list", name, property }
+          columnType = "list"
+          break
         case "base64":
-          return { type: "base64", name, property }
+          columnType = "base64"
+          break
         case "hex":
-          return { type: "hex", name, property }
+          columnType = "hex"
+          break
         case "email":
-          return { type: "email", name, property }
+          columnType = "email"
+          break
         case "url":
-          return { type: "url", name, property }
+          columnType = "url"
+          break
         case "date-time":
-          return { type: "date-time", name, property }
+          columnType = "date-time"
+          break
         case "date":
-          return { type: "date", name, property }
+          columnType = "date"
+          break
         case "time":
-          return { type: "time", name, property }
+          columnType = "time"
+          break
         case "duration":
-          return { type: "duration", name, property }
+          columnType = "duration"
+          break
         case "wkt":
-          return { type: "wkt", name, property }
+          columnType = "wkt"
+          break
         case "wkb":
-          return { type: "wkb", name, property }
+          columnType = "wkb"
+          break
         default:
-          return { type: "string", name, property }
+          columnType = "string"
+          break
       }
+      break
     case "array":
-      return { type: "array", name, property }
+      columnType = "array"
+      break
     case "object":
-      switch (property.format) {
+      switch (format) {
         case "geojson":
-          return { type: "geojson", name, property }
+          columnType = "geojson"
+          break
         case "topojson":
-          return { type: "topojson", name, property }
+          columnType = "topojson"
+          break
         default:
-          return { type: "object", name, property }
+          columnType = "object"
+          break
       }
+      break
     default:
-      return { type: "unknown", name, property }
+      columnType = "unknown"
+      break
   }
+
+  return { type: columnType, name, nullable, property } as Column
 }

@@ -104,7 +104,7 @@ const ObjectColumnPropertyGroup = z.discriminatedUnion("format", [
   ObjectColumnProperty,
 ])
 
-export const ColumnProperty = z.discriminatedUnion("type", [
+export const ColumnProperty = z.union([
   BooleanColumnProperty,
   IntegerColumnPropertyGroup,
   NumberColumnProperty,

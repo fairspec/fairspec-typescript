@@ -35,10 +35,11 @@ describe("inferTableSchemaFromSqlite", () => {
 
     expect(schema).toEqual({
       required: [],
+      primaryKey: undefined,
       properties: {
-        string: { type: "string" },
-        integer: { type: "integer" },
-        number: { type: "number" },
+        string: { type: ["string", "null"] },
+        integer: { type: ["integer", "null"] },
+        number: { type: ["number", "null"] },
       },
     })
   })

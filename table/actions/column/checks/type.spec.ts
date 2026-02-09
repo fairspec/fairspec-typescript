@@ -264,7 +264,7 @@ describe("inspectTable", () => {
 
     const tableSchema: TableSchema = {
       properties: {
-        is_active: { type: "boolean" },
+        is_active: { type: ["boolean", "null"] as const },
       },
     }
 

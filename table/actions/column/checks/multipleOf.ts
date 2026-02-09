@@ -2,15 +2,10 @@ import type { CellMultipleOfError, Column } from "@fairspec/metadata"
 import type { CellMapping } from "../../../models/cell.ts"
 
 export function checkCellMultipleOf(column: Column, mapping: CellMapping) {
-  if (
-    column.property.type !== "integer" &&
-    column.property.type !== "number" &&
-    column.property.format !== "decimal"
-  ) {
-    return undefined
-  }
+  const property = column.property
+  if (!("multipleOf" in property)) return undefined
 
-  const multipleOf = column.property.multipleOf
+  const multipleOf = property.multipleOf
   if (multipleOf === undefined) return undefined
 
   const isErrorExpr = mapping.target.modulo(multipleOf).eq(0).not()

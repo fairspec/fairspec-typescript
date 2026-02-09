@@ -10,9 +10,9 @@ import type {
   CellMinItemsError,
   CellMinimumError,
   CellMinLengthError,
+  CellMissingError,
   CellMultipleOfError,
   CellPatternError,
-  CellRequiredError,
   CellTypeError,
   CellUniqueError,
   ColumnMissingError,
@@ -34,8 +34,8 @@ export function renderError(error: FairspecError) {
   switch (error.type) {
     case "cell/type":
       return renderCellTypeError(error)
-    case "cell/required":
-      return renderCellRequiredError(error)
+    case "cell/missing":
+      return renderCellMissingError(error)
     case "cell/minimum":
       return renderCellMinimumError(error)
     case "cell/maximum":
@@ -101,12 +101,12 @@ export function renderCellTypeError(error: CellTypeError) {
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is not ${columnType}${inResource}`
 }
 
-export function renderCellRequiredError(error: CellRequiredError) {
+export function renderCellMissingError(error: CellMissingError) {
   const columnName = pc.bold(error.columnName)
   const rowNumber = pc.bold(error.rowNumber)
   const inResource = renderInResource(error.resourceName)
 
-  return `A required cell in column ${columnName} of row ${rowNumber} is missing${inResource}`
+  return `A cell in column ${columnName} of row ${rowNumber} is missing${inResource}`
 }
 
 export function renderCellMinimumError(error: CellMinimumError) {

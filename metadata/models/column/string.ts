@@ -1,8 +1,8 @@
 import { z } from "zod"
-import { BaseColumn, BaseColumnProperty } from "./base.ts"
+import { BaseColumn, BaseColumnProperty, NullableType } from "./base.ts"
 
 export const BaseStringColumnProperty = BaseColumnProperty.extend({
-  type: z.literal("string"),
+  type: NullableType("string"),
 
   enum: z
     .array(z.string())

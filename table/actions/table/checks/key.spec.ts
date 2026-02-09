@@ -192,7 +192,7 @@ describe("inspectTable (row/unique)", () => {
 
     const tableSchema: TableSchema = {
       properties: {
-        id: { type: "number" },
+        id: { type: ["number", "null"] as const },
         name: { type: "string" },
       },
       uniqueKeys: [["id"], ["id", "name"]],

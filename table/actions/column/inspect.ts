@@ -16,9 +16,9 @@ import { checkCellMaxLength } from "./checks/maxLength.ts"
 import { checkCellMinItems } from "./checks/minItems.ts"
 import { createCheckCellMinimum } from "./checks/minimum.ts"
 import { checkCellMinLength } from "./checks/minLength.ts"
+import { checkCellMissing } from "./checks/missing.ts"
 import { checkCellMultipleOf } from "./checks/multipleOf.ts"
 import { checkCellPattern } from "./checks/pattern.ts"
-import { checkCellRequired } from "./checks/required.ts"
 import { checkCellType } from "./checks/type.ts"
 import { normalizeColumn } from "./normalize.ts"
 import { inspectArrayColumn } from "./types/array.ts"
@@ -145,7 +145,7 @@ async function inspectCellsInPolars(
 
   for (const checkCell of [
     checkCellType,
-    checkCellRequired,
+    checkCellMissing,
     checkCellEnum,
     checkCellConst,
     createCheckCellMinimum(),

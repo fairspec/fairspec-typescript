@@ -59,6 +59,11 @@ export { saveTableSchema } from "./actions/tableSchema/save.ts"
 export { validateTableSchema } from "./actions/tableSchema/validate.ts"
 export { Catalog } from "./models/catalog.ts"
 export { ArrayColumn } from "./models/column/array.ts"
+export {
+  getBaseType,
+  isNullableType,
+  NullableType,
+} from "./models/column/base.ts"
 export { Base64Column } from "./models/column/base64.ts"
 export { BooleanColumn } from "./models/column/boolean.ts"
 export { CategoricalColumn } from "./models/column/categorical.ts"
@@ -110,9 +115,9 @@ export {
   CellMinItemsError,
   CellMinimumError,
   CellMinLengthError,
+  CellMissingError,
   CellMultipleOfError,
   CellPatternError,
-  CellRequiredError,
   CellTypeError,
   CellUniqueError,
 } from "./models/error/cell.ts"

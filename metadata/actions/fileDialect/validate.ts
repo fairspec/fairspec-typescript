@@ -29,11 +29,11 @@ export async function validateFileDialect(
     rootJsonPointer: options?.rootJsonPointer,
   })
 
-  let dialect: FileDialect | undefined
+  let fileDialect: FileDialect | undefined
   if (report.valid) {
     // Valid -> we can cast it
-    dialect = descriptor as FileDialect
+    fileDialect = descriptor as FileDialect
   }
 
-  return { ...report, dialect }
+  return { ...report, fileDialect }
 }

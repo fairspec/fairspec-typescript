@@ -6,9 +6,9 @@ import { validateFileDialect } from "./validate.ts"
 export async function assertFileDialect(source: Descriptor | FileDialect) {
   const report = await validateFileDialect(source)
 
-  if (!report.dialect) {
+  if (!report.fileDialect) {
     throw new FairspecException(`Invalid dialect`, { report })
   }
 
-  return report.dialect
+  return report.fileDialect
 }

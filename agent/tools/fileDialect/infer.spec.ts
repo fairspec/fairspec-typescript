@@ -5,7 +5,7 @@ import { inferFileDialectTool } from "./infer.ts"
 
 describe("inferFileDialectTool", () => {
   it("validates tool structure", () => {
-    expect(inferFileDialectTool.id).toBe("infer-dialect")
+    expect(inferFileDialectTool.id).toBe("infer-file-dialect")
     expect(inferFileDialectTool.description).toBeTruthy()
     expect(inferFileDialectTool.inputSchema).toBeTruthy()
     expect(inferFileDialectTool.outputSchema).toBeTruthy()

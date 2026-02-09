@@ -227,7 +227,7 @@ fairspec data infer-dialect data.json --json
 
 ### Options
 
-- `--sample-bytes <bytes>` - Sample size in bytes for format detection
+- `--sample-bytes <bytes>` - Sample size in bytes for file dialect detection
 - `--silent` - Suppress output messages
 - `--debug` - Show debug information
 - `--json` - Output as JSON

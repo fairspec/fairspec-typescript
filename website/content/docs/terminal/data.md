@@ -14,7 +14,7 @@ The `fairspec data` command provides utilities for working with JSON data:
 - `validate` - Validate JSON data against a Data Schema (JSON Schema)
 - `infer-schema` - Automatically generate a Data Schema from JSON data
 - `validate-schema` - Validate a Data Schema itself
-- `infer-format` - Detect the format of a data file
+- `infer-dialect` - Infer file dialect
 
 ## Validate JSON Data
 
@@ -210,19 +210,19 @@ Or if invalid:
 }
 ```
 
-## Infer Format
+## Infer File Dialect
 
-Automatically detect the format of a data file:
+Automatically detect the dialect of a data file:
 
 ```bash
-# Infer format from file
-fairspec data infer-format data.json
+# Infer dialect from file
+fairspec data infer-dialect data.json
 
 # Infer from remote file
-fairspec data infer-format https://example.com/data.jsonl
+fairspec data infer-dialect https://example.com/data.jsonl
 
 # Output as JSON
-fairspec data infer-format data.json --json
+fairspec data infer-dialect data.json --json
 ```
 
 ### Options

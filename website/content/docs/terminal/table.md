@@ -17,7 +17,7 @@ The `fairspec table` command provides utilities for working with tables:
 - `infer-schema` - Automatically infer Table Schema from table data
 - `render-schema` - Render Table Schema as HTML or Markdown documentation
 - `validate-schema` - Validate a Table Schema file
-- `infer-format` - Detect table format automatically
+- `infer-dialect` - Infer file dialect
 - `script` - Interactive REPL session with loaded table
 
 ## Describe Tables
@@ -292,19 +292,19 @@ Or if invalid:
 - `--debug` - Show debug information
 - `--json` - Output as JSON
 
-## Infer Format
+## Infer File Dialect
 
-Automatically detect the format of a table file:
+Automatically detect the dialect of a table file:
 
 ```bash
-# Infer format from file
-fairspec table infer-format data.csv
+# Infer dialect from file
+fairspec table infer-dialect data.csv
 
 # Infer from remote file
-fairspec table infer-format https://example.com/data.xlsx
+fairspec table infer-dialect https://example.com/data.xlsx
 
 # Output as JSON
-fairspec table infer-format data.parquet --json
+fairspec table infer-dialect data.parquet --json
 ```
 
 ### Detected Formats
@@ -432,8 +432,8 @@ All table commands support these schema-related options:
 ### Explore Unknown Data
 
 ```bash
-# 1. Infer the format
-fairspec table infer-format unknown-data.txt
+# 1. Infer the dialect
+fairspec table infer-dialect unknown-data.txt
 
 # 2. Get basic statistics
 fairspec table describe unknown-data.txt

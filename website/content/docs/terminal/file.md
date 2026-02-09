@@ -14,7 +14,7 @@ The `fairspec file` command provides utilities for working with files:
 - `copy` - Copy local or remote files
 - `describe` - Get file statistics and metadata
 - `validate` - Validate file integrity
-- `infer-format` - Detect file format automatically
+- `infer-dialect` - Infer file dialect
 
 ## Copy Files
 
@@ -133,19 +133,19 @@ Example error:
 }
 ```
 
-## Infer Format
+## Infer File Dialect
 
-Automatically detect the format of a file:
+Automatically detect the dialect of a file:
 
 ```bash
-# Infer format from file
-fairspec file infer-format data.csv
+# Infer dialect from file
+fairspec file infer-dialect data.csv
 
 # Infer from remote file
-fairspec file infer-format https://example.com/data.json
+fairspec file infer-dialect https://example.com/data.json
 
 # Output as JSON
-fairspec file infer-format data.xlsx --json
+fairspec file infer-dialect data.xlsx --json
 ```
 
 ### Options
@@ -228,8 +228,8 @@ fairspec file describe --from-dataset dataset.json --from-resource sales
 # Copy the resource locally
 fairspec file copy --from-dataset dataset.json --from-resource sales --to-path sales.csv
 
-# Infer its format
-fairspec file infer-format sales.csv
+# Infer its dialect
+fairspec file infer-dialect sales.csv
 ```
 
 ### Automation with JSON

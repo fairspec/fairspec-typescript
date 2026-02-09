@@ -2,6 +2,7 @@ import * as pl from "nodejs-polars"
 import { getHeaderRows } from "../../helpers/dialect.ts"
 import type { DialectWithHeaderAndCommentRows } from "../../models/dialect.ts"
 import type { Table } from "../../models/table.ts"
+import { NUMBER_COLUMN_NAME } from "../../settings.ts"
 
 export async function joinHeaderRows(
   table: Table,
@@ -15,8 +16,8 @@ export async function joinHeaderRows(
   }
 
   const extraLabelsFrame = await table
-    .withRowIndex("fairspec:number", 1)
-    .filter(pl.col("fairspec:number").add(headerOffset).isIn(headerRows))
+    .withRowIndex(NUMBER_COLUMN_NAME, 1)
+    .filter(pl.col(NUMBER_COLUMN_NAME).add(headerOffset).isIn(headerRows))
     .select(...table.columns.map(name => pl.col(name).str.concat(headerJoin)))
     .collect()
 
@@ -31,10 +32,10 @@ export async function joinHeaderRows(
   )
 
   return table
-    .withRowIndex("fairspec:number", 1)
-    .filter(pl.col("fairspec:number").add(headerOffset).isIn(headerRows).not())
+    .withRowIndex(NUMBER_COLUMN_NAME, 1)
+    .filter(pl.col(NUMBER_COLUMN_NAME).add(headerOffset).isIn(headerRows).not())
     .rename(mapping)
-    .drop("fairspec:number")
+    .drop(NUMBER_COLUMN_NAME)
 }
 
 export function skipCommentRows(
@@ -48,13 +49,13 @@ export function skipCommentRows(
   }
 
   return table
-    .withRowIndex("fairspec:number", 1)
+    .withRowIndex(NUMBER_COLUMN_NAME, 1)
     .filter(
       pl
-        .col("fairspec:number")
+        .col(NUMBER_COLUMN_NAME)
         .add(commentOffset)
         .isIn(dialect.commentRows)
         .not(),
     )
-    .drop("fairspec:number")
+    .drop(NUMBER_COLUMN_NAME)
 }

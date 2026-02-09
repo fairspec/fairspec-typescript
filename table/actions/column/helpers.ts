@@ -12,6 +12,7 @@ import { inspectJson } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { getIsObject } from "../../helpers/general.ts"
 import type { Table } from "../../models/table.ts"
+import { NUMBER_COLUMN_NAME } from "../../settings.ts"
 
 // TODO: Generalize wkt/wkb/duration inspectors
 
@@ -25,8 +26,8 @@ export async function inspectTextColumn(
   const errors: CellError[] = []
 
   const frame = await table
-    .withRowIndex("fairspec:number", 1)
-    .select(pl.col("fairspec:number"), pl.col(column.name).alias("source"))
+    .withRowIndex(NUMBER_COLUMN_NAME, 1)
+    .select(pl.col(NUMBER_COLUMN_NAME), pl.col(column.name).alias("source"))
     .collect()
 
   for (const row of frame.toRecords() as any[]) {
@@ -43,7 +44,7 @@ export async function inspectTextColumn(
         cell: String(row.source),
         columnName: column.name,
         columnType: column.type,
-        rowNumber: row["fairspec:number"],
+        rowNumber: row[NUMBER_COLUMN_NAME],
       })
     }
   }
@@ -64,8 +65,8 @@ export async function inspectJsonColumn(
   const constraintJsonSchema = column.property
 
   const frame = await table
-    .withRowIndex("fairspec:number", 1)
-    .select(pl.col("fairspec:number"), pl.col(column.name).alias("source"))
+    .withRowIndex(NUMBER_COLUMN_NAME, 1)
+    .select(pl.col(NUMBER_COLUMN_NAME), pl.col(column.name).alias("source"))
     .collect()
 
   for (const row of frame.toRecords() as any[]) {
@@ -84,7 +85,7 @@ export async function inspectJsonColumn(
         cell: String(row.source),
         columnName: column.name,
         columnType: column.type,
-        rowNumber: row["fairspec:number"],
+        rowNumber: row[NUMBER_COLUMN_NAME],
       })
 
       continue
@@ -101,7 +102,7 @@ export async function inspectJsonColumn(
           cell: String(row.source),
           columnName: column.name,
           columnType: column.type,
-          rowNumber: row["fairspec:number"],
+          rowNumber: row[NUMBER_COLUMN_NAME],
         })
       }
 
@@ -118,7 +119,7 @@ export async function inspectJsonColumn(
           type: "cell/json",
           cell: String(row.source),
           columnName: column.name,
-          rowNumber: row["fairspec:number"],
+          rowNumber: row[NUMBER_COLUMN_NAME],
           message: error.message,
           jsonPointer: error.jsonPointer,
         })

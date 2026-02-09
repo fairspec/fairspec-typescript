@@ -8,7 +8,7 @@ import { createTool } from "@mastra/core/tools"
 import { z } from "zod"
 
 export const inferFileDialectTool = createTool({
-  id: "infer-dialect",
+  id: "infer-file-dialect",
   description:
     "Infer the dialect (format and format-specific properties) from a resource. Analyzes the data to determine CSV delimiters, JSON structure, etc.",
   inputSchema: z.object({

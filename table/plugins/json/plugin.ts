@@ -12,7 +12,10 @@ import { saveJsonTable } from "./actions/table/save.ts"
 
 export class JsonPlugin implements TablePlugin {
   async loadTable(resource: Resource, options?: LoadTableOptions) {
-    const fileDialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
+    const fileDialect = await getSupportedFileDialect(resource, [
+      "json",
+      "jsonl",
+    ])
     if (!fileDialect) return undefined
 
     return await loadJsonTable({ ...resource, fileDialect }, options)
@@ -21,7 +24,10 @@ export class JsonPlugin implements TablePlugin {
   async saveTable(table: Table, options: SaveTableOptions) {
     const resource = { data: options.path, ...options }
 
-    const fileDialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
+    const fileDialect = await getSupportedFileDialect(resource, [
+      "json",
+      "jsonl",
+    ])
     if (!fileDialect) return undefined
 
     return await saveJsonTable(table, { ...options, fileDialect })

@@ -36,8 +36,10 @@ export async function saveCsvTable(table: Table, options: SaveTableOptions) {
       maintainOrder: true,
       includeHeader: headerRows.length > 0,
       lineTerminator: fileDialect.lineTerminator ?? "\n",
-      quoteChar: fileDialect.format === "csv" ? fileDialect.quoteChar : undefined,
-      separator: fileDialect.format === "csv" ? (fileDialect?.delimiter ?? ",") : "\t",
+      quoteChar:
+        fileDialect.format === "csv" ? fileDialect.quoteChar : undefined,
+      separator:
+        fileDialect.format === "csv" ? (fileDialect?.delimiter ?? ",") : "\t",
     })
     .collect()
 

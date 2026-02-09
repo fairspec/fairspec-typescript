@@ -62,7 +62,9 @@ export async function inferXlsxFileDialect(
     return { format: fileDialect.format }
   }
 
-  const result = { format: fileDialect.format } as XlsxFileDialect | OdsFileDialect
+  const result = { format: fileDialect.format } as
+    | XlsxFileDialect
+    | OdsFileDialect
 
   if (detection.dialect.header.hasHeaderRow) {
     result.headerRows = [detection.dialect.header.numPreambleRows + 1]

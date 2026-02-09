@@ -1,10 +1,11 @@
 import { z } from "zod"
-import { BaseColumn, BaseColumnProperty, NullableType } from "./base.ts"
+import { createNullablePropertyType } from "../../actions/column/property.ts"
+import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
 // TODO: Should allow all the JSON Schema properties
 
 export const BaseObjectColumnProperty = BaseColumnProperty.extend({
-  type: NullableType("object"),
+  type: createNullablePropertyType("object"),
 
   enum: z
     .array(z.record(z.string(), z.unknown()))

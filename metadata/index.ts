@@ -1,5 +1,10 @@
 export { createColumnFromProperty } from "./actions/column/create.ts"
-export { getColumnProperties } from "./actions/column/property.ts"
+export {
+  createNullablePropertyType,
+  getBasePropertyType,
+  getColumnProperties,
+  getIsNullablePropertyType,
+} from "./actions/column/property.ts"
 export { loadDataSchema } from "./actions/dataSchema/load.ts"
 export { resolveDataSchema } from "./actions/dataSchema/resolve.ts"
 export { validateDataSchema } from "./actions/dataSchema/validate.ts"
@@ -59,11 +64,6 @@ export { saveTableSchema } from "./actions/tableSchema/save.ts"
 export { validateTableSchema } from "./actions/tableSchema/validate.ts"
 export { Catalog } from "./models/catalog.ts"
 export { ArrayColumn } from "./models/column/array.ts"
-export {
-  getBaseType,
-  isNullableType,
-  NullableType,
-} from "./models/column/base.ts"
 export { Base64Column } from "./models/column/base64.ts"
 export { BooleanColumn } from "./models/column/boolean.ts"
 export { CategoricalColumn } from "./models/column/categorical.ts"

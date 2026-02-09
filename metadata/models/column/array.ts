@@ -1,10 +1,11 @@
 import { z } from "zod"
-import { BaseColumn, BaseColumnProperty, NullableType } from "./base.ts"
+import { createNullablePropertyType } from "../../actions/column/property.ts"
+import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
 // TODO: Should allow all the JSON Schema properties
 
 export const ArrayColumnProperty = BaseColumnProperty.extend({
-  type: NullableType("array"),
+  type: createNullablePropertyType("array"),
   // TODO: Fix this hack
   format: z.literal("").optional(),
 

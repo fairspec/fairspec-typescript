@@ -1,8 +1,9 @@
 import { z } from "zod"
-import { BaseColumn, BaseColumnProperty, NullableType } from "./base.ts"
+import { createNullablePropertyType } from "../../actions/column/property.ts"
+import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
 export const BaseIntegerColumnProperty = BaseColumnProperty.extend({
-  type: NullableType("integer"),
+  type: createNullablePropertyType("integer"),
 
   enum: z
     .array(z.int())

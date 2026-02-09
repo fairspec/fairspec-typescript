@@ -1,14 +1,14 @@
-import { getBaseType, isNullableType } from "../../models/column/base.ts"
 import type { Column, ColumnProperty } from "../../models/column/column.ts"
+import { getBasePropertyType, getIsNullablePropertyType } from "./property.ts"
 
 export function createColumnFromProperty(
   name: string,
   property: ColumnProperty,
 ): Column {
   const propertyType = property.type ?? "null"
-  const baseType = getBaseType(propertyType)
+  const baseType = getBasePropertyType(propertyType)
   const format = "format" in property ? property.format : undefined
-  const nullable = isNullableType(propertyType) || undefined
+  const nullable = getIsNullablePropertyType(propertyType) || undefined
 
   let columnType: string
   switch (baseType) {

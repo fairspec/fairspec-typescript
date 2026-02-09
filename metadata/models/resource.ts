@@ -25,16 +25,16 @@ export const Resource = Datacite.extend({
     .optional()
     .describe("Whether the resource is text-based."),
 
+  integrity: Integrity.optional().describe(
+    "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",
+  ),
+
   dialect: z
     .union([Path, Dialect])
     .optional()
     .describe(
       "A path to dialect or an object with the dialect of the file. For multiple files the format property defines the dialect for all the files.",
     ),
-
-  integrity: Integrity.optional().describe(
-    "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",
-  ),
 
   dataSchema: z
     .union([Path, DataSchema])

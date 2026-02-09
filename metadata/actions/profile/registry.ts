@@ -4,7 +4,9 @@ import dataSchemaProfile from "../../profiles/data-schema.json" with {
   type: "json",
 }
 import datasetProfile from "../../profiles/dataset.json" with { type: "json" }
-import dialectProfile from "../../profiles/dialect.json" with { type: "json" }
+import dialectProfile from "../../profiles/file-dialect.json" with {
+  type: "json",
+}
 import tableSchemaProfile from "../../profiles/table-schema.json" with {
   type: "json",
 }
@@ -23,7 +25,7 @@ export const profileRegistry: ProfileRegistry = [
     profile: datasetProfile,
   },
   {
-    type: "dialect",
+    type: "file-dialect",
     path: "https://fairspec.org/profiles/latest/dialect.json",
     version: "latest",
     profile: dialectProfile,

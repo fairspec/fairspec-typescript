@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "allOf": [{ "$ref": "#/$defs/Dialect" }],
+  "allOf": [{ "$ref": "#/$defs/FileDialect" }],
   "$defs": {
-    "Dialect": {
+    "FileDialect": {
       "type": "object",
       "properties": {
         "$schema": { "$ref": "#/$defs/Profile" },
@@ -100,7 +100,7 @@
     },
     "XlsxDialect": {
       "properties": {
-        "format": { "const": "xlxs" },
+        "format": { "const": "xlsx" },
         "sheetName": { "$ref": "#/$defs/SheetName" },
         "sheetNumber": { "$ref": "#/$defs/SheetNumber" },
         "headerRows": { "$ref": "#/$defs/HeaderRows" },

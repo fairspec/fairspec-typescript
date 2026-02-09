@@ -6,7 +6,7 @@ export const Profile = JsonSchema
 export const ProfileType = z.enum([
   "catalog",
   "dataset",
-  "dialect",
+  "file-dialect",
   "data-schema",
   "table-schema",
 ])

@@ -4,13 +4,13 @@ import type { FileDialect } from "../../models/fileDialect/fileDialect.ts"
 import * as settings from "../../settings.ts"
 
 export async function saveFileDialect(
-  dialect: FileDialect,
+  fileDialect: FileDialect,
   options: {
     path: string
     overwrite?: boolean
   },
 ) {
-  const descriptor = copyDescriptor(dialect)
+  const descriptor = copyDescriptor(fileDialect)
 
   descriptor.$schema =
     descriptor.$schema ??

@@ -9,9 +9,9 @@ export async function inferFileDialect(
   options?: InferFileDialectOptions,
 ) {
   for (const plugin of system.plugins) {
-    const dialect = await plugin.inferFileDialect?.(resource, options)
-    if (dialect) {
-      return dialect
+    const fileDialect = await plugin.inferFileDialect?.(resource, options)
+    if (fileDialect) {
+      return fileDialect
     }
   }
 

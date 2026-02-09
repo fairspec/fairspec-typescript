@@ -1,14 +1,14 @@
 import type { FileDialect } from "../../models/fileDialect/fileDialect.ts"
 import { loadFileDialect } from "./load.ts"
 
-export async function resolveFileDialect(dialect?: FileDialect | string) {
-  if (!dialect) {
+export async function resolveFileDialect(fileDialect?: FileDialect | string) {
+  if (!fileDialect) {
     return undefined
   }
 
-  if (typeof dialect !== "string") {
-    return dialect
+  if (typeof fileDialect !== "string") {
+    return fileDialect
   }
 
-  return await loadFileDialect(dialect)
+  return await loadFileDialect(fileDialect)
 }

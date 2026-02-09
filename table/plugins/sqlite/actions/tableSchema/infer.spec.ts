@@ -5,7 +5,10 @@ import { describe, expect, it } from "vitest"
 import { saveSqliteTable } from "../../actions/table/save.ts"
 import { inferTableSchemaFromSqlite } from "./infer.ts"
 
-const dialect: SqliteFileDialect = { format: "sqlite", tableName: "fairspec" }
+const fileDialect: SqliteFileDialect = {
+  format: "sqlite",
+  tableName: "fairspec",
+}
 
 describe("inferTableSchemaFromSqlite", () => {
   it("should infer schema", async () => {
@@ -21,13 +24,13 @@ describe("inferTableSchemaFromSqlite", () => {
 
     await saveSqliteTable(source, {
       path,
-      fileDialect: dialect,
+      fileDialect,
       overwrite: true,
     })
 
     const schema = await inferTableSchemaFromSqlite({
       data: path,
-      fileDialect: dialect,
+      fileDialect,
     })
 
     expect(schema).toEqual({

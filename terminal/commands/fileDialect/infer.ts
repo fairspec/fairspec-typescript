@@ -29,18 +29,18 @@ export const inferFileDialectCommand = new Command()
       path = await selectFile(session, options)
     }
 
-    const dialect = await session.task("Inferring dialect", async () => {
-      const dialect = await inferFileDialect(
+    const fileDialect = await session.task("Inferring dialect", async () => {
+      const fileDialect = await inferFileDialect(
         { data: path },
         { sampleBytes: options.sampleBytes },
       )
 
-      if (!dialect) {
+      if (!fileDialect) {
         throw new Error("Could not infer dialect")
       }
 
-      return dialect
+      return fileDialect
     })
 
-    session.renderDataResult(dialect)
+    session.renderDataResult(fileDialect)
   })

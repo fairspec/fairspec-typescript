@@ -21,24 +21,24 @@ export async function inferXlsxFileDialect(
     return undefined
   }
 
-  const dialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
-  if (!dialect) {
+  const fileDialect = await getSupportedFileDialect(resource, ["xlsx", "ods"])
+  if (!fileDialect) {
     return undefined
   }
 
   const buffer = await loadFile(dataPath)
   const book = read(buffer, { type: "buffer" })
 
-  const sheetIndex = dialect?.sheetNumber ? dialect.sheetNumber - 1 : 0
-  const sheetName = dialect?.sheetName ?? book.SheetNames[sheetIndex]
+  const sheetIndex = fileDialect?.sheetNumber ? fileDialect.sheetNumber - 1 : 0
+  const sheetName = fileDialect?.sheetName ?? book.SheetNames[sheetIndex]
 
   if (!sheetName) {
-    return { format: dialect.format }
+    return { format: fileDialect.format }
   }
 
   const sheet = book.Sheets[sheetName]
   if (!sheet) {
-    return { format: dialect.format }
+    return { format: fileDialect.format }
   }
 
   const allRows = utils.sheet_to_json(sheet, {
@@ -50,7 +50,7 @@ export async function inferXlsxFileDialect(
   const rows = allRows.slice(0, sampleRows)
 
   if (rows.length === 0) {
-    return { format: dialect.format }
+    return { format: fileDialect.format }
   }
 
   const sniffer = new Sniffer()
@@ -59,10 +59,10 @@ export async function inferXlsxFileDialect(
   try {
     detection = sniffer.sniffRows(rows)
   } catch {
-    return { format: dialect.format }
+    return { format: fileDialect.format }
   }
 
-  const result = { format: dialect.format } as XlsxFileDialect | OdsFileDialect
+  const result = { format: fileDialect.format } as XlsxFileDialect | OdsFileDialect
 
   if (detection.dialect.header.hasHeaderRow) {
     result.headerRows = [detection.dialect.header.numPreambleRows + 1]

@@ -11,13 +11,13 @@ export async function getSupportedFileDialect<F extends FileDialect["format"]>(
   const dataPath = getDataPath(resource)
   if (!dataPath) return undefined
 
-  const dialect = (await resolveFileDialect(resource.fileDialect)) ?? {
+  const fielDialect = (await resolveFileDialect(resource.fileDialect)) ?? {
     format: inferFileDialectFormat(resource),
   }
 
   for (const supportedFormat of supportedFormats) {
-    if (dialect.format === supportedFormat) {
-      return dialect as Extract<FileDialect, { format: F }>
+    if (fielDialect.format === supportedFormat) {
+      return fielDialect as Extract<FileDialect, { format: F }>
     }
   }
 

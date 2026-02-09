@@ -61,12 +61,12 @@ export const inferTableSchemaCommand = new Command()
       json: options.json,
     })
 
-    const dialect = path
+    const fileDialect = path
       ? (options.dialect ?? createFileDialectFromPathAndOptions(path, options))
       : undefined
 
     const resource: Resource = path
-      ? { data: path, fileDialect: dialect }
+      ? { data: path, fileDialect }
       : await selectResource(session, options)
 
     const tableSchema = await session.task("Inferring schema", async () => {

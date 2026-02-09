@@ -49,27 +49,29 @@ export async function validateDatasetDescriptor(
       const rootJsonPointer = `/resources/${index}`
 
       if (typeof resource.fileDialect === "string") {
-        const dialectReport = await validateFileDialect(resource.fileDialect, {
-          rootJsonPointer,
-        })
+        const fileDialectReport = await validateFileDialect(
+          resource.fileDialect,
+          { rootJsonPointer },
+        )
 
-        report.errors.push(...dialectReport.errors)
+        report.errors.push(...fileDialectReport.errors)
       }
 
       if (typeof resource.dataSchema === "string") {
-        const dataReport = await validateDataSchema(resource.dataSchema, {
+        const dataSchemaReport = await validateDataSchema(resource.dataSchema, {
           rootJsonPointer,
         })
 
-        report.errors.push(...dataReport.errors)
+        report.errors.push(...dataSchemaReport.errors)
       }
 
       if (typeof resource.tableSchema === "string") {
-        const tableReport = await validateTableSchema(resource.tableSchema, {
-          rootJsonPointer,
-        })
+        const tableSchemaReport = await validateTableSchema(
+          resource.tableSchema,
+          { rootJsonPointer },
+        )
 
-        report.errors.push(...tableReport.errors)
+        report.errors.push(...tableSchemaReport.errors)
       }
     }
 

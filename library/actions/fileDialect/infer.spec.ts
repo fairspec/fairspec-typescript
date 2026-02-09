@@ -8,8 +8,8 @@ describe("inferFileDialect", () => {
     const path = await writeTempFile("id,name,age\n1,alice,25\n2,bob,30")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferFileDialect(resource)
-    expect(dialect).toEqual<CsvFileDialect>({
+    const fileDialect = await inferFileDialect(resource)
+    expect(fileDialect).toEqual<CsvFileDialect>({
       format: "csv",
       delimiter: ",",
       headerRows: [1],
@@ -21,8 +21,8 @@ describe("inferFileDialect", () => {
     const path = await writeTempFile("id\tname\tage\n1\talice\t25\n2\tbob\t30")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
-    const dialect = await inferFileDialect(resource)
-    expect(dialect).toEqual({
+    const fileDialect = await inferFileDialect(resource)
+    expect(fileDialect).toEqual({
       format: "tsv",
       headerRows: [1],
       lineTerminator: "\n",
@@ -33,8 +33,8 @@ describe("inferFileDialect", () => {
     const path = await writeTempFile(JSON.stringify([{ id: 1, name: "alice" }]))
     const resource: Resource = { data: path, fileDialect: { format: "json" } }
 
-    const dialect = await inferFileDialect(resource)
-    expect(dialect).toEqual({
+    const fileDialect = await inferFileDialect(resource)
+    expect(fileDialect).toEqual({
       format: "json",
       rowType: "object",
     })
@@ -45,7 +45,7 @@ describe("inferFileDialect", () => {
       data: [{ id: 1 }],
     }
 
-    const dialect = await inferFileDialect(resource)
-    expect(dialect).toBeUndefined()
+    const fileDialect = await inferFileDialect(resource)
+    expect(fileDialect).toBeUndefined()
   })
 })

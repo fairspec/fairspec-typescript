@@ -119,6 +119,52 @@ describe("inspectColumn", () => {
     })
   })
 
+  describe("column named 'number'", () => {
+    it("should not crash when data has a column named 'number'", async () => {
+      const table = pl
+        .DataFrame({
+          name: ["Alice", "Bob", "Charlie"],
+          number: [1, 2, 3],
+        })
+        .lazy()
+
+      const tableSchema: TableSchema = {
+        properties: {
+          name: { type: "string" },
+          number: { type: "integer" },
+        },
+      }
+
+      const errors = await inspectTable(table, { tableSchema })
+      expect(errors).toHaveLength(0)
+    })
+
+    it("should report cell errors with correct row numbers for a column named 'number'", async () => {
+      const table = pl
+        .DataFrame({
+          name: ["Alice", "Bob", "Charlie"],
+          number: ["1", "bad", "3"],
+        })
+        .lazy()
+
+      const tableSchema: TableSchema = {
+        properties: {
+          name: { type: "string" },
+          number: { type: "integer" },
+        },
+      }
+
+      const errors = await inspectTable(table, { tableSchema })
+      expect(errors).toContainEqual({
+        type: "cell/type",
+        cell: "bad",
+        columnName: "number",
+        columnType: "integer",
+        rowNumber: 2,
+      })
+    })
+  })
+
   describe("cell types validation", () => {
     it("should validate string to integer conversion errors", async () => {
       const table = pl

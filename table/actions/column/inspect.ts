@@ -7,6 +7,7 @@ import type {
 import * as pl from "nodejs-polars"
 import type { ColumnMapping } from "../../models/column.ts"
 import type { Table } from "../../models/table.ts"
+import { NUMBER_COLUMN_NAME } from "../../settings.ts"
 import { checkCellConst } from "./checks/const.ts"
 import { checkCellEnum } from "./checks/enum.ts"
 import { checkCellMaxItems } from "./checks/maxItems.ts"
@@ -134,9 +135,9 @@ async function inspectCellsInPolars(
   const { maxErrors } = options
   const errors: CellError[] = []
   let columnCheckTable = table
-    .withRowIndex("number", 1)
+    .withRowIndex(NUMBER_COLUMN_NAME, 1)
     .select(
-      pl.col("number"),
+      pl.col(NUMBER_COLUMN_NAME),
       normalizeColumn(mapping).alias("target"),
       normalizeColumn(mapping, { keepType: true }).alias("source"),
       pl.lit(null).alias("error"),
@@ -184,7 +185,7 @@ async function inspectCellsInPolars(
     const errorTemplate = JSON.parse(row.error) as CellError
     errors.push({
       ...errorTemplate,
-      rowNumber: row.number,
+      rowNumber: row[NUMBER_COLUMN_NAME],
       cell: String(row.source ?? ""),
     })
   }

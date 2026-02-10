@@ -5,7 +5,7 @@ import { getPolarsSchema } from "../../helpers/schema.ts"
 import type { InferTableSchemaOptions } from "../../models/schema.ts"
 import type { Table } from "../../models/table.ts"
 
-// TODO: Implement actual options usage for inferring
+const DEFAULT_MISSING_VALUES = ["", "NA", "N/A", "null", "-"]
 
 export async function inferTableSchemaFromTable(
   table: Table,
@@ -22,6 +22,9 @@ export function inferTableSchemaFromSample(
   options?: Exclude<InferTableSchemaOptions, "sampleRows">,
 ) {
   const { confidence = 0.9, columnTypes, keepStrings } = options ?? {}
+  const effectiveMissingValues =
+    options?.missingValues ?? DEFAULT_MISSING_VALUES
+  const detectedMissingValues = new Set<string>()
 
   const typeMapping = createTypeMapping()
   const regexMapping = createRegexMapping(options)
@@ -48,6 +51,7 @@ export function inferTableSchemaFromSample(
     }
 
     const type = columnTypes?.[name] ?? typeMapping[variant] ?? "unknown"
+    let isNullable = false
 
     let column: Column
     switch (type) {
@@ -112,17 +116,37 @@ export function inferTableSchemaFromSample(
       }
 
       if (type === "string") {
-        if (!keepStrings) {
-          for (const [regex, namelessColumn] of Object.entries(regexMapping)) {
-            const failures = sample
-              .filter(pl.col(name).str.contains(regex).not())
-              .head(failureThreshold).height
+        const hasPolarsNulls = sample.filter(pl.col(name).isNull()).height > 0
+        let missingFilter: pl.Expr = pl.col(name).isNull()
+        let hasMissingValues = false
+        for (const mv of effectiveMissingValues) {
+          if (sample.filter(pl.col(name).eq(pl.lit(mv))).height > 0) {
+            detectedMissingValues.add(mv)
+            hasMissingValues = true
+            missingFilter = missingFilter.or(pl.col(name).eq(pl.lit(mv)))
+          }
+        }
+        isNullable = hasPolarsNulls || hasMissingValues
 
-            if (failures < failureThreshold) {
-              // TODO: fix
-              // @ts-expect-error
-              column = { ...namelessColumn, name }
-              break
+        if (!keepStrings) {
+          const effectiveSample = sample.filter(missingFilter.not())
+          if (effectiveSample.height > 0) {
+            const effectiveFailureThreshold =
+              effectiveSample.height -
+                Math.floor(effectiveSample.height * confidence) || 1
+            for (const [regex, namelessColumn] of Object.entries(
+              regexMapping,
+            )) {
+              const failures = effectiveSample
+                .filter(pl.col(name).str.contains(regex).not())
+                .head(effectiveFailureThreshold).height
+
+              if (failures < effectiveFailureThreshold) {
+                // TODO: fix
+                // @ts-expect-error
+                column = { ...namelessColumn, name }
+                break
+              }
             }
           }
         }
@@ -137,14 +161,27 @@ export function inferTableSchemaFromSample(
           column = { name, type: "integer", property: { type: "integer" } }
         }
       }
+
+      if (type !== "string") {
+        if (sample.filter(pl.col(name).isNull()).height > 0) {
+          isNullable = true
+        }
+      }
     }
 
+    if (isNullable) {
+      makePropertyNullable(column)
+    }
     enhanceColumn(column, options)
     columns.push(column)
   }
 
   const tableSchema: TableSchema = {
     properties: getColumnProperties(columns),
+  }
+
+  if (options?.missingValues === undefined && detectedMissingValues.size > 0) {
+    tableSchema.missingValues = [...detectedMissingValues]
   }
 
   enhanceSchema(tableSchema, options)
@@ -454,6 +491,13 @@ function enhanceColumn(column: Column, options?: InferTableSchemaOptions) {
     if (options?.listItemType !== undefined) {
       column.property.itemType = options.listItemType
     }
+  }
+}
+
+function makePropertyNullable(column: Column) {
+  const baseType = column.property.type
+  if (baseType && typeof baseType === "string") {
+    ;(column.property as Record<string, unknown>).type = [baseType, "null"]
   }
 }
 

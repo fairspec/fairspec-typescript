@@ -644,3 +644,89 @@ describe("inferTableSchemaFromTable", () => {
     expect(result).toEqual(tableSchema)
   })
 })
+
+describe("inferTableSchemaFromTable (nullable)", () => {
+  it("should infer nullable string from missing values", async () => {
+    const table = pl.DataFrame({ name: ["Alice", "Bob", "NA"] }).lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { name: { type: ["string", "null"] } },
+      missingValues: ["NA"],
+    })
+  })
+
+  it("should infer nullable integer from Polars nulls", async () => {
+    const table = pl
+      .DataFrame({
+        value: pl.Series("value", [1, 2, null], pl.Int32),
+      })
+      .lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { value: { type: ["integer", "null"] } },
+    })
+  })
+
+  it("should infer nullable number from Polars nulls", async () => {
+    const table = pl
+      .DataFrame({
+        value: pl.Series("value", [1.1, null, 3.3], pl.Float64),
+      })
+      .lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { value: { type: ["number", "null"] } },
+    })
+  })
+
+  it("should infer nullable url with missing values", async () => {
+    const table = pl
+      .DataFrame({
+        link: ["https://a.com", "http://b.com", "NA"],
+      })
+      .lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { link: { type: ["string", "null"], format: "url" } },
+      missingValues: ["NA"],
+    })
+  })
+
+  it("should infer nullable string when all values are missing", async () => {
+    const table = pl.DataFrame({ empty: ["NA", "N/A", ""] }).lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result.properties?.empty).toEqual({ type: ["string", "null"] })
+    expect(result.missingValues).toEqual(
+      expect.arrayContaining(["NA", "N/A", ""]),
+    )
+    expect(result.missingValues).toHaveLength(3)
+  })
+
+  it("should use explicit missingValues option", async () => {
+    const table = pl.DataFrame({ name: ["Alice", "MISSING"] }).lazy()
+    const result = await inferTableSchemaFromTable(table, {
+      missingValues: ["MISSING"],
+    })
+    expect(result).toEqual({
+      properties: { name: { type: ["string", "null"] } },
+      missingValues: ["MISSING"],
+    })
+  })
+
+  it("should not make columns nullable when no nulls exist", async () => {
+    const table = pl.DataFrame({ name: ["Alice", "Bob"] }).lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { name: { type: "string" } },
+    })
+  })
+
+  it("should infer nullable integer from empty string", async () => {
+    const table = pl.DataFrame({ value: ["1", "2", ""] }).lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { value: { type: ["integer", "null"] } },
+      missingValues: [""],
+    })
+  })
+})

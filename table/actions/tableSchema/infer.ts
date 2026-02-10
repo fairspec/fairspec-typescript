@@ -5,9 +5,7 @@ import { getPolarsSchema } from "../../helpers/schema.ts"
 import type { InferTableSchemaOptions } from "../../models/schema.ts"
 import type { Table } from "../../models/table.ts"
 
-// TODO: Rework the implementation
 // TODO: Implement actual options usage for inferring
-// TODO: Review default values being {columns: []} vs undefined
 
 export async function inferTableSchemaFromTable(
   table: Table,
@@ -201,6 +199,36 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
     "^\\d{1,3}(\\.\\d{3})+,\\d+$": {
       type: "number",
       property: { type: "number", groupChar: ".", decimalChar: "," },
+    },
+
+    "^[\\p{Sc}\\s-]*\\d+[%\\p{Sc}\\s]*$": {
+      type: "integer",
+      property: { type: "integer", withText: true },
+    },
+    "^[\\p{Sc}\\s-]*\\d{1,3}(,\\d{3})+[%\\p{Sc}\\s]*$": commaDecimal
+      ? { type: "number", property: { type: "number", withText: true } }
+      : {
+          type: "integer",
+          property: { type: "integer", groupChar: ",", withText: true },
+        },
+    "^[\\p{Sc}\\s-]*\\d+\\.\\d+[%\\p{Sc}\\s]*$": commaDecimal
+      ? {
+          type: "integer",
+          property: { type: "integer", groupChar: ".", withText: true },
+        }
+      : { type: "number", property: { type: "number", withText: true } },
+    "^[\\p{Sc}\\s-]*\\d{1,3}(,\\d{3})+\\.\\d+[%\\p{Sc}\\s]*$": {
+      type: "number",
+      property: { type: "number", groupChar: ",", withText: true },
+    },
+    "^[\\p{Sc}\\s-]*\\d{1,3}(\\.\\d{3})+,\\d+[%\\p{Sc}\\s]*$": {
+      type: "number",
+      property: {
+        type: "number",
+        groupChar: ".",
+        decimalChar: ",",
+        withText: true,
+      },
     },
 
     "^(true|True|TRUE|false|False|FALSE)$": {

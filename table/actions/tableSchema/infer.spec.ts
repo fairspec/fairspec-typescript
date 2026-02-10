@@ -87,6 +87,71 @@ describe("inferTableSchemaFromTable", () => {
     expect(result).toEqual(tableSchema)
   })
 
+  it("should infer numeric withText", async () => {
+    const table = pl
+      .DataFrame({
+        integer: ["$10", "$20", "$30"],
+        percent: ["10%", "20%", "30%"],
+        number: ["$10.50", "$20.75", "$30.99"],
+        percentNumber: ["10.5%", "20.75%", "30.99%"],
+        integerGroupChar: ["$1,000", "$2,000", "$3,000"],
+        numberGroupChar: ["$1,000.50", "$2,000.75", "$3,000.99"],
+        european: ["€1.000,50", "€2.000,75", "€3.000,99"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        integer: { type: "integer", withText: true },
+        percent: { type: "integer", withText: true },
+        number: { type: "number", withText: true },
+        percentNumber: { type: "number", withText: true },
+        integerGroupChar: {
+          type: "integer",
+          groupChar: ",",
+          withText: true,
+        },
+        numberGroupChar: { type: "number", groupChar: ",", withText: true },
+        european: {
+          type: "number",
+          groupChar: ".",
+          decimalChar: ",",
+          withText: true,
+        },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should not infer numeric withText for non-currency text", async () => {
+    const table = pl
+      .DataFrame({
+        ordinal: ["1st", "2nd", "3rd"],
+        unit: ["2d", "5h", "10m"],
+        label: ["Level 5", "Level 10", "Level 15"],
+        hash: ["#10", "#20", "#30"],
+        mixed: ["5x", "10x", "15x"],
+        word: ["abc", "def", "ghi"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        ordinal: { type: "string" },
+        unit: { type: "string" },
+        label: { type: "string" },
+        hash: { type: "string" },
+        mixed: { type: "string" },
+        word: { type: "string" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
   it("should infer booleans", async () => {
     const table = pl
       .DataFrame({

@@ -87,6 +87,71 @@ describe("inferTableSchemaFromTable", () => {
     expect(result).toEqual(tableSchema)
   })
 
+  it("should infer numeric withText", async () => {
+    const table = pl
+      .DataFrame({
+        integer: ["$10", "$20", "$30"],
+        percent: ["10%", "20%", "30%"],
+        number: ["$10.50", "$20.75", "$30.99"],
+        percentNumber: ["10.5%", "20.75%", "30.99%"],
+        integerGroupChar: ["$1,000", "$2,000", "$3,000"],
+        numberGroupChar: ["$1,000.50", "$2,000.75", "$3,000.99"],
+        european: ["€1.000,50", "€2.000,75", "€3.000,99"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        integer: { type: "integer", withText: true },
+        percent: { type: "integer", withText: true },
+        number: { type: "number", withText: true },
+        percentNumber: { type: "number", withText: true },
+        integerGroupChar: {
+          type: "integer",
+          groupChar: ",",
+          withText: true,
+        },
+        numberGroupChar: { type: "number", groupChar: ",", withText: true },
+        european: {
+          type: "number",
+          groupChar: ".",
+          decimalChar: ",",
+          withText: true,
+        },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should not infer numeric withText for non-currency text", async () => {
+    const table = pl
+      .DataFrame({
+        ordinal: ["1st", "2nd", "3rd"],
+        unit: ["2d", "5h", "10m"],
+        label: ["Level 5", "Level 10", "Level 15"],
+        hash: ["#10", "#20", "#30"],
+        mixed: ["5x", "10x", "15x"],
+        word: ["abc", "def", "ghi"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        ordinal: { type: "string" },
+        unit: { type: "string" },
+        label: { type: "string" },
+        hash: { type: "string" },
+        mixed: { type: "string" },
+        word: { type: "string" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
   it("should infer booleans", async () => {
     const table = pl
       .DataFrame({
@@ -449,6 +514,114 @@ describe("inferTableSchemaFromTable", () => {
     expect(monthFirstResult).toEqual(tableSchemaMonthFirst)
   })
 
+  it("should infer urls", async () => {
+    const table = pl
+      .DataFrame({
+        url: ["https://example.com", "http://foo.bar/baz"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        url: { type: "string", format: "url" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should infer emails", async () => {
+    const table = pl
+      .DataFrame({
+        email: ["user@example.com", "test.name+tag@domain.org"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        email: { type: "string", format: "email" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should infer wkt", async () => {
+    const table = pl
+      .DataFrame({
+        geom: ["POINT(1 2)", "LINESTRING(0 0, 1 1)"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        geom: { type: "string", format: "wkt" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should infer durations", async () => {
+    const table = pl
+      .DataFrame({
+        duration: ["P1Y2M3D", "PT1H30M", "P1D"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        duration: { type: "string", format: "duration" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should infer hex", async () => {
+    const table = pl
+      .DataFrame({
+        hex: ["1a2b3c4d5e6f7890", "abcdef0123456789"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        hex: { type: "string", format: "hex" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should not infer url/email/wkt/hex for similar text", async () => {
+    const table = pl
+      .DataFrame({
+        notUrl: ["ftp://example.com", "ftp://other.com"],
+        notEmail: ["user@", "test@"],
+        notWkt: ["POINT", "LINESTRING"],
+        notHex: ["cafe1234", "deadbeef"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        notUrl: { type: "string" },
+        notEmail: { type: "string" },
+        notWkt: { type: "string" },
+        notHex: { type: "string" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
   it("should infer lists", async () => {
     const table = pl
       .DataFrame({
@@ -469,5 +642,203 @@ describe("inferTableSchemaFromTable", () => {
 
     const result = await inferTableSchemaFromTable(table)
     expect(result).toEqual(tableSchema)
+  })
+})
+
+describe("inferTableSchemaFromTable (nullable)", () => {
+  it("should infer nullable string from missing values", async () => {
+    const table = pl.DataFrame({ name: ["Alice", "Bob", "NA"] }).lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { name: { type: ["string", "null"] } },
+      missingValues: ["NA"],
+    })
+  })
+
+  it("should infer nullable integer from Polars nulls", async () => {
+    const table = pl
+      .DataFrame({
+        value: pl.Series("value", [1, 2, null], pl.Int32),
+      })
+      .lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { value: { type: ["integer", "null"] } },
+    })
+  })
+
+  it("should infer nullable number from Polars nulls", async () => {
+    const table = pl
+      .DataFrame({
+        value: pl.Series("value", [1.1, null, 3.3], pl.Float64),
+      })
+      .lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { value: { type: ["number", "null"] } },
+    })
+  })
+
+  it("should infer nullable url with missing values", async () => {
+    const table = pl
+      .DataFrame({
+        link: ["https://a.com", "http://b.com", "NA"],
+      })
+      .lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { link: { type: ["string", "null"], format: "url" } },
+      missingValues: ["NA"],
+    })
+  })
+
+  it("should infer nullable string when all values are missing", async () => {
+    const table = pl.DataFrame({ empty: ["NA", "N/A", ""] }).lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result.properties?.empty).toEqual({ type: ["string", "null"] })
+    expect(result.missingValues).toEqual(
+      expect.arrayContaining(["NA", "N/A", ""]),
+    )
+    expect(result.missingValues).toHaveLength(3)
+  })
+
+  it("should use explicit missingValues option", async () => {
+    const table = pl.DataFrame({ name: ["Alice", "MISSING"] }).lazy()
+    const result = await inferTableSchemaFromTable(table, {
+      missingValues: ["MISSING"],
+    })
+    expect(result).toEqual({
+      properties: { name: { type: ["string", "null"] } },
+      missingValues: ["MISSING"],
+    })
+  })
+
+  it("should not make columns nullable when no nulls exist", async () => {
+    const table = pl.DataFrame({ name: ["Alice", "Bob"] }).lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { name: { type: "string" } },
+    })
+  })
+
+  it("should infer nullable integer from empty string", async () => {
+    const table = pl.DataFrame({ value: ["1", "2", ""] }).lazy()
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual({
+      properties: { value: { type: ["integer", "null"] } },
+      missingValues: [""],
+    })
+  })
+})
+
+describe("inferTableSchemaFromTable (options steer detection)", () => {
+  it("should steer boolean detection from trueValues/falseValues", async () => {
+    const table = pl.DataFrame({ value: ["yes", "no", "yes"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      trueValues: ["yes"],
+      falseValues: ["no"],
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: { type: "boolean", trueValues: ["yes"], falseValues: ["no"] },
+      },
+    })
+  })
+
+  it("should steer number detection from groupChar", async () => {
+    const table = pl.DataFrame({ value: ["1.000", "2.000", "3.000"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      groupChar: ".",
+    })
+
+    expect(result).toEqual({
+      properties: { value: { type: "integer", groupChar: "." } },
+    })
+  })
+
+  it("should steer number detection from decimalChar", async () => {
+    const table = pl.DataFrame({ value: ["1.000,5", "2.000,5"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      decimalChar: ",",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: { type: "number", decimalChar: ",", groupChar: "." },
+      },
+    })
+  })
+
+  it("should steer list detection from listDelimiter", async () => {
+    const table = pl.DataFrame({ value: ["1;2", "3;4", "5;6"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      listDelimiter: ";",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: {
+          type: "string",
+          format: "list",
+          itemType: "integer",
+          delimiter: ";",
+        },
+      },
+    })
+  })
+
+  it("should steer date detection from dateFormat", async () => {
+    const table = pl.DataFrame({ value: ["15/01/2023", "20/02/2023"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      dateFormat: "%d/%m/%Y",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%d/%m/%Y",
+        },
+      },
+    })
+  })
+
+  it("should derive monthFirst from dateFormat", async () => {
+    const table = pl.DataFrame({ value: ["01/15/2023", "02/20/2023"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      dateFormat: "%m/%d/%Y",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%m/%d/%Y",
+        },
+      },
+    })
+  })
+
+  it("should filter time patterns from timeFormat", async () => {
+    const table = pl.DataFrame({ value: ["14:30", "08:15"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      timeFormat: "%H:%M",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: { type: "string", format: "time", temporalFormat: "%H:%M" },
+      },
+    })
   })
 })

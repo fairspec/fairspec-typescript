@@ -5,9 +5,7 @@ import { getPolarsSchema } from "../../helpers/schema.ts"
 import type { InferTableSchemaOptions } from "../../models/schema.ts"
 import type { Table } from "../../models/table.ts"
 
-// TODO: Rework the implementation
-// TODO: Implement actual options usage for inferring
-// TODO: Review default values being {columns: []} vs undefined
+const DEFAULT_MISSING_VALUES = ["", "NA", "N/A", "null", "-"]
 
 export async function inferTableSchemaFromTable(
   table: Table,
@@ -24,6 +22,9 @@ export function inferTableSchemaFromSample(
   options?: Exclude<InferTableSchemaOptions, "sampleRows">,
 ) {
   const { confidence = 0.9, columnTypes, keepStrings } = options ?? {}
+  const effectiveMissingValues =
+    options?.missingValues ?? DEFAULT_MISSING_VALUES
+  const detectedMissingValues = new Set<string>()
 
   const typeMapping = createTypeMapping()
   const regexMapping = createRegexMapping(options)
@@ -50,6 +51,7 @@ export function inferTableSchemaFromSample(
     }
 
     const type = columnTypes?.[name] ?? typeMapping[variant] ?? "unknown"
+    let isNullable = false
 
     let column: Column
     switch (type) {
@@ -114,17 +116,37 @@ export function inferTableSchemaFromSample(
       }
 
       if (type === "string") {
-        if (!keepStrings) {
-          for (const [regex, namelessColumn] of Object.entries(regexMapping)) {
-            const failures = sample
-              .filter(pl.col(name).str.contains(regex).not())
-              .head(failureThreshold).height
+        const hasPolarsNulls = sample.filter(pl.col(name).isNull()).height > 0
+        let missingFilter: pl.Expr = pl.col(name).isNull()
+        let hasMissingValues = false
+        for (const mv of effectiveMissingValues) {
+          if (sample.filter(pl.col(name).eq(pl.lit(mv))).height > 0) {
+            detectedMissingValues.add(mv)
+            hasMissingValues = true
+            missingFilter = missingFilter.or(pl.col(name).eq(pl.lit(mv)))
+          }
+        }
+        isNullable = hasPolarsNulls || hasMissingValues
 
-            if (failures < failureThreshold) {
-              // TODO: fix
-              // @ts-expect-error
-              column = { ...namelessColumn, name }
-              break
+        if (!keepStrings) {
+          const effectiveSample = sample.filter(missingFilter.not())
+          if (effectiveSample.height > 0) {
+            const effectiveFailureThreshold =
+              effectiveSample.height -
+                Math.floor(effectiveSample.height * confidence) || 1
+            for (const [regex, namelessColumn] of Object.entries(
+              regexMapping,
+            )) {
+              const failures = effectiveSample
+                .filter(pl.col(name).str.contains(regex).not())
+                .head(effectiveFailureThreshold).height
+
+              if (failures < effectiveFailureThreshold) {
+                // TODO: fix
+                // @ts-expect-error
+                column = { ...namelessColumn, name }
+                break
+              }
             }
           }
         }
@@ -139,14 +161,27 @@ export function inferTableSchemaFromSample(
           column = { name, type: "integer", property: { type: "integer" } }
         }
       }
+
+      if (type !== "string") {
+        if (sample.filter(pl.col(name).isNull()).height > 0) {
+          isNullable = true
+        }
+      }
     }
 
+    if (isNullable) {
+      makePropertyNullable(column)
+    }
     enhanceColumn(column, options)
     columns.push(column)
   }
 
   const tableSchema: TableSchema = {
     properties: getColumnProperties(columns),
+  }
+
+  if (options?.missingValues === undefined && detectedMissingValues.size > 0) {
+    tableSchema.missingValues = [...detectedMissingValues]
   }
 
   enhanceSchema(tableSchema, options)
@@ -183,15 +218,54 @@ function createTypeMapping() {
   return mapping
 }
 
+function escapeRegex(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+}
+
+function deriveMonthFirst(format: string | undefined) {
+  if (!format) return undefined
+  const mIndex = format.indexOf("%m")
+  const dIndex = format.indexOf("%d")
+  if (mIndex === -1 || dIndex === -1) return undefined
+  return mIndex < dIndex
+}
+
 function createRegexMapping(options?: InferTableSchemaOptions) {
-  const { commaDecimal, monthFirst } = options ?? {}
+  const {
+    commaDecimal,
+    monthFirst,
+    trueValues,
+    falseValues,
+    decimalChar,
+    groupChar,
+    listDelimiter,
+    dateFormat,
+    timeFormat,
+    datetimeFormat,
+  } = options ?? {}
+
+  const effectiveCommaDecimal =
+    commaDecimal ?? (decimalChar === "," || groupChar === ".")
+
+  const effectiveMonthFirst =
+    monthFirst ??
+    deriveMonthFirst(dateFormat) ??
+    deriveMonthFirst(datetimeFormat)
+
+  const allBoolValues = [
+    ...(trueValues ?? ["true", "True", "TRUE"]),
+    ...(falseValues ?? ["false", "False", "FALSE"]),
+  ]
+  const boolRegex = `^(${allBoolValues.map(escapeRegex).join("|")})$`
+
+  const listEsc = escapeRegex(listDelimiter ?? ",")
 
   const mapping: Record<string, Omit<Column, "name">> = {
     "^\\d+$": { type: "integer", property: { type: "integer" } },
-    "^\\d{1,3}(,\\d{3})+$": commaDecimal
+    "^\\d{1,3}(,\\d{3})+$": effectiveCommaDecimal
       ? { type: "number", property: { type: "number" } }
       : { type: "integer", property: { type: "integer", groupChar: "," } },
-    "^\\d+\\.\\d+$": commaDecimal
+    "^\\d+\\.\\d+$": effectiveCommaDecimal
       ? { type: "integer", property: { type: "integer", groupChar: "." } }
       : { type: "number", property: { type: "number" } },
     "^\\d{1,3}(,\\d{3})+\\.\\d+$": {
@@ -203,7 +277,37 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
       property: { type: "number", groupChar: ".", decimalChar: "," },
     },
 
-    "^(true|True|TRUE|false|False|FALSE)$": {
+    "^[\\p{Sc}\\s-]*\\d+[%\\p{Sc}\\s]*$": {
+      type: "integer",
+      property: { type: "integer", withText: true },
+    },
+    "^[\\p{Sc}\\s-]*\\d{1,3}(,\\d{3})+[%\\p{Sc}\\s]*$": effectiveCommaDecimal
+      ? { type: "number", property: { type: "number", withText: true } }
+      : {
+          type: "integer",
+          property: { type: "integer", groupChar: ",", withText: true },
+        },
+    "^[\\p{Sc}\\s-]*\\d+\\.\\d+[%\\p{Sc}\\s]*$": effectiveCommaDecimal
+      ? {
+          type: "integer",
+          property: { type: "integer", groupChar: ".", withText: true },
+        }
+      : { type: "number", property: { type: "number", withText: true } },
+    "^[\\p{Sc}\\s-]*\\d{1,3}(,\\d{3})+\\.\\d+[%\\p{Sc}\\s]*$": {
+      type: "number",
+      property: { type: "number", groupChar: ",", withText: true },
+    },
+    "^[\\p{Sc}\\s-]*\\d{1,3}(\\.\\d{3})+,\\d+[%\\p{Sc}\\s]*$": {
+      type: "number",
+      property: {
+        type: "number",
+        groupChar: ".",
+        decimalChar: ",",
+        withText: true,
+      },
+    },
+
+    [boolRegex]: {
       type: "boolean",
       property: { type: "boolean" },
     },
@@ -216,7 +320,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
       type: "date",
       property: { type: "string", format: "date", temporalFormat: "%Y/%m/%d" },
     },
-    "^\\d{2}/\\d{2}/\\d{4}$": monthFirst
+    "^\\d{2}/\\d{2}/\\d{4}$": effectiveMonthFirst
       ? {
           type: "date",
           property: {
@@ -233,7 +337,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
             temporalFormat: "%d/%m/%Y",
           },
         },
-    "^\\d{2}-\\d{2}-\\d{4}$": monthFirst
+    "^\\d{2}-\\d{2}-\\d{4}$": effectiveMonthFirst
       ? {
           type: "date",
           property: {
@@ -250,7 +354,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
             temporalFormat: "%d-%m-%Y",
           },
         },
-    "^\\d{2}\\.\\d{2}\\.\\d{4}$": monthFirst
+    "^\\d{2}\\.\\d{2}\\.\\d{4}$": effectiveMonthFirst
       ? {
           type: "date",
           property: {
@@ -309,7 +413,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
         temporalFormat: "%Y-%m-%d %H:%M:%S",
       },
     },
-    "^\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}$": monthFirst
+    "^\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}$": effectiveMonthFirst
       ? {
           type: "date-time",
           property: {
@@ -326,7 +430,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
             temporalFormat: "%d/%m/%Y %H:%M",
           },
         },
-    "^\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}:\\d{2}$": monthFirst
+    "^\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}:\\d{2}$": effectiveMonthFirst
       ? {
           type: "date-time",
           property: {
@@ -348,14 +452,64 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
 
     "^\\[": { type: "array", property: { type: "array" } },
 
-    "^\\d+,\\d+$": {
+    [`^\\d+${listEsc}\\d+$`]: {
       type: "list",
       property: { type: "string", format: "list", itemType: "integer" },
     },
-    "^[\\d.]+,[\\d.]+$": {
+    [`^[\\d.]+${listEsc}[\\d.]+$`]: {
       type: "list",
       property: { type: "string", format: "list", itemType: "number" },
     },
+
+    "^https?://\\S+$": {
+      type: "url",
+      property: { type: "string", format: "url" },
+    },
+
+    "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$": {
+      type: "email",
+      property: { type: "string", format: "email" },
+    },
+
+    "^(POINT|LINESTRING|POLYGON|MULTIPOINT|MULTILINESTRING|MULTIPOLYGON|GEOMETRYCOLLECTION)\\s*\\(":
+      {
+        type: "wkt",
+        property: { type: "string", format: "wkt" },
+      },
+
+    "^P(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$":
+      {
+        type: "duration",
+        property: { type: "string", format: "duration" },
+      },
+
+    "^([0-9a-fA-F]{2}){8,}$": {
+      type: "hex",
+      property: { type: "string", format: "hex" },
+    },
+  }
+
+  const canonicalFormats: Record<string, string> = {
+    date: "%Y-%m-%d",
+    time: "%H:%M:%S",
+    "date-time": "%Y-%m-%dT%H:%M:%S",
+  }
+
+  for (const [regex, col] of Object.entries(mapping)) {
+    const userFormat =
+      col.type === "date"
+        ? dateFormat
+        : col.type === "time"
+          ? timeFormat
+          : col.type === "date-time"
+            ? datetimeFormat
+            : undefined
+    if (userFormat === undefined) continue
+    const entryFormat =
+      "temporalFormat" in col.property
+        ? col.property.temporalFormat
+        : canonicalFormats[col.type]
+    if (entryFormat !== userFormat) delete mapping[regex]
   }
 
   return mapping
@@ -399,6 +553,13 @@ function enhanceColumn(column: Column, options?: InferTableSchemaOptions) {
     if (options?.listItemType !== undefined) {
       column.property.itemType = options.listItemType
     }
+  }
+}
+
+function makePropertyNullable(column: Column) {
+  const baseType = column.property.type
+  if (baseType && typeof baseType === "string") {
+    ;(column.property as Record<string, unknown>).type = [baseType, "null"]
   }
 }
 

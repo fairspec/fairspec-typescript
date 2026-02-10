@@ -18,7 +18,7 @@ export async function validateFileDialect(
   const $schema =
     typeof descriptor.$schema === "string"
       ? descriptor.$schema
-      : `https://fairspec.org/profiles/latest/dialect.json`
+      : `https://fairspec.org/profiles/latest/file-dialect.json`
 
   const profile = await loadProfile($schema, {
     profileType: "file-dialect",

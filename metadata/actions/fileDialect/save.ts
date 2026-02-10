@@ -14,7 +14,7 @@ export async function saveFileDialect(
 
   descriptor.$schema =
     descriptor.$schema ??
-    `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/dialect.json`
+    `https://fairspec.org/profiles/${settings.FAIRSPEC_VERSION}/file-dialect.json`
 
   await saveDescriptor(descriptor, {
     path: options.path,

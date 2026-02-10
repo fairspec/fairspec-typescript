@@ -1,7 +1,10 @@
 import { z } from "zod"
-import type { Column } from "../../models/column/column.ts"
+import type { BasePropertyType } from "../../models/column/base.ts"
+import type { Column, ColumnProperty } from "../../models/column/column.ts"
 
-export function createNullablePropertyType<T extends string>(literal: T) {
+export function createNullablePropertyType<T extends BasePropertyType>(
+  literal: T,
+) {
   return z.union([
     z.literal(literal),
     z.tuple([z.literal(literal), z.literal("null")]),
@@ -9,12 +12,14 @@ export function createNullablePropertyType<T extends string>(literal: T) {
   ])
 }
 
-export function getBasePropertyType(type: string | readonly string[]) {
+export function getBasePropertyType(type: ColumnProperty["type"]) {
+  if (type === undefined) return undefined
   if (typeof type === "string") return type
   return type.find(t => t !== "null") ?? "null"
 }
 
-export function getIsNullablePropertyType(type: string | readonly string[]) {
+export function getIsNullablePropertyType(type: ColumnProperty["type"]) {
+  if (type === undefined) return false
   if (typeof type === "string") return false
   return type.includes("null")
 }

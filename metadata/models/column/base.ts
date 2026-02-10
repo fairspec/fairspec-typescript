@@ -1,5 +1,14 @@
 import { z } from "zod"
 
+export const BasePropertyType = z.enum([
+  "string",
+  "number",
+  "integer",
+  "boolean",
+  "array",
+  "object",
+])
+
 export const BaseColumnProperty = z.object({
   title: z
     .string()
@@ -27,4 +36,6 @@ export const BaseColumn = z.object({
   property: BaseColumnProperty,
 })
 
+export type BasePropertyType = z.infer<typeof BasePropertyType>
+export type BaseColumnProperty = z.infer<typeof BaseColumnProperty>
 export type BaseColumn = z.infer<typeof BaseColumn>

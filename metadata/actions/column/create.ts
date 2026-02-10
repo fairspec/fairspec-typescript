@@ -1,92 +1,77 @@
-import type { Column, ColumnProperty } from "../../models/column/column.ts"
+import type {
+  Column,
+  ColumnProperty,
+  ColumnType,
+} from "../../models/column/column.ts"
 import { getBasePropertyType, getIsNullablePropertyType } from "./property.ts"
 
 export function createColumnFromProperty(
   name: string,
   property: ColumnProperty,
 ): Column {
-  const propertyType = property.type ?? "null"
-  const baseType = getBasePropertyType(propertyType)
+  const baseType = getBasePropertyType(property.type)
   const format = "format" in property ? property.format : undefined
-  const nullable = getIsNullablePropertyType(propertyType) || undefined
+  const nullable = getIsNullablePropertyType(property.type) || undefined
+  const columnType = getColumnType(baseType, format)
 
-  let columnType: string
+  // TODO: any way to make this more type-safe?
+  return { type: columnType, name, nullable, property } as Column
+}
+
+function getColumnType(
+  baseType: ReturnType<typeof getBasePropertyType>,
+  format: string | undefined,
+): ColumnType {
   switch (baseType) {
     case "boolean":
-      columnType = "boolean"
-      break
+      return "boolean"
     case "integer":
-      columnType = format === "categorical" ? "categorical" : "integer"
-      break
+      return format === "categorical" ? "categorical" : "integer"
     case "number":
-      columnType = "number"
-      break
+      return "number"
     case "string":
       switch (format) {
         case "categorical":
-          columnType = "categorical"
-          break
+          return "categorical"
         case "decimal":
-          columnType = "decimal"
-          break
+          return "decimal"
         case "list":
-          columnType = "list"
-          break
+          return "list"
         case "base64":
-          columnType = "base64"
-          break
+          return "base64"
         case "hex":
-          columnType = "hex"
-          break
+          return "hex"
         case "email":
-          columnType = "email"
-          break
+          return "email"
         case "url":
-          columnType = "url"
-          break
+          return "url"
         case "date-time":
-          columnType = "date-time"
-          break
+          return "date-time"
         case "date":
-          columnType = "date"
-          break
+          return "date"
         case "time":
-          columnType = "time"
-          break
+          return "time"
         case "duration":
-          columnType = "duration"
-          break
+          return "duration"
         case "wkt":
-          columnType = "wkt"
-          break
+          return "wkt"
         case "wkb":
-          columnType = "wkb"
-          break
+          return "wkb"
         default:
-          columnType = "string"
-          break
+          return "string"
       }
-      break
     case "array":
-      columnType = "array"
-      break
+      return "array"
     case "object":
       switch (format) {
         case "geojson":
-          columnType = "geojson"
-          break
+          return "geojson"
         case "topojson":
-          columnType = "topojson"
-          break
+          return "topojson"
         default:
-          columnType = "object"
-          break
+          return "object"
       }
-      break
     default:
-      columnType = "unknown"
-      break
+      return "unknown"
   }
-
-  return { type: columnType, name, nullable, property } as Column
 }

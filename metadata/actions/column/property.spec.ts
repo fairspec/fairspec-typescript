@@ -28,7 +28,7 @@ describe("getIsNullablePropertyType", () => {
     expect(getIsNullablePropertyType(["null", "string"])).toBe(true)
   })
 
-  it("should return false for array without null", () => {
-    expect(getIsNullablePropertyType(["string", "integer"])).toBe(false)
+  it("should return false for undefined type", () => {
+    expect(getIsNullablePropertyType(undefined)).toBe(false)
   })
 })

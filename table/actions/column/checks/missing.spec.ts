@@ -91,4 +91,30 @@ describe("inspectTable (cell/missing)", () => {
 
     expect(errors).toEqual([])
   })
+
+  it("should honor allRequired for non-nullable columns", async () => {
+    const table = pl
+      .DataFrame({
+        id: [1, null, 3],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      allRequired: true,
+      properties: {
+        id: { type: "number" },
+      },
+    }
+
+    const errors = await inspectTable(table, { tableSchema })
+
+    expect(errors).toEqual([
+      {
+        type: "cell/missing",
+        columnName: "id",
+        rowNumber: 2,
+        cell: "",
+      },
+    ])
+  })
 })

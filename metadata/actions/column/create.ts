@@ -1,64 +1,77 @@
-import type { Column, ColumnProperty } from "../../models/column/column.ts"
+import type {
+  Column,
+  ColumnProperty,
+  ColumnType,
+} from "../../models/column/column.ts"
+import { getBasePropertyType, getIsNullablePropertyType } from "./property.ts"
 
 export function createColumnFromProperty(
   name: string,
   property: ColumnProperty,
 ): Column {
-  switch (property.type) {
+  const baseType = getBasePropertyType(property.type)
+  const format = "format" in property ? property.format : undefined
+  const nullable = getIsNullablePropertyType(property.type) || undefined
+  const columnType = getColumnType(baseType, format)
+
+  // TODO: any way to make this more type-safe?
+  return { type: columnType, name, nullable, property } as Column
+}
+
+function getColumnType(
+  baseType: ReturnType<typeof getBasePropertyType>,
+  format: string | undefined,
+): ColumnType {
+  switch (baseType) {
     case "boolean":
-      return { type: "boolean", name, property }
+      return "boolean"
     case "integer":
-      switch (property.format) {
-        case "categorical":
-          return { type: "categorical", name, property }
-        default:
-          return { type: "integer", name, property }
-      }
+      return format === "categorical" ? "categorical" : "integer"
     case "number":
-      return { type: "number", name, property }
+      return "number"
     case "string":
-      switch (property.format) {
+      switch (format) {
         case "categorical":
-          return { type: "categorical", name, property }
+          return "categorical"
         case "decimal":
-          return { type: "decimal", name, property }
+          return "decimal"
         case "list":
-          return { type: "list", name, property }
+          return "list"
         case "base64":
-          return { type: "base64", name, property }
+          return "base64"
         case "hex":
-          return { type: "hex", name, property }
+          return "hex"
         case "email":
-          return { type: "email", name, property }
+          return "email"
         case "url":
-          return { type: "url", name, property }
+          return "url"
         case "date-time":
-          return { type: "date-time", name, property }
+          return "date-time"
         case "date":
-          return { type: "date", name, property }
+          return "date"
         case "time":
-          return { type: "time", name, property }
+          return "time"
         case "duration":
-          return { type: "duration", name, property }
+          return "duration"
         case "wkt":
-          return { type: "wkt", name, property }
+          return "wkt"
         case "wkb":
-          return { type: "wkb", name, property }
+          return "wkb"
         default:
-          return { type: "string", name, property }
+          return "string"
       }
     case "array":
-      return { type: "array", name, property }
+      return "array"
     case "object":
-      switch (property.format) {
+      switch (format) {
         case "geojson":
-          return { type: "geojson", name, property }
+          return "geojson"
         case "topojson":
-          return { type: "topojson", name, property }
+          return "topojson"
         default:
-          return { type: "object", name, property }
+          return "object"
       }
     default:
-      return { type: "unknown", name, property }
+      return "unknown"
   }
 }

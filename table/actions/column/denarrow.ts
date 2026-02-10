@@ -1,3 +1,4 @@
+import { getBasePropertyType } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import { getCategoricalValuesAndLabels } from "../../helpers/column.ts"
 import type { ColumnMapping } from "../../models/column.ts"
@@ -20,7 +21,9 @@ export function denarrowColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
       const { values, labels } = getCategoricalValuesAndLabels(mapping.target)
 
       const polarsType =
-        mapping.target.property.type === "string" ? pl.String : pl.Int64
+        getBasePropertyType(mapping.target.property.type) === "string"
+          ? pl.String
+          : pl.Int64
 
       return values.length
         ? columnExpr.replaceStrict(labels, values, pl.lit(null), polarsType)

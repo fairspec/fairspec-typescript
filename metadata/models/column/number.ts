@@ -1,8 +1,9 @@
 import { z } from "zod"
+import { createNullablePropertyType } from "../../actions/column/property.ts"
 import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
 export const BaseNumberColumnProperty = BaseColumnProperty.extend({
-  type: z.literal("number"),
+  type: createNullablePropertyType("number"),
   // TODO: Fix this hack
   format: z.literal("").optional(),
 

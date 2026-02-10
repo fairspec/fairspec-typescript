@@ -21,6 +21,13 @@ export const TableSchema = z.object({
     .optional()
     .describe("An optional list of column names that must be present"),
 
+  allRequired: z
+    .boolean()
+    .optional()
+    .describe(
+      "An optional boolean indicating whether all columns are required",
+    ),
+
   properties: z
     .record(z.string(), ColumnProperty)
     .optional()

@@ -1,5 +1,10 @@
 export { createColumnFromProperty } from "./actions/column/create.ts"
-export { getColumnProperties } from "./actions/column/property.ts"
+export {
+  createNullablePropertyType,
+  getBasePropertyType,
+  getColumnProperties,
+  getIsNullablePropertyType,
+} from "./actions/column/property.ts"
 export { loadDataSchema } from "./actions/dataSchema/load.ts"
 export { resolveDataSchema } from "./actions/dataSchema/resolve.ts"
 export { validateDataSchema } from "./actions/dataSchema/validate.ts"
@@ -110,9 +115,9 @@ export {
   CellMinItemsError,
   CellMinimumError,
   CellMinLengthError,
+  CellMissingError,
   CellMultipleOfError,
   CellPatternError,
-  CellRequiredError,
   CellTypeError,
   CellUniqueError,
 } from "./models/error/cell.ts"

@@ -1,5 +1,5 @@
 import type { Column, TableSchema } from "@fairspec/metadata"
-import { copyDescriptor } from "@fairspec/metadata"
+import { copyDescriptor, getBasePropertyType } from "@fairspec/metadata"
 
 export function mergeMissingValues(column: Column, tableSchema: TableSchema) {
   if (!tableSchema.missingValues) {
@@ -11,7 +11,7 @@ export function mergeMissingValues(column: Column, tableSchema: TableSchema) {
 
   // We ensure that integer missing values don't sneak in string columns
   for (const item of tableSchema.missingValues) {
-    if (mergedColumn.property.type === "string") {
+    if (getBasePropertyType(mergedColumn.property.type) === "string") {
       const value = typeof item === "object" ? item.value : item
       if (typeof value !== "string") continue
     }

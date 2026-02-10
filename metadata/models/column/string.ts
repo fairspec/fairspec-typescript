@@ -1,8 +1,9 @@
 import { z } from "zod"
+import { createNullablePropertyType } from "../../actions/column/property.ts"
 import { BaseColumn, BaseColumnProperty } from "./base.ts"
 
 export const BaseStringColumnProperty = BaseColumnProperty.extend({
-  type: z.literal("string"),
+  type: createNullablePropertyType("string"),
 
   enum: z
     .array(z.string())

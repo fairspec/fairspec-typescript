@@ -13,8 +13,8 @@ export const CellTypeError = BaseCellError.extend({
   columnType: ColumnType.describe("The expected column type"),
 })
 
-export const CellRequiredError = BaseCellError.extend({
-  type: z.literal("cell/required").describe("Error type identifier"),
+export const CellMissingError = BaseCellError.extend({
+  type: z.literal("cell/missing").describe("Error type identifier"),
 })
 
 export const CellMinimumError = BaseCellError.extend({
@@ -91,7 +91,7 @@ export const CellMaxItemsError = BaseCellError.extend({
 
 export const CellError = z.discriminatedUnion("type", [
   CellTypeError,
-  CellRequiredError,
+  CellMissingError,
   CellMinimumError,
   CellMaximumError,
   CellExclusiveMinimumError,
@@ -109,7 +109,7 @@ export const CellError = z.discriminatedUnion("type", [
 ])
 
 export type CellTypeError = z.infer<typeof CellTypeError>
-export type CellRequiredError = z.infer<typeof CellRequiredError>
+export type CellMissingError = z.infer<typeof CellMissingError>
 export type CellMinimumError = z.infer<typeof CellMinimumError>
 export type CellMaximumError = z.infer<typeof CellMaximumError>
 export type CellExclusiveMinimumError = z.infer<

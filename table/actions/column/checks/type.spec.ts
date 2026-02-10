@@ -255,6 +255,31 @@ describe("inspectTable", () => {
     expect(errors).toHaveLength(0)
   })
 
+  it("should validate type errors with nullable property type", async () => {
+    const table = pl
+      .DataFrame({
+        id: ["1", "bad", "3"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: ["integer", "null"] as const },
+      },
+    }
+
+    const errors = await inspectTable(table, { tableSchema })
+
+    expect(errors).toHaveLength(1)
+    expect(errors).toContainEqual({
+      type: "cell/type",
+      cell: "bad",
+      columnName: "id",
+      columnType: "integer",
+      rowNumber: 2,
+    })
+  })
+
   it("should validate with non-string source data", async () => {
     const table = pl
       .DataFrame({
@@ -264,7 +289,7 @@ describe("inspectTable", () => {
 
     const tableSchema: TableSchema = {
       properties: {
-        is_active: { type: "boolean" },
+        is_active: { type: ["boolean", "null"] as const },
       },
     }
 

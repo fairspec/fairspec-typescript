@@ -8,9 +8,17 @@ export function convertTableSchemaFromDatabase(databaseSchema: SqliteSchema) {
   const required: string[] = []
 
   for (const databaseColumn of databaseSchema.columns) {
-    columns.push(convertColumnFromDatabase(databaseColumn))
+    const column = convertColumnFromDatabase(databaseColumn)
 
-    // TODO: Update when required uses JSON Schema symantics
+    if (databaseColumn.isNullable) {
+      const baseType = column.property.type
+      if (baseType && typeof baseType === "string") {
+        ;(column.property as Record<string, unknown>).type = [baseType, "null"]
+      }
+    }
+
+    columns.push(column)
+
     if (!databaseColumn.isNullable) {
       required.push(databaseColumn.name)
     }

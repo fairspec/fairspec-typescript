@@ -2,9 +2,10 @@ import type { CellPatternError, Column } from "@fairspec/metadata"
 import type { CellMapping } from "../../../models/cell.ts"
 
 export function checkCellPattern(column: Column, mapping: CellMapping) {
-  if (column.property.type !== "string") return undefined
+  const property = column.property
+  if (!("pattern" in property)) return undefined
 
-  const pattern = column.property.pattern
+  const pattern = property.pattern
   if (!pattern) return undefined
 
   // For string-based columns we test against the source polars column

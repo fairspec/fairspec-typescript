@@ -1,4 +1,5 @@
 import type { Column } from "@fairspec/metadata"
+import { getBasePropertyType } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import type {
   ColumnMapping,
@@ -40,14 +41,14 @@ function getMissingValueType(
   column: Column,
   options?: DenormalizeColumnOptions,
 ) {
-  const propertyType = column.property.type
+  const baseType = getBasePropertyType(column.property.type ?? "null")
 
-  if (propertyType === "string") {
+  if (baseType === "string") {
     return "string"
   }
 
-  if (propertyType === "integer" || propertyType === "number") {
-    return options?.nativeTypes?.includes(propertyType) ? "number" : "string"
+  if (baseType === "integer" || baseType === "number") {
+    return options?.nativeTypes?.includes(baseType) ? "number" : "string"
   }
 
   return undefined

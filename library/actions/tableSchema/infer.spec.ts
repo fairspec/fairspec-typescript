@@ -129,7 +129,7 @@ describe("inferTableSchema", () => {
       properties: {
         id: { type: "integer" },
         name: { type: "string" },
-        email: { type: "string" },
+        email: { type: ["string", "null"], format: "email" },
       },
     })
   })

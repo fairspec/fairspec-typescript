@@ -730,3 +730,115 @@ describe("inferTableSchemaFromTable (nullable)", () => {
     })
   })
 })
+
+describe("inferTableSchemaFromTable (options steer detection)", () => {
+  it("should steer boolean detection from trueValues/falseValues", async () => {
+    const table = pl.DataFrame({ value: ["yes", "no", "yes"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      trueValues: ["yes"],
+      falseValues: ["no"],
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: { type: "boolean", trueValues: ["yes"], falseValues: ["no"] },
+      },
+    })
+  })
+
+  it("should steer number detection from groupChar", async () => {
+    const table = pl.DataFrame({ value: ["1.000", "2.000", "3.000"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      groupChar: ".",
+    })
+
+    expect(result).toEqual({
+      properties: { value: { type: "integer", groupChar: "." } },
+    })
+  })
+
+  it("should steer number detection from decimalChar", async () => {
+    const table = pl.DataFrame({ value: ["1.000,5", "2.000,5"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      decimalChar: ",",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: { type: "number", decimalChar: ",", groupChar: "." },
+      },
+    })
+  })
+
+  it("should steer list detection from listDelimiter", async () => {
+    const table = pl.DataFrame({ value: ["1;2", "3;4", "5;6"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      listDelimiter: ";",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: {
+          type: "string",
+          format: "list",
+          itemType: "integer",
+          delimiter: ";",
+        },
+      },
+    })
+  })
+
+  it("should steer date detection from dateFormat", async () => {
+    const table = pl.DataFrame({ value: ["15/01/2023", "20/02/2023"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      dateFormat: "%d/%m/%Y",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%d/%m/%Y",
+        },
+      },
+    })
+  })
+
+  it("should derive monthFirst from dateFormat", async () => {
+    const table = pl.DataFrame({ value: ["01/15/2023", "02/20/2023"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      dateFormat: "%m/%d/%Y",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: {
+          type: "string",
+          format: "date",
+          temporalFormat: "%m/%d/%Y",
+        },
+      },
+    })
+  })
+
+  it("should filter time patterns from timeFormat", async () => {
+    const table = pl.DataFrame({ value: ["14:30", "08:15"] }).lazy()
+
+    const result = await inferTableSchemaFromTable(table, {
+      timeFormat: "%H:%M",
+    })
+
+    expect(result).toEqual({
+      properties: {
+        value: { type: "string", format: "time", temporalFormat: "%H:%M" },
+      },
+    })
+  })
+})

@@ -218,15 +218,54 @@ function createTypeMapping() {
   return mapping
 }
 
+function escapeRegex(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+}
+
+function deriveMonthFirst(format: string | undefined) {
+  if (!format) return undefined
+  const mIndex = format.indexOf("%m")
+  const dIndex = format.indexOf("%d")
+  if (mIndex === -1 || dIndex === -1) return undefined
+  return mIndex < dIndex
+}
+
 function createRegexMapping(options?: InferTableSchemaOptions) {
-  const { commaDecimal, monthFirst } = options ?? {}
+  const {
+    commaDecimal,
+    monthFirst,
+    trueValues,
+    falseValues,
+    decimalChar,
+    groupChar,
+    listDelimiter,
+    dateFormat,
+    timeFormat,
+    datetimeFormat,
+  } = options ?? {}
+
+  const effectiveCommaDecimal =
+    commaDecimal ?? (decimalChar === "," || groupChar === ".")
+
+  const effectiveMonthFirst =
+    monthFirst ??
+    deriveMonthFirst(dateFormat) ??
+    deriveMonthFirst(datetimeFormat)
+
+  const allBoolValues = [
+    ...(trueValues ?? ["true", "True", "TRUE"]),
+    ...(falseValues ?? ["false", "False", "FALSE"]),
+  ]
+  const boolRegex = `^(${allBoolValues.map(escapeRegex).join("|")})$`
+
+  const listEsc = escapeRegex(listDelimiter ?? ",")
 
   const mapping: Record<string, Omit<Column, "name">> = {
     "^\\d+$": { type: "integer", property: { type: "integer" } },
-    "^\\d{1,3}(,\\d{3})+$": commaDecimal
+    "^\\d{1,3}(,\\d{3})+$": effectiveCommaDecimal
       ? { type: "number", property: { type: "number" } }
       : { type: "integer", property: { type: "integer", groupChar: "," } },
-    "^\\d+\\.\\d+$": commaDecimal
+    "^\\d+\\.\\d+$": effectiveCommaDecimal
       ? { type: "integer", property: { type: "integer", groupChar: "." } }
       : { type: "number", property: { type: "number" } },
     "^\\d{1,3}(,\\d{3})+\\.\\d+$": {
@@ -242,13 +281,13 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
       type: "integer",
       property: { type: "integer", withText: true },
     },
-    "^[\\p{Sc}\\s-]*\\d{1,3}(,\\d{3})+[%\\p{Sc}\\s]*$": commaDecimal
+    "^[\\p{Sc}\\s-]*\\d{1,3}(,\\d{3})+[%\\p{Sc}\\s]*$": effectiveCommaDecimal
       ? { type: "number", property: { type: "number", withText: true } }
       : {
           type: "integer",
           property: { type: "integer", groupChar: ",", withText: true },
         },
-    "^[\\p{Sc}\\s-]*\\d+\\.\\d+[%\\p{Sc}\\s]*$": commaDecimal
+    "^[\\p{Sc}\\s-]*\\d+\\.\\d+[%\\p{Sc}\\s]*$": effectiveCommaDecimal
       ? {
           type: "integer",
           property: { type: "integer", groupChar: ".", withText: true },
@@ -268,7 +307,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
       },
     },
 
-    "^(true|True|TRUE|false|False|FALSE)$": {
+    [boolRegex]: {
       type: "boolean",
       property: { type: "boolean" },
     },
@@ -281,7 +320,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
       type: "date",
       property: { type: "string", format: "date", temporalFormat: "%Y/%m/%d" },
     },
-    "^\\d{2}/\\d{2}/\\d{4}$": monthFirst
+    "^\\d{2}/\\d{2}/\\d{4}$": effectiveMonthFirst
       ? {
           type: "date",
           property: {
@@ -298,7 +337,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
             temporalFormat: "%d/%m/%Y",
           },
         },
-    "^\\d{2}-\\d{2}-\\d{4}$": monthFirst
+    "^\\d{2}-\\d{2}-\\d{4}$": effectiveMonthFirst
       ? {
           type: "date",
           property: {
@@ -315,7 +354,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
             temporalFormat: "%d-%m-%Y",
           },
         },
-    "^\\d{2}\\.\\d{2}\\.\\d{4}$": monthFirst
+    "^\\d{2}\\.\\d{2}\\.\\d{4}$": effectiveMonthFirst
       ? {
           type: "date",
           property: {
@@ -374,7 +413,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
         temporalFormat: "%Y-%m-%d %H:%M:%S",
       },
     },
-    "^\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}$": monthFirst
+    "^\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}$": effectiveMonthFirst
       ? {
           type: "date-time",
           property: {
@@ -391,7 +430,7 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
             temporalFormat: "%d/%m/%Y %H:%M",
           },
         },
-    "^\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}:\\d{2}$": monthFirst
+    "^\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}:\\d{2}$": effectiveMonthFirst
       ? {
           type: "date-time",
           property: {
@@ -413,11 +452,11 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
 
     "^\\[": { type: "array", property: { type: "array" } },
 
-    "^\\d+,\\d+$": {
+    [`^\\d+${listEsc}\\d+$`]: {
       type: "list",
       property: { type: "string", format: "list", itemType: "integer" },
     },
-    "^[\\d.]+,[\\d.]+$": {
+    [`^[\\d.]+${listEsc}[\\d.]+$`]: {
       type: "list",
       property: { type: "string", format: "list", itemType: "number" },
     },
@@ -448,6 +487,29 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
       type: "hex",
       property: { type: "string", format: "hex" },
     },
+  }
+
+  const canonicalFormats: Record<string, string> = {
+    date: "%Y-%m-%d",
+    time: "%H:%M:%S",
+    "date-time": "%Y-%m-%dT%H:%M:%S",
+  }
+
+  for (const [regex, col] of Object.entries(mapping)) {
+    const userFormat =
+      col.type === "date"
+        ? dateFormat
+        : col.type === "time"
+          ? timeFormat
+          : col.type === "date-time"
+            ? datetimeFormat
+            : undefined
+    if (userFormat === undefined) continue
+    const entryFormat =
+      "temporalFormat" in col.property
+        ? col.property.temporalFormat
+        : canonicalFormats[col.type]
+    if (entryFormat !== userFormat) delete mapping[regex]
   }
 
   return mapping

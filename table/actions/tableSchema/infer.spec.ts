@@ -514,6 +514,114 @@ describe("inferTableSchemaFromTable", () => {
     expect(monthFirstResult).toEqual(tableSchemaMonthFirst)
   })
 
+  it("should infer urls", async () => {
+    const table = pl
+      .DataFrame({
+        url: ["https://example.com", "http://foo.bar/baz"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        url: { type: "string", format: "url" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should infer emails", async () => {
+    const table = pl
+      .DataFrame({
+        email: ["user@example.com", "test.name+tag@domain.org"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        email: { type: "string", format: "email" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should infer wkt", async () => {
+    const table = pl
+      .DataFrame({
+        geom: ["POINT(1 2)", "LINESTRING(0 0, 1 1)"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        geom: { type: "string", format: "wkt" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should infer durations", async () => {
+    const table = pl
+      .DataFrame({
+        duration: ["P1Y2M3D", "PT1H30M", "P1D"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        duration: { type: "string", format: "duration" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should infer hex", async () => {
+    const table = pl
+      .DataFrame({
+        hex: ["1a2b3c4d5e6f7890", "abcdef0123456789"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        hex: { type: "string", format: "hex" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
+  it("should not infer url/email/wkt/hex for similar text", async () => {
+    const table = pl
+      .DataFrame({
+        notUrl: ["ftp://example.com", "ftp://other.com"],
+        notEmail: ["user@", "test@"],
+        notWkt: ["POINT", "LINESTRING"],
+        notHex: ["cafe1234", "deadbeef"],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        notUrl: { type: "string" },
+        notEmail: { type: "string" },
+        notWkt: { type: "string" },
+        notHex: { type: "string" },
+      },
+    }
+
+    const result = await inferTableSchemaFromTable(table)
+    expect(result).toEqual(tableSchema)
+  })
+
   it("should infer lists", async () => {
     const table = pl
       .DataFrame({

@@ -384,6 +384,33 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
       type: "list",
       property: { type: "string", format: "list", itemType: "number" },
     },
+
+    "^https?://\\S+$": {
+      type: "url",
+      property: { type: "string", format: "url" },
+    },
+
+    "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$": {
+      type: "email",
+      property: { type: "string", format: "email" },
+    },
+
+    "^(POINT|LINESTRING|POLYGON|MULTIPOINT|MULTILINESTRING|MULTIPOLYGON|GEOMETRYCOLLECTION)\\s*\\(":
+      {
+        type: "wkt",
+        property: { type: "string", format: "wkt" },
+      },
+
+    "^P(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$":
+      {
+        type: "duration",
+        property: { type: "string", format: "duration" },
+      },
+
+    "^([0-9a-fA-F]{2}){8,}$": {
+      type: "hex",
+      property: { type: "string", format: "hex" },
+    },
   }
 
   return mapping

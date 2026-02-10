@@ -250,6 +250,29 @@ describe("inspectTable", () => {
     expect(errors).toEqual([])
   })
 
+  it("should detect missing columns with allRequired", async () => {
+    const table = pl
+      .DataFrame({
+        id: [1, 2],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      allRequired: true,
+      properties: {
+        id: { type: "number" },
+        name: { type: "string" },
+      },
+    }
+
+    const errors = await inspectTable(table, { tableSchema })
+
+    expect(errors).toContainEqual({
+      type: "column/missing",
+      columnName: "name",
+    })
+  })
+
   it("should detect when no columns match", async () => {
     const table = pl
       .DataFrame({

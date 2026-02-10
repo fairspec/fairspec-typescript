@@ -24,6 +24,35 @@ describe("inspectTable (cell/minLength)", () => {
     expect(errors).toHaveLength(0)
   })
 
+  it("should validate minLength with nullable property type", async () => {
+    const table = pl
+      .DataFrame({
+        code: ["ABCD", "A", null],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        code: {
+          type: ["string", "null"] as const,
+          minLength: 3,
+        },
+      },
+    }
+
+    const errors = await inspectTable(table, { tableSchema })
+
+    expect(errors).toEqual([
+      {
+        type: "cell/minLength",
+        columnName: "code",
+        minLength: 3,
+        rowNumber: 2,
+        cell: "A",
+      },
+    ])
+  })
+
   it("should report an error for strings that are too short", async () => {
     const table = pl
       .DataFrame({

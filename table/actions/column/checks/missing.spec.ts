@@ -55,6 +55,24 @@ describe("inspectTable (cell/missing)", () => {
     ])
   })
 
+  it("should not report an error for reversed nullable type", async () => {
+    const table = pl
+      .DataFrame({
+        id: [1, null, 3],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        id: { type: ["null", "number"] as const },
+      },
+    }
+
+    const errors = await inspectTable(table, { tableSchema })
+
+    expect(errors).toEqual([])
+  })
+
   it("should not report an error for nullable columns", async () => {
     const table = pl
       .DataFrame({

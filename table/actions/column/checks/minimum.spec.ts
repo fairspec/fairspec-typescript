@@ -306,6 +306,35 @@ describe("inspectTable (cell/minimum)", () => {
     ])
   })
 
+  it("should validate minimum with nullable property type", async () => {
+    const table = pl
+      .DataFrame({
+        price: [10.5, 3.0, null],
+      })
+      .lazy()
+
+    const tableSchema: TableSchema = {
+      properties: {
+        price: {
+          type: ["number", "null"] as const,
+          minimum: 5,
+        },
+      },
+    }
+
+    const errors = await inspectTable(table, { tableSchema })
+
+    expect(errors).toEqual([
+      {
+        type: "cell/minimum",
+        columnName: "price",
+        minimum: "5",
+        rowNumber: 2,
+        cell: "3",
+      },
+    ])
+  })
+
   it("should handle exclusiveMinimum for integer year values", async () => {
     const table = pl
       .DataFrame({

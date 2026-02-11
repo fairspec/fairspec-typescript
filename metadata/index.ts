@@ -92,7 +92,72 @@ export {
   ResourceDataPath,
   ResourceDataValue,
 } from "./models/data.ts"
+export {
+  AlternateIdentifier,
+  AlternateIdentifiers,
+} from "./models/datacite/alternateIdentifier.ts"
+export {
+  ContentTypeGeneral,
+  ContributorType,
+  CreatorNameType,
+  DateType,
+  DescriptionType,
+  FunderIdentifierType,
+  Latitude,
+  Longitude,
+  NumberType,
+  RelatedIdentifierType,
+  RelationType,
+  TitleType,
+} from "./models/datacite/common.ts"
+export { ContentTypes } from "./models/datacite/contentType.ts"
+export { Contributor, Contributors } from "./models/datacite/contributor.ts"
+export {
+  Creator,
+  CreatorAffiliation,
+  CreatorAffiliations,
+  CreatorNameIdentifier,
+  CreatorNameIdentifiers,
+  Creators,
+} from "./models/datacite/creator.ts"
 export { Datacite } from "./models/datacite/datacite.ts"
+export {
+  Date as DataciteDate,
+  Dates,
+  DateValue,
+} from "./models/datacite/date.ts"
+export { Description, Descriptions } from "./models/datacite/description.ts"
+export { Formats } from "./models/datacite/formats.ts"
+export {
+  FundingReference,
+  FundingReferences,
+} from "./models/datacite/fundingReference.ts"
+export {
+  GeoLocation,
+  GeoLocationBox,
+  GeoLocationPoint,
+  GeoLocationPolygonItem,
+  GeoLocations,
+} from "./models/datacite/geoLocation.ts"
+export { Doi, DoiPrefix, DoiSuffix } from "./models/datacite/identifier.ts"
+export { Language } from "./models/datacite/language.ts"
+export { PublicationYear } from "./models/datacite/publicationYear.ts"
+export { Publisher } from "./models/datacite/publisher.ts"
+export {
+  RelatedIdentifier,
+  RelatedIdentifiers,
+  RelatedObject,
+} from "./models/datacite/relatedIdentifier.ts"
+export {
+  RelatedItem,
+  RelatedItemIdentifier,
+  RelatedItems,
+} from "./models/datacite/relatedItem.ts"
+export { Rights, RightsList } from "./models/datacite/rights.ts"
+export { Sizes } from "./models/datacite/size.ts"
+export { Subject, Subjects } from "./models/datacite/subject.ts"
+export { Title, Titles } from "./models/datacite/title.ts"
+export { Version } from "./models/datacite/version.ts"
 export { DataSchema, RenderDataSchemaOptions } from "./models/dataSchema.ts"
 export {
   ConvertDatasetFromOptions,
@@ -144,6 +209,22 @@ export {
 export { TableError } from "./models/error/table.ts"
 export { FairspecException } from "./models/exception.ts"
 export { ArrowFileDialect } from "./models/fileDialect/arrow.ts"
+export {
+  ColumnNames,
+  CommentPrefix,
+  CommentRows,
+  Delimiter,
+  HeaderJoin,
+  HeaderRows,
+  JsonPointer,
+  LineTerminator,
+  NullSequence,
+  QuoteChar,
+  RowType,
+  SheetName,
+  SheetNumber,
+  TableName,
+} from "./models/fileDialect/common.ts"
 export { CsvFileDialect } from "./models/fileDialect/csv.ts"
 export { FileDialect } from "./models/fileDialect/fileDialect.ts"
 export { JsonFileDialect } from "./models/fileDialect/json.ts"
@@ -154,6 +235,8 @@ export { SqliteFileDialect } from "./models/fileDialect/sqlite.ts"
 export { TsvFileDialect } from "./models/fileDialect/tsv.ts"
 export { UnknownFileDialect } from "./models/fileDialect/unknown.ts"
 export { XlsxFileDialect } from "./models/fileDialect/xlsx.ts"
+export { ForeignKey } from "./models/foreignKey.ts"
+export { Integrity } from "./models/integrity.ts"
 export { JsonSchema } from "./models/jsonSchema.ts"
 export { ExternalPath, InternalPath, Path } from "./models/path.ts"
 export { Profile } from "./models/profile.ts"
@@ -165,4 +248,6 @@ export {
   RenderTableSchemaOptions,
   TableSchema,
 } from "./models/tableSchema.ts"
+export { UniqueKey } from "./models/uniqueKey.ts"
 export type { MetadataPlugin } from "./plugin.ts"
+export { FAIRSPEC_VERSION } from "./settings.ts"

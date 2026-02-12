@@ -4,7 +4,7 @@ import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 import type { SqliteSchema } from "../../models/schema.ts"
-import { SQLITE_NATIVE_TYPES } from "../../settings.ts"
+import { NATIVE_TYPES } from "../../settings.ts"
 import { connectDatabase } from "../database/connect.ts"
 import { convertTableSchemaToDatabase } from "../tableSchema/toDatabase.ts"
 
@@ -28,7 +28,7 @@ export async function saveSqliteTable(table: Table, options: SaveTableOptions) {
     }))
 
   table = await denormalizeTable(table, tableSchema, {
-    nativeTypes: SQLITE_NATIVE_TYPES,
+    nativeTypes: NATIVE_TYPES,
   })
 
   const database = await connectDatabase(path, { create: true })

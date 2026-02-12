@@ -2,6 +2,7 @@ import { assertLocalPathVacant } from "@fairspec/dataset"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
+import { NATIVE_TYPES } from "../../settings.ts"
 
 // TODO: rebase on sinkIPC when it is available
 // https://github.com/pola-rs/nodejs-polars/issues/353
@@ -21,14 +22,7 @@ export async function saveArrowTable(table: Table, options: SaveTableOptions) {
     }))
 
   table = await denormalizeTable(table, tableSchema, {
-    nativeTypes: [
-      "boolean",
-      "integer",
-      "number",
-      "string",
-      "list",
-      "date-time",
-    ],
+    nativeTypes: NATIVE_TYPES,
   })
 
   const frame = await table.collect()

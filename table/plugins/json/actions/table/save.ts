@@ -6,6 +6,7 @@ import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
 import { encodeJsonBuffer } from "../../actions/buffer/encode.ts"
+import { NATIVE_TYPES } from "../../settings.ts"
 
 export async function saveJsonTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
@@ -26,7 +27,7 @@ export async function saveJsonTable(table: Table, options: SaveTableOptions) {
     }))
 
   table = await denormalizeTable(table, tableSchema, {
-    nativeTypes: ["boolean", "integer", "list", "number", "string"],
+    nativeTypes: NATIVE_TYPES,
   })
 
   const frame = await table.collect()

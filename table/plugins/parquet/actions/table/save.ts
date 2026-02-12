@@ -2,6 +2,7 @@ import { assertLocalPathVacant } from "@fairspec/dataset"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
+import { NATIVE_TYPES } from "../../settings.ts"
 
 export async function saveParquetTable(
   table: Table,
@@ -21,14 +22,7 @@ export async function saveParquetTable(
     }))
 
   table = await denormalizeTable(table, tableSchema, {
-    nativeTypes: [
-      "boolean",
-      "integer",
-      "number",
-      "string",
-      "list",
-      "date-time",
-    ],
+    nativeTypes: NATIVE_TYPES,
   })
 
   await table

@@ -4,6 +4,7 @@ import { utils, write } from "xlsx"
 import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
+import { NATIVE_TYPES } from "../../settings.ts"
 
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation
@@ -25,7 +26,7 @@ export async function saveXlsxTable(table: Table, options: SaveTableOptions) {
     }))
 
   table = await denormalizeTable(table, tableSchema, {
-    nativeTypes: ["boolean", "integer", "number", "string"],
+    nativeTypes: NATIVE_TYPES,
   })
 
   const frame = await table.collect()

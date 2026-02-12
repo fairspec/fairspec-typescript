@@ -4,6 +4,7 @@ import { denormalizeTable } from "../../../../actions/table/denormalize.ts"
 import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer.ts"
 import { getHeaderRows } from "../../../../helpers/fileDialect.ts"
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
+import { NATIVE_TYPES } from "../../settings.ts"
 
 export async function saveCsvTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
@@ -28,7 +29,7 @@ export async function saveCsvTable(table: Table, options: SaveTableOptions) {
     }))
 
   table = await denormalizeTable(table, tableSchema, {
-    nativeTypes: ["string"],
+    nativeTypes: NATIVE_TYPES,
   })
 
   await table

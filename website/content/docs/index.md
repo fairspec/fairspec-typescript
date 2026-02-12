@@ -10,7 +10,7 @@ This guide will help you get started with Fairspec TypeScript. If you are new to
 ## Runtimes
 
 > [!TIP]
-> - It is possible to use Fairspec TypeScript in [Jupyter Notebooks](/guides/jupyter)!
+> - It is possible to use Fairspec TypeScript in [Jupyter Notebooks](/typescript/jupyter)!
 
 Fairspec TypeScript and all its packages support all the prominent TypeScript runtimes:
 

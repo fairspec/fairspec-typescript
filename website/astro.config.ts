@@ -5,20 +5,20 @@ import starlightChangelogs, {
 } from "starlight-changelogs"
 import starlightGitHubAlerts from "starlight-github-alerts"
 import starlightScrollToTop from "starlight-scroll-to-top"
-import starlightTypeDoc from "starlight-typedoc"
+// import starlightTypeDoc from "starlight-typedoc"
 import packageJson from "./package.json" with { type: "json" }
 
 const { origin, hostname, pathname } = new URL(packageJson.homepage)
 const basedir = import.meta.env.PROD ? pathname : "/"
 
-const PACKAGES = {
-  fairspec: "../fairspec",
-  "@fairspec/library": "../library",
-  "@fairspec/dataset": "../dataset",
-  "@fairspec/extension": "../extension",
-  "@fairspec/metadata": "../metadata",
-  "@fairspec/table": "../table",
-}
+// const PACKAGES = {
+//   fairspec: "../fairspec",
+//   "@fairspec/library": "../library",
+//   "@fairspec/dataset": "../dataset",
+//   "@fairspec/extension": "../extension",
+//   "@fairspec/metadata": "../metadata",
+//   "@fairspec/table": "../table",
+// }
 
 export default defineConfig({
   site: origin,
@@ -57,16 +57,16 @@ export default defineConfig({
         starlightGitHubAlerts(),
         starlightScrollToTop(),
         starlightChangelogs(),
-        starlightTypeDoc({
-          entryPoints: generatePackageEntrypoints(),
-          tsconfig: "../tsconfig.json",
-          typeDoc: { entryPointStrategy: "packages", router: "structure" },
-          output: "reference",
-          sidebar: {
-            label: "API Reference",
-            collapsed: true,
-          },
-        }),
+        // starlightTypeDoc({
+        //   entryPoints: generatePackageEntrypoints(),
+        //   tsconfig: "../tsconfig.json",
+        //   typeDoc: { entryPointStrategy: "packages", router: "structure" },
+        //   output: "reference",
+        //   sidebar: {
+        //     label: "API Reference",
+        //     collapsed: true,
+        //   },
+        // }),
       ],
       sidebar: [
         {
@@ -78,14 +78,13 @@ export default defineConfig({
         },
         { label: "Terminal", autogenerate: { directory: "terminal" } },
         { label: "TypeScript", autogenerate: { directory: "typescript" } },
-        {
-          label: "Reference",
-          collapsed: true,
-          items: generatePackageSidebars(),
-        },
+        // {
+        //   label: "Reference",
+        //   collapsed: true,
+        //   items: generatePackageSidebars(),
+        // },
         {
           label: "Changelog",
-          collapsed: true,
           items: makeChangelogsSidebarLinks([
             {
               type: "recent",
@@ -109,23 +108,23 @@ export default defineConfig({
   ],
 })
 
-function generatePackageEntrypoints() {
-  return Object.values(PACKAGES)
-}
-
-function generatePackageSidebars() {
-  return Object.entries(PACKAGES).map(([name, _path]) =>
-    generatePackageSidebar({ name }),
-  )
-}
-
-function generatePackageSidebar(props: { name: string }) {
-  const name = props.name
-  const slug = name.replace("@", "_")
-
-  return {
-    label: name,
-    collapsed: true,
-    autogenerate: { directory: `reference/${slug}` },
-  }
-}
+// function generatePackageEntrypoints() {
+//   return Object.values(PACKAGES)
+// }
+//
+// function generatePackageSidebars() {
+//   return Object.entries(PACKAGES).map(([name, _path]) =>
+//     generatePackageSidebar({ name }),
+//   )
+// }
+//
+// function generatePackageSidebar(props: { name: string }) {
+//   const name = props.name
+//   const slug = name.replace("@", "_")
+//
+//   return {
+//     label: name,
+//     collapsed: true,
+//     autogenerate: { directory: `reference/${slug}` },
+//   }
+// }

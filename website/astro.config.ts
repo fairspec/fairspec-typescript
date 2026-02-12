@@ -89,7 +89,7 @@ export default defineConfig({
             {
               type: "recent",
               base: "changelog",
-              count: 10,
+              count: 1,
             },
           ]),
         },

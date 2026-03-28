@@ -4,6 +4,7 @@ sidebar:
   label: CSV
   order: 1
 ---
+
 Comprehensive CSV file handling with automatic format detection, advanced header processing, and high-performance data operations.
 
 ## Installation
@@ -46,13 +47,13 @@ const table = await loadCsvTable({
   format: {
     name: "csv",
     delimiter: ";",
-    headerRows: [1]
-  }
+    headerRows: [1],
+  },
 })
 
 // Load multiple CSV files (concatenated)
 const table = await loadCsvTable({
-  data: ["part1.csv", "part2.csv", "part3.csv"]
+  data: ["part1.csv", "part2.csv", "part3.csv"],
 })
 ```
 
@@ -70,14 +71,14 @@ await saveCsvTable(table, {
   format: {
     name: "csv",
     delimiter: "\t",
-    quoteChar: "'"
-  }
+    quoteChar: "'",
+  },
 })
 
 // Save as TSV
 await saveCsvTable(table, {
   path: "output.tsv",
-  format: { name: "tsv" }
+  format: { name: "tsv" },
 })
 ```
 
@@ -97,8 +98,8 @@ const table = await loadCsvTable({
     name: "csv",
     delimiter: ",",
     quoteChar: '"',
-    headerRows: [1]
-  }
+    headerRows: [1],
+  },
 })
 ```
 
@@ -117,8 +118,8 @@ const table = await loadCsvTable({
   format: {
     name: "csv",
     headerRows: [1, 2],
-    headerJoin: "_"
-  }
+    headerJoin: "_",
+  },
 })
 // Resulting columns: ["Year_Quarter", "2023_Q1", "2023_Q2", "2024_Q1", "2024_Q2"]
 ```
@@ -137,8 +138,8 @@ const table = await loadCsvTable({
   format: {
     name: "csv",
     commentRows: [1, 2],
-    headerRows: [3]
-  }
+    headerRows: [3],
+  },
 })
 
 // Or use commentPrefix to skip lines starting with a specific character
@@ -147,8 +148,8 @@ const table = await loadCsvTable({
   format: {
     name: "csv",
     commentPrefix: "#",
-    headerRows: [1]
-  }
+    headerRows: [1],
+  },
 })
 ```
 
@@ -157,14 +158,14 @@ const table = await loadCsvTable({
 ```typescript
 // Load from URL
 const table = await loadCsvTable({
-  data: "https://example.com/data.csv"
+  data: "https://example.com/data.csv",
 })
 
 // Load multiple remote files
 const table = await loadCsvTable({
   data: [
     "https://api.example.com/data-2023.csv",
-    "https://api.example.com/data-2024.csv"
-  ]
+    "https://api.example.com/data-2024.csv",
+  ],
 })
 ```

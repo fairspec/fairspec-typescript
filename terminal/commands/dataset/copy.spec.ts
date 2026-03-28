@@ -3,7 +3,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import { copyDatasetCommand } from "./copy.ts"
 
 // TODO: recover

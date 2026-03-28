@@ -1,6 +1,6 @@
 import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { normalizeTable } from "../../actions/table/normalize.ts"
 
 describe("substituteColumn", () => {
@@ -91,42 +91,52 @@ describe("substituteColumn", () => {
       ["x", null],
       ["", ""],
       ["value", "value"],
-    ])('schema-level ["x"] + column-level ["-"]: %s -> %s', async (cell, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: ["x"],
-        properties: {
-          name: { type: "string", missingValues: ["-"] },
-        },
-      }
+    ])(
+      'schema-level ["x"] + column-level ["-"]: %s -> %s',
+      async (cell, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("name", [cell], pl.String)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: ["x"],
+          properties: {
+            name: { type: "string", missingValues: ["-"] },
+          },
+        }
 
-      const result = await normalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await normalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.getColumn("name").get(0)
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.getColumn("name").get(0)
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       ["-", null],
       ["x", null],
       ["", ""],
       ["value", "value"],
-    ])('schema-level ["-"] + column-level ["x"]: %s -> %s', async (cell, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: ["-"],
-        properties: {
-          name: { type: "string", missingValues: ["x"] },
-        },
-      }
+    ])(
+      'schema-level ["-"] + column-level ["x"]: %s -> %s',
+      async (cell, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("name", [cell], pl.String)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: ["-"],
+          properties: {
+            name: { type: "string", missingValues: ["x"] },
+          },
+        }
 
-      const result = await normalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await normalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.getColumn("name").get(0)
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.getColumn("name").get(0)
+        expect(actual).toEqual(expected)
+      },
+    )
   })
 
   describe("integer missing values", () => {
@@ -217,42 +227,52 @@ describe("substituteColumn", () => {
       [-99, null],
       [0, 0],
       [42, 42],
-    ])("schema-level [-99] + column-level [-1]: %s -> %s", async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("value", [value], pl.Int64)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-99],
-        properties: {
-          value: { type: "integer", missingValues: [-1] },
-        },
-      }
+    ])(
+      "schema-level [-99] + column-level [-1]: %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Int64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-99],
+          properties: {
+            value: { type: "integer", missingValues: [-1] },
+          },
+        }
 
-      const result = await normalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await normalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.getColumn("value").get(0)
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.getColumn("value").get(0)
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [-1, null],
       [-99, null],
       [0, 0],
       [99, 99],
-    ])("schema-level [-1] + column-level [-99]: %s -> %s", async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("value", [value], pl.Int64)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-1],
-        properties: {
-          value: { type: "integer", missingValues: [-99] },
-        },
-      }
+    ])(
+      "schema-level [-1] + column-level [-99]: %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Int64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-1],
+          properties: {
+            value: { type: "integer", missingValues: [-99] },
+          },
+        }
 
-      const result = await normalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await normalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.getColumn("value").get(0)
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.getColumn("value").get(0)
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [-1, null],
@@ -349,45 +369,51 @@ describe("substituteColumn", () => {
       [-99, null],
       [0, 0],
       [42, 42],
-    ])("schema-level [-99] + column-level [-1] (Float64): %s -> %s", async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("value", [value], pl.Float64)])
-        .lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-99],
-        properties: {
-          value: { type: "integer", missingValues: [-1] },
-        },
-      }
+    ])(
+      "schema-level [-99] + column-level [-1] (Float64): %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Float64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-99],
+          properties: {
+            value: { type: "integer", missingValues: [-1] },
+          },
+        }
 
-      const result = await normalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await normalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.getColumn("value").get(0)
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.getColumn("value").get(0)
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [-1, null],
       [-99, null],
       [0, 0],
       [99, 99],
-    ])("schema-level [-1] + column-level [-99] (Float64): %s -> %s", async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("value", [value], pl.Float64)])
-        .lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-1],
-        properties: {
-          value: { type: "integer", missingValues: [-99] },
-        },
-      }
+    ])(
+      "schema-level [-1] + column-level [-99] (Float64): %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Float64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-1],
+          properties: {
+            value: { type: "integer", missingValues: [-99] },
+          },
+        }
 
-      const result = await normalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await normalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.getColumn("value").get(0)
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.getColumn("value").get(0)
+        expect(actual).toEqual(expected)
+      },
+    )
   })
 })

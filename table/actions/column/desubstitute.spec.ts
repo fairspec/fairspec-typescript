@@ -1,6 +1,6 @@
 import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { denormalizeTable } from "../../actions/table/denormalize.ts"
 
 describe("desubstituteColumn", () => {
@@ -126,100 +126,125 @@ describe("desubstituteColumn", () => {
       [null, "-"],
       ["hello", "hello"],
       ["value", "value"],
-    ])('schema-level ["x"] + column-level ["-"]: %s -> %s', async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [value], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: ["x"],
-        properties: {
-          name: { type: "string", missingValues: ["-"] },
-        },
-      }
+    ])(
+      'schema-level ["x"] + column-level ["-"]: %s -> %s',
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("name", [value], pl.String)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: ["x"],
+          properties: {
+            name: { type: "string", missingValues: ["-"] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await denormalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.toRecords()[0]?.name
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, "x"],
       ["hello", "hello"],
       ["value", "value"],
-    ])('schema-level ["-"] + column-level ["x"]: %s -> %s', async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [value], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: ["-"],
-        properties: {
-          name: { type: "string", missingValues: ["x"] },
-        },
-      }
+    ])(
+      'schema-level ["-"] + column-level ["x"]: %s -> %s',
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("name", [value], pl.String)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: ["-"],
+          properties: {
+            name: { type: "string", missingValues: ["x"] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await denormalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.toRecords()[0]?.name
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, "-"],
       ["value", "value"],
       ["test", "test"],
-    ])('column-level ["-", "n/a", "null"] (uses first): %s -> %s', async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [value], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        properties: {
-          name: { type: "string", missingValues: ["-", "n/a", "null"] },
-        },
-      }
+    ])(
+      'column-level ["-", "n/a", "null"] (uses first): %s -> %s',
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("name", [value], pl.String)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          properties: {
+            name: { type: "string", missingValues: ["-", "n/a", "null"] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await denormalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.toRecords()[0]?.name
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, "n/a"],
       ["value", "value"],
       ["test", "test"],
-    ])('schema-level ["n/a", "NULL", ""] (uses first): %s -> %s', async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [value], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: ["n/a", "NULL", ""],
-        properties: {
-          name: { type: "string" },
-        },
-      }
+    ])(
+      'schema-level ["n/a", "NULL", ""] (uses first): %s -> %s',
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("name", [value], pl.String)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: ["n/a", "NULL", ""],
+          properties: {
+            name: { type: "string" },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await denormalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.toRecords()[0]?.name
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, "-"],
       ["value", "value"],
       ["test", "test"],
-    ])('column-level ["-"] + schema-level [""] (column takes precedence): %s -> %s', async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("name", [value], pl.String)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [""],
-        properties: {
-          name: { type: "string", missingValues: ["-"] },
-        },
-      }
+    ])(
+      'column-level ["-"] + schema-level [""] (column takes precedence): %s -> %s',
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("name", [value], pl.String)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [""],
+          properties: {
+            name: { type: "string", missingValues: ["-"] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema)
-      const frame = await result.collect()
+        const result = await denormalizeTable(table, tableSchema)
+        const frame = await result.collect()
 
-      const actual = frame.toRecords()[0]?.name
-      expect(actual).toEqual(expected)
-    })
+        const actual = frame.toRecords()[0]?.name
+        expect(actual).toEqual(expected)
+      },
+    )
   })
 
   describe("integer missing values", () => {
@@ -317,45 +342,55 @@ describe("desubstituteColumn", () => {
       [null, -1],
       [0, 0],
       [42, 42],
-    ])("schema-level [-99] + column-level [-1]: %s -> %s", async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("value", [value], pl.Int64)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-99],
-        properties: {
-          value: { type: "integer", missingValues: [-1] },
-        },
-      }
+    ])(
+      "schema-level [-99] + column-level [-1]: %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Int64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-99],
+          properties: {
+            value: { type: "integer", missingValues: [-1] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema, {
-        nativeTypes: ["integer"],
-      })
+        const result = await denormalizeTable(table, tableSchema, {
+          nativeTypes: ["integer"],
+        })
 
-      const frame = await result.collect()
-      const actual = frame.toRecords()[0]?.value
-      expect(actual).toEqual(expected)
-    })
+        const frame = await result.collect()
+        const actual = frame.toRecords()[0]?.value
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, -99],
       [0, 0],
       [99, 99],
-    ])("schema-level [-1] + column-level [-99]: %s -> %s", async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("value", [value], pl.Int64)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-1],
-        properties: {
-          value: { type: "integer", missingValues: [-99] },
-        },
-      }
+    ])(
+      "schema-level [-1] + column-level [-99]: %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Int64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-1],
+          properties: {
+            value: { type: "integer", missingValues: [-99] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema, {
-        nativeTypes: ["integer"],
-      })
+        const result = await denormalizeTable(table, tableSchema, {
+          nativeTypes: ["integer"],
+        })
 
-      const frame = await result.collect()
-      const actual = frame.toRecords()[0]?.value
-      expect(actual).toEqual(expected)
-    })
+        const frame = await result.collect()
+        const actual = frame.toRecords()[0]?.value
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, -1],
@@ -459,113 +494,134 @@ describe("desubstituteColumn", () => {
       [null, -1],
       [0, 0],
       [42, 42],
-    ])("schema-level [-99] + column-level [-1] (Float64): %s -> %s", async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("value", [value], pl.Float64)])
-        .lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-99],
-        properties: {
-          value: { type: "number", missingValues: [-1] },
-        },
-      }
+    ])(
+      "schema-level [-99] + column-level [-1] (Float64): %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Float64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-99],
+          properties: {
+            value: { type: "number", missingValues: [-1] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema, {
-        nativeTypes: ["number"],
-      })
+        const result = await denormalizeTable(table, tableSchema, {
+          nativeTypes: ["number"],
+        })
 
-      const frame = await result.collect()
-      const actual = frame.toRecords()[0]?.value
-      expect(actual).toEqual(expected)
-    })
+        const frame = await result.collect()
+        const actual = frame.toRecords()[0]?.value
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, -99],
       [0, 0],
       [99, 99],
-    ])("schema-level [-1] + column-level [-99] (Float64): %s -> %s", async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("value", [value], pl.Float64)])
-        .lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-1],
-        properties: {
-          value: { type: "number", missingValues: [-99] },
-        },
-      }
+    ])(
+      "schema-level [-1] + column-level [-99] (Float64): %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Float64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-1],
+          properties: {
+            value: { type: "number", missingValues: [-99] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema, {
-        nativeTypes: ["number"],
-      })
+        const result = await denormalizeTable(table, tableSchema, {
+          nativeTypes: ["number"],
+        })
 
-      const frame = await result.collect()
-      const actual = frame.toRecords()[0]?.value
-      expect(actual).toEqual(expected)
-    })
+        const frame = await result.collect()
+        const actual = frame.toRecords()[0]?.value
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, -1],
       [0, 0],
       [42, 42],
-    ])("column-level [-1, -999, -9999] (uses first): %s -> %s", async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("value", [value], pl.Int64)]).lazy()
-      const tableSchema: TableSchema = {
-        properties: {
-          value: { type: "integer", missingValues: [-1, -999, -9999] },
-        },
-      }
+    ])(
+      "column-level [-1, -999, -9999] (uses first): %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Int64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          properties: {
+            value: { type: "integer", missingValues: [-1, -999, -9999] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema, {
-        nativeTypes: ["integer"],
-      })
+        const result = await denormalizeTable(table, tableSchema, {
+          nativeTypes: ["integer"],
+        })
 
-      const frame = await result.collect()
-      const actual = frame.toRecords()[0]?.value
-      expect(actual).toEqual(expected)
-    })
+        const frame = await result.collect()
+        const actual = frame.toRecords()[0]?.value
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, -999],
       [0, 0],
       [100, 100],
-    ])("schema-level [-999, -9999, -99999] (uses first): %s -> %s", async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("value", [value], pl.Int64)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-999, -9999, -99999],
-        properties: {
-          value: { type: "integer" },
-        },
-      }
+    ])(
+      "schema-level [-999, -9999, -99999] (uses first): %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Int64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-999, -9999, -99999],
+          properties: {
+            value: { type: "integer" },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema, {
-        nativeTypes: ["integer"],
-      })
+        const result = await denormalizeTable(table, tableSchema, {
+          nativeTypes: ["integer"],
+        })
 
-      const frame = await result.collect()
-      const actual = frame.toRecords()[0]?.value
-      expect(actual).toEqual(expected)
-    })
+        const frame = await result.collect()
+        const actual = frame.toRecords()[0]?.value
+        expect(actual).toEqual(expected)
+      },
+    )
 
     it.each([
       [null, -1],
       [0, 0],
       [42, 42],
-    ])("column-level [-1] + schema-level [-999] (column takes precedence): %s -> %s", async (value, expected) => {
-      const table = pl.DataFrame([pl.Series("value", [value], pl.Int64)]).lazy()
-      const tableSchema: TableSchema = {
-        missingValues: [-999],
-        properties: {
-          value: { type: "integer", missingValues: [-1] },
-        },
-      }
+    ])(
+      "column-level [-1] + schema-level [-999] (column takes precedence): %s -> %s",
+      async (value, expected) => {
+        const table = pl
+          .DataFrame([pl.Series("value", [value], pl.Int64)])
+          .lazy()
+        const tableSchema: TableSchema = {
+          missingValues: [-999],
+          properties: {
+            value: { type: "integer", missingValues: [-1] },
+          },
+        }
 
-      const result = await denormalizeTable(table, tableSchema, {
-        nativeTypes: ["integer"],
-      })
+        const result = await denormalizeTable(table, tableSchema, {
+          nativeTypes: ["integer"],
+        })
 
-      const frame = await result.collect()
-      const actual = frame.toRecords()[0]?.value
-      expect(actual).toEqual(expected)
-    })
+        const frame = await result.collect()
+        const actual = frame.toRecords()[0]?.value
+        expect(actual).toEqual(expected)
+      },
+    )
   })
 })

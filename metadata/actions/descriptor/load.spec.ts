@@ -1,5 +1,5 @@
 import path from "node:path"
-import { afterEach, describe, expect, it, vi } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vite-plus/test"
 import { loadDescriptor } from "./load.ts"
 
 describe("loadDescriptor", () => {

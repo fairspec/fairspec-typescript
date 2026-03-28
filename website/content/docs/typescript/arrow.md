@@ -42,12 +42,12 @@ const table = await loadArrowTable({ data: "data.arrow" })
 
 // Load from remote URL
 const table = await loadArrowTable({
-  data: "https://example.com/data.arrow"
+  data: "https://example.com/data.arrow",
 })
 
 // Load multiple files (concatenated)
 const table = await loadArrowTable({
-  data: ["file1.arrow", "file2.arrow"]
+  data: ["file1.arrow", "file2.arrow"],
 })
 ```
 
@@ -62,7 +62,7 @@ await saveArrowTable(table, { path: "output.arrow" })
 // Save with explicit format
 await saveArrowTable(table, {
   path: "output.arrow",
-  format: { name: "arrow" }
+  format: { name: "arrow" },
 })
 ```
 
@@ -73,14 +73,14 @@ await saveArrowTable(table, {
 ```typescript
 // Load from URL
 const table = await loadArrowTable({
-  data: "https://example.com/data.arrow"
+  data: "https://example.com/data.arrow",
 })
 
 // Load multiple remote files
 const table = await loadArrowTable({
   data: [
     "https://api.example.com/data-2023.arrow",
-    "https://api.example.com/data-2024.arrow"
-  ]
+    "https://api.example.com/data-2024.arrow",
+  ],
 })
 ```

@@ -45,13 +45,13 @@ const table = await loadXlsxTable({
   data: "data.ods",
   format: {
     name: "ods",
-    sheetName: "Sheet2"
-  }
+    sheetName: "Sheet2",
+  },
 })
 
 // Load multiple ODS files (concatenated)
 const table = await loadXlsxTable({
-  data: ["part1.ods", "part2.ods", "part3.ods"]
+  data: ["part1.ods", "part2.ods", "part3.ods"],
 })
 ```
 
@@ -63,7 +63,7 @@ import { saveXlsxTable } from "fairspec"
 // Save with default options
 await saveXlsxTable(table, {
   path: "output.ods",
-  format: { name: "ods" }
+  format: { name: "ods" },
 })
 
 // Save with custom sheet name
@@ -71,8 +71,8 @@ await saveXlsxTable(table, {
   path: "output.ods",
   format: {
     name: "ods",
-    sheetName: "Data"
-  }
+    sheetName: "Data",
+  },
 })
 ```
 
@@ -86,8 +86,8 @@ const table = await loadXlsxTable({
   data: "workbook.ods",
   format: {
     name: "ods",
-    sheetNumber: 2  // Load second sheet
-  }
+    sheetNumber: 2, // Load second sheet
+  },
 })
 
 // Select by sheet name
@@ -95,8 +95,8 @@ const table = await loadXlsxTable({
   data: "workbook.ods",
   format: {
     name: "ods",
-    sheetName: "Sales Data"
-  }
+    sheetName: "Sales Data",
+  },
 })
 ```
 
@@ -109,8 +109,8 @@ const table = await loadXlsxTable({
   format: {
     name: "ods",
     headerRows: [1, 2],
-    headerJoin: "_"
-  }
+    headerJoin: "_",
+  },
 })
 // Resulting columns: ["Year_Quarter", "2023_Q1", "2023_Q2", "2024_Q1", "2024_Q2"]
 ```
@@ -124,8 +124,8 @@ const table = await loadXlsxTable({
   format: {
     name: "ods",
     commentRows: [1, 2],
-    headerRows: [3]
-  }
+    headerRows: [3],
+  },
 })
 
 // Skip rows with comment prefix
@@ -134,8 +134,8 @@ const table = await loadXlsxTable({
   format: {
     name: "ods",
     commentPrefix: "#",
-    headerRows: [1]
-  }
+    headerRows: [1],
+  },
 })
 ```
 
@@ -144,15 +144,15 @@ const table = await loadXlsxTable({
 ```typescript
 // Load from URL
 const table = await loadXlsxTable({
-  data: "https://example.com/data.ods"
+  data: "https://example.com/data.ods",
 })
 
 // Load multiple remote files
 const table = await loadXlsxTable({
   data: [
     "https://api.example.com/data-2023.ods",
-    "https://api.example.com/data-2024.ods"
-  ]
+    "https://api.example.com/data-2024.ods",
+  ],
 })
 ```
 
@@ -164,7 +164,7 @@ const table = await loadXlsxTable({
   data: "data.ods",
   format: {
     name: "ods",
-    columnNames: ["name", "age", "city"]
-  }
+    columnNames: ["name", "age", "city"],
+  },
 })
 ```

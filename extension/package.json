@@ -1,30 +1,30 @@
 {
   "name": "@fairspec/extension",
-  "type": "module",
   "version": "0.0.0-dev",
-  "exports": "./build/index.js",
-  "sideEffects": false,
-  "files": [
-    "build"
+  "description": "Fairspec TypeScript is a fast data management framework built on top of the Fairspec standard and Polars DataFrames",
+  "keywords": [
+    "data",
+    "dataframe",
+    "extension",
+    "fair",
+    "fairspec",
+    "html",
+    "jsonschema",
+    "polars",
+    "quality",
+    "tableschema",
+    "typescript",
+    "validation"
   ],
   "license": "MIT",
   "author": "Evgeny Karev",
   "repository": "https://github.com/fairspec/fairspec-typescript",
-  "description": "Fairspec TypeScript is a fast data management framework built on top of the Fairspec standard and Polars DataFrames",
-  "keywords": [
-    "fairspec",
-    "data",
-    "polars",
-    "dataframe",
-    "jsonschema",
-    "tableschema",
-    "typescript",
-    "validation",
-    "quality",
-    "fair",
-    "extension",
-    "html"
+  "files": [
+    "build"
   ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": "./build/index.js",
   "scripts": {
     "build": "tsgo",
     "type": "tsgo --noEmit"

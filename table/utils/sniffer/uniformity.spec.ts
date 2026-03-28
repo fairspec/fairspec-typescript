@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { calculateTau0, calculateTau1 } from "./uniformity.ts"
 
 describe("uniformity", () => {

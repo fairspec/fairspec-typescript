@@ -1,6 +1,6 @@
 import { getTempFilePath } from "@fairspec/dataset"
 import * as pl from "nodejs-polars"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { loadXlsxTable } from "./load.ts"
 import { saveXlsxTable } from "./save.ts"
 import { readTestData } from "./test.ts"

@@ -5,10 +5,7 @@ export { queryTable } from "./actions/table/query.ts"
 export { inferTableSchemaFromTable } from "./actions/tableSchema/infer.ts"
 export { DenormalizeColumnOptions } from "./models/column.ts"
 export type { Frame } from "./models/frame.ts"
-export {
-  InferTableSchemaOptions,
-  TableSchemaOptions,
-} from "./models/schema.ts"
+export { InferTableSchemaOptions, TableSchemaOptions } from "./models/schema.ts"
 export type { Table } from "./models/table.ts"
 export { LoadTableOptions, SaveTableOptions } from "./models/table.ts"
 export type { TablePlugin } from "./plugin.ts"

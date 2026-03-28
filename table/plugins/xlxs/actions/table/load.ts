@@ -39,7 +39,9 @@ export async function loadXlsxTable(
     const buffer = await loadFile(path)
 
     const book = read(buffer, { type: "buffer" })
-    const sheetIndex = fileDialect?.sheetNumber ? fileDialect.sheetNumber - 1 : 0
+    const sheetIndex = fileDialect?.sheetNumber
+      ? fileDialect.sheetNumber - 1
+      : 0
     const sheetName = fileDialect?.sheetName ?? book.SheetNames[sheetIndex]
     const sheet = sheetName ? book.Sheets[sheetName] : undefined
 
@@ -60,7 +62,8 @@ export async function loadXlsxTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema)
+      tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 

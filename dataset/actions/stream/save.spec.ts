@@ -1,7 +1,7 @@
 import * as fs from "node:fs/promises"
 import * as path from "node:path"
 import { Readable } from "node:stream"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { getTempFolderPath } from "../folder/temp.ts"
 import { saveFileStream } from "./save.ts"
 

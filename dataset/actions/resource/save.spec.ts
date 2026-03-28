@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { saveResourceFiles } from "./save.ts"
 
 describe("saveResourceFiles", () => {
@@ -96,20 +96,17 @@ describe("saveResourceFiles", () => {
         tableSchema: "folder2-schema.json",
       },
     },
-  ])("$description", async ({
-    resource,
-    basepath,
-    withRemote,
-    withoutFolders,
-    descriptor,
-  }) => {
-    expect(
-      await saveResourceFiles(resource, {
-        basepath,
-        withRemote,
-        withoutFolders,
-        saveFile: async props => props.denormalizedPath,
-      }),
-    ).toEqual(descriptor)
-  })
+  ])(
+    "$description",
+    async ({ resource, basepath, withRemote, withoutFolders, descriptor }) => {
+      expect(
+        await saveResourceFiles(resource, {
+          basepath,
+          withRemote,
+          withoutFolders,
+          saveFile: async props => props.denormalizedPath,
+        }),
+      ).toEqual(descriptor)
+    },
+  )
 })

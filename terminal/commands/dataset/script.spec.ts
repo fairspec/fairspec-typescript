@@ -1,6 +1,6 @@
 import { writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test"
 
 let mockReplSession: { context: Record<string, unknown> }
 const replStartMock = vi.fn(() => mockReplSession)

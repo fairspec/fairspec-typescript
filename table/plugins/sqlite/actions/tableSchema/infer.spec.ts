@@ -1,7 +1,7 @@
 import { getTempFilePath } from "@fairspec/dataset"
 import type { SqliteFileDialect } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { saveSqliteTable } from "../../actions/table/save.ts"
 import { inferTableSchemaFromSqlite } from "./infer.ts"
 

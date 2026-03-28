@@ -1,6 +1,6 @@
 import { writeTempFile } from "@fairspec/dataset"
 import type { CsvFileDialect, Resource } from "@fairspec/metadata"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { inferFileDialect } from "./infer.ts"
 
 describe("inferFileDialect", () => {

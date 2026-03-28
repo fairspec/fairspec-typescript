@@ -42,12 +42,12 @@ const table = await loadJsonTable({ data: "data.json" })
 
 // Load from remote URL
 const table = await loadJsonTable({
-  data: "https://example.com/data.json"
+  data: "https://example.com/data.json",
 })
 
 // Load multiple files (concatenated)
 const table = await loadJsonTable({
-  data: ["file1.json", "file2.json"]
+  data: ["file1.json", "file2.json"],
 })
 ```
 
@@ -62,7 +62,7 @@ await saveJsonTable(table, { path: "output.json" })
 // Save with explicit format
 await saveJsonTable(table, {
   path: "output.json",
-  format: { name: "json" }
+  format: { name: "json" },
 })
 ```
 
@@ -72,8 +72,8 @@ JSON tables use an array of objects format:
 
 ```json
 [
-  {"id": 1, "name": "Alice", "age": 30},
-  {"id": 2, "name": "Bob", "age": 25}
+  { "id": 1, "name": "Alice", "age": 30 },
+  { "id": 2, "name": "Bob", "age": 25 }
 ]
 ```
 
@@ -89,8 +89,8 @@ const table = await loadJsonTable({
   data: "data.json",
   format: {
     name: "json",
-    jsonPointer: "users"
-  }
+    jsonPointer: "users",
+  },
 })
 ```
 
@@ -104,8 +104,8 @@ const table = await loadJsonTable({
   data: "data.json",
   format: {
     name: "json",
-    columnNames: ["name", "age"]
-  }
+    columnNames: ["name", "age"],
+  },
 })
 ```
 
@@ -119,8 +119,8 @@ const table = await loadJsonTable({
   data: "data.json",
   format: {
     name: "json",
-    rowType: "array"
-  }
+    rowType: "array",
+  },
 })
 ```
 
@@ -134,7 +134,7 @@ await saveJsonTable(table, {
   path: "output.json",
   format: {
     name: "json",
-    jsonPointer: "users"
-  }
+    jsonPointer: "users",
+  },
 })
 ```

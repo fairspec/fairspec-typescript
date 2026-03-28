@@ -33,8 +33,7 @@ export async function loadDatasetFromCkan(datasetUrl: string) {
   const systemDataset = convertDatasetFromCkan(ckanDataset)
   const userDatasetPath = (systemDataset.resources ?? [])
     .filter(
-      resource =>
-        resource.unstable_customMetadata?.ckanKey === "dataset.json",
+      resource => resource.unstable_customMetadata?.ckanKey === "dataset.json",
     )
     .map(resource => resource.unstable_customMetadata?.ckanUrl as string)
     .at(0)

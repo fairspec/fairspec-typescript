@@ -42,12 +42,12 @@ const table = await loadParquetTable({ data: "data.parquet" })
 
 // Load from remote URL
 const table = await loadParquetTable({
-  data: "https://example.com/data.parquet"
+  data: "https://example.com/data.parquet",
 })
 
 // Load multiple files (concatenated)
 const table = await loadParquetTable({
-  data: ["file1.parquet", "file2.parquet"]
+  data: ["file1.parquet", "file2.parquet"],
 })
 ```
 
@@ -62,7 +62,7 @@ await saveParquetTable(table, { path: "output.parquet" })
 // Save with explicit format
 await saveParquetTable(table, {
   path: "output.parquet",
-  format: { name: "parquet" }
+  format: { name: "parquet" },
 })
 ```
 
@@ -73,14 +73,14 @@ await saveParquetTable(table, {
 ```typescript
 // Load from URL
 const table = await loadParquetTable({
-  data: "https://example.com/data.parquet"
+  data: "https://example.com/data.parquet",
 })
 
 // Load multiple remote files
 const table = await loadParquetTable({
   data: [
     "https://api.example.com/data-2023.parquet",
-    "https://api.example.com/data-2024.parquet"
-  ]
+    "https://api.example.com/data-2024.parquet",
+  ],
 })
 ```

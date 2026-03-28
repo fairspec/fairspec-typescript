@@ -61,6 +61,7 @@ fairspec file describe --from-dataset dataset.json --from-resource users
 ### Output
 
 The describe command returns:
+
 - `bytes` - File size in bytes
 - `textual` - Whether the file is text-based
 - `integrity` - Hash value and type
@@ -115,10 +116,12 @@ fairspec file validate data.csv --hash a1b2c3d4 --json
 ### Validation Report
 
 Returns a validation report with:
+
 - `valid` - Boolean indicating if validation passed
 - `errors` - Array of validation errors (if any)
 
 Example error:
+
 ```json
 {
   "valid": false,
@@ -157,6 +160,7 @@ fairspec file infer-dialect data.xlsx --json
 ### Supported Formats
 
 The command can detect:
+
 - CSV/TSV files
 - JSON/JSONL files
 - Excel files (.xlsx, .xls)

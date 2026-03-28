@@ -1,5 +1,5 @@
 import { join, relative } from "node:path"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { normalizePath } from "./normalize.ts"
 
 describe("normalizePath", () => {

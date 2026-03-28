@@ -28,8 +28,8 @@ import { loadInlineTable } from "fairspec"
 const table = await loadInlineTable({
   data: [
     { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" }
-  ]
+    { id: 2, name: "Bob" },
+  ],
 })
 ```
 
@@ -46,8 +46,8 @@ const table = await loadInlineTable({
   data: [
     { id: 1, name: "english", native: "English" },
     { id: 2, name: "chinese", native: "中文" },
-    { id: 3, name: "spanish", native: "Español" }
-  ]
+    { id: 3, name: "spanish", native: "Español" },
+  ],
 })
 ```
 
@@ -63,8 +63,8 @@ const table = await loadInlineTable({
     ["id", "name", "native"],
     [1, "english", "English"],
     [2, "chinese", "中文"],
-    [3, "spanish", "Español"]
-  ]
+    [3, "spanish", "Español"],
+  ],
 })
 ```
 
@@ -80,15 +80,15 @@ import { loadInlineTable } from "fairspec"
 const table = await loadInlineTable({
   data: [
     { id: 1, name: "english", active: true },
-    { id: 2, name: "chinese", active: false }
+    { id: 2, name: "chinese", active: false },
   ],
   tableSchema: {
     properties: {
       id: { type: "integer" },
       name: { type: "string" },
-      active: { type: "boolean" }
-    }
-  }
+      active: { type: "boolean" },
+    },
+  },
 })
 ```
 
@@ -104,14 +104,14 @@ const languages = await loadInlineTable({
   name: "languages",
   data: [
     { id: 1, name: "english" },
-    { id: 2, name: "chinese" }
-  ]
+    { id: 2, name: "chinese" },
+  ],
 })
 
 // Load main data from file
 const users = await loadCsvTable({
   name: "users",
-  data: "users.csv"
+  data: "users.csv",
 })
 ```
 
@@ -129,14 +129,13 @@ const table = await loadInlineTable({
   data: [
     { code: "US", name: "United States" },
     { code: "CN", name: "China" },
-    { code: "ES", name: "Spain" }
+    { code: "ES", name: "Spain" },
   ],
   tableSchema: {
     properties: {
       code: { type: "string" },
-      name: { type: "string" }
-    }
-  }
+      name: { type: "string" },
+    },
+  },
 })
 ```
-

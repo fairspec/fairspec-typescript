@@ -1,12 +1,11 @@
 {
   "name": "@fairspec/website",
-  "type": "module",
   "version": "0.0.0-dev",
   "private": true,
-  "title": "Fairspec TypeScript",
   "description": "Fairspec Typescript is a fast data management framework built on top of the Fairspec standard and Polars DataFrames. It supports various formats like CSV, JSON, and Parquet and integrates with data platforms such as CKAN, Zenodo, and GitHub",
-  "repository": "https://github.com/fairspec/fairspec-typescript",
   "homepage": "https://typescript.fairspec.org",
+  "repository": "https://github.com/fairspec/fairspec-typescript",
+  "type": "module",
   "scripts": {
     "build": "astro build",
     "preview": "astro preview --port 5000",
@@ -14,9 +13,9 @@
     "type": "echo 'enable tsc --noEmit'"
   },
   "devDependencies": {
-    "fairspec": "workspace:*",
     "@astrojs/starlight": "0.36.0",
     "astro": "5.14.1",
+    "fairspec": "workspace:*",
     "sharp": "0.34.2",
     "starlight-changelogs": "0.1.1",
     "starlight-github-alerts": "0.1.0",
@@ -24,5 +23,6 @@
     "starlight-typedoc": "0.21.3",
     "typedoc": "0.28.9",
     "typedoc-plugin-markdown": "4.8.0"
-  }
+  },
+  "title": "Fairspec TypeScript"
 }

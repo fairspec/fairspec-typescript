@@ -1,5 +1,5 @@
 import type { Dataset } from "@fairspec/metadata"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import * as loadModule from "./actions/dataset/load.ts"
 import { GithubPlugin } from "./plugin.ts"
 

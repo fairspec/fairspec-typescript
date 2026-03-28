@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/library"
 import { writeTempFile } from "@fairspec/library"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { validateDataTool } from "./validate.ts"
 
 describe("validateDataTool", () => {

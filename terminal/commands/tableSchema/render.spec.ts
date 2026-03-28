@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises"
 import type { TableSchema } from "@fairspec/library"
 import { getTempFilePath, writeTempFile } from "@fairspec/library"
 import { Command } from "commander"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import { renderTableSchemaCommand } from "./render.ts"
 
 describe("schema render", () => {

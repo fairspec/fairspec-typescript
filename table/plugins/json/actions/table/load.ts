@@ -20,8 +20,9 @@ export async function loadJsonTable(
     throw new Error("Resource data is not compatible")
   }
 
-  const maxBytes = fileDialect?.format === "jsonl" ? options?.previewBytes : undefined
-  const paths = await prefetchFiles(resource, {maxBytes})
+  const maxBytes =
+    fileDialect?.format === "jsonl" ? options?.previewBytes : undefined
+  const paths = await prefetchFiles(resource, { maxBytes })
   if (!paths.length) {
     throw new Error("Resource data is not defined")
   }
@@ -32,9 +33,10 @@ export async function loadJsonTable(
   }
 
   const isLines = fileDialect?.format === "jsonl"
-  const isDefault = Object.keys(fileDialect ?? {})
-    .filter(key => !['type', 'title', 'description'].includes(key)).length === 0
-
+  const isDefault =
+    Object.keys(fileDialect ?? {}).filter(
+      key => !["type", "title", "description"].includes(key),
+    ).length === 0
 
   const tables: Table[] = []
   for (const path of paths) {
@@ -58,7 +60,8 @@ export async function loadJsonTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema)
+      tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 
@@ -67,7 +70,7 @@ export async function loadJsonTable(
 
 // TODO: Make data unkonwn not any!
 function processData(data: any, dialect?: JsonFileDialect | JsonlFileDialect) {
-  if (dialect?.format === 'json' && dialect?.jsonPointer) {
+  if (dialect?.format === "json" && dialect?.jsonPointer) {
     data = data[dialect.jsonPointer]
   }
 

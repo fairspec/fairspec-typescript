@@ -1,15 +1,9 @@
 import type { ProfileRegistry } from "../../models/profile.ts"
 import catalogProfile from "../../profiles/catalog.json" with { type: "json" }
-import dataSchemaProfile from "../../profiles/data-schema.json" with {
-  type: "json",
-}
+import dataSchemaProfile from "../../profiles/data-schema.json" with { type: "json" }
 import datasetProfile from "../../profiles/dataset.json" with { type: "json" }
-import fileDialectProfile from "../../profiles/file-dialect.json" with {
-  type: "json",
-}
-import tableSchemaProfile from "../../profiles/table-schema.json" with {
-  type: "json",
-}
+import fileDialectProfile from "../../profiles/file-dialect.json" with { type: "json" }
+import tableSchemaProfile from "../../profiles/table-schema.json" with { type: "json" }
 
 export const profileRegistry: ProfileRegistry = [
   {

@@ -1,8 +1,6 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import type { CkanSchema } from "../../models/schema.ts"
-import ckanSchemaFixture from "./fixtures/ckan-schema.json" with {
-  type: "json",
-}
+import ckanSchemaFixture from "./fixtures/ckan-schema.json" with { type: "json" }
 import { convertTableSchemaFromCkan } from "./fromCkan.ts"
 
 describe("convertTableSchemaFromCkan", () => {

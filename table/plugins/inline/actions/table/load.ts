@@ -19,7 +19,8 @@ export async function loadInlineTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema)
+      tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 

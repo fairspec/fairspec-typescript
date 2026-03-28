@@ -10,6 +10,7 @@ This guide will help you get started with Fairspec TypeScript. If you are new to
 ## Runtimes
 
 > [!TIP]
+>
 > - It is possible to use Fairspec TypeScript in [Jupyter Notebooks](/typescript/jupyter)!
 
 Fairspec TypeScript and all its packages support all the prominent TypeScript runtimes:
@@ -69,7 +70,6 @@ console.log(dataset)
 //  id: 'https://doi.org/10.5281/zenodo.10053903',
 //  ...
 //}
-
 ```
 
 Validating an in-memory dataset descriptor:
@@ -125,7 +125,7 @@ const table = await loadTable({
     name: "csv",
     delimiter: ";",
     headerRows: false,
-  }
+  },
 })
 ```
 

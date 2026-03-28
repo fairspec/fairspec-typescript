@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises"
 import { getTempFilePath } from "@fairspec/dataset"
 import * as pl from "nodejs-polars"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { loadJsonTable } from "./load.ts"
 import { saveJsonTable } from "./save.ts"
 

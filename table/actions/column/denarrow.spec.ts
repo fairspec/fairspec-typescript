@@ -1,6 +1,6 @@
 import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { denormalizeTable } from "../../actions/table/denormalize.ts"
 
 describe("denarrowColumn", () => {

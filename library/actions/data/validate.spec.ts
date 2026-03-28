@@ -1,5 +1,5 @@
 import type { Resource } from "@fairspec/metadata"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { validateData } from "./validate.ts"
 
 describe("validateData", () => {

@@ -43,7 +43,10 @@ export async function loadSqliteTable(
     if (!options?.denormalized) {
       let tableSchema = await resolveTableSchema(resource.tableSchema)
       if (!tableSchema) {
-        tableSchema = await inferTableSchemaFromSqlite({...resource, fileDialect})
+        tableSchema = await inferTableSchemaFromSqlite({
+          ...resource,
+          fileDialect,
+        })
       }
 
       table = await normalizeTable(table, tableSchema)

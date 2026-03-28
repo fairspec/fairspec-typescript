@@ -30,8 +30,8 @@ const table = await loadSqliteTable({
   data: "database.db",
   format: {
     name: "sqlite",
-    tableName: "users"
-  }
+    tableName: "users",
+  },
 })
 // column types will be automatically inferred from database schema
 ```
@@ -48,8 +48,8 @@ const table = await loadSqliteTable({
   data: "data.db",
   format: {
     name: "sqlite",
-    tableName: "products"
-  }
+    tableName: "products",
+  },
 })
 
 // Load from a specific path
@@ -57,8 +57,8 @@ const table = await loadSqliteTable({
   data: "/path/to/database.db",
   format: {
     name: "sqlite",
-    tableName: "orders"
-  }
+    tableName: "orders",
+  },
 })
 ```
 
@@ -72,8 +72,8 @@ await saveSqliteTable(table, {
   path: "output.db",
   format: {
     name: "sqlite",
-    tableName: "results"
-  }
+    tableName: "results",
+  },
 })
 
 // Overwrite existing table
@@ -81,9 +81,9 @@ await saveSqliteTable(table, {
   path: "output.db",
   format: {
     name: "sqlite",
-    tableName: "results"
+    tableName: "results",
   },
-  overwrite: true
+  overwrite: true,
 })
 ```
 
@@ -99,8 +99,8 @@ const table = await loadSqliteTable({
   data: "shop.db",
   format: {
     name: "sqlite",
-    tableName: "products"
-  }
+    tableName: "products",
+  },
 })
 // Types like INTEGER, TEXT, REAL are mapped to appropriate Table Schema types
 ```
@@ -117,8 +117,8 @@ await saveSqliteTable(table, {
   path: "new-database.db",
   format: {
     name: "sqlite",
-    tableName: "my_data"
-  }
+    tableName: "my_data",
+  },
 })
 ```
 
@@ -133,14 +133,14 @@ await saveSqliteTable(table, {
   path: "output.db",
   format: {
     name: "sqlite",
-    tableName: "customers"
+    tableName: "customers",
   },
   tableSchema: {
     properties: {
       id: { type: "integer" },
       name: { type: "string" },
-      email: { type: "string" }
-    }
-  }
+      email: { type: "string" },
+    },
+  },
 })
 ```

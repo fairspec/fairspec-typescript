@@ -43,12 +43,12 @@ const table = await loadJsonTable({ data: "data.jsonl" })
 // Load with explicit format
 const table = await loadJsonTable({
   data: "data.jsonl",
-  format: { name: "jsonl" }
+  format: { name: "jsonl" },
 })
 
 // Load multiple files (concatenated)
 const table = await loadJsonTable({
-  data: ["part1.jsonl", "part2.jsonl"]
+  data: ["part1.jsonl", "part2.jsonl"],
 })
 ```
 
@@ -60,7 +60,7 @@ import { saveJsonTable } from "fairspec"
 // Save as JSONL
 await saveJsonTable(table, {
   path: "output.jsonl",
-  format: { name: "jsonl" }
+  format: { name: "jsonl" },
 })
 ```
 
@@ -86,8 +86,8 @@ const table = await loadJsonTable({
   data: "data.jsonl",
   format: {
     name: "jsonl",
-    columnNames: ["name", "age"]
-  }
+    columnNames: ["name", "age"],
+  },
 })
 ```
 
@@ -105,8 +105,8 @@ const table = await loadJsonTable({
   data: "data.jsonl",
   format: {
     name: "jsonl",
-    rowType: "array"
-  }
+    rowType: "array",
+  },
 })
 ```
 
@@ -115,14 +115,14 @@ const table = await loadJsonTable({
 ```typescript
 // Load from URL
 const table = await loadJsonTable({
-  data: "https://example.com/data.jsonl"
+  data: "https://example.com/data.jsonl",
 })
 
 // Load multiple remote files
 const table = await loadJsonTable({
   data: [
     "https://api.example.com/logs-2023.jsonl",
-    "https://api.example.com/logs-2024.jsonl"
-  ]
+    "https://api.example.com/logs-2024.jsonl",
+  ],
 })
 ```

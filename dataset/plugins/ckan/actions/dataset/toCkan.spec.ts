@@ -1,9 +1,7 @@
 import type { Dataset } from "@fairspec/metadata"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import type { CkanDataset } from "../../models/dataset.ts"
-import ckanPackageFixture from "./fixtures/ckan-dataset.json" with {
-  type: "json",
-}
+import ckanPackageFixture from "./fixtures/ckan-dataset.json" with { type: "json" }
 import { convertDatasetFromCkan } from "./fromCkan.ts"
 import { convertDatasetToCkan } from "./toCkan.ts"
 

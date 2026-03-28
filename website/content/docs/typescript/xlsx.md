@@ -45,13 +45,13 @@ const table = await loadXlsxTable({
   data: "data.xlsx",
   format: {
     name: "xlsx",
-    sheetName: "Sheet2"
-  }
+    sheetName: "Sheet2",
+  },
 })
 
 // Load multiple XLSX files (concatenated)
 const table = await loadXlsxTable({
-  data: ["part1.xlsx", "part2.xlsx", "part3.xlsx"]
+  data: ["part1.xlsx", "part2.xlsx", "part3.xlsx"],
 })
 ```
 
@@ -68,8 +68,8 @@ await saveXlsxTable(table, {
   path: "output.xlsx",
   format: {
     name: "xlsx",
-    sheetName: "Data"
-  }
+    sheetName: "Data",
+  },
 })
 ```
 
@@ -83,8 +83,8 @@ const table = await loadXlsxTable({
   data: "workbook.xlsx",
   format: {
     name: "xlsx",
-    sheetNumber: 2  // Load second sheet
-  }
+    sheetNumber: 2, // Load second sheet
+  },
 })
 
 // Select by sheet name
@@ -92,8 +92,8 @@ const table = await loadXlsxTable({
   data: "workbook.xlsx",
   format: {
     name: "xlsx",
-    sheetName: "Sales Data"
-  }
+    sheetName: "Sales Data",
+  },
 })
 ```
 
@@ -106,8 +106,8 @@ const table = await loadXlsxTable({
   format: {
     name: "xlsx",
     headerRows: [1, 2],
-    headerJoin: "_"
-  }
+    headerJoin: "_",
+  },
 })
 // Resulting columns: ["Year_Quarter", "2023_Q1", "2023_Q2", "2024_Q1", "2024_Q2"]
 ```
@@ -121,8 +121,8 @@ const table = await loadXlsxTable({
   format: {
     name: "xlsx",
     commentRows: [1, 2],
-    headerRows: [3]
-  }
+    headerRows: [3],
+  },
 })
 
 // Skip rows with comment prefix
@@ -131,8 +131,8 @@ const table = await loadXlsxTable({
   format: {
     name: "xlsx",
     commentPrefix: "#",
-    headerRows: [1]
-  }
+    headerRows: [1],
+  },
 })
 ```
 
@@ -141,15 +141,15 @@ const table = await loadXlsxTable({
 ```typescript
 // Load from URL
 const table = await loadXlsxTable({
-  data: "https://example.com/data.xlsx"
+  data: "https://example.com/data.xlsx",
 })
 
 // Load multiple remote files
 const table = await loadXlsxTable({
   data: [
     "https://api.example.com/data-2023.xlsx",
-    "https://api.example.com/data-2024.xlsx"
-  ]
+    "https://api.example.com/data-2024.xlsx",
+  ],
 })
 ```
 
@@ -161,7 +161,7 @@ const table = await loadXlsxTable({
   data: "data.xlsx",
   format: {
     name: "xlsx",
-    columnNames: ["name", "age", "city"]
-  }
+    columnNames: ["name", "age", "city"],
+  },
 })
 ```

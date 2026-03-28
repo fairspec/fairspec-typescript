@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import { writeTempFile } from "../../actions/file/temp.ts"
 import { inferBytes, inferHash, inferTextual } from "./infer.ts"
 import * as fetchModule from "./prefetch.ts"

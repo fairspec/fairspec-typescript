@@ -1,5 +1,5 @@
 import * as pl from "nodejs-polars"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { joinHeaderRows, skipCommentRows } from "./fileDialect.ts"
 
 describe("joinHeaderRows", () => {

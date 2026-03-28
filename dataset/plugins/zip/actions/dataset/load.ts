@@ -30,9 +30,7 @@ export async function loadDatasetFromZip(archivePath: string) {
     await writeFile(path, data)
   }
 
-  const dataset = await loadDatasetDescriptor(
-    join(basepath, "dataset.json"),
-  )
+  const dataset = await loadDatasetDescriptor(join(basepath, "dataset.json"))
 
   return dataset
 }

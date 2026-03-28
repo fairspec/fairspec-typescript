@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import { getHeaderRows } from "../../../../helpers/fileDialect.ts"
-import type {CsvFileDialect, TsvFileDialect} from "@fairspec/metadata"
+import type { CsvFileDialect, TsvFileDialect } from "@fairspec/metadata"
 import { resolveTableSchema } from "@fairspec/metadata"
 import { prefetchFiles } from "@fairspec/dataset"
 import type { LoadTableOptions } from "../../../../models/table.ts"
@@ -22,7 +22,7 @@ export async function loadCsvTable(
   options?: LoadTableOptions,
 ) {
   const maxBytes = options?.previewBytes
-  const paths = await prefetchFiles(resource, {maxBytes})
+  const paths = await prefetchFiles(resource, { maxBytes })
   if (!paths.length) {
     throw new Error("Resource path is not defined")
   }
@@ -34,7 +34,10 @@ export async function loadCsvTable(
 
   // TODO: Consider inferring all the missing dialect properties
   if (!fileDialect || Object.keys(fileDialect).length <= 1) {
-    fileDialect = await inferCsvFileDialect({ ...resource, data: paths[0] }, options)
+    fileDialect = await inferCsvFileDialect(
+      { ...resource, data: paths[0] },
+      options,
+    )
   }
 
   const scanOptions = getScanOptions(fileDialect)
@@ -62,7 +65,8 @@ export async function loadCsvTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema)
+      tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 
@@ -80,14 +84,16 @@ function getScanOptions(fileDialect?: TsvFileDialect | CsvFileDialect) {
   options.skipRows = headerRows[0] ? headerRows[0] - 1 : 0
   options.hasHeader = headerRows.length > 0
   options.eolChar = fileDialect?.lineTerminator ?? "\n"
-  options.sep = fileDialect?.format === "csv" ? (fileDialect?.delimiter ?? ",") : "\t"
-  options.quoteChar = fileDialect?.format === "csv" ? fileDialect?.quoteChar ?? '"' : undefined
+  options.sep =
+    fileDialect?.format === "csv" ? (fileDialect?.delimiter ?? ",") : "\t"
+  options.quoteChar =
+    fileDialect?.format === "csv" ? (fileDialect?.quoteChar ?? '"') : undefined
   options.nullValues = fileDialect?.nullSequence
   options.commentPrefix = fileDialect?.commentPrefix
 
   if (fileDialect?.columnNames) {
     options.schema = Object.fromEntries(
-      fileDialect.columnNames.map(name => [name, pl.String])
+      fileDialect.columnNames.map(name => [name, pl.String]),
     )
   }
 

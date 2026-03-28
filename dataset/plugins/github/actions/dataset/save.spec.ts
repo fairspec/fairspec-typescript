@@ -1,7 +1,7 @@
 import { relative } from "node:path"
 import type { Dataset } from "@fairspec/metadata"
 import { loadDatasetDescriptor } from "@fairspec/metadata"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import { saveDatasetToGithub } from "./save.ts"
 
 describe("saveDatasetToGithub", () => {

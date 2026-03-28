@@ -28,6 +28,7 @@ Project is a monorepo with the following packages:
 ### Setup
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/yourusername/fairspec-typescript.git fairspec-typescript
    cd fairspec-typescript
@@ -37,6 +38,7 @@ Project is a monorepo with the following packages:
    ```bash
    pnpm install
    ```
+
 ## Development Workflow
 
 ### Code Style and Quality
@@ -44,16 +46,19 @@ Project is a monorepo with the following packages:
 We use Biome for linting and formatting, and TypeScript for type checking:
 
 - **Lint**: Check for code issues
+
   ```bash
   pnpm run lint
   ```
 
 - **Format**: Auto-fix formatting issues
+
   ```bash
   pnpm run format
   ```
 
 - **Type Check**: Verify TypeScript types
+
   ```bash
   pnpm run type
   ```
@@ -68,11 +73,13 @@ We use Biome for linting and formatting, and TypeScript for type checking:
 Tests are collocated with the code and use Vitest:
 
 - **Run All Tests**: (includes linting and type checking)
+
   ```bash
   pnpm test
   ```
 
 - **Run Tests Only**: (without linting/type checking)
+
   ```bash
   pnpm run spec
   ```
@@ -89,6 +96,7 @@ Update all dependencies to their latest versions:
 ```bash
 pnpm run bump
 ```
+
 ## Code Style Guidelines
 
 - Use TypeScript with strict type checking

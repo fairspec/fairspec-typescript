@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { writeTempFile } from "../file/temp.ts"
 import { loadFileStream } from "./load.ts"
 

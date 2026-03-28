@@ -43,16 +43,18 @@ import * as pl from "nodejs-polars"
 import { inferTableSchemaFromTable } from "fairspec"
 
 // Create a table from data
-const table = pl.DataFrame({
-  id: ["1", "2", "3"],
-  price: ["10.50", "25.00", "15.75"],
-  date: ["2023-01-15", "2023-02-20", "2023-03-25"],
-  active: ["true", "false", "true"]
-}).lazy()
+const table = pl
+  .DataFrame({
+    id: ["1", "2", "3"],
+    price: ["10.50", "25.00", "15.75"],
+    date: ["2023-01-15", "2023-02-20", "2023-03-25"],
+    active: ["true", "false", "true"],
+  })
+  .lazy()
 
 const schema = await inferTableSchemaFromTable(table, {
-  sampleRows: 100,      // Sample size for inference
-  confidence: 0.9       // Confidence threshold
+  sampleRows: 100, // Sample size for inference
+  confidence: 0.9, // Confidence threshold
 })
 
 // Result: automatically detected integer, number, date, and boolean types
@@ -68,12 +70,14 @@ import { normalizeTable } from "fairspec"
 import type { TableSchema } from "fairspec"
 
 // Create table with string data
-const table = pl.DataFrame({
-  id: ["1", "2", "3"],
-  price: ["10.50", "25.00", "15.75"],
-  active: ["true", "false", "true"],
-  date: ["2023-01-15", "2023-02-20", "2023-03-25"]
-}).lazy()
+const table = pl
+  .DataFrame({
+    id: ["1", "2", "3"],
+    price: ["10.50", "25.00", "15.75"],
+    active: ["true", "false", "true"],
+    date: ["2023-01-15", "2023-02-20", "2023-03-25"],
+  })
+  .lazy()
 
 // Define schema
 const schema: TableSchema = {
@@ -81,8 +85,8 @@ const schema: TableSchema = {
     id: { type: "integer" },
     price: { type: "number" },
     active: { type: "boolean" },
-    date: { type: "date" }
-  }
+    date: { type: "date" },
+  },
 }
 
 const normalized = await normalizeTable(table, schema)
@@ -101,7 +105,7 @@ import { denormalizeTable } from "fairspec"
 
 // Denormalize for saving (converts dates to strings, etc.)
 const denormalized = await denormalizeTable(table, schema, {
-  nativeTypes: ["string", "number", "boolean"]
+  nativeTypes: ["string", "number", "boolean"],
 })
 ```
 
@@ -118,29 +122,29 @@ const schema: TableSchema = {
   properties: {
     id: {
       type: "integer",
-      minimum: 1
+      minimum: 1,
     },
     name: {
       type: "string",
       minLength: 1,
-      maxLength: 100
+      maxLength: 100,
     },
     email: {
       type: "string",
-      pattern: "^[^@]+@[^@]+\\.[^@]+$"
+      pattern: "^[^@]+@[^@]+\\.[^@]+$",
     },
     age: {
       type: "integer",
       minimum: 0,
-      maximum: 150
+      maximum: 150,
     },
     status: {
       type: "string",
-      enum: ["active", "inactive", "pending"]
-    }
+      enum: ["active", "inactive", "pending"],
+    },
   },
   required: ["id", "name", "email"],
-  primaryKey: ["id"]
+  primaryKey: ["id"],
 }
 ```
 
@@ -152,13 +156,14 @@ Customize how schemas are inferred:
 import { inferTableSchemaFromTable } from "fairspec"
 
 const schema = await inferTableSchemaFromTable(table, {
-  sampleRows: 100,      // Number of rows to sample
-  confidence: 0.9,      // Confidence threshold for type detection
-  keepStrings: false,   // Keep original string types
-  columnTypes: {        // Override types for specific columns
+  sampleRows: 100, // Number of rows to sample
+  confidence: 0.9, // Confidence threshold for type detection
+  keepStrings: false, // Keep original string types
+  columnTypes: {
+    // Override types for specific columns
     id: "integer",
-    status: "categorical"
-  }
+    status: "categorical",
+  },
 })
 ```
 
@@ -169,9 +174,9 @@ Define missing value indicators:
 ```typescript
 const schema: TableSchema = {
   properties: {
-    value: { type: "number" }
+    value: { type: "number" },
   },
-  missingValues: ["", "N/A", "null", -999]
+  missingValues: ["", "N/A", "null", -999],
 }
 ```
 
@@ -183,40 +188,43 @@ Define table-level constraints:
 const schema: TableSchema = {
   properties: {
     user_id: { type: "integer" },
-    email: { type: "string" }
+    email: { type: "string" },
   },
   primaryKey: ["user_id"],
-  uniqueKeys: [
-    { columnNames: ["email"] }
-  ]
+  uniqueKeys: [{ columnNames: ["email"] }],
 }
 ```
 
 ## Supported Column Types
 
 ### Primitive Types
+
 - `string` - Text data
 - `integer` - Whole numbers
 - `number` - Decimal numbers
 - `boolean` - True/false values
 
 ### Temporal Types
+
 - `date` - Calendar dates
 - `datetime` - Date and time
 - `time` - Time of day
 - `duration` - Time spans
 
 ### Spatial Types
+
 - `geojson` - GeoJSON geometries
 - `wkt` - Well-Known Text geometries
 - `wkb` - Well-Known Binary geometries
 
 ### Complex Types
+
 - `array` - Fixed-length arrays
 - `list` - Variable-length lists
 - `object` - JSON objects
 
 ### Specialized Types
+
 - `email` - Email addresses
 - `url` - URLs
 - `categorical` - Categorical data

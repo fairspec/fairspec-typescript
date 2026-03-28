@@ -1,6 +1,6 @@
 import type { TableSchema } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { denormalizeTable } from "../../../actions/table/denormalize.ts"
 import { normalizeTable } from "../../../actions/table/normalize.ts"
 
@@ -148,25 +148,28 @@ describe("parseDecimalColumn", () => {
     ["€ 1.000,00", 1000.0],
     ["1.000,00 €", 1000.0],
     ["1.234,56 €", 1234.56],
-  ])("withText + groupChar '.' + decimalChar ',': %s -> %s", async (cell, expected) => {
-    const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
-    const tableSchema: TableSchema = {
-      properties: {
-        name: {
-          type: "number",
-          withText: true,
-          groupChar: ".",
-          decimalChar: ",",
+  ])(
+    "withText + groupChar '.' + decimalChar ',': %s -> %s",
+    async (cell, expected) => {
+      const table = pl.DataFrame([pl.Series("name", [cell], pl.String)]).lazy()
+      const tableSchema: TableSchema = {
+        properties: {
+          name: {
+            type: "number",
+            withText: true,
+            groupChar: ".",
+            decimalChar: ",",
+          },
         },
-      },
-    }
+      }
 
-    const result = await normalizeTable(table, tableSchema)
-    const frame = await result.collect()
+      const result = await normalizeTable(table, tableSchema)
+      const frame = await result.collect()
 
-    const actual = frame.toRecords()[0]?.name
-    expect(actual).toEqual(expected)
-  })
+      const actual = frame.toRecords()[0]?.name
+      expect(actual).toEqual(expected)
+    },
+  )
 })
 
 // TODO: how to construct it properly in polars?

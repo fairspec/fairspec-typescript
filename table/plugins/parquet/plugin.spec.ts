@@ -1,6 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import * as loadModule from "./actions/table/load.ts"
 import * as saveModule from "./actions/table/save.ts"
 import { ParquetPlugin } from "./plugin.ts"

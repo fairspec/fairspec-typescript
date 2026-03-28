@@ -4,6 +4,7 @@ sidebar:
   label: TSV
   order: 2
 ---
+
 Tab-separated values (TSV) file handling with automatic format detection and high-performance data operations.
 
 ## Installation
@@ -44,13 +45,13 @@ const table = await loadCsvTable({
   data: "data.tsv",
   format: {
     name: "tsv",
-    headerRows: [1]
-  }
+    headerRows: [1],
+  },
 })
 
 // Load multiple TSV files (concatenated)
 const table = await loadCsvTable({
-  data: ["part1.tsv", "part2.tsv", "part3.tsv"]
+  data: ["part1.tsv", "part2.tsv", "part3.tsv"],
 })
 ```
 
@@ -62,7 +63,7 @@ import { saveCsvTable } from "fairspec"
 // Save with default options
 await saveCsvTable(table, {
   path: "output.tsv",
-  format: { name: "tsv" }
+  format: { name: "tsv" },
 })
 
 // Save with line terminator option
@@ -70,8 +71,8 @@ await saveCsvTable(table, {
   path: "output.tsv",
   format: {
     name: "tsv",
-    lineTerminator: "\r\n"
-  }
+    lineTerminator: "\r\n",
+  },
 })
 ```
 
@@ -86,8 +87,8 @@ const table = await loadCsvTable({
   format: {
     name: "tsv",
     headerRows: [1, 2],
-    headerJoin: "_"
-  }
+    headerJoin: "_",
+  },
 })
 ```
 
@@ -100,8 +101,8 @@ const table = await loadCsvTable({
   format: {
     name: "tsv",
     commentPrefix: "#",
-    headerRows: [1]
-  }
+    headerRows: [1],
+  },
 })
 
 // Or specify specific comment row numbers
@@ -110,8 +111,8 @@ const table = await loadCsvTable({
   format: {
     name: "tsv",
     commentRows: [1, 2],
-    headerRows: [3]
-  }
+    headerRows: [3],
+  },
 })
 ```
 
@@ -120,14 +121,14 @@ const table = await loadCsvTable({
 ```typescript
 // Load from URL
 const table = await loadCsvTable({
-  data: "https://example.com/data.tsv"
+  data: "https://example.com/data.tsv",
 })
 
 // Load multiple remote files
 const table = await loadCsvTable({
   data: [
     "https://api.example.com/data-2023.tsv",
-    "https://api.example.com/data-2024.tsv"
-  ]
+    "https://api.example.com/data-2024.tsv",
+  ],
 })
 ```

@@ -1,5 +1,5 @@
 import type { Dataset } from "@fairspec/metadata"
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it } from "vite-plus/test"
 import {
   getTempFilePath,
   writeTempFile,

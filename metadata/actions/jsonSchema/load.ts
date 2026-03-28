@@ -9,7 +9,8 @@ export async function loadJsonSchema(
   let jsonSchema = cache.get(path)
 
   if (!jsonSchema) {
-    const { profileRegistry } = await import("../../actions/profile/registry.ts")
+    const { profileRegistry } =
+      await import("../../actions/profile/registry.ts")
     for (const item of profileRegistry) {
       if (item.path === path) {
         jsonSchema = item.profile

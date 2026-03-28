@@ -1,6 +1,6 @@
 import { stat } from "node:fs/promises"
 import type { Dataset } from "@fairspec/metadata"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import * as loadModule from "./actions/dataset/load.ts"
 import * as saveModule from "./actions/dataset/save.ts"
 import { FolderPlugin } from "./plugin.ts"

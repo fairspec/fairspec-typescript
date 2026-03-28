@@ -1,6 +1,6 @@
 import type { Dataset } from "@fairspec/metadata"
 import * as metadataModule from "@fairspec/metadata"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import { DescriptorPlugin } from "./plugin.ts"
 
 vi.mock("@fairspec/metadata", async () => {

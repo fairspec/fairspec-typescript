@@ -1,5 +1,5 @@
 import type { TableSchema } from "@fairspec/metadata"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { renderTableSchemaAsHtml } from "./asHtml.tsx"
 
 describe("renderTableSchemaAsHtml", () => {

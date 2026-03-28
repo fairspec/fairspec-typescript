@@ -6,20 +6,19 @@
   "scripts": {
     "build": "pnpm -F !website build",
     "bump": "ncu -ws -u",
-    "clean": "rm -rf **/node_modules",
+    "clean": "rm -rf pnpm-local.yaml node_modules **/node_modules **/build",
     "coverage": "sensible-browser coverage/index.html",
-    "debug": "pnpm vp test --no-file-parallelism --test-timeout=0 --inspect-brk --browser run",
+    "debug": "vp test --no-file-parallelism --test-timeout=0 --inspect-brk --browser run",
     "format": "vp fmt",
     "lint": "vp fmt --check && vp lint",
-    "install:ci": "pnpm install --ignore-scripts",
     "prepare": "is-ci || lefthook install",
-    "publish:ci": "pnpm -r publish --access public --ignore-scripts --no-git-checks",
+    "release": "pnpm -r publish --access public --ignore-scripts --no-git-checks",
+    "setversion": "pnpm -r exec pnpm version --no-git-tag-version",
     "spec": "vp test",
     "start": "pnpm -F website start",
     "test": "pnpm lint && pnpm build && pnpm spec",
     "test:win": "pnpm spec",
-    "type": "pnpm -r type",
-    "version:ci": "pnpm --include-workspace-root -r exec pnpm version --no-git-tag-version"
+    "type": "pnpm -r type"
   },
   "devDependencies": {
     "@semantic-release/exec": "7.1.0",

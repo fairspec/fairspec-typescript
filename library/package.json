@@ -34,7 +34,7 @@
     "zod": "^4.2.1"
   },
   "scripts": {
-    "build": "tsc",
-    "type": "tsc --noEmit"
+    "build": "tsgo",
+    "type": "tsgo --noEmit"
   }
 }

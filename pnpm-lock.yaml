@@ -48,8 +48,8 @@ importers:
         specifier: 0.1.14
         version: 0.1.14(@types/node@24.2.0)(jiti@2.6.1)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(typescript@5.9.2)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1))(yaml@2.8.1)
       vitest-polly:
-        specifier: 2.0.3
-        version: 2.0.3(vite-plus@0.1.14(@types/node@24.2.0)(jiti@2.6.1)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(typescript@5.9.2)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1))(yaml@2.8.1))(vitest@4.1.0(@types/node@24.2.0)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1)))
+        specifier: 2.1.0
+        version: 2.1.0(vite-plus@0.1.14(@types/node@24.2.0)(jiti@2.6.1)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(typescript@5.9.2)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1))(yaml@2.8.1))(vitest@4.1.0(@types/node@24.2.0)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1)))
 
   agent:
     dependencies:
@@ -5254,8 +5254,8 @@ packages:
       vite:
         optional: true
 
-  vitest-polly@2.0.3:
-    resolution: {integrity: sha512-NmeQ6GNTRheTzNiGbhOmkKIkvqQ8Q5DSRNu7mwRjRg+wnotblgKRwiTvoTGY4j7eidwUvzVKncSxvl+V1KKOCg==}
+  vitest-polly@2.1.0:
+    resolution: {integrity: sha512-qJawsW7xvUkDaU9eyDAYCDzIvOK7d6h77lBqA794zCGviBUxaZPsGa00Q2tkUedD2EzRR0A2batAi+HVZvB7ag==}
     engines: {node: ^24.0.0, pnpm: ^10.0.0}
     peerDependencies:
       vite-plus: '>=0.1.14'
@@ -10766,7 +10766,7 @@ snapshots:
     optionalDependencies:
       vite: 6.4.1(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1)
 
-  vitest-polly@2.0.3(vite-plus@0.1.14(@types/node@24.2.0)(jiti@2.6.1)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(typescript@5.9.2)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1))(yaml@2.8.1))(vitest@4.1.0(@types/node@24.2.0)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1))):
+  vitest-polly@2.1.0(vite-plus@0.1.14(@types/node@24.2.0)(jiti@2.6.1)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(typescript@5.9.2)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1))(yaml@2.8.1))(vitest@4.1.0(@types/node@24.2.0)(vite@7.2.2(@types/node@24.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.93.2)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.20.3)(yaml@2.8.1))):
     dependencies:
       '@pollyjs/adapter-fetch': 6.0.7
       '@pollyjs/core': 6.0.6

@@ -46,8 +46,10 @@ pids
 # Notebooks
 .ipynb_checkpoints/
 
-# React
-# .react-router/
+# Environment
+.env
+.env.local
+.env.test
 
 # User
 .vim/
@@ -62,10 +64,7 @@ build/
 compile/
 dist/
 .astro/
-.cursor/
 .serena/
-.mcp.json
-.env
 .env.local
 messages.js
 .user/

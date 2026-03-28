@@ -14,10 +14,10 @@
     "prepare": "is-ci || lefthook install",
     "release": "pnpm -r publish --access public --ignore-scripts --no-git-checks",
     "setversion": "pnpm -r exec pnpm version --no-git-tag-version",
-    "spec": "vp test",
+    "unit": "vp test",
     "start": "pnpm -F website start",
-    "test": "pnpm lint && pnpm build && pnpm spec",
-    "test:win": "pnpm spec",
+    "test": "pnpm lint && pnpm build && pnpm unit",
+    "test:win": "pnpm unit",
     "type": "pnpm -r type"
   },
   "devDependencies": {

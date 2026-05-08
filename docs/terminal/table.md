@@ -1,8 +1,8 @@
 ---
 title: Working with Tables in Terminal
-sidebar:
-  order: 2
-  label: Table
+label: Table
+path: /terminal/table/
+order: 2
 ---
 
 Table operations including querying, validation, statistics, and schema management for tabular data files.

@@ -1,0 +1,10 @@
+{
+  "name": "fairspec-typescript",
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "preview_urls": true,
+  "workers_dev": true,
+  "compatibility_date": "2025-08-15",
+  "assets": {
+    "directory": ".livemark/build/client",
+  },
+}

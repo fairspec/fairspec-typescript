@@ -1,8 +1,8 @@
 ---
 title: Working with JSON tables in TypeScript
-sidebar:
-  label: JSON
-  order: 3
+label: JSON
+path: /typescript/json/
+order: 3
 ---
 
 JSON file handling with automatic format detection and high-performance data operations.

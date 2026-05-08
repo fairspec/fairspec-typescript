@@ -1,8 +1,8 @@
 ---
 title: Using Fairspec TypeScript in Jupyter Notebooks
-sidebar:
-  label: Jupyter Notebooks
-  order: 12
+label: Jupyter Notebooks
+path: /typescript/jupyter/
+order: 12
 ---
 
 For data scientists and data engineers, [Jupyter Notebooks](https://docs.jupyter.org/en/latest/) provide a powerful and flexible environment for exploring, visualizing, and analyzing data.
@@ -23,7 +23,7 @@ For data scientists and data engineers, [Jupyter Notebooks](https://docs.jupyter
 
 1. **Select Deno Kernel in Notebook:** Choose the Deno kernel from your notebook's kernel selection menu. VSCode users may need to install the default Jupyter kernel extensions.
 
-![Fairspec TypeScript in Jupyter Notebooks](./assets/jupyter.png)
+![Fairspec TypeScript in Jupyter Notebooks](/jupyter.png)
 
 ## References
 

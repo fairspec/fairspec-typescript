@@ -1,8 +1,8 @@
 ---
 title: Working with JSON Data in Terminal
-sidebar:
-  order: 3
-  label: Data
+label: Data
+path: /terminal/data/
+order: 3
 ---
 
 JSON data validation and schema operations using JSON Schema standards.

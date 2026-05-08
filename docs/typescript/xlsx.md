@@ -1,11 +1,11 @@
 ---
-title: Working with ODS in TypeScript
-sidebar:
-  label: ODS
-  order: 6
+title: Working with XLSX in TypeScript
+label: XLSX
+path: /typescript/xlsx/
+order: 5
 ---
 
-OpenDocument Spreadsheet (ODS) file handling with sheet selection, advanced header processing, and high-performance data operations.
+Excel (.xlsx) file handling with sheet selection, advanced header processing, and high-performance data operations.
 
 ## Installation
 
@@ -15,10 +15,10 @@ npm install fairspec
 
 ## Getting Started
 
-ODS format is handled by the XLSX plugin, which provides:
+The XLSX plugin provides:
 
-- `loadXlsxTable` - Load ODS files into tables
-- `saveXlsxTable` - Save tables to ODS files
+- `loadXlsxTable` - Load Excel files into tables
+- `saveXlsxTable` - Save tables to Excel files
 - `XlsxPlugin` - Plugin for framework integration
 
 For example:
@@ -26,51 +26,48 @@ For example:
 ```typescript
 import { loadXlsxTable } from "fairspec"
 
-const table = await loadXlsxTable({ data: "table.ods" })
+const table = await loadXlsxTable({ data: "table.xlsx" })
 // the column types will be automatically inferred
 ```
 
 ## Basic Usage
 
-### Loading ODS Files
+### Loading XLSX Files
 
 ```typescript
 import { loadXlsxTable } from "fairspec"
 
-// Load a simple ODS file
-const table = await loadXlsxTable({ data: "data.ods" })
+// Load a simple XLSX file
+const table = await loadXlsxTable({ data: "data.xlsx" })
 
 // Load with custom format (specify sheet)
 const table = await loadXlsxTable({
-  data: "data.ods",
+  data: "data.xlsx",
   format: {
-    name: "ods",
+    name: "xlsx",
     sheetName: "Sheet2",
   },
 })
 
-// Load multiple ODS files (concatenated)
+// Load multiple XLSX files (concatenated)
 const table = await loadXlsxTable({
-  data: ["part1.ods", "part2.ods", "part3.ods"],
+  data: ["part1.xlsx", "part2.xlsx", "part3.xlsx"],
 })
 ```
 
-### Saving ODS Files
+### Saving XLSX Files
 
 ```typescript
 import { saveXlsxTable } from "fairspec"
 
 // Save with default options
-await saveXlsxTable(table, {
-  path: "output.ods",
-  format: { name: "ods" },
-})
+await saveXlsxTable(table, { path: "output.xlsx" })
 
 // Save with custom sheet name
 await saveXlsxTable(table, {
-  path: "output.ods",
+  path: "output.xlsx",
   format: {
-    name: "ods",
+    name: "xlsx",
     sheetName: "Data",
   },
 })
@@ -83,18 +80,18 @@ await saveXlsxTable(table, {
 ```typescript
 // Select by sheet number (1-indexed)
 const table = await loadXlsxTable({
-  data: "workbook.ods",
+  data: "workbook.xlsx",
   format: {
-    name: "ods",
+    name: "xlsx",
     sheetNumber: 2, // Load second sheet
   },
 })
 
 // Select by sheet name
 const table = await loadXlsxTable({
-  data: "workbook.ods",
+  data: "workbook.xlsx",
   format: {
-    name: "ods",
+    name: "xlsx",
     sheetName: "Sales Data",
   },
 })
@@ -103,11 +100,11 @@ const table = await loadXlsxTable({
 ### Multi-Header Row Processing
 
 ```typescript
-// ODS with multiple header rows
+// XLSX with multiple header rows
 const table = await loadXlsxTable({
-  data: "multi-header.ods",
+  data: "multi-header.xlsx",
   format: {
-    name: "ods",
+    name: "xlsx",
     headerRows: [1, 2],
     headerJoin: "_",
   },
@@ -120,9 +117,9 @@ const table = await loadXlsxTable({
 ```typescript
 // Skip specific comment rows
 const table = await loadXlsxTable({
-  data: "with-comments.ods",
+  data: "with-comments.xlsx",
   format: {
-    name: "ods",
+    name: "xlsx",
     commentRows: [1, 2],
     headerRows: [3],
   },
@@ -130,9 +127,9 @@ const table = await loadXlsxTable({
 
 // Skip rows with comment prefix
 const table = await loadXlsxTable({
-  data: "data.ods",
+  data: "data.xlsx",
   format: {
-    name: "ods",
+    name: "xlsx",
     commentPrefix: "#",
     headerRows: [1],
   },
@@ -144,14 +141,14 @@ const table = await loadXlsxTable({
 ```typescript
 // Load from URL
 const table = await loadXlsxTable({
-  data: "https://example.com/data.ods",
+  data: "https://example.com/data.xlsx",
 })
 
 // Load multiple remote files
 const table = await loadXlsxTable({
   data: [
-    "https://api.example.com/data-2023.ods",
-    "https://api.example.com/data-2024.ods",
+    "https://api.example.com/data-2023.xlsx",
+    "https://api.example.com/data-2024.xlsx",
   ],
 })
 ```
@@ -161,9 +158,9 @@ const table = await loadXlsxTable({
 ```typescript
 // Select specific columns
 const table = await loadXlsxTable({
-  data: "data.ods",
+  data: "data.xlsx",
   format: {
-    name: "ods",
+    name: "xlsx",
     columnNames: ["name", "age", "city"],
   },
 })

@@ -1,8 +1,8 @@
 ---
 title: Working with Tabular Data in TypeScript
-sidebar:
-  label: Tabular Data
-  order: 11
+label: Tabular Data
+path: /typescript/table/
+order: 11
 ---
 
 High-performance data processing and schema validation for tabular data built on **nodejs-polars** (a Rust-based DataFrame library).

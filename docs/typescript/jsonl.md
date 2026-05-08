@@ -1,8 +1,8 @@
 ---
 title: Working with JSONL tables in TypeScript
-sidebar:
-  label: JSONL
-  order: 4
+label: JSONL
+path: /typescript/jsonl/
+order: 4
 ---
 
 JSONL (JSON Lines) file handling with automatic format detection and high-performance data operations.

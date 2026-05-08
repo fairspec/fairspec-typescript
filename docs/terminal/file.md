@@ -1,8 +1,8 @@
 ---
 title: Working with Files in Terminal
-sidebar:
-  order: 4
-  label: File
+label: File
+path: /terminal/file/
+order: 4
 ---
 
 File operations for copying, describing, validating, and analyzing local or remote files.

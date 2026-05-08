@@ -1,8 +1,8 @@
 ---
 title: Working with Parquet in TypeScript
-sidebar:
-  label: Parquet
-  order: 8
+label: Parquet
+path: /typescript/parquet/
+order: 8
 ---
 
 Apache Parquet file handling with high-performance columnar data processing and compression.

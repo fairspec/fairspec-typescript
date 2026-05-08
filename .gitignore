@@ -64,10 +64,12 @@ build/
 compile/
 dist/
 .astro/
+.livemark/build/
+.tanstack/
+.content-collections/
 .serena/
 .env.local
 messages.js
 .user/
 tmuxp.yaml
-/website/content/docs/reference/
 /.claude/settings.local.json

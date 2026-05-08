@@ -1,8 +1,8 @@
 ---
 title: Working with SQLite in TypeScript
-sidebar:
-  label: SQLite
-  order: 9
+label: SQLite
+path: /typescript/sqlite/
+order: 9
 ---
 
 SQLite database file handling with table loading and saving capabilities.

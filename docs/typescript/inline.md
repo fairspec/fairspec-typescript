@@ -1,8 +1,8 @@
 ---
 title: Working with Inline Data tables in TypeScript
-sidebar:
-  label: Inline Data
-  order: 10
+label: Inline Data
+path: /typescript/inline/
+order: 10
 ---
 
 Inline data handling for tables embedded directly in resource definitions.

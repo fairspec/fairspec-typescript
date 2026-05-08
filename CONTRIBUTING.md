@@ -1,8 +1,4 @@
----
-title: Contributing
-sidebar:
-  order: 2
----
+# Contributing
 
 Thank you for your interest in contributing to Fairspec TypeScript! This document provides guidelines and instructions for contributing to this project.
 

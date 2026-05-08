@@ -1,8 +1,8 @@
 ---
 title: Working with Datasets in Terminal
-sidebar:
-  order: 1
-  label: Dataset
+label: Dataset
+path: /terminal/dataset/
+order: 1
 ---
 
 Dataset operations for managing collections of tabular resources with metadata and schemas.

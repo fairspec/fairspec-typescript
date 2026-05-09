@@ -19,11 +19,6 @@ export default defineConfig({
   ],
   links: [
     {
-      url: "https://fairspec.org",
-      title: "Project",
-      position: "header",
-    },
-    {
       url: "https://fairspec.org/overview/introduction/",
       title: "Standard",
       position: "header",

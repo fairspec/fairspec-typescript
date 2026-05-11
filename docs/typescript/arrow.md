@@ -2,7 +2,7 @@
 title: Working with Arrow in TypeScript
 label: Arrow
 path: /typescript/arrow/
-order: 7
+order: 11
 ---
 
 Apache Arrow IPC file handling with high-performance columnar data processing.

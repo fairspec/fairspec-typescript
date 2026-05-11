@@ -2,7 +2,7 @@
 title: Working with ODS in TypeScript
 label: ODS
 path: /typescript/ods/
-order: 6
+order: 10
 ---
 
 OpenDocument Spreadsheet (ODS) file handling with sheet selection, advanced header processing, and high-performance data operations.

@@ -2,7 +2,7 @@
 title: Working with Inline Data tables in TypeScript
 label: Inline Data
 path: /typescript/inline/
-order: 10
+order: 14
 ---
 
 Inline data handling for tables embedded directly in resource definitions.

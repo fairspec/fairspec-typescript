@@ -2,7 +2,7 @@
 title: Working with SQLite in TypeScript
 label: SQLite
 path: /typescript/sqlite/
-order: 9
+order: 13
 ---
 
 SQLite database file handling with table loading and saving capabilities.

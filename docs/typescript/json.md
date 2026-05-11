@@ -2,7 +2,7 @@
 title: Working with JSON tables in TypeScript
 label: JSON
 path: /typescript/json/
-order: 3
+order: 7
 ---
 
 JSON file handling with automatic format detection and high-performance data operations.

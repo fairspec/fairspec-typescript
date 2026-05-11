@@ -2,7 +2,7 @@
 title: Working with XLSX in TypeScript
 label: XLSX
 path: /typescript/xlsx/
-order: 5
+order: 9
 ---
 
 Excel (.xlsx) file handling with sheet selection, advanced header processing, and high-performance data operations.

@@ -2,7 +2,7 @@
 title: Working with CSV in TypeScript
 label: CSV
 path: /typescript/csv/
-order: 1
+order: 5
 ---
 
 Comprehensive CSV file handling with automatic format detection, advanced header processing, and high-performance data operations.

@@ -2,7 +2,7 @@
 title: Working with TSV in TypeScript
 label: TSV
 path: /typescript/tsv/
-order: 2
+order: 6
 ---
 
 Tab-separated values (TSV) file handling with automatic format detection and high-performance data operations.

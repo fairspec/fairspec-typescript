@@ -2,7 +2,7 @@
 title: Working with Parquet in TypeScript
 label: Parquet
 path: /typescript/parquet/
-order: 8
+order: 12
 ---
 
 Apache Parquet file handling with high-performance columnar data processing and compression.

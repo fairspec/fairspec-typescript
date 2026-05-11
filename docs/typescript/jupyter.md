@@ -2,7 +2,7 @@
 title: Using Fairspec TypeScript in Jupyter Notebooks
 label: Jupyter Notebooks
 path: /typescript/jupyter/
-order: 12
+order: 15
 ---
 
 For data scientists and data engineers, [Jupyter Notebooks](https://docs.jupyter.org/en/latest/) provide a powerful and flexible environment for exploring, visualizing, and analyzing data.

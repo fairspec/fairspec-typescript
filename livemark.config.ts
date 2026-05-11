@@ -12,7 +12,7 @@ export default defineConfig({
       type: "custom",
       title: "Fairspec",
       url: "https://fairspec.org",
-      icon: "rocket",
+      icon: "house",
     },
     {
       type: "custom",

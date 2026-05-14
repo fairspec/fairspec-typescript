@@ -1,5 +1,7 @@
 pre-commit:
   jobs:
+    - name: scan:secret:staged
+      run: pnpm scan:secret:staged
     - name: format:staged
       run: pnpm format {staged_files}
       stage_fixed: true

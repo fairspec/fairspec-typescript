@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r build",
-    "bump": "ncu -ws -u",
+    "deps": "ncu -ws -u",
     "coverage": "sensible-browser coverage/index.html",
     "debug": "vp test --no-file-parallelism --test-timeout=0 --inspect-brk --browser run",
     "docs:build": "livemark build",
@@ -51,7 +51,7 @@
   },
   "engines": {
     "node": "^24.0.0",
-    "pnpm": "^10.0.0"
+    "pnpm": "^11.0.0"
   },
-  "packageManager": "pnpm@10.21.0+sha512.da3337267e400fdd3d479a6c68079ac6db01d8ca4f67572083e722775a796788a7a9956613749e000fac20d424b594f7a791a5f4e2e13581c5ef947f26968a40"
+  "packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499"
 }

@@ -1,4 +1,3 @@
-dangerouslyAllowAllBuilds: true
 packages:
   - agent
   - dataset
@@ -8,3 +7,11 @@ packages:
   - metadata
   - table
   - terminal
+
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  lefthook: true
+  msw: true
+  sharp: true
+  workerd: true

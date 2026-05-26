@@ -1,10 +1,6 @@
 import { buffer } from "node:stream/consumers"
 import { loadFileStream } from "@fairspec/dataset"
-import type {
-  CsvFileDialect,
-  Resource,
-  TsvFileDialect,
-} from "@fairspec/metadata"
+import type { CsvFileDialect, Resource, TsvFileDialect } from "@fairspec/metadata"
 import { getDataPath } from "@fairspec/metadata"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 

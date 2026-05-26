@@ -1,9 +1,4 @@
-import type {
-  CellError,
-  Column,
-  ColumnError,
-  TableError,
-} from "@fairspec/metadata"
+import type { CellError, Column, ColumnError, TableError } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import type { ColumnMapping } from "../../models/column.ts"
 import type { Table } from "../../models/table.ts"

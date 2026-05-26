@@ -17,10 +17,7 @@ import { getSupportedFileDialect } from "@fairspec/metadata"
 // for better commentPrefix + headerRows/commentRows support
 // (consult with the Data Package Working Group)
 
-export async function loadCsvTable(
-  resource: Resource,
-  options?: LoadTableOptions,
-) {
+export async function loadCsvTable(resource: Resource, options?: LoadTableOptions) {
   const maxBytes = options?.previewBytes
   const paths = await prefetchFiles(resource, { maxBytes })
   if (!paths.length) {
@@ -34,10 +31,7 @@ export async function loadCsvTable(
 
   // TODO: Consider inferring all the missing dialect properties
   if (!fileDialect || Object.keys(fileDialect).length <= 1) {
-    fileDialect = await inferCsvFileDialect(
-      { ...resource, data: paths[0] },
-      options,
-    )
+    fileDialect = await inferCsvFileDialect({ ...resource, data: paths[0] }, options)
   }
 
   const scanOptions = getScanOptions(fileDialect)
@@ -65,8 +59,7 @@ export async function loadCsvTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema)
-      tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 
@@ -84,8 +77,7 @@ function getScanOptions(fileDialect?: TsvFileDialect | CsvFileDialect) {
   options.skipRows = headerRows[0] ? headerRows[0] - 1 : 0
   options.hasHeader = headerRows.length > 0
   options.eolChar = fileDialect?.lineTerminator ?? "\n"
-  options.sep =
-    fileDialect?.format === "csv" ? (fileDialect?.delimiter ?? ",") : "\t"
+  options.sep = fileDialect?.format === "csv" ? (fileDialect?.delimiter ?? ",") : "\t"
   options.quoteChar =
     fileDialect?.format === "csv" ? (fileDialect?.quoteChar ?? '"') : undefined
   options.nullValues = fileDialect?.nullSequence

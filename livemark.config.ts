@@ -70,8 +70,7 @@ export default defineConfig({
       file: "CONTRIBUTING.md",
       article: {
         title: "Contributing",
-        description:
-          "How to set up the repository, propose changes, and ship a release.",
+        description: "How to set up the repository, propose changes, and ship a release.",
         icon: "heart-handshake",
         path: "/contributing/",
         order: -1,

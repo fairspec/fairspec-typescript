@@ -42,10 +42,7 @@ export function parseDecimalColumn(column: DecimalColumn, columnExpr: pl.Expr) {
   return columnExpr
 }
 
-export function stringifyDecimalColumn(
-  _column: DecimalColumn,
-  columnExpr: pl.Expr,
-) {
+export function stringifyDecimalColumn(_column: DecimalColumn, columnExpr: pl.Expr) {
   // Convert to string
   columnExpr = columnExpr.cast(pl.String)
 

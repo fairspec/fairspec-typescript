@@ -8,8 +8,7 @@ export function getColumns(tableSchema: TableSchema) {
 
   for (const [name, property] of objectEntries(tableSchema.properties ?? {})) {
     const column = createColumnFromProperty(name, property)
-    column.required =
-      tableSchema.allRequired || tableSchema.required?.includes(name)
+    column.required = tableSchema.allRequired || tableSchema.required?.includes(name)
     columns.push(column)
   }
 

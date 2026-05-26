@@ -2,10 +2,7 @@ import { access, readFile } from "node:fs/promises"
 import { join } from "node:path"
 import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it } from "vite-plus/test"
-import {
-  getTempFilePath,
-  writeTempFile,
-} from "../../../../actions/file/temp.ts"
+import { getTempFilePath, writeTempFile } from "../../../../actions/file/temp.ts"
 import { loadDatasetFromFolder } from "./load.ts"
 import { saveDatasetToFolder } from "./save.ts"
 
@@ -35,9 +32,7 @@ describe("saveDatasetToFolder", () => {
   it("should save dataset with metadata", async () => {
     const dataset: Dataset = {
       titles: [{ title: "Test Dataset" }],
-      descriptions: [
-        { description: "A test dataset", descriptionType: "Abstract" },
-      ],
+      descriptions: [{ description: "A test dataset", descriptionType: "Abstract" }],
       version: "1.0.0",
       resources: [
         {
@@ -161,9 +156,7 @@ describe("saveDatasetToFolder", () => {
   it("should save and reload dataset with same structure", async () => {
     const originalDataset: Dataset = {
       titles: [{ title: "Test Dataset" }],
-      descriptions: [
-        { description: "A test dataset", descriptionType: "Abstract" },
-      ],
+      descriptions: [{ description: "A test dataset", descriptionType: "Abstract" }],
       resources: [
         {
           name: "test_resource",
@@ -177,9 +170,7 @@ describe("saveDatasetToFolder", () => {
 
     expect(reloadedDataset).toBeDefined()
     expect(reloadedDataset.titles?.[0]?.title).toBe("Test Dataset")
-    expect(reloadedDataset.descriptions?.[0]?.description).toBe(
-      "A test dataset",
-    )
+    expect(reloadedDataset.descriptions?.[0]?.description).toBe("A test dataset")
     expect(reloadedDataset.resources).toHaveLength(1)
     expect(reloadedDataset.resources?.[0]?.name).toBe("test_resource")
   })
@@ -187,9 +178,7 @@ describe("saveDatasetToFolder", () => {
   it("should save and reload dataset preserving metadata", async () => {
     const originalDataset: Dataset = {
       titles: [{ title: "Test Dataset" }],
-      descriptions: [
-        { description: "A test dataset", descriptionType: "Abstract" },
-      ],
+      descriptions: [{ description: "A test dataset", descriptionType: "Abstract" }],
       version: "1.0.0",
       resources: [
         {

@@ -6,10 +6,7 @@ import { UniqueKey } from "./uniqueKey.ts"
 export const TableSchema = z.object({
   $schema: z.httpUrl().optional().describe("Fairspec Schema profile url."),
 
-  title: z
-    .string()
-    .optional()
-    .describe("A human-readable title of the table schema"),
+  title: z.string().optional().describe("A human-readable title of the table schema"),
 
   description: z
     .string()
@@ -24,9 +21,7 @@ export const TableSchema = z.object({
   allRequired: z
     .boolean()
     .optional()
-    .describe(
-      "An optional boolean indicating whether all columns are required",
-    ),
+    .describe("An optional boolean indicating whether all columns are required"),
 
   properties: z
     .record(z.string(), ColumnProperty)
@@ -56,9 +51,7 @@ export const TableSchema = z.object({
     .array(z.string())
     .min(1)
     .optional()
-    .describe(
-      "An optional array of column names that form the table's primary key",
-    ),
+    .describe("An optional array of column names that form the table's primary key"),
 
   uniqueKeys: z
     .array(UniqueKey)
@@ -87,9 +80,5 @@ export const ConvertTableSchemaFromOptions = z.object({
 
 export type TableSchema = z.infer<typeof TableSchema>
 export type RenderTableSchemaOptions = z.infer<typeof RenderTableSchemaOptions>
-export type ConvertTableSchemaToOptions = z.infer<
-  typeof ConvertTableSchemaToOptions
->
-export type ConvertTableSchemaFromOptions = z.infer<
-  typeof ConvertTableSchemaFromOptions
->
+export type ConvertTableSchemaToOptions = z.infer<typeof ConvertTableSchemaToOptions>
+export type ConvertTableSchemaFromOptions = z.infer<typeof ConvertTableSchemaFromOptions>

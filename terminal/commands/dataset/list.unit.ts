@@ -26,28 +26,18 @@ describe("dataset list", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(listDatasetCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(listDatasetCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "list",
-        descriptorPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "list", descriptorPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -72,28 +62,18 @@ describe("dataset list", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(listDatasetCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(listDatasetCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "list",
-        descriptorPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "list", descriptorPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -115,28 +95,18 @@ describe("dataset list", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(listDatasetCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(listDatasetCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "list",
-        descriptorPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "list", descriptorPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)

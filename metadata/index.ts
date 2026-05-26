@@ -86,12 +86,7 @@ export { UnknownColumn } from "./models/column/unknown.ts"
 export { UrlColumn } from "./models/column/url.ts"
 export { WkbColumn } from "./models/column/wkb.ts"
 export { WktColumn } from "./models/column/wkt.ts"
-export {
-  Data,
-  ResourceData,
-  ResourceDataPath,
-  ResourceDataValue,
-} from "./models/data.ts"
+export { Data, ResourceData, ResourceDataPath, ResourceDataValue } from "./models/data.ts"
 export {
   AlternateIdentifier,
   AlternateIdentifiers,
@@ -121,11 +116,7 @@ export {
   Creators,
 } from "./models/datacite/creator.ts"
 export { Datacite } from "./models/datacite/datacite.ts"
-export {
-  Date as DataciteDate,
-  Dates,
-  DateValue,
-} from "./models/datacite/date.ts"
+export { Date as DataciteDate, Dates, DateValue } from "./models/datacite/date.ts"
 export { Description, Descriptions } from "./models/datacite/description.ts"
 export { Formats } from "./models/datacite/formats.ts"
 export {
@@ -201,11 +192,7 @@ export {
   ResourceMissingError,
   ResourceTypeError,
 } from "./models/error/resource.ts"
-export {
-  RowError,
-  RowPrimaryKeyError,
-  RowUniqueKeyError,
-} from "./models/error/row.ts"
+export { RowError, RowPrimaryKeyError, RowUniqueKeyError } from "./models/error/row.ts"
 export { TableError } from "./models/error/table.ts"
 export { FairspecException } from "./models/exception.ts"
 export { ArrowFileDialect } from "./models/fileDialect/arrow.ts"

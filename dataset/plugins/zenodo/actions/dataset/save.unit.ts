@@ -46,9 +46,7 @@ describe("saveDatasetToZenodo", () => {
   })
 
   it.skip("should save a dataset", async () => {
-    const dataset = await loadDatasetDescriptor(
-      "core/package/fixtures/package.json",
-    )
+    const dataset = await loadDatasetDescriptor("core/package/fixtures/package.json")
 
     const result = await saveDatasetToZenodo(dataset, {
       apiKey: "<key>",
@@ -67,8 +65,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {
@@ -141,8 +138,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {
@@ -204,8 +200,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {
@@ -312,8 +307,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {
@@ -362,8 +356,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {
@@ -415,8 +408,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {
@@ -456,8 +448,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {
@@ -485,9 +476,7 @@ describe("saveDatasetToZenodo", () => {
     const result = await saveDatasetToZenodo(emptyDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(2)
-    expect(result.datasetUrl).toEqual(
-      "https://sandbox.zenodo.org/uploads/12345",
-    )
+    expect(result.datasetUrl).toEqual("https://sandbox.zenodo.org/uploads/12345")
   })
 
   it("skips resources without files", async () => {
@@ -509,8 +498,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {
@@ -565,8 +553,7 @@ describe("saveDatasetToZenodo", () => {
           links: {
             self: "https://sandbox.zenodo.org/api/deposit/depositions/12345",
             html: "https://sandbox.zenodo.org/deposit/12345",
-            files:
-              "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
+            files: "https://sandbox.zenodo.org/api/deposit/depositions/12345/files",
             bucket: "https://sandbox.zenodo.org/api/files/bucket-id",
           },
           metadata: {

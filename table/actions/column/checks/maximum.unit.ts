@@ -71,9 +71,7 @@ describe("inspectTable (cell/maximum)", () => {
 
     const errors = await inspectTable(table, { tableSchema })
     expect(
-      errors.filter(
-        (e: { type: string }) => e.type === "cell/exclusiveMaximum",
-      ),
+      errors.filter((e: { type: string }) => e.type === "cell/exclusiveMaximum"),
     ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/exclusiveMaximum",

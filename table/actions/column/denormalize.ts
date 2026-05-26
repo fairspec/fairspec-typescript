@@ -1,8 +1,5 @@
 import * as pl from "nodejs-polars"
-import type {
-  ColumnMapping,
-  DenormalizeColumnOptions,
-} from "../../models/column.ts"
+import type { ColumnMapping, DenormalizeColumnOptions } from "../../models/column.ts"
 import { denarrowColumn } from "./denarrow.ts"
 import { desubstituteColumn } from "./desubstitute.ts"
 import { stringifyColumn } from "./stringify.ts"

@@ -27,19 +27,15 @@ describe("schema render", () => {
     const schemaPath = await writeTempFile(JSON.stringify(schema))
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(renderTableSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(renderTableSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync([
@@ -72,12 +68,10 @@ describe("schema render", () => {
 
     vi.spyOn(console, "log").mockImplementation(() => {})
 
-    const command = new Command()
-      .addCommand(renderTableSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(renderTableSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync([
@@ -109,19 +103,15 @@ describe("schema render", () => {
     const schemaPath = await writeTempFile(JSON.stringify(schema))
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(renderTableSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(renderTableSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync([

@@ -4,8 +4,7 @@ import type { TableSchema } from "../../models/tableSchema.ts"
 import { loadTableSchema } from "./load.ts"
 
 describe("loadTableSchema", () => {
-  const getFixturePath = (name: string) =>
-    join(import.meta.dirname, "fixtures", name)
+  const getFixturePath = (name: string) => join(import.meta.dirname, "fixtures", name)
   const expectedSchema = {
     $schema: "https://fairspec.org/profiles/latest/table-schema.json",
     properties: {
@@ -26,9 +25,7 @@ describe("loadTableSchema", () => {
   })
 
   it("throws an error when schema is invalid", async () => {
-    await expect(
-      loadTableSchema(getFixturePath("schema-invalid.json")),
-    ).rejects.toThrow()
+    await expect(loadTableSchema(getFixturePath("schema-invalid.json"))).rejects.toThrow()
   })
 
   it("loads a full schema with all features", async () => {
@@ -36,9 +33,7 @@ describe("loadTableSchema", () => {
 
     expectTypeOf(schema).toEqualTypeOf<TableSchema>()
     expect(schema).toBeDefined()
-    expect(schema.$schema).toBe(
-      "https://fairspec.org/profiles/latest/table-schema.json",
-    )
+    expect(schema.$schema).toBe("https://fairspec.org/profiles/latest/table-schema.json")
 
     expect(schema.required).toEqual(["id", "email"])
 
@@ -47,9 +42,7 @@ describe("loadTableSchema", () => {
 
     expect(schema.properties.id?.type).toBe("integer")
     expect(schema.properties.id?.title).toBe("User ID")
-    expect(schema.properties.id?.description).toBe(
-      "Unique identifier for the user",
-    )
+    expect(schema.properties.id?.description).toBe("Unique identifier for the user")
 
     expect.assert(schema.properties.email?.type === "string")
     expect.assert(schema.properties.email.format === "email")

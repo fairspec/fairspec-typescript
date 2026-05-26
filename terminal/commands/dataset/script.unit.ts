@@ -42,12 +42,10 @@ describe.skip("dataset script", () => {
       format: "json",
     })
 
-    const command = new Command()
-      .addCommand(scriptDatasetCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(scriptDatasetCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "script", descriptorPath])
@@ -69,12 +67,10 @@ describe.skip("dataset script", () => {
       format: "json",
     })
 
-    const command = new Command()
-      .addCommand(scriptDatasetCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(scriptDatasetCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "script", descriptorPath])
@@ -100,12 +96,10 @@ describe.skip("dataset script", () => {
       format: "json",
     })
 
-    const command = new Command()
-      .addCommand(scriptDatasetCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(scriptDatasetCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "script", descriptorPath])

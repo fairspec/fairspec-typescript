@@ -99,9 +99,7 @@ describe("inferFileDialectTool", () => {
   })
 
   it("infers JSONL format", async () => {
-    const path = await writeTempFile(
-      '{"id":1,"name":"alice"}\n{"id":2,"name":"bob"}',
-    )
+    const path = await writeTempFile('{"id":1,"name":"alice"}\n{"id":2,"name":"bob"}')
     const resource: Resource = { data: path, fileDialect: { format: "jsonl" } }
 
     const result = await inferFileDialectTool.execute?.(
@@ -174,10 +172,7 @@ describe("inferFileDialectTool", () => {
   })
 
   it("respects sampleBytes option", async () => {
-    const largeData = Array.from(
-      { length: 1000 },
-      (_, i) => `${i},row${i}`,
-    ).join("\n")
+    const largeData = Array.from({ length: 1000 }, (_, i) => `${i},row${i}`).join("\n")
     const path = await writeTempFile(`id,name\n${largeData}`)
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 

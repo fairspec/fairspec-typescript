@@ -216,9 +216,7 @@ describe("saveDatasetDescriptor", () => {
   it("should throw an error when file exists and overwrite is not specified", async () => {
     await saveDatasetDescriptor(testDataset, { path: testPath })
 
-    await expect(
-      saveDatasetDescriptor(testDataset, { path: testPath }),
-    ).rejects.toThrow()
+    await expect(saveDatasetDescriptor(testDataset, { path: testPath })).rejects.toThrow()
   })
 
   it("should overwrite existing file when overwrite is true", async () => {
@@ -273,11 +271,7 @@ describe("saveDatasetDescriptor", () => {
       titles: [{ title: "Full Dataset" }],
       publisher: { name: "Example Publisher" },
       publicationYear: "2024",
-      subjects: [
-        { subject: "test" },
-        { subject: "data" },
-        { subject: "dataset" },
-      ],
+      subjects: [{ subject: "test" }, { subject: "data" }, { subject: "dataset" }],
       descriptions: [
         {
           description: "A dataset with all fields",
@@ -312,9 +306,7 @@ describe("saveDatasetDescriptor", () => {
     const parsedContent = JSON.parse(content)
     expect(parsedContent.creators[0].name).toBe("Full Creator")
     expect(parsedContent.titles[0].title).toBe("Full Dataset")
-    expect(parsedContent.descriptions[0].description).toBe(
-      "A dataset with all fields",
-    )
+    expect(parsedContent.descriptions[0].description).toBe("A dataset with all fields")
     expect(parsedContent.version).toBe("1.0.0")
     expect(parsedContent.publicationYear).toBe("2024")
     expect(parsedContent.subjects).toHaveLength(3)

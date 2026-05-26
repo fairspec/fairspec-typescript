@@ -12,10 +12,7 @@ export const BooleanColumnProperty = BaseColumnProperty.extend({
     .optional()
     .describe("An optional array of allowed values for the column"),
 
-  const: z
-    .boolean()
-    .optional()
-    .describe("An optional const that all values must match"),
+  const: z.boolean().optional().describe("An optional const that all values must match"),
 
   default: z
     .array(z.boolean())

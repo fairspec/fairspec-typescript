@@ -43,9 +43,7 @@ describe("inspectTable (cell/enum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/enum"),
-    ).toHaveLength(2)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/enum",
       columnName: "status",
@@ -79,9 +77,7 @@ describe("inspectTable (cell/enum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/enum"),
-    ).toHaveLength(0)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(0)
   })
 
   it("should handle case sensitivity correctly", async () => {
@@ -103,9 +99,7 @@ describe("inspectTable (cell/enum)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/enum"),
-    ).toHaveLength(2)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/enum")).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/enum",
       columnName: "status",
@@ -225,11 +219,7 @@ describe("inspectTable (cell/enum)", () => {
 
     const table = pl
       .DataFrame({
-        timestamp: [
-          "2024-01-01T10:00:00",
-          "2024-01-01T14:00:00",
-          "2024-01-01T20:00:00",
-        ],
+        timestamp: ["2024-01-01T10:00:00", "2024-01-01T14:00:00", "2024-01-01T20:00:00"],
       })
       .lazy()
 

@@ -91,9 +91,7 @@ describe("saveDescriptor", () => {
   it("should throw an error when file exists and overwrite is not specified", async () => {
     await saveDescriptor(testDescriptor, { path: testPath })
 
-    await expect(
-      saveDescriptor(testDescriptor, { path: testPath }),
-    ).rejects.toThrow()
+    await expect(saveDescriptor(testDescriptor, { path: testPath })).rejects.toThrow()
   })
 
   it("should overwrite existing file when overwrite is true", async () => {

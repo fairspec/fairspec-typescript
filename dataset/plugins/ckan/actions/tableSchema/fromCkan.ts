@@ -3,9 +3,7 @@ import { getColumnProperties } from "@fairspec/metadata"
 import type { CkanField } from "../../models/field.ts"
 import type { CkanSchema } from "../../models/schema.ts"
 
-export function convertTableSchemaFromCkan(
-  ckanSchema: CkanSchema,
-): TableSchema {
+export function convertTableSchemaFromCkan(ckanSchema: CkanSchema): TableSchema {
   const columns: Column[] = []
 
   for (const ckanField of ckanSchema.fields) {

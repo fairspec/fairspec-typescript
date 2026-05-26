@@ -353,8 +353,7 @@ describe("validateArrayColumn", () => {
         columnName: "tags",
         rowNumber: 2,
         cell: '["duplicate","duplicate"]',
-        message:
-          "must NOT have duplicate items (items ## 1 and 0 are identical)",
+        message: "must NOT have duplicate items (items ## 1 and 0 are identical)",
         jsonPointer: "",
       },
     ])

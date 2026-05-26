@@ -59,10 +59,7 @@ function processData(
 
   if (dialect.rowType === "array") {
     const names = dialect.columnNames ?? Object.keys(data[0])
-    data = [
-      names,
-      ...data.map((row: any) => names.map((name: any) => row[name])),
-    ]
+    data = [names, ...data.map((row: any) => names.map((name: any) => row[name]))]
   }
 
   if (dialect.format === "json") {

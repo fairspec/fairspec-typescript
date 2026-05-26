@@ -22,19 +22,16 @@ export function inferTableSchemaFromSample(
   options?: Exclude<InferTableSchemaOptions, "sampleRows">,
 ) {
   const { confidence = 0.9, columnTypes, keepStrings } = options ?? {}
-  const effectiveMissingValues =
-    options?.missingValues ?? DEFAULT_MISSING_VALUES
+  const effectiveMissingValues = options?.missingValues ?? DEFAULT_MISSING_VALUES
   const detectedMissingValues = new Set<string>()
 
   const typeMapping = createTypeMapping()
   const regexMapping = createRegexMapping(options)
 
   const polarsSchema = getPolarsSchema(sample.schema)
-  const columnNames =
-    options?.columnNames ?? polarsSchema.columns.map(f => f.name)
+  const columnNames = options?.columnNames ?? polarsSchema.columns.map(f => f.name)
 
-  const failureThreshold =
-    sample.height - Math.floor(sample.height * confidence) || 1
+  const failureThreshold = sample.height - Math.floor(sample.height * confidence) || 1
 
   const columns: Column[] = []
   for (const name of columnNames) {
@@ -132,11 +129,9 @@ export function inferTableSchemaFromSample(
           const effectiveSample = sample.filter(missingFilter.not())
           if (effectiveSample.height > 0) {
             const effectiveFailureThreshold =
-              effectiveSample.height -
-                Math.floor(effectiveSample.height * confidence) || 1
-            for (const [regex, namelessColumn] of Object.entries(
-              regexMapping,
-            )) {
+              effectiveSample.height - Math.floor(effectiveSample.height * confidence) ||
+              1
+            for (const [regex, namelessColumn] of Object.entries(regexMapping)) {
               const failures = effectiveSample
                 .filter(pl.col(name).str.contains(regex).not())
                 .head(effectiveFailureThreshold).height
@@ -244,13 +239,10 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
     datetimeFormat,
   } = options ?? {}
 
-  const effectiveCommaDecimal =
-    commaDecimal ?? (decimalChar === "," || groupChar === ".")
+  const effectiveCommaDecimal = commaDecimal ?? (decimalChar === "," || groupChar === ".")
 
   const effectiveMonthFirst =
-    monthFirst ??
-    deriveMonthFirst(dateFormat) ??
-    deriveMonthFirst(datetimeFormat)
+    monthFirst ?? deriveMonthFirst(dateFormat) ?? deriveMonthFirst(datetimeFormat)
 
   const allBoolValues = [
     ...(trueValues ?? ["true", "True", "TRUE"]),
@@ -477,11 +469,10 @@ function createRegexMapping(options?: InferTableSchemaOptions) {
         property: { type: "string", format: "wkt" },
       },
 
-    "^P(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$":
-      {
-        type: "duration",
-        property: { type: "string", format: "duration" },
-      },
+    "^P(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$": {
+      type: "duration",
+      property: { type: "string", format: "duration" },
+    },
 
     "^([0-9a-fA-F]{2}){8,}$": {
       type: "hex",
@@ -563,10 +554,7 @@ function makePropertyNullable(column: Column) {
   }
 }
 
-function enhanceSchema(
-  tableSchema: TableSchema,
-  options?: InferTableSchemaOptions,
-) {
+function enhanceSchema(tableSchema: TableSchema, options?: InferTableSchemaOptions) {
   if (options?.missingValues !== undefined) {
     tableSchema.missingValues = options.missingValues
   }

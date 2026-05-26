@@ -14,10 +14,7 @@ export class FolderPlugin implements DatasetPlugin {
     return dataset
   }
 
-  async saveDataset(
-    dataset: Dataset,
-    options: { target: string; withRemote?: boolean },
-  ) {
+  async saveDataset(dataset: Dataset, options: { target: string; withRemote?: boolean }) {
     const isFolder = await getIsFolder(options.target)
     if (!isFolder) return undefined
 

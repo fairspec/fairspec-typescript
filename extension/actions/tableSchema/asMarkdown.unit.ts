@@ -21,12 +21,8 @@ describe("renderTableSchemaAsMarkdown", () => {
 
     const result = renderTableSchemaAsMarkdown(schema)
 
-    expect(result).toContain(
-      "| Name | Type | Title | Description | Constraints |",
-    )
-    expect(result).toContain(
-      "| id | integer | Identifier | Unique identifier |",
-    )
+    expect(result).toContain("| Name | Type | Title | Description | Constraints |")
+    expect(result).toContain("| id | integer | Identifier | Unique identifier |")
     expect(result).toContain("| name | string | Name | Person name |")
   })
 
@@ -61,9 +57,7 @@ describe("renderTableSchemaAsMarkdown", () => {
 
     const result = renderTableSchemaAsMarkdown(schema)
 
-    expect(result).toContain(
-      "| Name | Type | Title | Description | Constraints |",
-    )
+    expect(result).toContain("| Name | Type | Title | Description | Constraints |")
   })
 
   it("handles pipe characters in column values", () => {

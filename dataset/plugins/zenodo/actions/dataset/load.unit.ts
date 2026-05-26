@@ -6,9 +6,7 @@ useRecording()
 
 describe("loadDatasetFromZenodo", () => {
   it("should load a package", async () => {
-    const dataset = await loadDatasetFromZenodo(
-      "https://zenodo.org/records/15525711",
-    )
+    const dataset = await loadDatasetFromZenodo("https://zenodo.org/records/15525711")
 
     expect(dataset).toMatchSnapshot()
   })

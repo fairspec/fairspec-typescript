@@ -1,9 +1,5 @@
 import { z } from "zod"
-import {
-  ContentTypeGeneral,
-  NumberType,
-  RelatedIdentifierType,
-} from "./common.ts"
+import { ContentTypeGeneral, NumberType, RelatedIdentifierType } from "./common.ts"
 import { Contributors } from "./contributor.ts"
 import { Creators } from "./creator.ts"
 import { PublicationYear } from "./publicationYear.ts"
@@ -21,9 +17,7 @@ export const RelatedItem = RelatedObject.extend({
   relatedItemIdentifier: RelatedItemIdentifier.optional().describe(
     "Identifiers of related items",
   ),
-  relatedItemType: ContentTypeGeneral.describe(
-    "The general type of the related item",
-  ),
+  relatedItemType: ContentTypeGeneral.describe("The general type of the related item"),
   creators: Creators.optional(),
   contributors: Contributors.optional(),
   titles: Titles.describe("The title(s) of the related item"),
@@ -37,9 +31,7 @@ export const RelatedItem = RelatedObject.extend({
   number: z
     .string()
     .optional()
-    .describe(
-      "Number of the related item (e.g., report number, article number)",
-    ),
+    .describe("Number of the related item (e.g., report number, article number)"),
   numberType: NumberType.optional().describe("The type of the number"),
 }).refine(
   data => {

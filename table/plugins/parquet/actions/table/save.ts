@@ -4,10 +4,7 @@ import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer
 import type { SaveTableOptions, Table } from "../../../../models/table.ts"
 import { NATIVE_TYPES } from "../../settings.ts"
 
-export async function saveParquetTable(
-  table: Table,
-  options: SaveTableOptions,
-) {
+export async function saveParquetTable(table: Table, options: SaveTableOptions) {
   const { path, overwrite } = options
 
   if (!overwrite) {

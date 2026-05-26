@@ -38,9 +38,7 @@ import { loadDataset } from "fairspec"
 
 const local = await loadDataset("./datasets/sales/dataset.json")
 
-const remote = await loadDataset(
-  "https://example.com/datasets/sales/dataset.json",
-)
+const remote = await loadDataset("https://example.com/datasets/sales/dataset.json")
 
 const folder = await loadDataset("./datasets/sales")
 
@@ -68,9 +66,7 @@ If no plugin can load the source, `loadDataset` throws.
 ```ts
 import { loadDataset, saveDataset } from "fairspec"
 
-const dataset = await loadDataset(
-  "https://example.com/datasets/sales/dataset.json",
-)
+const dataset = await loadDataset("https://example.com/datasets/sales/dataset.json")
 
 await saveDataset(dataset, { target: "./local-sales" })
 
@@ -92,11 +88,7 @@ By default the plugin updates resource paths in the saved descriptor to point at
 import { inferDataset } from "fairspec"
 
 const dataset = await inferDataset({
-  resources: [
-    { data: "users.csv" },
-    { data: "orders.csv" },
-    { data: "products.csv" },
-  ],
+  resources: [{ data: "users.csv" }, { data: "orders.csv" }, { data: "products.csv" }],
 })
 
 console.log(dataset.resources?.[0]?.tableSchema)

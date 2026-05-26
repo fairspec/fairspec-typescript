@@ -40,10 +40,7 @@ export function parseNumberColumn(column: NumberColumn, columnExpr: pl.Expr) {
   return columnExpr
 }
 
-export function stringifyNumberColumn(
-  _column: NumberColumn,
-  columnExpr: pl.Expr,
-) {
+export function stringifyNumberColumn(_column: NumberColumn, columnExpr: pl.Expr) {
   // Convert to string
   columnExpr = columnExpr.cast(pl.String)
 

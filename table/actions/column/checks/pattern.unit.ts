@@ -29,12 +29,7 @@ describe("inspectTable (cell/pattern)", () => {
 
     const table = pl
       .DataFrame({
-        email: [
-          "john@example.com",
-          "alice@domain",
-          "test.io",
-          "valid@email.com",
-        ],
+        email: ["john@example.com", "alice@domain", "test.io", "valid@email.com"],
       })
       .lazy()
 
@@ -70,9 +65,7 @@ describe("inspectTable (cell/pattern)", () => {
   // TODO: recover polars panic
   it.skip("should not error for valid decimal values", async () => {
     const table = pl
-      .DataFrame([
-        pl.Series("amount", ["100.00", "200.00", "300.00"], pl.String),
-      ])
+      .DataFrame([pl.Series("amount", ["100.00", "200.00", "300.00"], pl.String)])
       .lazy()
 
     const tableSchema: TableSchema = {

@@ -25,10 +25,7 @@ export function parseBooleanColumn(column: BooleanColumn, columnExpr: pl.Expr) {
 const DEFAULT_TRUE_VALUE = "true"
 const DEFAULT_FALSE_VALUE = "false"
 
-export function stringifyBooleanColumn(
-  column: BooleanColumn,
-  columnExpr: pl.Expr,
-) {
+export function stringifyBooleanColumn(column: BooleanColumn, columnExpr: pl.Expr) {
   const trueValue = column.property.trueValues?.[0] ?? DEFAULT_TRUE_VALUE
   const falseValue = column.property.falseValues?.[0] ?? DEFAULT_FALSE_VALUE
 

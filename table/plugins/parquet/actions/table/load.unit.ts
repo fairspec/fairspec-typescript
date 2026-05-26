@@ -22,12 +22,8 @@ describe("loadParquetTable", () => {
     it("should load local file (multipart)", async () => {
       const path1 = getTempFilePath()
       const path2 = getTempFilePath()
-      pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeParquet(
-        path1,
-      )
-      pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeParquet(
-        path2,
-      )
+      pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeParquet(path1)
+      pl.DataFrame({ id: [1, 2], name: ["english", "中文"] }).writeParquet(path2)
 
       const table = await loadParquetTable({ data: [path1, path2] })
       expect((await table.collect()).toRecords()).toEqual([

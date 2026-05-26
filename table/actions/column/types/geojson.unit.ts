@@ -158,11 +158,7 @@ describe("validateGeojsonColumn", () => {
   it("should errors for invalid JSON", async () => {
     const table = pl
       .DataFrame({
-        data: [
-          '{"type":"Point","coordinates":[0,0]}',
-          "invalid json",
-          "{broken}",
-        ],
+        data: ['{"type":"Point","coordinates":[0,0]}', "invalid json", "{broken}"],
       })
       .lazy()
 

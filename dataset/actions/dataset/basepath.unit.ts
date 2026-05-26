@@ -10,11 +10,7 @@ describe("getCommonLocalBasepath", () => {
     },
     {
       description: "nested directories",
-      paths: [
-        "data/nested/file1.csv",
-        "data/nested/file2.csv",
-        "data/file3.csv",
-      ],
+      paths: ["data/nested/file1.csv", "data/nested/file2.csv", "data/file3.csv"],
       basepath: "data",
     },
     {
@@ -44,10 +40,7 @@ describe("getCommonLocalBasepath", () => {
     },
     {
       description: "all paths are remote",
-      paths: [
-        "https://example.com/table1.csv",
-        "https://example.com/table2.csv",
-      ],
+      paths: ["https://example.com/table1.csv", "https://example.com/table2.csv"],
       basepath: undefined,
     },
   ])("$description", ({ paths, basepath }) => {

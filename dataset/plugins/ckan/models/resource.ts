@@ -11,9 +11,7 @@ export const CkanResource = z
     format: z.string().describe("Resource format"),
     hash: z.string().describe("Resource hash"),
     last_modified: z.string().describe("Resource last modification timestamp"),
-    metadata_modified: z
-      .string()
-      .describe("Resource metadata modification timestamp"),
+    metadata_modified: z.string().describe("Resource metadata modification timestamp"),
     mimetype: z.string().describe("Resource MIME type"),
     size: z.number().describe("Resource size in bytes"),
     schema: CkanSchema.optional().describe("Resource schema"),

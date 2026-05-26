@@ -2,10 +2,7 @@ export { copyFile } from "./actions/file/copy.ts"
 export { describeFile } from "./actions/file/describe.ts"
 export { inferIntegrity, inferTextual } from "./actions/file/infer.ts"
 export { loadFile } from "./actions/file/load.ts"
-export {
-  assertLocalPathVacant,
-  getIsLocalPathExist,
-} from "./actions/file/path.ts"
+export { assertLocalPathVacant, getIsLocalPathExist } from "./actions/file/path.ts"
 export { prefetchFiles } from "./actions/file/prefetch.ts"
 export { saveFile } from "./actions/file/save.ts"
 export { getTempFilePath, writeTempFile } from "./actions/file/temp.ts"
@@ -37,8 +34,4 @@ export {
   saveDatasetToZenodo,
   ZenodoPlugin,
 } from "./plugins/zenodo/index.ts"
-export {
-  loadDatasetFromZip,
-  saveDatasetToZip,
-  ZipPlugin,
-} from "./plugins/zip/index.ts"
+export { loadDatasetFromZip, saveDatasetToZip, ZipPlugin } from "./plugins/zip/index.ts"

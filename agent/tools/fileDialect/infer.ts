@@ -13,9 +13,7 @@ export const inferFileDialectTool = createTool({
     "Infer the dialect (format and format-specific properties) from a resource. Analyzes the data to determine CSV delimiters, JSON structure, etc.",
   inputSchema: z.object({
     resource: Resource.describe("The resource to infer dialect from"),
-    options: InferFileDialectOptions.optional().describe(
-      "Dialect inference options",
-    ),
+    options: InferFileDialectOptions.optional().describe("Dialect inference options"),
   }),
   outputSchema: z.object({
     fileDialect: FileDialect.optional(),

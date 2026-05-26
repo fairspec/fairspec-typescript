@@ -5,10 +5,7 @@ export function calculateTau0(fieldCounts: number[]): number {
   return 1 / (1 + 2 * stdDev)
 }
 
-export function calculateTau1(
-  fieldCounts: number[],
-  modalCount: number,
-): number {
+export function calculateTau1(fieldCounts: number[], modalCount: number): number {
   if (fieldCounts.length === 0) return 0
 
   const rangeScore = calculateRangeScore(fieldCounts, modalCount)

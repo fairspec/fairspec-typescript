@@ -1,9 +1,6 @@
 import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it } from "vite-plus/test"
-import {
-  getTempFilePath,
-  writeTempFile,
-} from "../../../../actions/file/temp.ts"
+import { getTempFilePath, writeTempFile } from "../../../../actions/file/temp.ts"
 import { loadDatasetFromFolder } from "./load.ts"
 import { saveDatasetToFolder } from "./save.ts"
 
@@ -29,9 +26,7 @@ describe("loadDatasetFromFolder", () => {
   it("should load dataset with metadata", async () => {
     const originalDataset: Dataset = {
       titles: [{ title: "Test Dataset" }],
-      descriptions: [
-        { description: "A test dataset", descriptionType: "Abstract" },
-      ],
+      descriptions: [{ description: "A test dataset", descriptionType: "Abstract" }],
       version: "1.0.0",
       resources: [{ data: { key: "value" } }],
     }

@@ -101,9 +101,7 @@ describe("saveJsonTable (format=jsonl)", () => {
     await saveJsonTable(table, { path, fileDialect: { format: "jsonl" } })
 
     const content = await readFile(path, "utf-8")
-    expect(content).toEqual(
-      [JSON.stringify(row1), JSON.stringify(row2)].join("\n"),
-    )
+    expect(content).toEqual([JSON.stringify(row1), JSON.stringify(row2)].join("\n"))
   })
 
   it("should handle item keys", async () => {
@@ -115,10 +113,9 @@ describe("saveJsonTable (format=jsonl)", () => {
 
     const content = await readFile(path, "utf-8")
     expect(content).toEqual(
-      [
-        JSON.stringify({ name: row1.name }),
-        JSON.stringify({ name: row2.name }),
-      ].join("\n"),
+      [JSON.stringify({ name: row1.name }), JSON.stringify({ name: row2.name })].join(
+        "\n",
+      ),
     )
   })
 
@@ -147,8 +144,6 @@ describe("saveJsonTable (format=jsonl)", () => {
     })
 
     const content = await readFile(path, "utf-8")
-    expect(content).toEqual(
-      [JSON.stringify(row1), JSON.stringify(row2)].join("\n"),
-    )
+    expect(content).toEqual([JSON.stringify(row1), JSON.stringify(row2)].join("\n"))
   })
 })

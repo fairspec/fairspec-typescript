@@ -24,10 +24,9 @@ export async function validateDatasetForeignKeys(
     const foreignKeys = tableSchema.foreignKeys
     if (!foreignKeys) continue
 
-    const names = [
-      resource.name,
-      ...foreignKeys.map(it => it.reference.resource),
-    ].filter(Boolean) as string[]
+    const names = [resource.name, ...foreignKeys.map(it => it.reference.resource)].filter(
+      Boolean,
+    ) as string[]
 
     for (const name of names) {
       const resource = dataset.resources?.find(res => res.name === name)
@@ -69,17 +68,13 @@ export async function validateDatasetForeignKeys(
         continue
       }
 
-      const foreignKeyCheckTable = left
-        .select(...foreignKey.columns)
-        .join(right, {
-          how: "anti",
-          leftOn: foreignKey.columns,
-          rightOn: foreignKey.reference.columns,
-        })
+      const foreignKeyCheckTable = left.select(...foreignKey.columns).join(right, {
+        how: "anti",
+        leftOn: foreignKey.columns,
+        rightOn: foreignKey.reference.columns,
+      })
 
-      const foreignKeyCheckFrame = await foreignKeyCheckTable
-        .head(maxErrors)
-        .collect()
+      const foreignKeyCheckFrame = await foreignKeyCheckTable.head(maxErrors).collect()
 
       for (const row of foreignKeyCheckFrame.toRecords() as any[]) {
         errors.push({

@@ -162,9 +162,7 @@ describe("concatFileStreams", () => {
   })
 
   it("should maintain stream order with many streams", async () => {
-    const streams = Array.from({ length: 10 }, (_, i) =>
-      Readable.from([String(i)]),
-    )
+    const streams = Array.from({ length: 10 }, (_, i) => Readable.from([String(i)]))
 
     const concatenated = concatFileStreams(streams)
 

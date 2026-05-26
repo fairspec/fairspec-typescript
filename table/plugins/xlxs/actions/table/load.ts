@@ -15,10 +15,7 @@ import { inferXlsxFileDialect } from "../fileDialect/infer.ts"
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation
 
-export async function loadXlsxTable(
-  resource: Resource,
-  options?: LoadTableOptions,
-) {
+export async function loadXlsxTable(resource: Resource, options?: LoadTableOptions) {
   const paths = await prefetchFiles(resource)
   if (!paths.length) {
     throw new Error("Resource path is not defined")
@@ -39,9 +36,7 @@ export async function loadXlsxTable(
     const buffer = await loadFile(path)
 
     const book = read(buffer, { type: "buffer" })
-    const sheetIndex = fileDialect?.sheetNumber
-      ? fileDialect.sheetNumber - 1
-      : 0
+    const sheetIndex = fileDialect?.sheetNumber ? fileDialect.sheetNumber - 1 : 0
     const sheetName = fileDialect?.sheetName ?? book.SheetNames[sheetIndex]
     const sheet = sheetName ? book.Sheets[sheetName] : undefined
 
@@ -62,8 +57,7 @@ export async function loadXlsxTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema)
-      tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 

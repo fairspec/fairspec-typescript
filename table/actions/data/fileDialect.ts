@@ -22,9 +22,7 @@ export function getRecordsFromRows(
       continue
     }
 
-    records.push(
-      Object.fromEntries(labels.map((label, index) => [label, row[index]])),
-    )
+    records.push(Object.fromEntries(labels.map((label, index) => [label, row[index]])))
   }
 
   return records

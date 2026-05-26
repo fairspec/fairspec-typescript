@@ -1,9 +1,4 @@
-import type {
-  Dataset,
-  FileDialect,
-  MetadataPlugin,
-  Resource,
-} from "@fairspec/metadata"
+import type { Dataset, FileDialect, MetadataPlugin, Resource } from "@fairspec/metadata"
 import type { SaveDatasetOptions } from "./models/dataset.ts"
 import type { InferFileDialectOptions } from "./models/fileDialect.ts"
 

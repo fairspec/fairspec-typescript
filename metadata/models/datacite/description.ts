@@ -20,9 +20,7 @@ export const Description = z.object({
 
 export const Descriptions = z
   .array(Description)
-  .describe(
-    "All additional information that does not fit in any of the other categories",
-  )
+  .describe("All additional information that does not fit in any of the other categories")
 
 export type Description = z.infer<typeof Description>
 export type Descriptions = z.infer<typeof Descriptions>

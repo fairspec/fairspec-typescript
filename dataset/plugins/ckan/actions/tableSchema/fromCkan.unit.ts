@@ -9,9 +9,7 @@ describe("convertTableSchemaFromCkan", () => {
 
     const result = convertTableSchemaFromCkan(ckanSchema)
 
-    expect(Object.keys(result.properties ?? {})).toHaveLength(
-      ckanSchema.fields.length,
-    )
+    expect(Object.keys(result.properties ?? {})).toHaveLength(ckanSchema.fields.length)
 
     const idColumn = result.properties?.id
     expect(idColumn).toBeDefined()
@@ -73,9 +71,7 @@ describe("convertTableSchemaFromCkan", () => {
       expect(createdAtColumn.type).toEqual("string")
       expect(createdAtColumn.format).toEqual("date-time")
       expect(createdAtColumn.title).toEqual("Created At")
-      expect(createdAtColumn.description).toEqual(
-        "Timestamp when record was created",
-      )
+      expect(createdAtColumn.description).toEqual("Timestamp when record was created")
     }
 
     const metadataColumn = result.properties?.metadata

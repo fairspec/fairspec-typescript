@@ -8,9 +8,7 @@ export const queryTableTool = createTool({
     "Query a table using SQL. Loads the table, executes the SQL query, and returns the results as an array of records.",
   inputSchema: z.object({
     resource: Resource.describe("The table resource to query"),
-    query: z
-      .string()
-      .describe("SQL query to execute (use 'self' as table name)"),
+    query: z.string().describe("SQL query to execute (use 'self' as table name)"),
   }),
   outputSchema: z.object({
     records: z.array(z.record(z.string(), z.unknown())),

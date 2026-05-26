@@ -23,9 +23,7 @@ export function convertDatasetFromZenodo(zenodoRecord: ZenodoRecord): Dataset {
     dataset.creators = metadata.creators.map(creator => ({
       name: creator.name,
       nameType: "Personal",
-      affiliation: creator.affiliation
-        ? [{ name: creator.affiliation }]
-        : undefined,
+      affiliation: creator.affiliation ? [{ name: creator.affiliation }] : undefined,
     }))
   }
 

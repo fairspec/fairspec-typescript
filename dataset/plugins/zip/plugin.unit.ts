@@ -158,9 +158,7 @@ describe("ZipPlugin", () => {
     it("should save dataset with metadata", async () => {
       const dataset: Dataset = {
         titles: [{ title: "Test Dataset" }],
-        descriptions: [
-          { description: "A test dataset", descriptionType: "Abstract" },
-        ],
+        descriptions: [{ description: "A test dataset", descriptionType: "Abstract" }],
         resources: [],
       }
       mockSaveDatasetToZip.mockResolvedValue(undefined)

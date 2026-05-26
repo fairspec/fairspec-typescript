@@ -561,9 +561,7 @@ fairspec dataset script dataset.json
 dataset.resources.map(r => r.name)
 
 // Load a specific resource
-const users = await fairspec.loadTable(
-  dataset.resources.find(r => r.name === "users"),
-)
+const users = await fairspec.loadTable(dataset.resources.find(r => r.name === "users"))
 
 // Query the data
 const activeUsers = await users.filter(pl.col("active").eq(true)).collect()

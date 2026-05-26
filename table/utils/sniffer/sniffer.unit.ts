@@ -91,8 +91,7 @@ describe("Sniffer", () => {
     })
 
     it("should skip comment preamble", () => {
-      const csv =
-        "# This is a comment\n# Another comment\nid,name\n1,Alice\n2,Bob"
+      const csv = "# This is a comment\n# Another comment\nid,name\n1,Alice\n2,Bob"
       const bytes = new TextEncoder().encode(csv)
       const sniffer = new Sniffer()
       const metadata = sniffer.sniffBytes(bytes)
@@ -102,8 +101,7 @@ describe("Sniffer", () => {
     })
 
     it("should detect structural preamble", () => {
-      const csv =
-        "Report Title\nReport Date: 2024-01-01\nid,name\n1,Alice\n2,Bob"
+      const csv = "Report Title\nReport Date: 2024-01-01\nid,name\n1,Alice\n2,Bob"
       const bytes = new TextEncoder().encode(csv)
       const sniffer = new Sniffer()
       const metadata = sniffer.sniffBytes(bytes)

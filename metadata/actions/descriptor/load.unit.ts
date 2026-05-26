@@ -4,10 +4,7 @@ import { loadDescriptor } from "./load.ts"
 
 describe("loadDescriptor", () => {
   const getFixturePath = (name?: string) =>
-    path.relative(
-      process.cwd(),
-      path.join(import.meta.dirname, "fixtures", name ?? ""),
-    )
+    path.relative(process.cwd(), path.join(import.meta.dirname, "fixtures", name ?? ""))
 
   const expectedDescriptor = {
     fields: [

@@ -11,17 +11,13 @@ import { decodeJsonBuffer } from "../../actions/buffer/decode.ts"
 import { getSupportedFileDialect } from "@fairspec/metadata"
 import { inferJsonFileDialect } from "../fileDialect/infer.ts"
 
-export async function loadJsonTable(
-  resource: Resource,
-  options?: LoadTableOptions,
-) {
+export async function loadJsonTable(resource: Resource, options?: LoadTableOptions) {
   let fileDialect = await getSupportedFileDialect(resource, ["json", "jsonl"])
   if (!fileDialect) {
     throw new Error("Resource data is not compatible")
   }
 
-  const maxBytes =
-    fileDialect?.format === "jsonl" ? options?.previewBytes : undefined
+  const maxBytes = fileDialect?.format === "jsonl" ? options?.previewBytes : undefined
   const paths = await prefetchFiles(resource, { maxBytes })
   if (!paths.length) {
     throw new Error("Resource data is not defined")
@@ -60,8 +56,7 @@ export async function loadJsonTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema)
-      tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 
@@ -80,9 +75,7 @@ function processData(data: any, dialect?: JsonFileDialect | JsonlFileDialect) {
     data = data
       .slice(1)
       .map((row: any) =>
-        Object.fromEntries(
-          keys.map((key: any, index: number) => [key, row[index]]),
-        ),
+        Object.fromEntries(keys.map((key: any, index: number) => [key, row[index]])),
       )
   }
 

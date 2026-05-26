@@ -71,9 +71,7 @@ describe("inspectTable (cell/minimum)", () => {
 
     const errors = await inspectTable(table, { tableSchema })
     expect(
-      errors.filter(
-        (e: { type: string }) => e.type === "cell/exclusiveMinimum",
-      ),
+      errors.filter((e: { type: string }) => e.type === "cell/exclusiveMinimum"),
     ).toHaveLength(2)
     expect(errors).toContainEqual({
       type: "cell/exclusiveMinimum",

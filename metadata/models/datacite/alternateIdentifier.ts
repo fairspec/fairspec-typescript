@@ -8,9 +8,7 @@ export const AlternateIdentifier = z.object({
     ),
   alternateIdentifierType: z
     .string()
-    .describe(
-      "The type of the AlternateIdentifier (e.g., URL, URN, ISBN, ISSN, etc.)",
-    ),
+    .describe("The type of the AlternateIdentifier (e.g., URL, URN, ISBN, ISSN, etc.)"),
 })
 
 export const AlternateIdentifiers = z

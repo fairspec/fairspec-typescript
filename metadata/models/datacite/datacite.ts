@@ -21,17 +21,13 @@ import { Titles } from "./title.ts"
 import { Version } from "./version.ts"
 
 export const Datacite = z.object({
-  doi: Doi.optional().describe(
-    "The Digital Object Identifier (DOI) for the resource",
-  ),
+  doi: Doi.optional().describe("The Digital Object Identifier (DOI) for the resource"),
   prefix: DoiPrefix.optional().describe("The DOI prefix for the resource"),
   suffix: DoiSuffix.optional().describe("The DOI suffix for the resource"),
   creators: Creators.optional().describe(
     "The main researchers involved in producing the data, or the authors of the publication",
   ),
-  titles: Titles.optional().describe(
-    "A name or title by which a resource is known",
-  ),
+  titles: Titles.optional().describe("A name or title by which a resource is known"),
   publisher: Publisher.optional().describe(
     "The entity that holds, archives, publishes, prints, distributes, releases, issues, or produces the resource",
   ),
@@ -45,9 +41,7 @@ export const Datacite = z.object({
     "The institution or person responsible for collecting, managing, distributing, or otherwise contributing to the development of the resource",
   ),
   dates: Dates.optional().describe("Different dates relevant to the work"),
-  language: Language.optional().describe(
-    "The primary language of the resource",
-  ),
+  language: Language.optional().describe("The primary language of the resource"),
   types: ContentTypes.optional().describe("The type of the resource"),
   alternateIdentifiers: AlternateIdentifiers.optional().describe(
     "An identifier or identifiers other than the primary Identifier applied to the resource",
@@ -58,9 +52,7 @@ export const Datacite = z.object({
   sizes: Sizes.optional().describe("Size information about the resource"),
   formats: Formats.optional().describe("Technical format of the resource"),
   version: Version.optional().describe("The version number of the resource"),
-  rightsList: RightsList.optional().describe(
-    "Rights information for this resource",
-  ),
+  rightsList: RightsList.optional().describe("Rights information for this resource"),
   descriptions: Descriptions.optional().describe(
     "All additional information that does not fit in any of the other categories",
   ),

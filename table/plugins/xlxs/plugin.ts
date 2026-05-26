@@ -1,10 +1,6 @@
 import type { Resource } from "@fairspec/metadata"
 import { getSupportedFileDialect } from "@fairspec/metadata"
-import type {
-  LoadTableOptions,
-  SaveTableOptions,
-  Table,
-} from "../../models/table.ts"
+import type { LoadTableOptions, SaveTableOptions, Table } from "../../models/table.ts"
 import type { TablePlugin } from "../../plugin.ts"
 import { inferXlsxFileDialect } from "./actions/fileDialect/infer.ts"
 import { loadXlsxTable } from "./actions/table/load.ts"

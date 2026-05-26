@@ -7,13 +7,9 @@ import { inferDataSchema } from "../../actions/dataSchema/infer.ts"
 import { inferFileDialect } from "../../actions/fileDialect/infer.ts"
 import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
 
-export type InferResourceOptions = InferFileDialectOptions &
-  InferTableSchemaOptions
+export type InferResourceOptions = InferFileDialectOptions & InferTableSchemaOptions
 
-export async function inferResource(
-  resource: Resource,
-  options?: InferResourceOptions,
-) {
+export async function inferResource(resource: Resource, options?: InferResourceOptions) {
   resource = copyDescriptor(resource)
 
   if (!resource.name) {

@@ -59,9 +59,7 @@ describe("convertTableSchemaToCkan", () => {
 
     const result = convertTableSchemaToCkan(schema)
 
-    expect(result.fields).toHaveLength(
-      Object.keys(schema.properties ?? {}).length,
-    )
+    expect(result.fields).toHaveLength(Object.keys(schema.properties ?? {}).length)
 
     const idField = result.fields.find(f => f.id === "id")
     expect(idField).toBeDefined()
@@ -130,9 +128,7 @@ describe("convertTableSchemaToCkan", () => {
       expect(createdAtField.type).toEqual("timestamp")
       expect(createdAtField.info).toBeDefined()
       expect(createdAtField.info?.label).toEqual("Created At")
-      expect(createdAtField.info?.notes).toEqual(
-        "Timestamp when record was created",
-      )
+      expect(createdAtField.info?.notes).toEqual("Timestamp when record was created")
       expect(createdAtField.info?.type_override).toEqual("timestamp")
     }
 
@@ -261,14 +257,10 @@ describe("convertTableSchemaToCkan", () => {
 
     const resultCkanSchema = convertTableSchemaToCkan(fairspecSchema)
 
-    expect(resultCkanSchema.fields).toHaveLength(
-      originalCkanSchema.fields.length,
-    )
+    expect(resultCkanSchema.fields).toHaveLength(originalCkanSchema.fields.length)
 
     originalCkanSchema.fields.forEach(originalField => {
-      const resultField = resultCkanSchema.fields.find(
-        f => f.id === originalField.id,
-      )
+      const resultField = resultCkanSchema.fields.find(f => f.id === originalField.id)
       expect(resultField).toBeDefined()
 
       if (resultField && originalField) {

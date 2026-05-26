@@ -9,9 +9,7 @@ describe("denarrowColumn", () => {
       ["red", "red"],
       ["green", "green"],
     ])("string: %s -> %s", async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("name", [value], pl.Categorical)])
-        .lazy()
+      const table = pl.DataFrame([pl.Series("name", [value], pl.Categorical)]).lazy()
       const tableSchema: TableSchema = {
         properties: {
           name: {
@@ -33,9 +31,7 @@ describe("denarrowColumn", () => {
       ["Low", 1],
       ["High", 2],
     ])("integer: %s -> %s", async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("name", [value], pl.Categorical)])
-        .lazy()
+      const table = pl.DataFrame([pl.Series("name", [value], pl.Categorical)]).lazy()
       const tableSchema: TableSchema = {
         properties: {
           name: {

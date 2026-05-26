@@ -3,16 +3,12 @@ import { BaseError } from "./base.ts"
 
 export const ResourceMissingError = BaseError.extend({
   type: z.literal("resource/missing").describe("Error type identifier"),
-  referencingResourceName: z
-    .string()
-    .describe("The name of the referencing resource"),
+  referencingResourceName: z.string().describe("The name of the referencing resource"),
 })
 
 export const ResourceTypeError = BaseError.extend({
   type: z.literal("resource/type").describe("Error type identifier"),
-  expectedResourceType: z
-    .enum(["data", "table"])
-    .describe("The expected data type"),
+  expectedResourceType: z.enum(["data", "table"]).describe("The expected data type"),
   referencingResourceName: z
     .string()
     .optional()

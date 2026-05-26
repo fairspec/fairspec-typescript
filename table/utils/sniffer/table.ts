@@ -19,9 +19,7 @@ export class Table {
 
     const delimiterChar = String.fromCharCode(dialect.delimiter)
     const quoteChar =
-      dialect.quote.type === "Some"
-        ? String.fromCharCode(dialect.quote.char)
-        : null
+      dialect.quote.type === "Some" ? String.fromCharCode(dialect.quote.char) : null
 
     const lineTerminatorRegex =
       dialect.lineTerminator === "CRLF"
@@ -107,11 +105,7 @@ export class Table {
   }
 }
 
-function parseQuotedLine(
-  line: string,
-  delimiter: string,
-  quote: string,
-): string[] {
+function parseQuotedLine(line: string, delimiter: string, quote: string): string[] {
   const fields: string[] = []
   let currentField = ""
   let inQuotes = false

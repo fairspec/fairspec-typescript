@@ -10,9 +10,9 @@ export function substituteColumn(mapping: ColumnMapping, columnExpr: pl.Expr) {
     return columnExpr
   }
 
-  const flattenMissingValues = (
-    mapping.target.property.missingValues ?? []
-  ).map(it => (typeof it === "object" ? it.value : it))
+  const flattenMissingValues = (mapping.target.property.missingValues ?? []).map(it =>
+    typeof it === "object" ? it.value : it,
+  )
 
   const compatibleMissingValues = flattenMissingValues.filter(
     value => typeof value === missingValueType,

@@ -11,9 +11,7 @@ export async function validateTableSchema(
   },
 ) {
   const descriptor =
-    typeof source === "string"
-      ? await loadDescriptor(source)
-      : (source as Descriptor)
+    typeof source === "string" ? await loadDescriptor(source) : (source as Descriptor)
 
   const $schema =
     typeof descriptor.$schema === "string"

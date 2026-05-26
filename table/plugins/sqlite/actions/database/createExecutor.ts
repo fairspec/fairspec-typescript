@@ -2,9 +2,7 @@ import type { DatabaseSync } from "node:sqlite"
 import type { IGenericSqlite } from "kysely-generic-sqlite"
 import { buildQueryFn, parseBigInt } from "kysely-generic-sqlite"
 
-export function createSqliteExecutor(
-  db: DatabaseSync,
-): IGenericSqlite<DatabaseSync> {
+export function createSqliteExecutor(db: DatabaseSync): IGenericSqlite<DatabaseSync> {
   const getStmt = (sql: string) => {
     const stmt = db.prepare(sql)
     // We change it from original to use plain numbers

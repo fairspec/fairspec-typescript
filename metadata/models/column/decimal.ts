@@ -31,25 +31,19 @@ export const DecimalColumnProperty = BaseStringColumnProperty.extend({
     .number()
     .positive()
     .optional()
-    .describe(
-      "An optional constraint that values must be a multiple of this number",
-    ),
+    .describe("An optional constraint that values must be a multiple of this number"),
 
   decimalChar: z
     .string()
     .length(1)
     .optional()
-    .describe(
-      "An optional single character used as the decimal separator in the data",
-    ),
+    .describe("An optional single character used as the decimal separator in the data"),
 
   groupChar: z
     .string()
     .length(1)
     .optional()
-    .describe(
-      "An optional single character used as the thousands separator in the data",
-    ),
+    .describe("An optional single character used as the thousands separator in the data"),
 
   withText: z
     .boolean()

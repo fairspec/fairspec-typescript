@@ -5,10 +5,7 @@ import { inferTableSchema } from "../../actions/tableSchema/infer.ts"
 import type { ValidateTableOptions } from "../../models/table.ts"
 import { loadTable } from "./load.ts"
 
-export async function validateTable(
-  resource: Resource,
-  options?: ValidateTableOptions,
-) {
+export async function validateTable(resource: Resource, options?: ValidateTableOptions) {
   const { maxErrors } = options ?? {}
   const errors: FairspecError[] = []
 

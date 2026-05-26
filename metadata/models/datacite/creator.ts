@@ -9,13 +9,8 @@ export const CreatorNameIdentifier = z.object({
     ),
   nameIdentifierScheme: z
     .string()
-    .describe(
-      "The name of the name identifier scheme (e.g., ORCID, ISNI, ROR)",
-    ),
-  schemeUri: z
-    .string()
-    .optional()
-    .describe("The URI of the name identifier scheme"),
+    .describe("The name of the name identifier scheme (e.g., ORCID, ISNI, ROR)"),
+  schemeUri: z.string().optional().describe("The URI of the name identifier scheme"),
 })
 
 export const CreatorNameIdentifiers = z
@@ -31,9 +26,7 @@ export const CreatorAffiliation = z.object({
   affiliationIdentifier: z
     .string()
     .optional()
-    .describe(
-      "Uniquely identifies the organizational affiliation of the creator",
-    ),
+    .describe("Uniquely identifies the organizational affiliation of the creator"),
   affiliationIdentifierScheme: z
     .string()
     .optional()
@@ -57,22 +50,14 @@ export const Creator = z.object({
   nameType: CreatorNameType.optional().describe(
     "The type of name (Organizational or Personal)",
   ),
-  givenName: z
-    .string()
-    .optional()
-    .describe("The personal or first name of the creator"),
-  familyName: z
-    .string()
-    .optional()
-    .describe("The surname or last name of the creator"),
+  givenName: z.string().optional().describe("The personal or first name of the creator"),
+  familyName: z.string().optional().describe("The surname or last name of the creator"),
   nameIdentifiers: CreatorNameIdentifiers.optional(),
   affiliation: CreatorAffiliations.optional(),
   lang: z
     .string()
     .optional()
-    .describe(
-      "Language of the name, specified using ISO 639-1 or ISO 639-3 codes",
-    ),
+    .describe("Language of the name, specified using ISO 639-1 or ISO 639-3 codes"),
 })
 
 export const Creators = z

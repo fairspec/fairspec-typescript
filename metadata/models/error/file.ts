@@ -3,10 +3,7 @@ import { BaseError } from "./base.ts"
 
 export const TextualError = BaseError.extend({
   type: z.literal("file/textual").describe("Error type identifier"),
-  actualEncoding: z
-    .string()
-    .optional()
-    .describe("The actual encoding format found"),
+  actualEncoding: z.string().optional().describe("The actual encoding format found"),
 })
 
 export const IntegrityError = BaseError.extend({
@@ -16,10 +13,7 @@ export const IntegrityError = BaseError.extend({
   actualHash: z.string().describe("The actual hash value found"),
 })
 
-export const FileError = z.discriminatedUnion("type", [
-  TextualError,
-  IntegrityError,
-])
+export const FileError = z.discriminatedUnion("type", [TextualError, IntegrityError])
 
 export type TextualError = z.infer<typeof TextualError>
 export type IntegrityError = z.infer<typeof IntegrityError>

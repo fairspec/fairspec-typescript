@@ -55,10 +55,7 @@ export async function inferIntegrity(
   return { type, hash }
 }
 
-export async function inferHash(
-  resource: Resource,
-  options?: { hashType?: HashType },
-) {
+export async function inferHash(resource: Resource, options?: { hashType?: HashType }) {
   const hashType = options?.hashType ?? "sha256"
   const localPaths = await prefetchFiles(resource)
 

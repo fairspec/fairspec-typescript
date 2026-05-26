@@ -41,9 +41,9 @@ describe("inspectTable (cell/const)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/const"),
-    ).toHaveLength(2)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/const")).toHaveLength(
+      2,
+    )
     expect(errors).toContainEqual({
       type: "cell/const",
       columnName: "status",
@@ -77,9 +77,9 @@ describe("inspectTable (cell/const)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/const"),
-    ).toHaveLength(0)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/const")).toHaveLength(
+      0,
+    )
   })
 
   it("should handle case sensitivity correctly", async () => {
@@ -99,9 +99,9 @@ describe("inspectTable (cell/const)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/const"),
-    ).toHaveLength(2)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/const")).toHaveLength(
+      2,
+    )
     expect(errors).toContainEqual({
       type: "cell/const",
       columnName: "status",
@@ -135,9 +135,9 @@ describe("inspectTable (cell/const)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/const"),
-    ).toHaveLength(1)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/const")).toHaveLength(
+      1,
+    )
     expect(errors).toContainEqual({
       type: "cell/const",
       columnName: "priority",
@@ -164,9 +164,9 @@ describe("inspectTable (cell/const)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/const"),
-    ).toHaveLength(1)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/const")).toHaveLength(
+      1,
+    )
     expect(errors).toContainEqual({
       type: "cell/const",
       columnName: "rate",
@@ -193,9 +193,9 @@ describe("inspectTable (cell/const)", () => {
     }
 
     const errors = await inspectTable(table, { tableSchema })
-    expect(
-      errors.filter((e: { type: string }) => e.type === "cell/const"),
-    ).toHaveLength(1)
+    expect(errors.filter((e: { type: string }) => e.type === "cell/const")).toHaveLength(
+      1,
+    )
     expect(errors).toContainEqual({
       type: "cell/const",
       columnName: "enabled",

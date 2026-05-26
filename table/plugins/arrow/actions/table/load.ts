@@ -6,10 +6,7 @@ import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import * as pl from "nodejs-polars"
 
-export async function loadArrowTable(
-  resource: Resource,
-  options?: LoadTableOptions,
-) {
+export async function loadArrowTable(resource: Resource, options?: LoadTableOptions) {
   const [firstPath, ...restPaths] = await prefetchFiles(resource)
   if (!firstPath) {
     throw new Error("Resource data is not defined")
@@ -22,8 +19,7 @@ export async function loadArrowTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema)
-      tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 

@@ -1,10 +1,6 @@
 import os from "node:os"
 import type { Dataset, FairspecError } from "@fairspec/metadata"
-import {
-  createReport,
-  FairspecException,
-  inferResourceName,
-} from "@fairspec/metadata"
+import { createReport, FairspecException, inferResourceName } from "@fairspec/metadata"
 import pAll from "p-all"
 import { validateResource } from "../../actions/resource/validate.ts"
 import { validateDatasetForeignKeys } from "./foreignKey.ts"

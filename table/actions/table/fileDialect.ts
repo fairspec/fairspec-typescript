@@ -25,10 +25,7 @@ export async function joinHeaderRows(
   const extraLabels = extraLabelsFrame.row(0)
 
   const mapping = Object.fromEntries(
-    labels.map((label, index) => [
-      label,
-      [label, extraLabels[index]].join(headerJoin),
-    ]),
+    labels.map((label, index) => [label, [label, extraLabels[index]].join(headerJoin)]),
   )
 
   return table
@@ -50,12 +47,6 @@ export function skipCommentRows(
 
   return table
     .withRowIndex(NUMBER_COLUMN_NAME, 1)
-    .filter(
-      pl
-        .col(NUMBER_COLUMN_NAME)
-        .add(commentOffset)
-        .isIn(dialect.commentRows)
-        .not(),
-    )
+    .filter(pl.col(NUMBER_COLUMN_NAME).add(commentOffset).isIn(dialect.commentRows).not())
     .drop(NUMBER_COLUMN_NAME)
 }

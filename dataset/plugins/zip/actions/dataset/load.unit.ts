@@ -1,9 +1,6 @@
 import type { Dataset } from "@fairspec/metadata"
 import { beforeEach, describe, expect, it } from "vite-plus/test"
-import {
-  getTempFilePath,
-  writeTempFile,
-} from "../../../../actions/file/temp.ts"
+import { getTempFilePath, writeTempFile } from "../../../../actions/file/temp.ts"
 import { loadDatasetFromZip } from "./load.ts"
 import { saveDatasetToZip } from "./save.ts"
 
@@ -34,9 +31,7 @@ describe("loadDatasetFromZip", () => {
   it("should load dataset with metadata", async () => {
     const originalDataset: Dataset = {
       titles: [{ title: "Test Dataset" }],
-      descriptions: [
-        { description: "A test data dataset", descriptionType: "Abstract" },
-      ],
+      descriptions: [{ description: "A test data dataset", descriptionType: "Abstract" }],
       version: "1.0.0",
       resources: [
         {
@@ -50,9 +45,7 @@ describe("loadDatasetFromZip", () => {
     const loadedDataset = await loadDatasetFromZip(tempZipPath)
 
     expect(loadedDataset.titles?.[0]?.title).toBe("Test Dataset")
-    expect(loadedDataset.descriptions?.[0]?.description).toBe(
-      "A test data dataset",
-    )
+    expect(loadedDataset.descriptions?.[0]?.description).toBe("A test data dataset")
     expect(loadedDataset.version).toBe("1.0.0")
   })
 
@@ -128,9 +121,7 @@ describe("loadDatasetFromZip", () => {
     expect.assert(loadedDataset.resources)
     expect(loadedDataset.resources[0]?.tableSchema).toBeDefined()
     const tableSchema = loadedDataset.resources[0]?.tableSchema
-    expect(typeof tableSchema === "object" && "properties" in tableSchema).toBe(
-      true,
-    )
+    expect(typeof tableSchema === "object" && "properties" in tableSchema).toBe(true)
     if (typeof tableSchema === "object" && "properties" in tableSchema) {
       expect(Object.keys(tableSchema.properties ?? {})).toHaveLength(2)
     }

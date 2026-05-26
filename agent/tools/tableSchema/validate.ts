@@ -9,9 +9,7 @@ export const validateTableSchemaTool = createTool({
   inputSchema: z.object({
     source: z
       .union([Descriptor, z.string()])
-      .describe(
-        "The table schema to validate (descriptor object or file path)",
-      ),
+      .describe("The table schema to validate (descriptor object or file path)"),
   }),
   outputSchema: z.object({
     report: Report,

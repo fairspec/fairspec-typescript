@@ -7,7 +7,4 @@ export const debug = new Option(
   "Enable debug mode to print exception details to stderr",
 )
 
-export const silent = new Option(
-  "--silent",
-  "suppress all output except errors",
-)
+export const silent = new Option("--silent", "suppress all output except errors")

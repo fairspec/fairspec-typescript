@@ -20,10 +20,7 @@ export const Resource = Datacite.extend({
       "An optional name for the resource consisting of alphanumeric characters and underscores. If provided, it can be used to reference resource within a dataset context.",
     ),
 
-  textual: z
-    .boolean()
-    .optional()
-    .describe("Whether the resource is text-based."),
+  textual: z.boolean().optional().describe("Whether the resource is text-based."),
 
   integrity: Integrity.optional().describe(
     "The integrity check of the file with type (md5, sha1, sha256, sha512) and hash value.",

@@ -1,10 +1,7 @@
 import type { Column } from "@fairspec/metadata"
 import type { SqliteColumn } from "../../models/column.ts"
 
-export function convertColumnToDatabase(
-  column: Column,
-  isNullable = true,
-): SqliteColumn {
+export function convertColumnToDatabase(column: Column, isNullable = true): SqliteColumn {
   const databaseColumn: SqliteColumn = {
     name: column.name,
     dataType: convertType(column.type),

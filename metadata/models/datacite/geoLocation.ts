@@ -7,24 +7,14 @@ export const GeoLocationPoint = z.object({
 })
 
 export const GeoLocationBox = z.object({
-  westBoundLongitude: Longitude.describe(
-    "Western longitudinal dimension of box",
-  ),
-  eastBoundLongitude: Longitude.describe(
-    "Eastern longitudinal dimension of box",
-  ),
-  southBoundLatitude: Latitude.describe(
-    "Southern latitudinal dimension of box",
-  ),
-  northBoundLatitude: Latitude.describe(
-    "Northern latitudinal dimension of box",
-  ),
+  westBoundLongitude: Longitude.describe("Western longitudinal dimension of box"),
+  eastBoundLongitude: Longitude.describe("Eastern longitudinal dimension of box"),
+  southBoundLatitude: Latitude.describe("Southern latitudinal dimension of box"),
+  northBoundLatitude: Latitude.describe("Northern latitudinal dimension of box"),
 })
 
 export const GeoLocationPolygonItem = z.object({
-  polygonPoint: GeoLocationPoint.optional().describe(
-    "A point location in a polygon",
-  ),
+  polygonPoint: GeoLocationPoint.optional().describe("A point location in a polygon"),
   inPolygonPoint: GeoLocationPoint.optional().describe(
     "For any bound area that is larger than half the earth, define a (random) point inside",
   ),
@@ -37,12 +27,8 @@ export const GeoLocation = z.object({
     .describe(
       "Spatial region or named place where the data was gathered or about which the data is focused",
     ),
-  geoLocationPoint: GeoLocationPoint.optional().describe(
-    "A point location in space",
-  ),
-  geoLocationBox: GeoLocationBox.optional().describe(
-    "The spatial limits of a box",
-  ),
+  geoLocationPoint: GeoLocationPoint.optional().describe("A point location in space"),
+  geoLocationBox: GeoLocationBox.optional().describe("The spatial limits of a box"),
   geoLocationPolygon: z
     .array(GeoLocationPolygonItem)
     .optional()

@@ -24,10 +24,7 @@ export function parseIntegerColumn(column: IntegerColumn, columnExpr: pl.Expr) {
   return columnExpr
 }
 
-export function stringifyIntegerColumn(
-  _column: IntegerColumn,
-  columnExpr: pl.Expr,
-) {
+export function stringifyIntegerColumn(_column: IntegerColumn, columnExpr: pl.Expr) {
   // Convert to string
   columnExpr = columnExpr.cast(pl.String)
 

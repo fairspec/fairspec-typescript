@@ -125,9 +125,7 @@ describe("inferBytes", () => {
   })
 
   it("should handle binary data", async () => {
-    const tempFilePath = await writeTempFile(
-      Buffer.from([0xff, 0xd8, 0xff, 0xe0]),
-    )
+    const tempFilePath = await writeTempFile(Buffer.from([0xff, 0xd8, 0xff, 0xe0]))
     mockPrefetchFiles.mockResolvedValue([tempFilePath])
 
     const result = await inferBytes({ data: "https://example.com/file.bin" })
@@ -141,32 +139,23 @@ describe("inferBytes", () => {
 
 describe("inferTextual", () => {
   it("should return true for utf-8 text", async () => {
-    const tempFilePath = await writeTempFile(
-      "Hello, World! This is UTF-8 text.",
-    )
+    const tempFilePath = await writeTempFile("Hello, World! This is UTF-8 text.")
 
     const result = await inferTextual({ data: tempFilePath })
     expect(result).toBe(true)
   })
 
   it("should return false for binary files", async () => {
-    const tempFilePath = await writeTempFile(
-      Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00]),
-    )
+    const tempFilePath = await writeTempFile(Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00]))
 
     const result = await inferTextual({ data: tempFilePath })
     expect(result).toBe(false)
   })
 
   it("should use custom sample bytes", async () => {
-    const tempFilePath = await writeTempFile(
-      "This is a test file with UTF-8 content.",
-    )
+    const tempFilePath = await writeTempFile("This is a test file with UTF-8 content.")
 
-    const result = await inferTextual(
-      { data: tempFilePath },
-      { sampleBytes: 20 },
-    )
+    const result = await inferTextual({ data: tempFilePath }, { sampleBytes: 20 })
 
     expect(result).toBe(true)
   })
@@ -260,10 +249,9 @@ describe("inferTextual", () => {
 
   it("should return false for latin1 encoded file", async () => {
     const buffer = Buffer.from([
-      0x43, 0x61, 0x66, 0xe9, 0x20, 0x72, 0xe9, 0x73, 0x75, 0x6d, 0xe9, 0x20,
-      0x6e, 0x61, 0xef, 0x76, 0x65, 0x20, 0xe0, 0x20, 0x50, 0x61, 0x72, 0x69,
-      0x73, 0x2e, 0x20, 0xc7, 0x61, 0x20, 0x63, 0x27, 0x65, 0x73, 0x74, 0x20,
-      0x62, 0x6f, 0x6e, 0x21,
+      0x43, 0x61, 0x66, 0xe9, 0x20, 0x72, 0xe9, 0x73, 0x75, 0x6d, 0xe9, 0x20, 0x6e, 0x61,
+      0xef, 0x76, 0x65, 0x20, 0xe0, 0x20, 0x50, 0x61, 0x72, 0x69, 0x73, 0x2e, 0x20, 0xc7,
+      0x61, 0x20, 0x63, 0x27, 0x65, 0x73, 0x74, 0x20, 0x62, 0x6f, 0x6e, 0x21,
     ])
     const tempFilePath = await writeTempFile(buffer)
 
@@ -273,8 +261,8 @@ describe("inferTextual", () => {
 
   it("should return false for windows-1252 encoded file", async () => {
     const buffer = Buffer.from([
-      0x43, 0x61, 0x66, 0xe9, 0x20, 0x6e, 0x61, 0xef, 0x76, 0x65, 0x20, 0x72,
-      0xe9, 0x73, 0x75, 0x6d, 0xe9,
+      0x43, 0x61, 0x66, 0xe9, 0x20, 0x6e, 0x61, 0xef, 0x76, 0x65, 0x20, 0x72, 0xe9, 0x73,
+      0x75, 0x6d, 0xe9,
     ])
     const tempFilePath = await writeTempFile(buffer)
 

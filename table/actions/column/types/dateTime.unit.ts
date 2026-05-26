@@ -101,9 +101,7 @@ describe("stringifyDatetimeColumn", () => {
   it.each([[new Date(Date.UTC(2006, 10, 21, 16, 30, 0)), "21/11/2006 16:30"]])(
     "temporalFormat %%d/%%m/%%Y %%H:%%M: %s -> %s",
     async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("name", [value], pl.Datetime)])
-        .lazy()
+      const table = pl.DataFrame([pl.Series("name", [value], pl.Datetime)]).lazy()
       const tableSchema: TableSchema = {
         properties: {
           name: {
@@ -125,9 +123,7 @@ describe("stringifyDatetimeColumn", () => {
   it.each([[new Date(Date.UTC(2014, 0, 1, 6, 0, 0)), "2014/01/01T06:00:00"]])(
     "temporalFormat %%Y/%%m/%%dT%%H:%%M:%%S: %s -> %s",
     async (value, expected) => {
-      const table = pl
-        .DataFrame([pl.Series("name", [value], pl.Datetime)])
-        .lazy()
+      const table = pl.DataFrame([pl.Series("name", [value], pl.Datetime)]).lazy()
       const tableSchema: TableSchema = {
         properties: {
           name: {

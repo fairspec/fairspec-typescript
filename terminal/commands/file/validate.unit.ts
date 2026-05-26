@@ -22,19 +22,15 @@ describe("file validate", () => {
     const correctHash = stats.integrity?.hash ?? ""
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(validateFileCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(validateFileCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync([
@@ -61,19 +57,15 @@ describe("file validate", () => {
     const wrongHash = "0000000000000000000000000000000"
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(validateFileCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(validateFileCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync([
@@ -101,19 +93,15 @@ describe("file validate", () => {
     const filePath = await writeTempFile("some content", { format: "txt" })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(validateFileCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(validateFileCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "validate", filePath, "--json"])

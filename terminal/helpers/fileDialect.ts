@@ -19,8 +19,7 @@ export function createFileDialectFromPathAndOptions(
   if (format === "csv" || format === "tsv") {
     const fileDialect: CsvFileDialect | TsvFileDialect = { format }
 
-    if (options.lineTerminator)
-      fileDialect.lineTerminator = options.lineTerminator
+    if (options.lineTerminator) fileDialect.lineTerminator = options.lineTerminator
     if (options.nullSequence) fileDialect.nullSequence = options.nullSequence
     if (options.headerRows) fileDialect.headerRows = options.headerRows
     if (options.headerJoin) fileDialect.headerJoin = options.headerJoin

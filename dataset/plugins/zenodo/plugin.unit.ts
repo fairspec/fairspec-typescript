@@ -59,9 +59,7 @@ describe("ZenodoPlugin", () => {
       }
       mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadDataset(
-        "https://sandbox.zenodo.org/record/456",
-      )
+      const result = await plugin.loadDataset("https://sandbox.zenodo.org/record/456")
 
       expect(mockLoadDatasetFromZenodo).toHaveBeenCalledWith(
         "https://sandbox.zenodo.org/record/456",
@@ -91,9 +89,7 @@ describe("ZenodoPlugin", () => {
       }
       mockLoadDatasetFromZenodo.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadDataset(
-        "https://zenodo.org/record/123?preview=1",
-      )
+      const result = await plugin.loadDataset("https://zenodo.org/record/123?preview=1")
 
       expect(mockLoadDatasetFromZenodo).toHaveBeenCalledWith(
         "https://zenodo.org/record/123?preview=1",

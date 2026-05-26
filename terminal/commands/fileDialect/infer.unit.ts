@@ -20,19 +20,15 @@ describe("format infer", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(inferFileDialectCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(inferFileDialectCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
@@ -51,19 +47,15 @@ describe("format infer", () => {
     )
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(inferFileDialectCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(inferFileDialectCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
@@ -77,27 +69,20 @@ describe("format infer", () => {
   })
 
   it("should infer TSV format", async () => {
-    const tsvPath = await writeTempFile(
-      "id\tname\tage\n1\talice\t25\n2\tbob\t30",
-      {
-        format: "tsv",
-      },
-    )
+    const tsvPath = await writeTempFile("id\tname\tage\n1\talice\t25\n2\tbob\t30", {
+      format: "tsv",
+    })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(inferFileDialectCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(inferFileDialectCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "infer", tsvPath, "--json"])

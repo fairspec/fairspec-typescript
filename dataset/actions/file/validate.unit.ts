@@ -45,10 +45,9 @@ describe("validateFile", () => {
 
   it("should return error when textual is expected but file is latin1", async () => {
     const buffer = Buffer.from([
-      0x43, 0x61, 0x66, 0xe9, 0x20, 0x72, 0xe9, 0x73, 0x75, 0x6d, 0xe9, 0x20,
-      0x6e, 0x61, 0xef, 0x76, 0x65, 0x20, 0xe0, 0x20, 0x50, 0x61, 0x72, 0x69,
-      0x73, 0x2e, 0x20, 0xc7, 0x61, 0x20, 0x63, 0x27, 0x65, 0x73, 0x74, 0x20,
-      0x62, 0x6f, 0x6e, 0x21,
+      0x43, 0x61, 0x66, 0xe9, 0x20, 0x72, 0xe9, 0x73, 0x75, 0x6d, 0xe9, 0x20, 0x6e, 0x61,
+      0xef, 0x76, 0x65, 0x20, 0xe0, 0x20, 0x50, 0x61, 0x72, 0x69, 0x73, 0x2e, 0x20, 0xc7,
+      0x61, 0x20, 0x63, 0x27, 0x65, 0x73, 0x74, 0x20, 0x62, 0x6f, 0x6e, 0x21,
     ])
     const tempFilePath = await writeTempFile(buffer)
 
@@ -67,10 +66,7 @@ describe("validateFile", () => {
   it("should validate integrity successfully when it matches", async () => {
     const tempFilePath = await writeTempFile("Hello, World!")
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "md5" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "md5" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -86,10 +82,7 @@ describe("validateFile", () => {
   it("should return error when integrity hash does not match", async () => {
     const tempFilePath = await writeTempFile("Hello, World!")
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "md5" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "md5" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -112,10 +105,7 @@ describe("validateFile", () => {
   it("should validate sha256 integrity", async () => {
     const tempFilePath = await writeTempFile("Hello, World!")
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "sha256" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "sha256" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -131,10 +121,7 @@ describe("validateFile", () => {
   it("should validate sha1 integrity", async () => {
     const tempFilePath = await writeTempFile("Hello, World!")
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "sha1" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "sha1" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -150,10 +137,7 @@ describe("validateFile", () => {
   it("should validate sha512 integrity", async () => {
     const tempFilePath = await writeTempFile("Hello, World!")
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "sha512" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "sha512" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -169,10 +153,7 @@ describe("validateFile", () => {
   it("should validate both textual and integrity when both match", async () => {
     const tempFilePath = await writeTempFile("Hello, World!")
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "md5" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "md5" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -190,10 +171,7 @@ describe("validateFile", () => {
     const buffer = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00])
     const tempFilePath = await writeTempFile(buffer)
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "md5" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "md5" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -217,10 +195,7 @@ describe("validateFile", () => {
     const buffer = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00])
     const tempFilePath = await writeTempFile(buffer)
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "md5" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "md5" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -256,10 +231,7 @@ describe("validateFile", () => {
   it("should handle local file paths", async () => {
     const tempFilePath = await writeTempFile("x".repeat(2048))
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "sha256" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "sha256" })
 
     const report = await validateFile({
       data: tempFilePath,
@@ -275,10 +247,7 @@ describe("validateFile", () => {
   it("should handle empty file validation", async () => {
     const tempFilePath = await writeTempFile("")
 
-    const actualHash = await inferHash(
-      { data: tempFilePath },
-      { hashType: "sha256" },
-    )
+    const actualHash = await inferHash({ data: tempFilePath }, { hashType: "sha256" })
 
     const report = await validateFile({
       data: tempFilePath,

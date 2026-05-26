@@ -24,9 +24,7 @@ describe("GithubPlugin", () => {
       }
       mockLoadDatasetFromGithub.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadDataset(
-        "https://github.com/owner/repo/data",
-      )
+      const result = await plugin.loadDataset("https://github.com/owner/repo/data")
 
       expect(mockLoadDatasetFromGithub).toHaveBeenCalledWith(
         "https://github.com/owner/repo/data",
@@ -77,9 +75,7 @@ describe("GithubPlugin", () => {
       }
       mockLoadDatasetFromGithub.mockResolvedValue(mockDataset)
 
-      const result = await plugin.loadDataset(
-        "https://github.com/owner/repo?tab=readme",
-      )
+      const result = await plugin.loadDataset("https://github.com/owner/repo?tab=readme")
 
       expect(mockLoadDatasetFromGithub).toHaveBeenCalledWith(
         "https://github.com/owner/repo?tab=readme",

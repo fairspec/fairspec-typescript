@@ -44,14 +44,7 @@ describe("createFolder", () => {
 
   it("should create multiple levels of nested directories", async () => {
     const tempDir = getTempFolderPath()
-    const deepPath = path.join(
-      tempDir,
-      "level1",
-      "level2",
-      "level3",
-      "level4",
-      "level5",
-    )
+    const deepPath = path.join(tempDir, "level1", "level2", "level3", "level4", "level5")
 
     await createFolder(deepPath)
 

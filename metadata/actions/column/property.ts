@@ -2,9 +2,7 @@ import { z } from "zod"
 import type { BasePropertyType } from "../../models/column/base.ts"
 import type { Column, ColumnProperty } from "../../models/column/column.ts"
 
-export function createNullablePropertyType<T extends BasePropertyType>(
-  literal: T,
-) {
+export function createNullablePropertyType<T extends BasePropertyType>(literal: T) {
   return z.union([
     z.literal(literal),
     z.tuple([z.literal(literal), z.literal("null")]),
@@ -25,7 +23,5 @@ export function getIsNullablePropertyType(type: ColumnProperty["type"]) {
 }
 
 export function getColumnProperties(columns: Column[]) {
-  return Object.fromEntries(
-    columns.map(column => [column.name, column.property]),
-  )
+  return Object.fromEntries(columns.map(column => [column.name, column.property]))
 }

@@ -84,12 +84,8 @@ describe("potentialDialects", () => {
       const quotes = dialects.map(d => d.quote)
 
       const hasNone = quotes.some(q => q.type === "None")
-      const hasDoubleQuote = quotes.some(
-        q => q.type === "Some" && q.char === 34,
-      )
-      const hasSingleQuote = quotes.some(
-        q => q.type === "Some" && q.char === 39,
-      )
+      const hasDoubleQuote = quotes.some(q => q.type === "Some" && q.char === 34)
+      const hasSingleQuote = quotes.some(q => q.type === "Some" && q.char === 39)
 
       expect(hasNone).toBe(true)
       expect(hasDoubleQuote).toBe(true)
@@ -123,16 +119,12 @@ describe("potentialDialects", () => {
     })
 
     it("should include double quote", () => {
-      const hasDoubleQuote = QUOTE_CHARS.some(
-        q => q.type === "Some" && q.char === 34,
-      )
+      const hasDoubleQuote = QUOTE_CHARS.some(q => q.type === "Some" && q.char === 34)
       expect(hasDoubleQuote).toBe(true)
     })
 
     it("should include single quote", () => {
-      const hasSingleQuote = QUOTE_CHARS.some(
-        q => q.type === "Some" && q.char === 39,
-      )
+      const hasSingleQuote = QUOTE_CHARS.some(q => q.type === "Some" && q.char === 39)
       expect(hasSingleQuote).toBe(true)
     })
 

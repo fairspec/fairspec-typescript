@@ -10,9 +10,7 @@ export function normalizePath(path: string, options: { basepath?: string }) {
   }
 
   if (isBasepathRemote) {
-    const normalizedPath = new URL(
-      [options.basepath, path].join("/"),
-    ).toString()
+    const normalizedPath = new URL([options.basepath, path].join("/")).toString()
 
     if (!normalizedPath.startsWith(options.basepath ?? "")) {
       throw new Error(`Path ${path} is not a subpath of ${options.basepath}`)
@@ -25,14 +23,9 @@ export function normalizePath(path: string, options: { basepath?: string }) {
     throw new Error("File system is not supported in this environment")
   }
 
-  const normalizedPath = options.basepath
-    ? node.path.join(options.basepath, path)
-    : path
+  const normalizedPath = options.basepath ? node.path.join(options.basepath, path) : path
 
-  const relativePath = node.path.relative(
-    options.basepath ?? "",
-    normalizedPath,
-  )
+  const relativePath = node.path.relative(options.basepath ?? "", normalizedPath)
 
   if (relativePath.startsWith("..")) {
     throw new Error(`Path ${path} is not a subpath of ${options.basepath}`)

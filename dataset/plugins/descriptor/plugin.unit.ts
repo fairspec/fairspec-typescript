@@ -33,9 +33,7 @@ describe("DescriptorPlugin", () => {
 
       const result = await plugin.loadDataset("./datapackage.json")
 
-      expect(mockLoadDatasetDescriptor).toHaveBeenCalledWith(
-        "./datapackage.json",
-      )
+      expect(mockLoadDatasetDescriptor).toHaveBeenCalledWith("./datapackage.json")
       expect(result).toEqual(mockDataset)
     })
 

@@ -4,10 +4,7 @@ import pAll from "p-all"
 import type { InferResourceOptions } from "../../actions/resource/infer.ts"
 import { inferResource } from "../../actions/resource/infer.ts"
 
-export async function inferDataset(
-  dataset: Dataset,
-  options?: InferResourceOptions,
-) {
+export async function inferDataset(dataset: Dataset, options?: InferResourceOptions) {
   const concurrency = os.cpus().length
 
   const resources = await pAll(

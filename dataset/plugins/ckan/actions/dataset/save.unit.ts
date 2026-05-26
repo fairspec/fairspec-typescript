@@ -48,9 +48,7 @@ describe("saveDatasetToCkan", () => {
   })
 
   it.skip("should save a dataset", async () => {
-    const dataset = await loadDatasetDescriptor(
-      "core/dataset/fixtures/dataset.json",
-    )
+    const dataset = await loadDatasetDescriptor("core/dataset/fixtures/dataset.json")
 
     const result = await saveDatasetToCkan(dataset, {
       ckanUrl: "http://localhost:5000/",
@@ -377,9 +375,7 @@ describe("saveDatasetToCkan", () => {
     const result = await saveDatasetToCkan(emptyDataset, mockOptions)
 
     expect(fetchMock).toHaveBeenCalledTimes(2)
-    expect(result.datasetUrl).toEqual(
-      "https://ckan.example.com/dataset/test-dataset",
-    )
+    expect(result.datasetUrl).toEqual("https://ckan.example.com/dataset/test-dataset")
   })
 
   it("passes API key in Authorization header", async () => {

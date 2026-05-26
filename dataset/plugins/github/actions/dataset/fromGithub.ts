@@ -2,9 +2,7 @@ import type { Dataset } from "@fairspec/metadata"
 import { convertResourceFromGithub } from "../../actions/resource/fromGithub.ts"
 import type { GithubRepository } from "../../models/repository.ts"
 
-export function convertDatasetFromGithub(
-  githubRepository: GithubRepository,
-): Dataset {
+export function convertDatasetFromGithub(githubRepository: GithubRepository): Dataset {
   const dataset: Dataset = {
     resources: [],
   }
@@ -38,9 +36,7 @@ export function convertDatasetFromGithub(
     const contributor = {
       name: githubRepository.owner.login,
       nameType:
-        githubRepository.owner.type === "Organization"
-          ? "Organizational"
-          : "Personal",
+        githubRepository.owner.type === "Organization" ? "Organizational" : "Personal",
     } as const
 
     if (githubRepository.owner.type === "Organization") {

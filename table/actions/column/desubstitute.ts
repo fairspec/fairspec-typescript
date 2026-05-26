@@ -1,10 +1,7 @@
 import type { Column } from "@fairspec/metadata"
 import { getBasePropertyType } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
-import type {
-  ColumnMapping,
-  DenormalizeColumnOptions,
-} from "../../models/column.ts"
+import type { ColumnMapping, DenormalizeColumnOptions } from "../../models/column.ts"
 
 export function desubstituteColumn(
   mapping: ColumnMapping,
@@ -16,9 +13,9 @@ export function desubstituteColumn(
     return columnExpr
   }
 
-  const flattenMissingValues = (
-    mapping.target.property.missingValues ?? []
-  ).map(it => (typeof it === "object" ? it.value : it))
+  const flattenMissingValues = (mapping.target.property.missingValues ?? []).map(it =>
+    typeof it === "object" ? it.value : it,
+  )
 
   const compatibleMissingValue = flattenMissingValues?.filter(
     value => typeof value === missingValueType,
@@ -37,10 +34,7 @@ export function desubstituteColumn(
 
 // TODD: Improve this initial implementation
 
-function getMissingValueType(
-  column: Column,
-  options?: DenormalizeColumnOptions,
-) {
+function getMissingValueType(column: Column, options?: DenormalizeColumnOptions) {
   const baseType = getBasePropertyType(column.property.type ?? "null")
 
   if (baseType === "string") {

@@ -16,10 +16,7 @@ export class DescriptorPlugin implements DatasetPlugin {
     return dataset
   }
 
-  async saveDataset(
-    dataset: Dataset,
-    options: { target: string; withRemote?: boolean },
-  ) {
+  async saveDataset(dataset: Dataset, options: { target: string; withRemote?: boolean }) {
     const isLocalJson = getIsLocalJson(options.target)
     if (!isLocalJson) return undefined
 

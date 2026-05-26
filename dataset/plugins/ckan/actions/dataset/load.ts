@@ -32,9 +32,7 @@ export async function loadDatasetFromCkan(datasetUrl: string) {
 
   const systemDataset = convertDatasetFromCkan(ckanDataset)
   const userDatasetPath = (systemDataset.resources ?? [])
-    .filter(
-      resource => resource.unstable_customMetadata?.ckanKey === "dataset.json",
-    )
+    .filter(resource => resource.unstable_customMetadata?.ckanKey === "dataset.json")
     .map(resource => resource.unstable_customMetadata?.ckanUrl as string)
     .at(0)
 
@@ -64,10 +62,7 @@ function extractDatasetId(datasetUrl: string) {
 /**
  * Fetch resource schema data from CKAN datastore
  */
-async function loadCkanSchema(options: {
-  datasetUrl: string
-  resourceId: string
-}) {
+async function loadCkanSchema(options: { datasetUrl: string; resourceId: string }) {
   try {
     // For some reason, datastore_info doesn't work
     // So we use data fetching endpoint that also returns the schema

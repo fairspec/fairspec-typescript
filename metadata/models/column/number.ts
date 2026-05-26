@@ -12,10 +12,7 @@ export const BaseNumberColumnProperty = BaseColumnProperty.extend({
     .optional()
     .describe("An optional array of allowed values for the column"),
 
-  const: z
-    .number()
-    .optional()
-    .describe("An optional const that all values must match"),
+  const: z.number().optional().describe("An optional const that all values must match"),
 
   default: z
     .array(z.number())
@@ -67,25 +64,19 @@ export const BaseNumberColumnProperty = BaseColumnProperty.extend({
     .number()
     .positive()
     .optional()
-    .describe(
-      "An optional constraint that values must be a multiple of this number",
-    ),
+    .describe("An optional constraint that values must be a multiple of this number"),
 
   decimalChar: z
     .string()
     .length(1)
     .optional()
-    .describe(
-      "An optional single character used as the decimal separator in the data",
-    ),
+    .describe("An optional single character used as the decimal separator in the data"),
 
   groupChar: z
     .string()
     .length(1)
     .optional()
-    .describe(
-      "An optional single character used as the thousands separator in the data",
-    ),
+    .describe("An optional single character used as the thousands separator in the data"),
 
   withText: z
     .boolean()

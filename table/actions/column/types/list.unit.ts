@@ -124,9 +124,7 @@ describe("stringifyListColumn", () => {
     [["a", null, "c"], "a,c"],
     [[], ""],
   ])("default: %s -> %s", async (value, expected) => {
-    const table = pl
-      .DataFrame([pl.Series("name", [value], pl.List(pl.String))])
-      .lazy()
+    const table = pl.DataFrame([pl.Series("name", [value], pl.List(pl.String))]).lazy()
     const tableSchema: TableSchema = {
       properties: {
         name: {
@@ -152,9 +150,7 @@ describe("stringifyListColumn", () => {
     [[null, 2, null], "2"],
     [[], ""],
   ])("items integer: %s -> %s", async (value, expected) => {
-    const table = pl
-      .DataFrame([pl.Series("name", [value], pl.List(pl.Int16))])
-      .lazy()
+    const table = pl.DataFrame([pl.Series("name", [value], pl.List(pl.Int16))]).lazy()
     const tableSchema: TableSchema = {
       properties: {
         name: {
@@ -181,9 +177,7 @@ describe("stringifyListColumn", () => {
     [[null, 2.2, null], "2.2"],
     [[], ""],
   ])("items number: %s -> %s", async (value, expected) => {
-    const table = pl
-      .DataFrame([pl.Series("name", [value], pl.List(pl.Float64))])
-      .lazy()
+    const table = pl.DataFrame([pl.Series("name", [value], pl.List(pl.Float64))]).lazy()
     const tableSchema: TableSchema = {
       properties: {
         name: {
@@ -209,9 +203,7 @@ describe("stringifyListColumn", () => {
     [["", "b", ""], ";b;"],
     [[], ""],
   ])("delimiter ';': %s -> %s", async (value, expected) => {
-    const table = pl
-      .DataFrame([pl.Series("name", [value], pl.List(pl.String))])
-      .lazy()
+    const table = pl.DataFrame([pl.Series("name", [value], pl.List(pl.String))]).lazy()
     const tableSchema: TableSchema = {
       properties: {
         name: {

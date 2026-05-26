@@ -123,9 +123,7 @@ describe("loadXlsxTable (format=xlsx)", () => {
         fileDialect: { format: "xlsx", headerRows: [2] },
       })
 
-      expect((await table.collect()).toRecords()).toEqual([
-        { 1: 2, english: "中文" },
-      ])
+      expect((await table.collect()).toRecords()).toEqual([{ 1: 2, english: "中文" }])
     })
 
     it("should support multiline headerRows", async () => {
@@ -330,9 +328,7 @@ describe("loadXlsxTable (format=ods)", () => {
         fileDialect: { format: "ods", headerRows: [2] },
       })
 
-      expect((await table.collect()).toRecords()).toEqual([
-        { 1: 2, english: "中文" },
-      ])
+      expect((await table.collect()).toRecords()).toEqual([{ 1: 2, english: "中文" }])
     })
 
     it("should support multiline headerRows", async () => {

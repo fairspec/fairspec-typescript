@@ -119,9 +119,7 @@ describe("inferTableSchema", () => {
   })
 
   it("should handle empty string values", async () => {
-    const path = await writeTempFile(
-      "id,name,email\n1,alice,\n2,bob,bob@example.com",
-    )
+    const path = await writeTempFile("id,name,email\n1,alice,\n2,bob,bob@example.com")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const tableSchema = await inferTableSchema(resource)
@@ -135,9 +133,7 @@ describe("inferTableSchema", () => {
   })
 
   it("should infer schema with sampleRows option", async () => {
-    const path = await writeTempFile(
-      "id,name\n1,alice\n2,bob\n3,charlie\n4,david\n5,eve",
-    )
+    const path = await writeTempFile("id,name\n1,alice\n2,bob\n3,charlie\n4,david\n5,eve")
     const resource: Resource = { data: path, fileDialect: { format: "csv" } }
 
     const tableSchema = await inferTableSchema(resource, { sampleRows: 2 })

@@ -1,9 +1,5 @@
 import { loadFile } from "@fairspec/dataset"
-import type {
-  OdsFileDialect,
-  Resource,
-  XlsxFileDialect,
-} from "@fairspec/metadata"
+import type { OdsFileDialect, Resource, XlsxFileDialect } from "@fairspec/metadata"
 import { getDataFirstPath, getSupportedFileDialect } from "@fairspec/metadata"
 import { read, utils } from "xlsx"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
@@ -62,9 +58,7 @@ export async function inferXlsxFileDialect(
     return { format: fileDialect.format }
   }
 
-  const result = { format: fileDialect.format } as
-    | XlsxFileDialect
-    | OdsFileDialect
+  const result = { format: fileDialect.format } as XlsxFileDialect | OdsFileDialect
 
   if (detection.dialect.header.hasHeaderRow) {
     result.headerRows = [detection.dialect.header.numPreambleRows + 1]

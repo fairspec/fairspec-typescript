@@ -111,9 +111,7 @@ describe("CkanPlugin", () => {
     })
 
     it("should return undefined for urls with dataset in query params only", async () => {
-      const result = await plugin.loadDataset(
-        "https://example.com/api?name=dataset",
-      )
+      const result = await plugin.loadDataset("https://example.com/api?name=dataset")
 
       expect(mockLoadDatasetFromCkan).not.toHaveBeenCalled()
       expect(result).toBeUndefined()

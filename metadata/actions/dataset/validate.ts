@@ -15,9 +15,7 @@ export async function validateDatasetDescriptor(
   },
 ) {
   const descriptor =
-    typeof source === "string"
-      ? await loadDescriptor(source)
-      : (source as Descriptor)
+    typeof source === "string" ? await loadDescriptor(source) : (source as Descriptor)
 
   const $schema =
     typeof descriptor.$schema === "string"
@@ -49,10 +47,9 @@ export async function validateDatasetDescriptor(
       const rootJsonPointer = `/resources/${index}`
 
       if (typeof resource.fileDialect === "string") {
-        const fileDialectReport = await validateFileDialect(
-          resource.fileDialect,
-          { rootJsonPointer },
-        )
+        const fileDialectReport = await validateFileDialect(resource.fileDialect, {
+          rootJsonPointer,
+        })
 
         report.errors.push(...fileDialectReport.errors)
       }
@@ -66,10 +63,9 @@ export async function validateDatasetDescriptor(
       }
 
       if (typeof resource.tableSchema === "string") {
-        const tableSchemaReport = await validateTableSchema(
-          resource.tableSchema,
-          { rootJsonPointer },
-        )
+        const tableSchemaReport = await validateTableSchema(resource.tableSchema, {
+          rootJsonPointer,
+        })
 
         report.errors.push(...tableSchemaReport.errors)
       }

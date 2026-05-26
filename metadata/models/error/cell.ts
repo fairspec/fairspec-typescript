@@ -74,9 +74,7 @@ export const CellEnumError = BaseCellError.extend({
 export const CellJsonError = BaseCellError.extend({
   type: z.literal("cell/json").describe("Error type identifier"),
   message: z.string().describe("The JSON schema validation error message"),
-  jsonPointer: z
-    .string()
-    .describe("JSON Pointer to the validation error location"),
+  jsonPointer: z.string().describe("JSON Pointer to the validation error location"),
 })
 
 export const CellMinItemsError = BaseCellError.extend({
@@ -112,12 +110,8 @@ export type CellTypeError = z.infer<typeof CellTypeError>
 export type CellMissingError = z.infer<typeof CellMissingError>
 export type CellMinimumError = z.infer<typeof CellMinimumError>
 export type CellMaximumError = z.infer<typeof CellMaximumError>
-export type CellExclusiveMinimumError = z.infer<
-  typeof CellExclusiveMinimumError
->
-export type CellExclusiveMaximumError = z.infer<
-  typeof CellExclusiveMaximumError
->
+export type CellExclusiveMinimumError = z.infer<typeof CellExclusiveMinimumError>
+export type CellExclusiveMaximumError = z.infer<typeof CellExclusiveMaximumError>
 export type CellMultipleOfError = z.infer<typeof CellMultipleOfError>
 export type CellMinLengthError = z.infer<typeof CellMinLengthError>
 export type CellMaxLengthError = z.infer<typeof CellMaxLengthError>

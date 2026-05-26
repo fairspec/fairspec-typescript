@@ -25,15 +25,7 @@ export const TableSchemaOptions = z.object({
   arrayType: z.enum(["array", "list"]).optional(),
   listDelimiter: z.string().optional(),
   listItemType: z
-    .enum([
-      "string",
-      "number",
-      "boolean",
-      "date",
-      "date-time",
-      "integer",
-      "time",
-    ])
+    .enum(["string", "number", "boolean", "date", "date-time", "integer", "time"])
     .optional(),
 })
 

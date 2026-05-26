@@ -228,9 +228,7 @@ describe("inferCsvFileDialect", () => {
 
   describe("Header Detection", () => {
     it("should detect header row in CSV with mixed types", async () => {
-      const path = await writeTempFile(
-        "id,name,age\n1,Alice,25\n2,Bob,30\n3,Charlie,35",
-      )
+      const path = await writeTempFile("id,name,age\n1,Alice,25\n2,Bob,30\n3,Charlie,35")
       const fileDialect = await inferCsvFileDialect({ data: path })
 
       expect(fileDialect).toEqual({

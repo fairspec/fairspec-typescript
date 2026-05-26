@@ -102,8 +102,7 @@ describe("inspectJson", () => {
     expect(
       errors.some(
         error =>
-          error.jsonPointer === "/author/email" &&
-          error.message.includes("pattern"),
+          error.jsonPointer === "/author/email" && error.message.includes("pattern"),
       ),
     ).toBe(true)
   })

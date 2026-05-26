@@ -11,10 +11,7 @@ export async function inferTable(resource: Resource) {
     fileDialect = await inferFileDialect(resource)
   }
 
-  const table = await loadTable(
-    { ...resource, fileDialect },
-    { denormalized: true },
-  )
+  const table = await loadTable({ ...resource, fileDialect }, { denormalized: true })
 
   if (!table) {
     return undefined

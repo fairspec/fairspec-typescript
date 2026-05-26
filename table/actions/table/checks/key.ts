@@ -9,19 +9,14 @@ export function createRowKeyChecks(mapping: SchemaMapping) {
   const primaryKey = mapping.target.primaryKey
 
   const checks = [
-    ...(primaryKey
-      ? [createRowKeyCheck(primaryKey, { keyType: "primary" })]
-      : []),
+    ...(primaryKey ? [createRowKeyCheck(primaryKey, { keyType: "primary" })] : []),
     ...uniqueKeys.map(key => createRowKeyCheck(key, { keyType: "unique" })),
   ]
 
   return checks
 }
 
-function createRowKeyCheck(
-  keyColumns: string[],
-  options: { keyType: KeyCheckType },
-) {
+function createRowKeyCheck(keyColumns: string[], options: { keyType: KeyCheckType }) {
   const isErrorExpr = pl
     .concatList(keyColumns)
     .isFirstDistinct()

@@ -388,26 +388,14 @@ describe("inferTableSchemaFromTable", () => {
   it("should infer datetimes with ISO format", async () => {
     const table = pl
       .DataFrame({
-        standard: [
-          "2023-01-15T14:30:45",
-          "2023-02-20T08:15:30",
-          "2023-03-25T23:59:59",
-        ],
-        utc: [
-          "2023-01-15T14:30:45Z",
-          "2023-02-20T08:15:30Z",
-          "2023-03-25T23:59:59Z",
-        ],
+        standard: ["2023-01-15T14:30:45", "2023-02-20T08:15:30", "2023-03-25T23:59:59"],
+        utc: ["2023-01-15T14:30:45Z", "2023-02-20T08:15:30Z", "2023-03-25T23:59:59Z"],
         withTz: [
           "2023-01-15T14:30:45+01:00",
           "2023-02-20T08:15:30-05:00",
           "2023-03-25T23:59:59+00:00",
         ],
-        withSpace: [
-          "2023-01-15 14:30:45",
-          "2023-02-20 08:15:30",
-          "2023-03-25 23:59:59",
-        ],
+        withSpace: ["2023-01-15 14:30:45", "2023-02-20 08:15:30", "2023-03-25 23:59:59"],
       })
       .lazy()
 
@@ -431,21 +419,13 @@ describe("inferTableSchemaFromTable", () => {
   it("should infer datetimes with custom formats", async () => {
     const table = pl
       .DataFrame({
-        shortDayMonth: [
-          "15/01/2023 14:30",
-          "20/02/2023 08:15",
-          "25/03/2023 23:59",
-        ],
+        shortDayMonth: ["15/01/2023 14:30", "20/02/2023 08:15", "25/03/2023 23:59"],
         fullDayMonth: [
           "15/01/2023 14:30:45",
           "20/02/2023 08:15:30",
           "25/03/2023 23:59:59",
         ],
-        shortMonthDay: [
-          "01/15/2023 14:30",
-          "02/20/2023 08:15",
-          "03/25/2023 23:59",
-        ],
+        shortMonthDay: ["01/15/2023 14:30", "02/20/2023 08:15", "03/25/2023 23:59"],
         fullMonthDay: [
           "01/15/2023 14:30:45",
           "02/20/2023 08:15:30",
@@ -696,9 +676,7 @@ describe("inferTableSchemaFromTable (nullable)", () => {
     const table = pl.DataFrame({ empty: ["NA", "N/A", ""] }).lazy()
     const result = await inferTableSchemaFromTable(table)
     expect(result.properties?.empty).toEqual({ type: ["string", "null"] })
-    expect(result.missingValues).toEqual(
-      expect.arrayContaining(["NA", "N/A", ""]),
-    )
+    expect(result.missingValues).toEqual(expect.arrayContaining(["NA", "N/A", ""]))
     expect(result.missingValues).toHaveLength(3)
   })
 

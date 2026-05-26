@@ -1,7 +1,4 @@
-import type {
-  DataSchema,
-  RenderDataSchemaOptions,
-} from "./models/dataSchema.ts"
+import type { DataSchema, RenderDataSchemaOptions } from "./models/dataSchema.ts"
 import type {
   ConvertDatasetFromOptions,
   ConvertDatasetToOptions,
@@ -17,10 +14,7 @@ import type {
 } from "./models/tableSchema.ts"
 
 export interface MetadataPlugin {
-  renderDatasetAs?(
-    dataset: Dataset,
-    options: RenderDatasetOptions,
-  ): string | undefined
+  renderDatasetAs?(dataset: Dataset, options: RenderDatasetOptions): string | undefined
 
   convertDatasetTo?(
     dataset: Dataset,

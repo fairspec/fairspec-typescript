@@ -56,13 +56,7 @@ describe("inspectTable (row/unique)", () => {
     const table = pl
       .DataFrame({
         id: [1, 2, 3, 4, 5],
-        email: [
-          "a@test.com",
-          "b@test.com",
-          "c@test.com",
-          "d@test.com",
-          "e@test.com",
-        ],
+        email: ["a@test.com", "b@test.com", "c@test.com", "d@test.com", "e@test.com"],
       })
       .lazy()
 
@@ -82,13 +76,7 @@ describe("inspectTable (row/unique)", () => {
     const table = pl
       .DataFrame({
         id: [1, 2, 3, 4, 5],
-        email: [
-          "a@test.com",
-          "b@test.com",
-          "a@test.com",
-          "d@test.com",
-          "b@test.com",
-        ],
+        email: ["a@test.com", "b@test.com", "a@test.com", "d@test.com", "b@test.com"],
       })
       .lazy()
 
@@ -149,13 +137,7 @@ describe("inspectTable (row/unique)", () => {
     const table = pl
       .DataFrame({
         id: [1, 2, 3, 2, 5],
-        email: [
-          "a@test.com",
-          "b@test.com",
-          "c@test.com",
-          "d@test.com",
-          "a@test.com",
-        ],
+        email: ["a@test.com", "b@test.com", "c@test.com", "d@test.com", "a@test.com"],
       })
       .lazy()
 

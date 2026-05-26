@@ -3,9 +3,6 @@ import * as pl from "nodejs-polars"
 
 // TODO: review
 
-export function stringifyUnkonwnColumn(
-  _column: UnknownColumn,
-  columnExpr: pl.Expr,
-) {
+export function stringifyUnkonwnColumn(_column: UnknownColumn, columnExpr: pl.Expr) {
   return columnExpr.cast(pl.String)
 }

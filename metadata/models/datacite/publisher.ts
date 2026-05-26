@@ -18,10 +18,7 @@ export const Publisher = z.object({
     .describe(
       "The name of the publisher identifier scheme (e.g., ISNI, ROR, Crossref Funder ID)",
     ),
-  schemeUri: z
-    .string()
-    .optional()
-    .describe("The URI of the publisher identifier scheme"),
+  schemeUri: z.string().optional().describe("The URI of the publisher identifier scheme"),
   lang: z
     .string()
     .optional()

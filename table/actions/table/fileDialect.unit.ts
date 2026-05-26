@@ -8,13 +8,7 @@ describe("joinHeaderRows", () => {
       .DataFrame({
         col1: ["first", "name", "header3", "Alice", "Bob"],
         col2: ["last", "name", "header3", "Smith", "Jones"],
-        col3: [
-          "contact",
-          "email",
-          "header3",
-          "alice@example.com",
-          "bob@example.com",
-        ],
+        col3: ["contact", "email", "header3", "alice@example.com", "bob@example.com"],
       })
       .lazy()
 
@@ -24,11 +18,7 @@ describe("joinHeaderRows", () => {
     })
 
     const collected = await result.collect()
-    expect(collected.columns).toEqual([
-      "col1 first",
-      "col2 last",
-      "col3 contact",
-    ])
+    expect(collected.columns).toEqual(["col1 first", "col2 last", "col3 contact"])
     expect(collected.height).toBe(4)
     expect(collected.row(0)).toEqual(["name", "name", "email"])
     expect(collected.row(1)).toEqual(["header3", "header3", "header3"])

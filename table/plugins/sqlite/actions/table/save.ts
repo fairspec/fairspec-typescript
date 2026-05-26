@@ -83,11 +83,7 @@ async function defineTable(
   await query.execute()
 }
 
-async function populateTable(
-  database: Kysely<any>,
-  tableName: string,
-  table: Table,
-) {
+async function populateTable(database: Kysely<any>, tableName: string, table: Table) {
   let offset = 0
   const frame = await table.collect({ streaming: true })
   while (true) {

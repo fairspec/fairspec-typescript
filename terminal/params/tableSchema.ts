@@ -73,15 +73,9 @@ export const datetimeFormat = new Option(
   "datetime format pattern",
 )
 
-export const dateFormat = new Option(
-  "--date-format <dateFormat>",
-  "date format pattern",
-)
+export const dateFormat = new Option("--date-format <dateFormat>", "date format pattern")
 
-export const timeFormat = new Option(
-  "--time-format <timeFormat>",
-  "time format pattern",
-)
+export const timeFormat = new Option("--time-format <timeFormat>", "time format pattern")
 
 export const arrayType = new Option(
   "--array-type <arrayType>",

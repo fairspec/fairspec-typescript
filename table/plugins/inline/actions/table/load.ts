@@ -6,10 +6,7 @@ import { inferTableSchemaFromTable } from "../../../../actions/tableSchema/infer
 import { normalizeTable } from "../../../../actions/table/normalize.ts"
 import * as pl from "nodejs-polars"
 
-export async function loadInlineTable(
-  resource: Resource,
-  options?: LoadTableOptions,
-) {
+export async function loadInlineTable(resource: Resource, options?: LoadTableOptions) {
   const dataRecords = getDataRecords(resource)
   if (!dataRecords) {
     throw new Error("Resource data is not defined or tabular")
@@ -19,8 +16,7 @@ export async function loadInlineTable(
 
   if (!options?.denormalized) {
     let tableSchema = await resolveTableSchema(resource.tableSchema)
-    if (!tableSchema)
-      tableSchema = await inferTableSchemaFromTable(table, options)
+    if (!tableSchema) tableSchema = await inferTableSchemaFromTable(table, options)
     table = await normalizeTable(table, tableSchema)
   }
 

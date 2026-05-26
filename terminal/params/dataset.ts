@@ -1,9 +1,6 @@
 import { Option } from "commander"
 
-export const withRemote = new Option(
-  "--with-remote",
-  "include remote resources",
-)
+export const withRemote = new Option("--with-remote", "include remote resources")
 
 export const fromDataset = new Option(
   "-d --dataset <path>",

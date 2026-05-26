@@ -36,11 +36,7 @@ describe("convertDatasetToCkan", () => {
           contributorType: "ContactPerson",
         },
       ],
-      subjects: [
-        { subject: "test" },
-        { subject: "sample" },
-        { subject: "data" },
-      ],
+      subjects: [{ subject: "test" }, { subject: "sample" }, { subject: "data" }],
       dates: [
         {
           date: "2023-01-01T00:00:00Z",
@@ -188,12 +184,8 @@ describe("convertDatasetToCkan", () => {
     expect(resultCkanDataset.version).toEqual(originalCkanDataset.version)
 
     expect(resultCkanDataset.license_id).toEqual(originalCkanDataset.license_id)
-    expect(resultCkanDataset.license_title).toEqual(
-      originalCkanDataset.license_title,
-    )
-    expect(resultCkanDataset.license_url).toEqual(
-      originalCkanDataset.license_url,
-    )
+    expect(resultCkanDataset.license_title).toEqual(originalCkanDataset.license_title)
+    expect(resultCkanDataset.license_url).toEqual(originalCkanDataset.license_url)
 
     expect(resultCkanDataset.author).toEqual(originalCkanDataset.author)
     expect(resultCkanDataset.maintainer).toEqual(originalCkanDataset.maintainer)
@@ -207,9 +199,7 @@ describe("convertDatasetToCkan", () => {
 
     expect(resultCkanDataset.resources.length).toBeGreaterThan(0)
 
-    expect(resultCkanDataset.tags.length).toEqual(
-      originalCkanDataset.tags.length,
-    )
+    expect(resultCkanDataset.tags.length).toEqual(originalCkanDataset.tags.length)
     originalCkanDataset.tags.forEach(originalTag => {
       const matchingTag = resultCkanDataset.tags.find(
         tag => tag.name === originalTag.name,

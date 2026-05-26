@@ -10,11 +10,7 @@ export type { Table } from "./models/table.ts"
 export { LoadTableOptions, SaveTableOptions } from "./models/table.ts"
 export type { TablePlugin } from "./plugin.ts"
 
-export {
-  ArrowPlugin,
-  loadArrowTable,
-  saveArrowTable,
-} from "./plugins/arrow/index.ts"
+export { ArrowPlugin, loadArrowTable, saveArrowTable } from "./plugins/arrow/index.ts"
 export { CsvPlugin, loadCsvTable, saveCsvTable } from "./plugins/csv/index.ts"
 export { InlinePlugin, loadInlineTable } from "./plugins/inline/index.ts"
 export {
@@ -28,11 +24,7 @@ export {
   ParquetPlugin,
   saveParquetTable,
 } from "./plugins/parquet/index.ts"
-export {
-  loadSqliteTable,
-  SqlitePlugin,
-  saveSqliteTable,
-} from "./plugins/sqlite/index.ts"
+export { loadSqliteTable, SqlitePlugin, saveSqliteTable } from "./plugins/sqlite/index.ts"
 export {
   inferXlsxFileDialect,
   loadXlsxTable,

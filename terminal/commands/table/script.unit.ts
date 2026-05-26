@@ -35,12 +35,10 @@ describe.skip("table script", () => {
     const csvContent = "id,name\n1,alice\n2,bob"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
 
-    const command = new Command()
-      .addCommand(scriptTableCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(scriptTableCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     await command.parseAsync(["node", "test", "script", csvPath])
 
@@ -53,12 +51,10 @@ describe.skip("table script", () => {
     const csvContent = "id,name,age\n1,alice,25\n2,bob,30"
     const csvPath = await writeTempFile(csvContent, { format: "csv" })
 
-    const command = new Command()
-      .addCommand(scriptTableCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(scriptTableCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "script", csvPath])
@@ -73,12 +69,10 @@ describe.skip("table script", () => {
     const tsvContent = "id\tname\tscore\n1\talice\t85\n2\tbob\t90"
     const tsvPath = await writeTempFile(tsvContent, { format: "tsv" })
 
-    const command = new Command()
-      .addCommand(scriptTableCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(scriptTableCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "script", tsvPath])

@@ -129,9 +129,7 @@ export function renderCellMaximumError(error: CellMaximumError) {
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is more than ${maximum}${inResource}`
 }
 
-export function renderCellExclusiveMinimumError(
-  error: CellExclusiveMinimumError,
-) {
+export function renderCellExclusiveMinimumError(error: CellExclusiveMinimumError) {
   const cell = pc.bold(error.cell)
   const columnName = pc.bold(error.columnName)
   const rowNumber = pc.bold(error.rowNumber)
@@ -141,9 +139,7 @@ export function renderCellExclusiveMinimumError(
   return `Value of the cell ${cell} in column ${columnName} of row ${rowNumber} is less or equal to ${minimum}${inResource}`
 }
 
-export function renderCellExclusiveMaximumError(
-  error: CellExclusiveMaximumError,
-) {
+export function renderCellExclusiveMaximumError(error: CellExclusiveMaximumError) {
   const cell = pc.bold(error.cell)
   const columnName = pc.bold(error.columnName)
   const rowNumber = pc.bold(error.rowNumber)
@@ -282,9 +278,7 @@ export function renderDataError(error: DataError) {
 // File
 
 export function renderTextualError(error: TextualError) {
-  const actualEncoding = error.actualEncoding
-    ? pc.bold(error.actualEncoding)
-    : ""
+  const actualEncoding = error.actualEncoding ? pc.bold(error.actualEncoding) : ""
   const inResource = renderInResource(error.resourceName)
 
   return `File is expected to be textual with utf-8 encoding but it is ${actualEncoding ?? "binary"}${inResource}`

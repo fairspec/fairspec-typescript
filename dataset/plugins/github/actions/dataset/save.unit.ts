@@ -43,9 +43,7 @@ describe("saveDatasetToGithub", () => {
   })
 
   it.skip("should save a dataset", async () => {
-    const dataset = await loadDatasetDescriptor(
-      "core/dataset/fixtures/dataset.json",
-    )
+    const dataset = await loadDatasetDescriptor("core/dataset/fixtures/dataset.json")
 
     const result = await saveDatasetToGithub(dataset, {
       apiKey: "<key>",
@@ -199,9 +197,7 @@ describe("saveDatasetToGithub", () => {
     expect(repoCreateCall).toBeDefined()
     if (!repoCreateCall) return
 
-    expect(repoCreateCall[0]).toEqual(
-      "https://api.github.com/orgs/test-org/repos",
-    )
+    expect(repoCreateCall[0]).toEqual("https://api.github.com/orgs/test-org/repos")
   })
 
   it("uploads resource files with base64 encoding", async () => {

@@ -40,10 +40,7 @@ describe("saveParquetTable", () => {
 
     await saveParquetTable(source, { path })
 
-    const target = await loadParquetTable(
-      { data: path },
-      { denormalized: true },
-    )
+    const target = await loadParquetTable({ data: path }, { denormalized: true })
     expect((await target.collect()).toRecords()).toEqual([
       {
         boolean: true,

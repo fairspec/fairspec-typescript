@@ -29,28 +29,18 @@ describe("dataSchema validate", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(validateDataSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(validateDataSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "validate",
-        schemaPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -82,28 +72,18 @@ describe("dataSchema validate", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(validateDataSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(validateDataSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "validate",
-        schemaPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)
@@ -130,28 +110,18 @@ describe("dataSchema validate", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(validateDataSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(validateDataSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
-      await command.parseAsync([
-        "node",
-        "test",
-        "validate",
-        schemaPath,
-        "--json",
-      ])
+      await command.parseAsync(["node", "test", "validate", schemaPath, "--json"])
     } catch {}
 
     expect(text.length).toBeGreaterThan(0)

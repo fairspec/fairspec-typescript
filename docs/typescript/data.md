@@ -143,9 +143,7 @@ if (!report.valid) {
 ```ts
 import { validateData } from "fairspec"
 
-const response = await fetch("https://api.example.com/users").then(r =>
-  r.json(),
-)
+const response = await fetch("https://api.example.com/users").then(r => r.json())
 
 const report = await validateData({
   data: response,

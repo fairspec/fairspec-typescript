@@ -5,10 +5,7 @@ import pAll from "p-all"
 import { copyFile } from "../../actions/file/copy.ts"
 import { getTempFilePath } from "../../actions/file/temp.ts"
 
-export async function prefetchFiles(
-  resource: Resource,
-  options?: { maxBytes?: number },
-) {
+export async function prefetchFiles(resource: Resource, options?: { maxBytes?: number }) {
   const paths = getDataPaths(resource)
   if (!paths.length) return []
 
@@ -21,10 +18,7 @@ export async function prefetchFiles(
   return newPaths
 }
 
-export async function prefetchFile(
-  path: string,
-  options?: { maxBytes?: number },
-) {
+export async function prefetchFile(path: string, options?: { maxBytes?: number }) {
   if (!getIsRemotePath(path)) {
     return path
   }

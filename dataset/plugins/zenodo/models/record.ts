@@ -9,9 +9,7 @@ export const ZenodoRecord = z
     links: ZenodoLink,
     metadata: ZenodoMetadata,
     files: z.array(ZenodoFile).describe("Files associated with the record"),
-    state: z
-      .enum(["unsubmitted", "inprogress", "done"])
-      .describe("State of the record"),
+    state: z.enum(["unsubmitted", "inprogress", "done"]).describe("State of the record"),
     submitted: z.boolean().describe("Submitted flag"),
   })
   .describe("Zenodo record interface")

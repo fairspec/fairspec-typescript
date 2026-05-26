@@ -20,9 +20,7 @@ export const Date = z.object({
     .describe("Additional information about the date"),
 })
 
-export const Dates = z
-  .array(Date)
-  .describe("Different dates relevant to the work")
+export const Dates = z.array(Date).describe("Different dates relevant to the work")
 
 export type DateValue = z.infer<typeof DateValue>
 export type Date = z.infer<typeof Date>

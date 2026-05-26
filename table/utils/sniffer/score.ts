@@ -18,10 +18,7 @@ interface QuoteEvidence {
   internalMatches: number
 }
 
-export function scoreDialect(
-  bytes: Uint8Array,
-  dialect: PotentialDialect,
-): DialectScore {
+export function scoreDialect(bytes: Uint8Array, dialect: PotentialDialect): DialectScore {
   const table = Table.parse(bytes, dialect)
 
   const tau0 = calculateTau0(table.fieldCounts)
@@ -190,10 +187,7 @@ export function findBestDialect(
     }
 
     if (preferences.preferDoubleQuote) {
-      if (
-        score.dialect.quote.type === "Some" &&
-        score.dialect.quote.char === 34
-      ) {
+      if (score.dialect.quote.type === "Some" && score.dialect.quote.char === 34) {
         currentGamma += 0.05
       }
       if (

@@ -1,10 +1,5 @@
 import os from "node:os"
-import type {
-  Column,
-  RowError,
-  TableError,
-  TableSchema,
-} from "@fairspec/metadata"
+import type { Column, RowError, TableError, TableSchema } from "@fairspec/metadata"
 import { getColumns } from "@fairspec/metadata"
 import * as pl from "nodejs-polars"
 import pAll from "p-all"

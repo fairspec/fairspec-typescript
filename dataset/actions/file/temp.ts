@@ -24,9 +24,7 @@ export function getTempFilePath(options?: {
 }) {
   const { filename, format } = options ?? {}
 
-  const path = temporaryFile(
-    filename ? { name: filename } : { extension: format },
-  )
+  const path = temporaryFile(filename ? { name: filename } : { extension: format })
 
   if (!options?.persist) {
     exitHook(() => {

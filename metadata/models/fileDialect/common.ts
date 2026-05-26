@@ -8,10 +8,7 @@ export const QuoteChar = z.string()
 
 export const NullSequence = z.string()
 
-export const HeaderRows = z.union([
-  z.literal(false),
-  z.array(z.number().int().min(1)),
-])
+export const HeaderRows = z.union([z.literal(false), z.array(z.number().int().min(1))])
 
 export const HeaderJoin = z.string()
 

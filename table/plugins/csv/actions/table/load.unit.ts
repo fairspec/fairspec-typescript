@@ -70,9 +70,7 @@ describe("loadCsvTable", () => {
       { previewBytes: 18 },
     )
 
-    expect((await table.collect()).toRecords()).toEqual([
-      { id: 1, name: "english" },
-    ])
+    expect((await table.collect()).toRecords()).toEqual([{ id: 1, name: "english" }])
   })
 
   // TODO: polars bug?
@@ -209,9 +207,7 @@ describe("loadCsvTable", () => {
   })
 
   it("should support headerJoin", async () => {
-    const path = await writeTempFile(
-      "#comment\nid,name\nint,str\n1,alice\n2,bob",
-    )
+    const path = await writeTempFile("#comment\nid,name\nint,str\n1,alice\n2,bob")
 
     const table = await loadCsvTable({
       data: path,
@@ -241,9 +237,7 @@ describe("loadCsvTable", () => {
   })
 
   it("should support headerRows and commentRows", async () => {
-    const path = await writeTempFile(
-      "#comment\nid,name\n1,alice\n#comment\n2,bob",
-    )
+    const path = await writeTempFile("#comment\nid,name\n1,alice\n#comment\n2,bob")
 
     const table = await loadCsvTable({
       data: path,
@@ -280,9 +274,7 @@ describe("loadCsvTable", () => {
   })
 
   it("should handle null sequence", async () => {
-    const path = await writeTempFile(
-      "id,name,age\n1,alice,25\n2,N/A,30\n3,bob,N/A",
-    )
+    const path = await writeTempFile("id,name,age\n1,alice,25\n2,N/A,30\n3,bob,N/A")
     const table = await loadCsvTable({
       data: path,
       fileDialect: { format: "csv", nullSequence: "N/A" },

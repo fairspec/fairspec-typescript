@@ -13,10 +13,7 @@ export class ZipPlugin implements DatasetPlugin {
     return dataset
   }
 
-  async saveDataset(
-    dataset: Dataset,
-    options: { target: string; withRemote?: boolean },
-  ) {
+  async saveDataset(dataset: Dataset, options: { target: string; withRemote?: boolean }) {
     const isZip = getIsZip(options.target)
     if (!isZip) return undefined
 

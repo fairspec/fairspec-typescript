@@ -1,9 +1,4 @@
-import {
-  Report,
-  Resource,
-  ValidateTableOptions,
-  validateTable,
-} from "@fairspec/library"
+import { Report, Resource, ValidateTableOptions, validateTable } from "@fairspec/library"
 import { createTool } from "@mastra/core/tools"
 import { z } from "zod"
 

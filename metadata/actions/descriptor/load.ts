@@ -18,9 +18,7 @@ export async function loadDescriptor(
     throw new Error("Cannot load descriptor for security reasons")
   }
 
-  return !isRemote
-    ? await loadLocalDescriptor(path)
-    : await loadRemoteDescriptor(path)
+  return !isRemote ? await loadLocalDescriptor(path) : await loadRemoteDescriptor(path)
 }
 
 async function loadLocalDescriptor(path: string) {

@@ -1,10 +1,6 @@
 import { buffer } from "node:stream/consumers"
 import { loadFile, loadFileStream } from "@fairspec/dataset"
-import type {
-  JsonFileDialect,
-  JsonlFileDialect,
-  Resource,
-} from "@fairspec/metadata"
+import type { JsonFileDialect, JsonlFileDialect, Resource } from "@fairspec/metadata"
 import { getDataFirstPath, getSupportedFileDialect } from "@fairspec/metadata"
 import { Sniffer } from "../../../../utils/sniffer/sniffer.ts"
 import { decodeJsonBuffer } from "../buffer/decode.ts"

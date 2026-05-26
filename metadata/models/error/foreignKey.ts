@@ -5,9 +5,7 @@ import { BaseError } from "./base.ts"
 export const ForeignKeyError = BaseError.extend({
   type: z.literal("foreignKey").describe("Error type identifier"),
 
-  foreignKey: ForeignKey.describe(
-    "The foreign key constraint that was violated",
-  ),
+  foreignKey: ForeignKey.describe("The foreign key constraint that was violated"),
 
   cells: z
     .array(z.string())

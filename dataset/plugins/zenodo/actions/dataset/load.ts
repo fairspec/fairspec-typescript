@@ -25,10 +25,7 @@ export async function loadDatasetFromZenodo(
 
   const systemDataset = convertDatasetFromZenodo(zenodoRecord)
   const userDatasetPath = (systemDataset.resources ?? [])
-    .filter(
-      resource =>
-        resource.unstable_customMetadata?.zenodoKey === "dataset.json",
-    )
+    .filter(resource => resource.unstable_customMetadata?.zenodoKey === "dataset.json")
     .map(resource => resource.unstable_customMetadata?.zenodoUrl as string)
     .at(0)
 

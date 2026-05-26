@@ -1,9 +1,6 @@
 import type { Dialect, LineTerminator, Metadata, Quote } from "./metadata.ts"
 import type { PotentialDialect } from "./potentialDialects.ts"
-import {
-  detectLineTerminator,
-  generatePotentialDialects,
-} from "./potentialDialects.ts"
+import { detectLineTerminator, generatePotentialDialects } from "./potentialDialects.ts"
 import type { SampleSize } from "./sample.ts"
 import { findBestDialect, scoreDialect } from "./score.ts"
 import { Table } from "./table.ts"
@@ -32,10 +29,8 @@ export class Sniffer {
     const bytesNoBom = this.skipBom(bytes)
     let data = bytesNoBom
 
-    const {
-      data: withoutCommentPreamble,
-      preambleLines: commentPreambleLines,
-    } = this.skipPreamble(data)
+    const { data: withoutCommentPreamble, preambleLines: commentPreambleLines } =
+      this.skipPreamble(data)
     data = withoutCommentPreamble
 
     const sample = this.takeSample(data)
@@ -69,10 +64,7 @@ export class Sniffer {
     dialect.header.numPreambleRows += structuralPreambleRows
 
     const dataAfterAllPreamble = this.skipLines(data, structuralPreambleRows)
-    const headerDetectionResult = this.detectHeader(
-      dataAfterAllPreamble,
-      dialect,
-    )
+    const headerDetectionResult = this.detectHeader(dataAfterAllPreamble, dialect)
     dialect.header.hasHeaderRow = headerDetectionResult.hasHeader
 
     return this.buildMetadata(bytesNoBom, dialect)
@@ -202,9 +194,7 @@ export class Sniffer {
     return bytes.slice(0, i)
   }
 
-  private generateForcedDialects(
-    lineTerminator: LineTerminator,
-  ): PotentialDialect[] {
+  private generateForcedDialects(lineTerminator: LineTerminator): PotentialDialect[] {
     if (!this.forcedDelimiter) {
       throw new Error("generateForcedDialects called without forcedDelimiter")
     }
@@ -213,11 +203,7 @@ export class Sniffer {
 
     const quotes: Quote[] = this.forcedQuote
       ? [this.forcedQuote]
-      : [
-          { type: "None" },
-          { type: "Some", char: 34 },
-          { type: "Some", char: 39 },
-        ]
+      : [{ type: "None" }, { type: "Some", char: 34 }, { type: "Some", char: 39 }]
 
     return quotes.map(quote => ({
       delimiter,
@@ -226,10 +212,7 @@ export class Sniffer {
     }))
   }
 
-  private detectStructuralPreamble(
-    bytes: Uint8Array,
-    dialect: Dialect,
-  ): number {
+  private detectStructuralPreamble(bytes: Uint8Array, dialect: Dialect): number {
     const table = Table.parse(bytes, {
       delimiter: dialect.delimiter,
       quote: dialect.quote,
@@ -285,10 +268,7 @@ export class Sniffer {
     return bytes.slice(i)
   }
 
-  private detectHeader(
-    bytes: Uint8Array,
-    dialect: Dialect,
-  ): { hasHeader: boolean } {
+  private detectHeader(bytes: Uint8Array, dialect: Dialect): { hasHeader: boolean } {
     const table = Table.parse(bytes, {
       delimiter: dialect.delimiter,
       quote: dialect.quote,
@@ -340,10 +320,7 @@ export class Sniffer {
   }
 
   private buildMetadata(bytes: Uint8Array, dialect: Dialect): Metadata {
-    const dataAfterPreamble = this.skipLines(
-      bytes,
-      dialect.header.numPreambleRows,
-    )
+    const dataAfterPreamble = this.skipLines(bytes, dialect.header.numPreambleRows)
 
     const table = Table.parse(dataAfterPreamble, {
       delimiter: dialect.delimiter,

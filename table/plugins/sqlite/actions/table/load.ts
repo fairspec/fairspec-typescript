@@ -11,10 +11,7 @@ import { inferTableSchemaFromSqlite } from "../tableSchema/infer.ts"
 // Currently, we use slow non-rust implementation as in the future
 // polars-rust might be able to provide a faster native implementation
 
-export async function loadSqliteTable(
-  resource: Resource,
-  options?: LoadTableOptions,
-) {
+export async function loadSqliteTable(resource: Resource, options?: LoadTableOptions) {
   const firstPath = getDataFirstPath(resource)
   if (!firstPath) {
     throw new Error("Resource path is not defined")

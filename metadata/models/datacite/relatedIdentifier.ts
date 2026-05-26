@@ -1,9 +1,5 @@
 import { z } from "zod"
-import {
-  ContentTypeGeneral,
-  RelatedIdentifierType,
-  RelationType,
-} from "./common.ts"
+import { ContentTypeGeneral, RelatedIdentifierType, RelationType } from "./common.ts"
 
 export const RelatedObject = z.object({
   relationType: RelationType.describe(
@@ -12,9 +8,7 @@ export const RelatedObject = z.object({
   relatedMetadataScheme: z
     .string()
     .optional()
-    .describe(
-      "The name of the scheme (only for HasMetadata/IsMetadataFor relations)",
-    ),
+    .describe("The name of the scheme (only for HasMetadata/IsMetadataFor relations)"),
   schemeUri: z
     .string()
     .optional()

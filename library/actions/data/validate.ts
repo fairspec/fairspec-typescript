@@ -1,9 +1,5 @@
 import type { FairspecError, Resource } from "@fairspec/metadata"
-import {
-  createReport,
-  inspectJson,
-  resolveDataSchema,
-} from "@fairspec/metadata"
+import { createReport, inspectJson, resolveDataSchema } from "@fairspec/metadata"
 import { loadData } from "./load.ts"
 
 export async function validateData(resource: Resource) {

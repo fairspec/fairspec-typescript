@@ -3,10 +3,7 @@ import { z } from "zod"
 export const BaseFileDialect = z.object({
   $schema: z.httpUrl().optional().describe("Fairspec Dialect profile url."),
 
-  title: z
-    .string()
-    .optional()
-    .describe("An optional human-readable title of the format"),
+  title: z.string().optional().describe("An optional human-readable title of the format"),
 
   description: z
     .string()

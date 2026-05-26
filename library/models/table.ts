@@ -7,10 +7,7 @@ export const ValidateTableOptions = LoadTableOptions.and(
       .boolean()
       .optional()
       .describe("Skip schema inference if tableSchema not provided"),
-    maxErrors: z
-      .number()
-      .optional()
-      .describe("Maximum number of errors to return"),
+    maxErrors: z.number().optional().describe("Maximum number of errors to return"),
   }),
 )
 

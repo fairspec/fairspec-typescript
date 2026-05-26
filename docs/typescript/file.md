@@ -154,10 +154,7 @@ This is the same primitive used internally by `describeFile`, `loadTable`, and f
 import { inferIntegrity, inferTextual } from "fairspec"
 
 const textual = await inferTextual({ data: "data.csv" })
-const integrity = await inferIntegrity(
-  { data: "data.csv" },
-  { hashType: "sha256" },
-)
+const integrity = await inferIntegrity({ data: "data.csv" }, { hashType: "sha256" })
 ```
 
 `inferTextual` samples the first 10 KB by default and uses encoding detection; pass `sampleBytes` and `confidencePercent` to tune sensitivity.
@@ -201,9 +198,7 @@ if (!report.valid) {
 ```ts
 import { copyFile, loadDataset } from "fairspec"
 
-const dataset = await loadDataset(
-  "https://example.com/datasets/sales/dataset.json",
-)
+const dataset = await loadDataset("https://example.com/datasets/sales/dataset.json")
 
 for (const resource of dataset.resources ?? []) {
   const path = typeof resource.data === "string" ? resource.data : undefined

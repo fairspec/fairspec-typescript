@@ -1,10 +1,7 @@
 import { z } from "zod"
 
 export const Rights = z.object({
-  rights: z
-    .string()
-    .optional()
-    .describe("Any rights information for this resource"),
+  rights: z.string().optional().describe("Any rights information for this resource"),
   rightsUri: z.string().optional().describe("The URI of the license"),
   rightsIdentifier: z
     .string()
@@ -14,10 +11,7 @@ export const Rights = z.object({
     .string()
     .optional()
     .describe("The name of the scheme (e.g., SPDX)"),
-  schemeUri: z
-    .string()
-    .optional()
-    .describe("The URI of the rightsIdentifierScheme"),
+  schemeUri: z.string().optional().describe("The URI of the rightsIdentifierScheme"),
   lang: z
     .string()
     .optional()

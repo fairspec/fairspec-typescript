@@ -20,19 +20,15 @@ describe("schema infer", () => {
     })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(inferTableSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(inferTableSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
@@ -47,25 +43,20 @@ describe("schema infer", () => {
   })
 
   it("should infer schema with numeric types", async () => {
-    const csvPath = await writeTempFile(
-      "id,value,score\n1,100,95.5\n2,200,87.3",
-      { format: "csv" },
-    )
+    const csvPath = await writeTempFile("id,value,score\n1,100,95.5\n2,200,87.3", {
+      format: "csv",
+    })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(inferTableSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(inferTableSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "infer", csvPath, "--json"])
@@ -80,25 +71,20 @@ describe("schema infer", () => {
   })
 
   it("should infer schema with mixed types", async () => {
-    const csvPath = await writeTempFile(
-      "name,active,count\nalice,true,5\nbob,false,10",
-      { format: "csv" },
-    )
+    const csvPath = await writeTempFile("name,active,count\nalice,true,5\nbob,false,10", {
+      format: "csv",
+    })
 
     const text: string[] = []
-    vi.spyOn(process.stdout, "write").mockImplementation(
-      (msg: string | Uint8Array) => {
-        text.push(typeof msg === "string" ? msg : msg.toString())
-        return true
-      },
-    )
+    vi.spyOn(process.stdout, "write").mockImplementation((msg: string | Uint8Array) => {
+      text.push(typeof msg === "string" ? msg : msg.toString())
+      return true
+    })
 
-    const command = new Command()
-      .addCommand(inferTableSchemaCommand)
-      .configureOutput({
-        writeOut: () => {},
-        writeErr: () => {},
-      })
+    const command = new Command().addCommand(inferTableSchemaCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
 
     try {
       await command.parseAsync(["node", "test", "infer", csvPath, "--json"])

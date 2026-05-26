@@ -60,9 +60,7 @@ describe("FolderPlugin", () => {
     })
 
     it("should return undefined for github urls", async () => {
-      const result = await plugin.loadDataset(
-        "https://github.com/owner/repo/data",
-      )
+      const result = await plugin.loadDataset("https://github.com/owner/repo/data")
 
       expect(mockLoadDatasetFromFolder).not.toHaveBeenCalled()
       expect(result).toBeUndefined()

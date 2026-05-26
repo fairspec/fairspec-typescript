@@ -4,7 +4,7 @@ import { coverageConfigDefaults, defineConfig } from "vite-plus"
 export default defineConfig({
   fmt: {
     semi: false,
-    printWidth: 80,
+    printWidth: 90,
     arrowParens: "avoid",
   },
   lint: {

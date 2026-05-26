@@ -5,9 +5,7 @@ import { InferTableSchemaOptions, TableSchemaOptions } from "./schema.ts"
 
 export type Table = pl.LazyDataFrame
 
-export const LoadTableOptions = InferFileDialectOptions.and(
-  InferTableSchemaOptions,
-).and(
+export const LoadTableOptions = InferFileDialectOptions.and(InferTableSchemaOptions).and(
   z.object({
     previewBytes: z.number().optional(),
     denormalized: z.boolean().optional(),

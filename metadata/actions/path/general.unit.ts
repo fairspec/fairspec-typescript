@@ -122,9 +122,7 @@ describe("getFileExtension", () => {
   })
 
   it("infers format from URL path", () => {
-    expect(getFileExtension("https://example.com/data/products.json")).toBe(
-      "json",
-    )
+    expect(getFileExtension("https://example.com/data/products.json")).toBe("json")
   })
 
   it("preserve extension case", () => {
@@ -152,9 +150,7 @@ describe("getFileExtension", () => {
   })
 
   it("handles URL with query parameters", () => {
-    expect(getFileExtension("https://example.com/file.json?key=value")).toBe(
-      "json",
-    )
+    expect(getFileExtension("https://example.com/file.json?key=value")).toBe("json")
   })
 
   it("handles URL with hash", () => {
@@ -168,9 +164,7 @@ describe("getFileNameSlug", () => {
   })
 
   it("returns slugified basename from URL path", () => {
-    expect(getFileNameSlug("https://example.com/data/products.json")).toBe(
-      "products",
-    )
+    expect(getFileNameSlug("https://example.com/data/products.json")).toBe("products")
   })
 
   it("returns undefined when path has no filename", () => {
@@ -194,15 +188,11 @@ describe("getFileNameSlug", () => {
   })
 
   it("handles URL with query parameters", () => {
-    expect(getFileNameSlug("https://example.com/file.json?key=value")).toBe(
-      "file",
-    )
+    expect(getFileNameSlug("https://example.com/file.json?key=value")).toBe("file")
   })
 
   it("handles URL with hash", () => {
-    expect(getFileNameSlug("https://example.com/report.pdf#page=1")).toBe(
-      "report",
-    )
+    expect(getFileNameSlug("https://example.com/report.pdf#page=1")).toBe("report")
   })
 
   it("handles hidden files", () => {

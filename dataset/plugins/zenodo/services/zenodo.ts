@@ -8,21 +8,12 @@ export async function makeZenodoApiRequest<T = Descriptor>(options: {
   apiKey?: string
   sandbox?: boolean
 }) {
-  const {
-    endpoint,
-    method = "GET",
-    payload,
-    upload,
-    apiKey,
-    sandbox = false,
-  } = options
+  const { endpoint, method = "GET", payload, upload, apiKey, sandbox = false } = options
 
   let body: string | FormData | undefined
   const headers: Record<string, any> = {}
 
-  const baseUrl = sandbox
-    ? "https://sandbox.zenodo.org/api"
-    : "https://zenodo.org/api"
+  const baseUrl = sandbox ? "https://sandbox.zenodo.org/api" : "https://zenodo.org/api"
   const url = new URL(`${baseUrl}${endpoint}`)
 
   if (apiKey) {

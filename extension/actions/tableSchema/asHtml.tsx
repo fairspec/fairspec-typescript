@@ -86,9 +86,7 @@ function FieldRow(props: { column: Column; isRequired: boolean }) {
       </td>
       <td>
         {columnDescription && <p>{columnDescription}</p>}
-        {constraints.length > 0 && (
-          <ConstraintsList constraints={constraints} />
-        )}
+        {constraints.length > 0 && <ConstraintsList constraints={constraints} />}
         {"categories" in property && property.categories !== undefined && (
           <CategoriesList categories={property.categories} />
         )}
@@ -124,8 +122,7 @@ function CategoriesList(props: { categories: any[] }) {
       <ul>
         {categories.map((category, index) => {
           const value = typeof category === "object" ? category.value : category
-          const label =
-            typeof category === "object" ? category.label : undefined
+          const label = typeof category === "object" ? category.label : undefined
           return (
             <li key={index}>
               <code>{String(value)}</code>

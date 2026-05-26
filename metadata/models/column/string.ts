@@ -10,10 +10,7 @@ export const BaseStringColumnProperty = BaseColumnProperty.extend({
     .optional()
     .describe("An optional array of allowed values for the column"),
 
-  const: z
-    .string()
-    .optional()
-    .describe("An optional const that all values must match"),
+  const: z.string().optional().describe("An optional const that all values must match"),
 
   default: z
     .array(z.string())

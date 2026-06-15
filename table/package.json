@@ -38,7 +38,7 @@
   "dependencies": {
     "@fairspec/dataset": "workspace:*",
     "@fairspec/metadata": "workspace:*",
-    "kysely": "^0.28.7",
+    "kysely": "^0.28.17",
     "kysely-generic-sqlite": "^1.2.1",
     "nodejs-polars": "^0.23.5",
     "p-all": "^5.0.1",

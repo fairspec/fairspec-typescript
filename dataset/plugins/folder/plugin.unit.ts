@@ -117,6 +117,37 @@ describe("FolderPlugin", () => {
       expect(result).toEqual({ path: "/tmp/test" })
     })
 
+    it("should save dataset to a non-existent folder target", async () => {
+      const mockDataset: Dataset = {
+        resources: [{ name: "test", data: [] }],
+      }
+      mockStat.mockRejectedValue(new Error("ENOENT"))
+
+      const result = await plugin.saveDataset(mockDataset, {
+        target: "/tmp/new-folder",
+      })
+
+      expect(mockSaveDatasetFromFolder).toHaveBeenCalledWith(mockDataset, {
+        folderPath: "/tmp/new-folder",
+        withRemote: undefined,
+      })
+      expect(result).toEqual({ path: "/tmp/new-folder" })
+    })
+
+    it("should return undefined for a non-existent target with a file extension", async () => {
+      const mockDataset: Dataset = {
+        resources: [{ name: "test", data: [] }],
+      }
+      mockStat.mockRejectedValue(new Error("ENOENT"))
+
+      const result = await plugin.saveDataset(mockDataset, {
+        target: "/tmp/archive.zip",
+      })
+
+      expect(mockSaveDatasetFromFolder).not.toHaveBeenCalled()
+      expect(result).toBeUndefined()
+    })
+
     it("should return undefined for remote paths", async () => {
       const mockDataset: Dataset = {
         resources: [{ name: "test", data: [] }],

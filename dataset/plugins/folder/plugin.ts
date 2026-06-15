@@ -1,6 +1,6 @@
 import { stat } from "node:fs/promises"
 import type { Dataset } from "@fairspec/metadata"
-import { getIsRemotePath } from "@fairspec/metadata"
+import { getFileExtension, getIsRemotePath } from "@fairspec/metadata"
 import type { DatasetPlugin } from "../../plugin.ts"
 import { loadDatasetFromFolder } from "./actions/dataset/load.ts"
 import { saveDatasetToFolder } from "./actions/dataset/save.ts"
@@ -15,8 +15,8 @@ export class FolderPlugin implements DatasetPlugin {
   }
 
   async saveDataset(dataset: Dataset, options: { target: string; withRemote?: boolean }) {
-    const isFolder = await getIsFolder(options.target)
-    if (!isFolder) return undefined
+    const isFolderTarget = await getIsFolderTarget(options.target)
+    if (!isFolderTarget) return undefined
 
     await saveDatasetToFolder(dataset, {
       folderPath: options.target,
@@ -36,4 +36,10 @@ async function getIsFolder(path: string) {
   } catch {
     return false
   }
+}
+
+async function getIsFolderTarget(path: string) {
+  if (getIsRemotePath(path)) return false
+  if (await getIsFolder(path)) return true
+  return !getFileExtension(path)
 }

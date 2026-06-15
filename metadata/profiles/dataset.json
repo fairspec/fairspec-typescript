@@ -74,13 +74,15 @@
       ]
     },
     "Integrity": {
-      "type": "string",
+      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "type": {
           "enum": ["md5", "sha1", "sha256", "sha512"]
         },
         "hash": { "type": "string" }
-      }
+      },
+      "required": ["type", "hash"]
     },
     "DataSchema": {
       "oneOf": [

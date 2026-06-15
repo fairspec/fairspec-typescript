@@ -44,6 +44,25 @@ describe("validateDatasetDescriptor", () => {
     expect(report.valid).toBe(true)
   })
 
+  it("validates dataset with resource integrity", async () => {
+    const dataset = {
+      resources: [
+        {
+          data: "data.csv",
+          integrity: {
+            type: "sha256",
+            hash: "5f951fd841d3bd6c03ea05024f8c564096e10a3e17483e6a70d25a885942683a",
+          },
+        },
+      ],
+    }
+
+    const report = await validateDatasetDescriptor(dataset)
+
+    expect(report.valid).toBe(true)
+    expect(report.errors).toEqual([])
+  })
+
   it("validates dataset with datacite metadata", async () => {
     const dataset = {
       creators: [

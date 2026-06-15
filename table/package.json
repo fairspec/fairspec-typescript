@@ -47,6 +47,6 @@
     "zod": "^4.2.1"
   },
   "peerDependencies": {
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+    "xlsx": "catalog:"
   }
 }

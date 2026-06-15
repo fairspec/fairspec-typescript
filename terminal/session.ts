@@ -2,7 +2,6 @@ import { setTimeout } from "node:timers/promises"
 import util from "node:util"
 import type { Frame, Report } from "@fairspec/library"
 import { FairspecException } from "@fairspec/library"
-import exitHook from "exit-hook"
 import { colorize } from "json-colorizer"
 import pc from "picocolors"
 import type { TaskInnerAPI } from "tasuku"
@@ -31,7 +30,7 @@ export class Session implements SessionOptions {
     // Have empty line before/after output
     if (!this.silent && !this.json) {
       process.stdout.write("\n")
-      exitHook(() => {
+      process.once("exit", () => {
         process.stdout.write("\n")
       })
     }
@@ -105,6 +104,10 @@ export class Session implements SessionOptions {
   }
 
   renderReportResult(report: Report) {
+    if (!report.valid) {
+      process.exitCode = 1
+    }
+
     if (this.silent) {
       return
     }

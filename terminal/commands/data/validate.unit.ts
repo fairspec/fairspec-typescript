@@ -4,7 +4,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test"
 import { validateDataCommand } from "./validate.ts"
 
 describe("data validate", () => {
+  let originalExitCode: typeof process.exitCode
+
   beforeEach(() => {
+    originalExitCode = process.exitCode
+    process.exitCode = undefined
     vi.spyOn(process, "exit").mockImplementation((() => {}) as () => never)
     vi.spyOn(process.stdout, "write").mockImplementation(() => true)
     vi.spyOn(process.stderr, "write").mockImplementation(() => true)
@@ -12,6 +16,7 @@ describe("data validate", () => {
 
   afterEach(() => {
     vi.restoreAllMocks()
+    process.exitCode = originalExitCode
   })
 
   it("should validate valid JSON data", async () => {
@@ -58,6 +63,70 @@ describe("data validate", () => {
     expect(text.length).toBeGreaterThan(0)
     const data = JSON.parse(text[0] ?? "")
     expect(data).toHaveProperty("valid")
+  })
+
+  it("should keep a zero exit code for valid data", async () => {
+    const jsonData = { name: "alice", age: 25 }
+    const jsonPath = await writeTempFile(JSON.stringify(jsonData), {
+      format: "json",
+    })
+    const schema = {
+      type: "object",
+      properties: { name: { type: "string" }, age: { type: "number" } },
+      required: ["name", "age"],
+    }
+    const schemaPath = await writeTempFile(JSON.stringify(schema), {
+      format: "json",
+    })
+
+    const command = new Command().addCommand(validateDataCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
+
+    await command.parseAsync([
+      "node",
+      "test",
+      "validate",
+      jsonPath,
+      "--schema",
+      schemaPath,
+      "--json",
+    ])
+
+    expect(process.exitCode).toBeFalsy()
+  })
+
+  it("should set a non-zero exit code for invalid data", async () => {
+    const jsonData = { name: "alice", age: "not a number" }
+    const jsonPath = await writeTempFile(JSON.stringify(jsonData), {
+      format: "json",
+    })
+    const schema = {
+      type: "object",
+      properties: { name: { type: "string" }, age: { type: "number" } },
+      required: ["name", "age"],
+    }
+    const schemaPath = await writeTempFile(JSON.stringify(schema), {
+      format: "json",
+    })
+
+    const command = new Command().addCommand(validateDataCommand).configureOutput({
+      writeOut: () => {},
+      writeErr: () => {},
+    })
+
+    await command.parseAsync([
+      "node",
+      "test",
+      "validate",
+      jsonPath,
+      "--schema",
+      schemaPath,
+      "--json",
+    ])
+
+    expect(process.exitCode).toBe(1)
   })
 
   it("should detect invalid JSON data", async () => {
